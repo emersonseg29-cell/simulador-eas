@@ -3,33 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EAS Corretora - Simulador Consultivo</title>
+    <title>EAS Corretora - Gestão de Leads</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; }
-        body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: var(--text); margin: 0; display: flex; justify-content: center; padding: 10px; }
-        .container { width: 100%; max-width: 500px; padding: 20px; text-align: center; }
-        .logo { width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--gold); margin-bottom: 15px; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        h2 { color: var(--primary); margin: 0; font-size: 1.6rem; font-weight: 800; }
-        .sub { color: var(--gold); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1px; }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: var(--text); margin: 0; padding: 10px; }
+        .container { width: 100%; max-width: 550px; background: #ffffff; padding: 25px; margin: auto; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .logo { width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--gold); margin: 0 auto 15px; display: block; object-fit: cover; }
+        h2 { color: var(--primary); text-align: center; margin: 0; font-size: 1.5rem; }
+        .sub { color: var(--gold); text-align: center; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; }
         
-        .input-group { margin-bottom: 18px; text-align: left; }
-        label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
-        input, select { width: 100%; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; outline: none; color: var(--text); }
+        .section-title { font-size: 0.9rem; font-weight: 800; color: var(--primary); margin: 20px 0 10px; border-bottom: 2px solid var(--gold); display: inline-block; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; box-sizing: border-box; outline: none; }
         
-        .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; box-shadow: 0 10px 20px rgba(29, 45, 68, 0.2); }
-
-        #resultado { display: none; margin-top: 35px; border-top: 2px solid #f1f5f9; padding-top: 25px; text-align: left; }
+        .btn-calc { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
         
-        /* Estilo do Texto Descritivo */
-        .descritivo-texto { background: #f8fafc; padding: 25px; border-radius: 20px; border-left: 6px solid var(--unimed); line-height: 1.6; color: #1e293b; font-size: 0.95rem; }
-        .descritivo-texto b { color: var(--primary); }
-        .highlight-box { background: #f0fdf4; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid var(--unimed); }
+        #areaSimulacao { display: none; margin-top: 30px; text-align: left; }
+        .pdf-content { padding: 20px; border: 1px solid #eee; border-radius: 15px; background: #fff; line-height: 1.6; }
         
-        .premio-final { background: var(--primary); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-top: 20px; }
-        .premio-final span { font-size: 1.8rem; font-weight: 800; display: block; color: var(--gold); }
-
-        .btn-whats { display: flex; align-items: center; justify-content: center; gap: 10px; background: #25d366; color: white; text-decoration: none; padding: 20px; border-radius: 12px; font-weight: 700; font-size: 1.1rem; margin-top: 20px; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); }
+        .highlight { background: #f0fdf4; padding: 15px; border-radius: 10px; border: 1px solid var(--unimed); margin: 15px 0; }
+        
+        .action-buttons { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-action { flex: 1; padding: 15px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-size: 0.9rem; }
+        .btn-pdf { background: #e2e8f0; color: var(--primary); }
+        .btn-w { background: #25d366; color: white; }
     </style>
 </head>
 <body>
@@ -37,117 +37,140 @@
 <div class="container">
     <img src="logo oficial.jpg.png" class="logo" alt="EAS Corretora">
     <h2>EAS CORRETORA</h2>
-    <div class="sub">Simulador de Proteção de Renda</div>
+    <div class="sub">Portal de Simulação Consultiva</div>
 
-    <div class="input-group">
-        <label>Qual sua idade?</label>
-        <input type="number" id="idade" placeholder="Ex: 35">
-    </div>
-
-    <div class="input-group">
-        <label>Profissão</label>
-        <select id="profissao">
-            <option value="empresario">Empresário / MEI</option>
-            <option value="advogado">Advogados</option>
-            <option value="saude">Médicos / Dentistas</option>
-            <option value="outros">Outras Profissões</option>
-        </select>
-    </div>
-
-    <div class="input-group">
-        <label>Renda Mensal Desejada</label>
-        <select id="beneficio">
-            <option value="3000">R$ 3.000,00</option>
-            <option value="6000">R$ 6.000,00</option>
-            <option value="9000" selected>R$ 9.000,00</option>
-        </select>
-    </div>
-
-    <div class="input-group">
-        <label>Cupom (opcional)</label>
-        <input type="text" id="cupom" placeholder="Ex: EAS">
-    </div>
-
-    <button class="btn-calc" onclick="gerarEstudo()">GERAR ESTUDO TÉCNICO</button>
-
-    <div id="resultado">
-        <div class="descritivo-texto" id="textoEstudo">
-            </div>
-
-        <div class="premio-final">
-            PRÊMIO MENSAL:
-            <span id="valorPremio">R$ 0,00</span>
+    <div class="form-box">
+        <div class="section-title">Dados do Cliente (Lead)</div>
+        <div class="input-group">
+            <label>Nome Completo do Cliente</label>
+            <input type="text" id="leadNome" placeholder="Ex: João Silva">
+        </div>
+        <div class="input-group">
+            <label>WhatsApp do Cliente</label>
+            <input type="tel" id="leadWhats" placeholder="Ex: 17999999999">
         </div>
 
-        <a href="" id="resWhats" class="btn-whats">
-            <i class="fa-brands fa-whatsapp"></i> CONTRATAR COM CONSULTOR
-        </a>
+        <div class="section-title">Configuração do Plano</div>
+        <div class="input-group">
+            <label>Idade</label>
+            <input type="number" id="idade" placeholder="Ex: 35">
+        </div>
+        <div class="input-group">
+            <label>Profissão</label>
+            <select id="profissao">
+                <option value="Empresário / MEI">Empresário / MEI</option>
+                <option value="Advogado">Advogado</option>
+                <option value="Médico / Dentista">Médico / Dentista</option>
+                <option value="Outras Profissões">Outras Profissões</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>Benefício Mensal</label>
+            <select id="beneficio">
+                <option value="3000">R$ 3.000,00</option>
+                <option value="6000">R$ 6.000,00</option>
+                <option value="9000" selected>R$ 9.000,00</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>Cupom Promocional</label>
+            <input type="text" id="cupom" placeholder="Ex: EAS">
+        </div>
+
+        <button class="btn-calc" onclick="gerarEstudo()">GERAR ESTUDO PERSONALIZADO</button>
+    </div>
+
+    <div id="areaSimulacao">
+        <div id="pdfDownloadArea" class="pdf-content">
+            <div style="text-align:center; margin-bottom: 20px;">
+                <h3 style="color:var(--primary); margin:0;">ESTUDO TÉCNICO UNIMED</h3>
+                <small>Preparado para: <b id="displayNome"></b></small>
+            </div>
+            
+            <p>Olá <span id="primeiroNome"></span>, conforme nossa conversa, segue o detalhamento da sua proteção:</p>
+
+            <p>• <b>Morte Natural:</b> R$ <span id="capBase"></span>,00<br>
+            • <b>Morte por Acidente:</b> R$ <span id="capAcidente"></span>,00<br>
+            • <b>Invalidez (Acidente/Doença):</b> R$ <span id="capBase2"></span>,00</p>
+
+            <p><b>SERIT (Renda):</b> Se precisar se afastar por mais de 7 dias, você receberá <b>R$ <span id="valBenef"></span>,00 por mês</b>.</p>
+
+            <div class="highlight">
+                <b>EXEMPLO DE INDENIZAÇÃO (60 DIAS):</b><br>
+                Atestado de 60 dias. Sua diária é R$ <span id="valDiaria"></span>.<br>
+                Pagamento de 53 dias (descontada franquia de 7 dias).<br>
+                <b>Total a receber: R$ <span id="totalIndeniza"></span></b>.
+            </div>
+
+            <p><b>CARÊNCIAS:</b> 30 dias para doenças comuns e 180 dias para LER/DORT/Hérnias. Acidentes sem carência.</p>
+            
+            <div style="text-align:right; font-weight:800; color:var(--primary); font-size:1.2rem; border-top: 1px solid #ddd; padding-top:10px;">
+                INVESTIMENTO: <span id="valPremio"></span>/mês
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-action btn-pdf" onclick="baixarPDF()">
+                <i class="fa-solid fa-file-pdf"></i> SALVAR PDF
+            </button>
+            <a href="#" id="linkWhats" class="btn-action btn-w" target="_blank">
+                <i class="fa-brands fa-whatsapp"></i> ENVIAR NO WHATSAPP
+            </a>
+        </div>
     </div>
 </div>
 
 <script>
     function gerarEstudo() {
-        const idade = parseInt(document.getElementById('idade').value);
+        const nome = document.getElementById('leadNome').value;
+        const whats = document.getElementById('leadWhats').value;
+        const idade = document.getElementById('idade').value;
         const benef = parseInt(document.getElementById('beneficio').value);
-        const prof = document.getElementById('profissao').value;
         const cupom = document.getElementById('cupom').value.trim().toUpperCase();
 
-        if(!idade) return alert("Por favor, informe a idade.");
+        if(!nome || !whats || !idade) return alert("Preencha Nome, WhatsApp e Idade do cliente.");
 
-        // Capitais de Morte (Baseado em 100k para plano de 9k proporcionalmente)
-        const capBase = (benef === 9000) ? 100000 : (benef === 6000 ? 60000 : 30000);
-        const capAcidente = capBase * 2;
+        // Cálculos
+        const cap = (benef === 9000) ? 100000 : (benef === 6000 ? 60000 : 30000);
+        const diaria = (benef / 30);
+        const total60 = (diaria * 53);
+        const pPadrao = { 3000: 120.79, 6000: 240.15, 9000: 340.00 };
+        const pPromo = { 3000: 74.05, 6000: 148.12, 9000: 211.30 };
+        const preco = (cupom === "EAS") ? pPromo[benef] : pPadrao[benef];
 
-        // Cálculos SERIT
-        const diaria = (benef / 30).toFixed(2);
-        const diasLiquidos = 60 - 7;
-        const totalIndenizacao = (diasLiquidos * diaria).toFixed(2);
+        // Preencher display
+        document.getElementById('displayNome').innerText = nome;
+        document.getElementById('primeiroNome').innerText = nome.split(' ')[0];
+        document.getElementById('capBase').innerText = cap.toLocaleString('pt-BR');
+        document.getElementById('capBase2').innerText = cap.toLocaleString('pt-BR');
+        document.getElementById('capAcidente').innerText = (cap*2).toLocaleString('pt-BR');
+        document.getElementById('valBenef').innerText = benef.toLocaleString('pt-BR');
+        document.getElementById('valDiaria').innerText = diaria.toFixed(2).replace('.',',');
+        document.getElementById('totalIndeniza').innerText = total60.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        document.getElementById('valPremio').innerText = `R$ ${preco.toFixed(2)}`;
 
-        // Lógica de Preço
-        const precosPadrao = { 3000: 120.79, 6000: 240.15, 9000: 340.00 };
-        const precosPromo = { 3000: 74.05, 6000: 148.12, 9000: 211.30 };
-        const precoFinal = (cupom === "EAS") ? precosPromo[benef] : precosPadrao[benef];
+        // WhatsApp Link
+        const msg = `*EAS CORRETORA - ESTUDO TÉCNICO*\n\nOlá ${nome}, segue sua simulação:\nProteção Mensal: R$ ${benef}\nExemplo 60 dias: R$ ${total60.toLocaleString('pt-BR')}\nInvestimento: R$ ${preco.toFixed(2)}/mês`;
+        document.getElementById('linkWhats').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
 
-        // Montagem do Texto
-        let texto = `
-            <p>Se ocorrer <b>morte natural</b> a seguradora pagará uma indenização no valor de <b>R$ ${capBase.toLocaleString('pt-BR')},00</b>.</p>
-            
-            <p>Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${capAcidente.toLocaleString('pt-BR')},00</b>.</p>
-            
-            <p>Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de <b>R$ ${capBase.toLocaleString('pt-BR')},00</b>.</p>
-            
-            <p><b>SERIT:</b> Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de <b>R$ ${benef.toLocaleString('pt-BR')},00 por mês</b>.</p>
-            
-            <div class="highlight-box">
-                <b>EXEMPLO PRÁTICO (60 DIAS):</b><br>
-                Suponhamos que você receba um atestado de 60 dias. Calculamos sua diária (R$ ${benef.toLocaleString('pt-BR')},00 ÷ 30 dias) = <b>R$ ${diaria.replace('.',',')} por dia</b>.<br><br>
-                Multiplicamos a diária pelos dias de afastamento descontando a franquia de 7 dias (53 dias pagos).<br>
-                <b>Total da Indenização: R$ ${parseFloat(totalIndenizacao).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.
-            </div>
+        document.getElementById('areaSimulacao').style.display = "block";
+    }
 
-            <p><small>* Quando prorroga o afastamento pelo mesmo CID não tem franquia.</small></p>
-            
-            <p><b>CARÊNCIAS:</b><br>
-            • Doenças comuns: <b>30 dias</b>.<br>
-            • LER, DORT, LTC, Doenças Progressivas, Degenerativas e Hérnias: <b>180 dias</b>.<br>
-            • Acidentes: <b>Não tem carência</b>.</p>
-        `;
-
-        if(prof === 'saude') {
-            texto = `<div style="color:var(--unimed); font-weight:bold; margin-bottom:15px;">✓ Vantagem: Dispensa de comprovação de renda ativada!</div>` + texto;
-        }
-
-        document.getElementById('textoEstudo').innerHTML = texto;
-        document.getElementById('valorPremio').innerText = `R$ ${precoFinal.toFixed(2)}`;
-        
-        const msg = `Olá! Fiz a simulação EAS (Plano R$ ${benef}). Idade: ${idade} anos. Gostaria de contratar.`;
-        document.getElementById('resWhats').href = `https://wa.me/5517997165139?text=${encodeURIComponent(msg)}`;
-        
-        document.getElementById('resultado').style.display = "block";
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    function baixarPDF() {
+        const element = document.getElementById('pdfDownloadArea');
+        const nome = document.getElementById('leadNome').value;
+        const opt = {
+            margin: 10,
+            filename: `Proposta_EAS_${nome}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
     }
 </script>
 </body>
 </html>
+
 
 
