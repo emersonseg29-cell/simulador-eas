@@ -24,7 +24,7 @@
     <img src="logo oficial.jpg.png" class="logo" alt="EAS Corretora">
     <h2>EAS Corretora</h2>
     <div class="input-group">
-        <label>IDADE</label>
+        <label>SUA IDADE</label>
         <input type="number" id="idade" placeholder="Ex: 35">
     </div>
     <div class="input-group">
@@ -50,7 +50,7 @@
     <div id="resultado">
         <div id="containerPreco"></div>
         <div id="resTexto"></div>
-        <a href="" id="resWhats" class="btn-whats">FALAR COM CONSULTOR</a>
+        <a href="" id="resWhats" class="btn-whats">FALAR COM CONSULTOR EAS</a>
     </div>
 </div>
 <script>
@@ -69,34 +69,49 @@
         const benef = document.getElementById('beneficio').value;
         const prof = document.getElementById('profissao').value;
         const cupom = document.getElementById('cupom').value.trim().toUpperCase();
-        if(!idade) return alert("Digite a sua idade.");
+        
+        if(!idade) return alert("Digite sua idade.");
+        
         const resDiv = document.getElementById('resultado');
         if(idade > 65) {
             document.getElementById('containerPreco').innerHTML = `<p style="color:red; font-weight:bold;">Para idades acima de 65 anos, consulte condições manuais.</p>`;
             document.getElementById('resTexto').innerHTML = "";
+            document.getElementById('resWhats').href = `https://wa.me/5517997165139?text=Olá! Tenho ${idade} anos e gostaria de informações sobre o plano de R$ ${benef}.`;
             resDiv.style.display = "block";
             return;
         }
+
         let faixa = "14-35";
         if(idade >= 60) faixa = "60-65"; else if(idade >= 54) faixa = "54-59"; else if(idade >= 48) faixa = "48-53"; else if(idade >= 42) faixa = "42-47"; else if(idade >= 36) faixa = "36-41";
+        
         const isCupom = (cupom === "EAS");
         const preco = isCupom ? tabelaPromo[benef][faixa] : tabelaPadrao[benef][faixa];
+        
         const diaria = (benef / 30).toFixed(2);
         const totalIndenizado = ((30 - 7) * diaria).toFixed(2);
+        
         document.getElementById('containerPreco').innerHTML = `
             <div class="box-preco">
                 <div style="font-size: 2.2rem; font-weight: 800;">R$ ${preco.toFixed(2)}/mês</div>
                 <div style="font-size: 0.9rem;">${isCupom ? 'Cupom EAS Aplicado (Tabela Promocional)' : 'Tabela Padrão'}</div>
             </div>`;
-        let msgSaude = prof === 'saude' ? `<p style="color:var(--unimed); font-weight:bold;">✅ Vantagem: Médicos não precisam comprovar renda até 40 mil!</p>` : '';
+            
+        let msgSaude = prof === 'saude' ? `<p style="color:var(--unimed); font-weight:bold;">✅ Vantagem: Dispensa de comprovação de renda para sua profissão!</p>` : '';
+
         document.getElementById('resTexto').innerHTML = `
             ${msgSaude}
-            <span class="secao-titulo">ESTUDO TÉCNICO</span>
-            <p>Franquia: <b>7 dias</b>.<br>Diária: <b>R$ ${diaria}</b>.<br>Em 30 dias de afastamento, recebe por 23 dias (R$ ${totalIndenizado}).</p>
+            <span class="secao-titulo">ESTUDO SERIT</span>
+            <p>Franquia: <b>7 dias</b>.<br>
+            Sua diária é de <b>R$ ${diaria}</b>.<br>
+            Em 30 dias de afastamento, você recebe por 23 dias (Total: <b>R$ ${totalIndenizado}</b>).</p>
             <span class="secao-titulo">CARÊNCIAS UNIMED</span>
-            <p>• 30 dias para doenças.<br>• 180 dias para LER/DORT/Hérnias.<br>• Acidente não tem carência.</p>
+            <p>• 30 dias para doenças.<br>
+            • 180 dias para LER/DORT/Hérnias.<br>
+            • Sem carência para acidentes.</p>
         `;
-        document.getElementById('resWhats').href = `https://wa.me/5517988435711?text=Olá! Simulei o plano de R$ ${benef} para ${idade} anos.`;
+        
+        // NÚMERO ATUALIZADO AQUI
+        document.getElementById('resWhats').href = `https://wa.me/5517997165139?text=Olá! Simulei o plano de R$ ${benef} (Idade ${idade}) e gostaria de contratar.`;
         resDiv.style.display = "block";
     }
 </script>
