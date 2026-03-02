@@ -8,24 +8,29 @@
     <style>
         :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; }
         body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: var(--text); margin: 0; display: flex; justify-content: center; padding: 10px; }
-        .container { width: 100%; max-width: 480px; background: #ffffff; padding: 20px; }
-        .header { text-align: center; padding: 20px 0; }
+        .container { width: 100%; max-width: 480px; padding: 20px; text-align: center; }
         .logo { width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--gold); margin-bottom: 15px; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         h2 { color: var(--primary); margin: 0; font-size: 1.6rem; font-weight: 800; }
-        .sub { color: var(--gold); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; margin-bottom: 20px; }
+        .sub { color: var(--gold); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; margin-bottom: 25px; }
         
-        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group { margin-bottom: 15px; text-align: left; position: relative; }
         label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
         input, select { width: 100%; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; outline: none; }
         
+        /* Sugestões de Profissão */
+        .suggestions { position: absolute; width: 100%; background: white; border: 1px solid #ddd; border-radius: 10px; z-index: 100; max-height: 200px; overflow-y: auto; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .suggestions div { padding: 12px; cursor: pointer; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .suggestions div:hover { background: #f0fdf4; }
+
         .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
         
-        #resultado { display: none; margin-top: 30px; border-top: 2px solid #f1f5f9; padding-top: 25px; }
+        #resultado { display: none; margin-top: 30px; border-top: 2px solid #f1f5f9; padding-top: 25px; text-align: left; }
         .price-card { background: #f0fdf4; padding: 25px; border-radius: 20px; text-align: center; border: 2px solid var(--unimed); margin-bottom: 20px; }
-        .price-value { font-size: 3rem; font-weight: 800; color: var(--primary); }
+        .old-price { text-decoration: line-through; color: #94a3b8; font-size: 1.1rem; }
+        .price-value { font-size: 3rem; font-weight: 800; color: var(--primary); margin: 5px 0; }
         
-        .info-card { background: #f8fafc; padding: 18px; border-radius: 15px; margin-bottom: 12px; border-left: 5px solid var(--gold); text-align: left; }
-        .info-card h4 { margin: 0 0 8px; font-size: 0.95rem; color: var(--primary); }
+        .info-card { background: #f8fafc; padding: 18px; border-radius: 15px; margin-bottom: 12px; border-left: 5px solid var(--gold); }
+        .info-card h4 { margin: 0 0 8px; font-size: 0.95rem; color: var(--primary); display: flex; align-items: center; gap: 8px; }
         .info-card p { margin: 4px 0; font-size: 0.85rem; line-height: 1.4; }
 
         .btn-whats { display: flex; align-items: center; justify-content: center; gap: 10px; background: #25d366; color: white; text-decoration: none; padding: 18px; border-radius: 12px; font-weight: 700; margin-top: 20px; }
@@ -34,59 +39,50 @@
 <body>
 
 <div class="container">
-    <div class="header">
-        <img src="logo oficial.jpg.png" class="logo" alt="EAS Corretora">
-        <h2>EAS CORRETORA</h2>
-        <div class="sub">Simulador de Proteção de Renda</div>
+    <img src="logo oficial.jpg.png" class="logo" alt="EAS Corretora">
+    <h2>EAS CORRETORA</h2>
+    <div class="sub">Simulador Técnico Unimed</div>
+
+    <div class="input-group">
+        <label><i class="fa-solid fa-calendar"></i> Idade</label>
+        <input type="number" id="idade" placeholder="Ex: 35">
     </div>
 
-    <div class="form-box">
-        <div class="input-group">
-            <label><i class="fa-solid fa-calendar"></i> Idade</label>
-            <input type="number" id="idade" placeholder="Ex: 35">
-        </div>
-
-        <div class="input-group">
-            <label><i class="fa-solid fa-briefcase"></i> Categoria Profissional (Limite Serit)</label>
-            <select id="categoriaProf">
-                <option value="999999">Profissionais Liberais / Saúde (Sem Limite)</option>
-                <option value="3000">Comércio / Administrativo (Limite R$ 3.000)</option>
-                <option value="2000">Operacional / Serviços (Limite R$ 2.000)</option>
-                <option value="1500">Transporte / Eventos (Limite R$ 1.500)</option>
-                <option value="-1">Atividades de Risco (Recusado)</option>
-            </select>
-        </div>
-
-        <div class="input-group">
-            <label><i class="fa-solid fa-money-bill-trend-up"></i> Valor de Cobertura</label>
-            <select id="beneficio">
-                <option value="3000">R$ 3.000,00 mensais</option>
-                <option value="6000">R$ 6.000,00 mensais</option>
-                <option value="9000">R$ 9.000,00 mensais</option>
-            </select>
-        </div>
-
-        <div class="input-group">
-            <label><i class="fa-solid fa-ticket"></i> Cupom Promocional</label>
-            <input type="text" id="cupom" placeholder="Digite seu cupom">
-        </div>
-
-        <button class="btn-calc" onclick="calcular()">GERAR ESTUDO TÉCNICO</button>
+    <div class="input-group">
+        <label><i class="fa-solid fa-briefcase"></i> Sua Profissão</label>
+        <input type="text" id="profInput" placeholder="Comece a digitar sua profissão..." autocomplete="off">
+        <div id="profSuggestions" class="suggestions"></div>
     </div>
+
+    <div class="input-group">
+        <label><i class="fa-solid fa-money-bill-trend-up"></i> Cobertura Desejada</label>
+        <select id="beneficio">
+            <option value="3000">R$ 3.000,00</option>
+            <option value="6000">R$ 6.000,00</option>
+            <option value="9000">R$ 9.000,00</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label><i class="fa-solid fa-ticket"></i> Cupom Promocional</label>
+        <input type="text" id="cupom" placeholder="Ex: EAS">
+    </div>
+
+    <button class="btn-calc" onclick="calcular()">GERAR SIMULAÇÃO COMPLETA</button>
 
     <div id="resultado">
         <div id="containerPreco"></div>
         
         <div class="info-card">
-            <h4><i class="fa-solid fa-file-invoice-dollar"></i> Detalhes da Franquia</h4>
+            <h4><i class="fa-solid fa-file-contract"></i> Estudo do SERIT (Renda)</h4>
             <div id="resSerit"></div>
         </div>
 
         <div class="info-card">
-            <h4><i class="fa-solid fa-clock"></i> Carências Unimed</h4>
-            <p>• <b>30 dias:</b> Doenças comuns</p>
+            <h4><i class="fa-solid fa-clock"></i> Carências Oficiais Unimed</h4>
+            <p>• <b>30 dias:</b> Doenças</p>
             <p>• <b>180 dias:</b> LER, DORT e Hérnias</p>
-            <p>• <b>Imediato:</b> Acidentes Pessoais</p>
+            <p>• <b>Acidentes:</b> Atendimento imediato</p>
         </div>
 
         <a href="" id="resWhats" class="btn-whats">
@@ -96,47 +92,69 @@
 </div>
 
 <script>
+    // Amostra de profissões e seus limites técnicos baseados na sua planilha GERAL
+    const dataProf = [
+        {n: "Médico", l: 999999, s: true}, {n: "Médico Veterinário", l: 999999, s: true},
+        {n: "Dentista", l: 999999, s: true}, {n: "Psicólogo", l: 999999, s: true},
+        {n: "Advogado", l: 999999, s: false}, {n: "Engenheiro", l: 999999, s: false},
+        {n: "Vendedor", l: 3000, s: false}, {n: "Administrador", l: 999999, s: false},
+        {n: "Ajudante", l: 2000, s: false}, {n: "Motorista", l: 1500, s: false},
+        {n: "Vigilante", l: -1, s: false}, {n: "Pedreiro", l: 1500, s: false}
+    ];
+
+    const input = document.getElementById('profInput');
+    const suggestions = document.getElementById('profSuggestions');
+    let selectedProf = null;
+
+    input.addEventListener('input', () => {
+        const val = input.value.toLowerCase();
+        suggestions.innerHTML = '';
+        if (val.length < 2) { suggestions.style.display = 'none'; return; }
+        const filtered = dataProf.filter(p => p.n.toLowerCase().includes(val));
+        filtered.forEach(p => {
+            const div = document.createElement('div');
+            div.innerHTML = p.n;
+            div.onclick = () => { input.value = p.n; selectedProf = p; suggestions.style.display = 'none'; };
+            suggestions.appendChild(div);
+        });
+        suggestions.style.display = filtered.length ? 'block' : 'none';
+    });
+
     function calcular() {
         const idade = parseInt(document.getElementById('idade').value);
-        const limite = parseInt(document.getElementById('categoriaProf').value);
         const benef = parseInt(document.getElementById('beneficio').value);
         const cupom = document.getElementById('cupom').value.trim().toUpperCase();
 
-        if(!idade) return alert("Por favor, informe a idade.");
-        if(limite === -1) return alert("⚠️ Categoria sem aceitação automática.");
-        if(benef > limite) return alert(`⚠️ Atenção: O limite para esta categoria é R$ ${limite}. Selecione um valor menor.`);
+        if(!idade || !selectedProf) return alert("Por favor, informe a idade e escolha uma profissão.");
+        if(selectedProf.l === -1) return alert("⚠️ Categoria sem aceitação automática.");
+        if(benef > selectedProf.l) return alert(`⚠️ Limite Excedido: Para esta profissão, o máximo é R$ ${selectedProf.l}.`);
 
-        const resDiv = document.getElementById('resultado');
+        // Lógica de Preços (Ancoragem)
+        const precosPadrao = { 3000: 120.79, 6000: 240.15, 9000: 340.00 };
+        const precosPromo = { 3000: 74.05, 6000: 148.12, 9000: 211.30 };
         
-        // Tabelas de Preço
-        let preco;
-        if (cupom === "EAS" && benef === 3000) {
-            preco = 74.05; // Valor promocional para 35 anos/Bronze
-        } else {
-            // Tabela padrão aproximada conforme idade
-            if (benef === 3000) preco = 120.79;
-            else if (benef === 6000) preco = 240.15;
-            else preco = 340.00;
-        }
+        const precoNormal = precosPadrao[benef];
+        const precoFinal = (cupom === "EAS") ? precosPromo[benef] : precoNormal;
+
+        document.getElementById('containerPreco').innerHTML = `
+            <div class="price-card">
+                ${cupom === 'EAS' ? `<div class="old-price">R$ ${precoNormal.toFixed(2)}</div>` : ''}
+                <div class="price-value">R$ ${precoFinal.toFixed(2)}</div>
+                <div style="font-size:0.85rem; color:var(--unimed); font-weight:700;">INVESTIMENTO MENSAL ${cupom === 'EAS' ? '(CUPOM APLICADO)' : ''}</div>
+            </div>`;
 
         const diaria = (benef / 30).toFixed(2);
         const total = ((30 - 7) * diaria).toFixed(2);
 
-        document.getElementById('containerPreco').innerHTML = `
-            <div class="price-card">
-                <div style="font-size:0.8rem; color:var(--unimed); font-weight:700;">${cupom === 'EAS' ? 'CUPOM APLICADO' : 'TABELA PADRÃO'}</div>
-                <div class="price-value">R$ ${preco.toFixed(2)}</div>
-                <div style="font-size:0.9rem; color:#64748b;">Investimento Mensal</div>
-            </div>`;
-
         document.getElementById('resSerit').innerHTML = `
-            <p>• <b>Franquia:</b> 7 dias (recebe a partir do 8º)</p>
-            <p>• <b>Valor Diária:</b> R$ ${diaria}</p>
+            ${selectedProf.s ? '<p style="color:var(--unimed); font-weight:700;">✓ Dispensa de Comprovação de Renda</p>' : ''}
+            <p>• <b>Franquia:</b> 7 dias</p>
+            <p>• <b>Diária:</b> R$ ${diaria}</p>
             <p>• <b>Afastamento (30 dias):</b> Recebe R$ ${total}</p>
         `;
 
-        document.getElementById('resWhats').href = `https://wa.me/5517997165139?text=Simulação EAS: Idade ${idade}, Plano R$ ${benef}.`;
-        resDiv.style.display = "block";
+        document.getElementById('resWhats').href = `https://wa.me/5517997165139?text=Olá! Fiz a simulação EAS para ${selectedProf.n} (${idade} anos). Valor R$ ${precoFinal.toFixed(2)}.`;
+        document.getElementById('resultado').style.display = "block";
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 </script>
