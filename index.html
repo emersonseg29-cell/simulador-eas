@@ -3,56 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EAS Corretora - Simulador Oficial</title>
+    <title>EAS Corretora - Simulador Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; display: flex; justify-content: center; padding: 20px; margin: 0; }
-        .card { background: white; width: 100%; max-width: 500px; padding: 2.5rem; border-radius: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-top: 8px solid var(--primary); box-sizing: border-box; text-align: center; }
-        .logo { width: 120px; height: 120px; margin: 0 auto 1.5rem; border-radius: 50%; border: 3px solid var(--gold); display: block; object-fit: cover; }
-        .input-group { margin-bottom: 1.2rem; text-align: left; }
-        label { display: block; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 6px; }
-        input, select { width: 100%; padding: 14px; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; background: #f8fafc; font-size: 1rem; outline: none; }
-        button { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1em; transition: 0.3s; margin-top: 10px; }
-        #resultado { margin-top: 2rem; display: none; text-align: left; border-top: 2px solid #eee; padding-top: 25px; }
-        .box-preco { background: #f0fdf4; padding: 20px; border-radius: 1.5rem; border: 2px solid var(--unimed); text-align: center; margin-bottom: 20px; }
-        .secao-titulo { color: var(--primary); font-weight: 800; border-bottom: 2px solid var(--gold); display: inline-block; margin-bottom: 10px; margin-top: 15px; }
-        .btn-whats { display: block; background: #25d366; color: white; text-align: center; padding: 16px; border-radius: 12px; text-decoration: none; font-weight: bold; margin-top: 20px; }
+        :root {
+            --primary: #1d2d44;
+            --primary-light: #2a3d5a;
+            --gold: #b89b3e;
+            --unimed: #00995d;
+            --bg: #f4f7f9;
+            --white: #ffffff;
+            --text: #334155;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--white);
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .header {
+            background: var(--primary);
+            padding: 40px 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid var(--gold);
+            margin-bottom: 15px;
+            object-fit: cover;
+            background: white;
+        }
+
+        .header h2 { margin: 0; font-size: 1.5rem; letter-spacing: 1px; }
+        .header p { margin: 5px 0 0; font-size: 0.9rem; opacity: 0.8; }
+
+        .form-content { padding: 30px 25px; }
+
+        .input-group { margin-bottom: 20px; }
+        label { 
+            display: block; 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            color: #64748b; 
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            margin-left: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #f1f5f9;
+            border-radius: 15px;
+            font-size: 1rem;
+            background: #f8fafc;
+            transition: 0.3s;
+            box-sizing: border-box;
+            color: var(--primary);
+        }
+
+        input:focus, select:focus {
+            border-color: var(--gold);
+            outline: none;
+            background: white;
+        }
+
+        .btn-calc {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(29, 45, 68, 0.2);
+        }
+
+        .btn-calc:hover { background: var(--primary-light); transform: translateY(-2px); }
+
+        #resultado { display: none; padding: 0 25px 30px; animation: slideUp 0.5s ease; }
+
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .price-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid var(--unimed);
+            margin-bottom: 20px;
+        }
+
+        .price-value { font-size: 2.8rem; font-weight: 800; color: var(--primary); margin: 5px 0; }
+        .price-label { font-size: 0.85rem; color: var(--unimed); font-weight: 700; }
+
+        .info-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+
+        .info-card h4 { 
+            margin: 0 0 10px; 
+            font-size: 0.9rem; 
+            color: var(--primary); 
+            display: flex; 
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-card p { margin: 5px 0; font-size: 0.9rem; line-height: 1.5; color: #475569; }
+
+        .badge-saude {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-whats {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #25d366;
+            color: white;
+            text-decoration: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
+            transition: 0.3s;
+        }
+
+        .btn-whats:hover { transform: scale(1.02); background: #20ba5a; }
+
     </style>
 </head>
 <body>
-<div class="card">
-    <img src="logo oficial.jpg.png" class="logo" alt="EAS Corretora">
-    <h2>EAS Corretora</h2>
-    <div class="input-group">
-        <label>SUA IDADE</label>
-        <input type="number" id="idade" placeholder="Ex: 35">
+
+<div class="container">
+    <div class="header">
+        <img src="logo oficial.jpg.png" class="logo" alt="EAS Corretora">
+        <h2>EAS CORRETORA</h2>
+        <p>Consultoria Especializada Unimed</p>
     </div>
-    <div class="input-group">
-        <label>SUA PROFISSÃO</label>
-        <select id="profissao">
-            <option value="outros">Outras Profissões</option>
-            <option value="saude">Médico / Dentista</option>
-        </select>
+
+    <div class="form-content">
+        <div class="input-group">
+            <label><i class="fa-solid fa-calendar-day"></i> Qual sua idade?</label>
+            <input type="number" id="idade" placeholder="Ex: 35">
+        </div>
+
+        <div class="input-group">
+            <label><i class="fa-solid fa-stethoscope"></i> Profissão</label>
+            <select id="profissao">
+                <option value="outros">Outras Profissões</option>
+                <option value="saude">Médico / Dentista</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label><i class="fa-solid fa-wallet"></i> Cobertura Desejada</label>
+            <select id="beneficio">
+                <option value="3000">R$ 3.000,00 mensais</option>
+                <option value="6000">R$ 6.000,00 mensais</option>
+                <option value="9000">R$ 9.000,00 mensais</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label><i class="fa-solid fa-tag"></i> Cupom Promocional</label>
+            <input type="text" id="cupom" placeholder="Digite aqui seu cupom">
+        </div>
+
+        <button class="btn-calc" onclick="gerarSimulacao()">VER ESTUDO TÉCNICO</button>
     </div>
-    <div class="input-group">
-        <label>RENDA MENSAL DESEJADA</label>
-        <select id="beneficio">
-            <option value="3000">R$ 3.000,00</option>
-            <option value="6000">R$ 6.000,00</option>
-            <option value="9000">R$ 9.000,00</option>
-        </select>
-    </div>
-    <div class="input-group">
-        <label>CUPOM DE DESCONTO</label>
-        <input type="text" id="cupom" placeholder="Ex: EAS">
-    </div>
-    <button onclick="gerarSimulacao()">CALCULAR AGORA</button>
+
     <div id="resultado">
+        <div id="saudeAviso"></div>
         <div id="containerPreco"></div>
-        <div id="resTexto"></div>
-        <a href="" id="resWhats" class="btn-whats">FALAR COM CONSULTOR EAS</a>
+        
+        <div class="info-card">
+            <h4><i class="fa-solid fa-shield-halved" style="color:var(--gold)"></i> Proteção de Renda (SERIT)</h4>
+            <div id="resSerit"></div>
+        </div>
+
+        <div class="info-card">
+            <h4><i class="fa-solid fa-clock" style="color:var(--gold)"></i> Carências Oficiais</h4>
+            <p>• <b>30 dias:</b> Doenças comuns</p>
+            <p>• <b>180 dias:</b> LER, DORT e Hérnias</p>
+            <p>• <b>Acidentes:</b> Cobertura imediata</p>
+        </div>
+
+        <a href="" id="resWhats" class="btn-whats">
+            <i class="fa-brands fa-whatsapp"></i> FALAR COM O CONSULTOR
+        </a>
     </div>
 </div>
+
 <script>
     const tabelaPromo = {
         "3000": { "14-35": 74.05, "36-41": 89.02, "42-47": 116.41, "48-53": 159.55, "54-59": 215.11, "60-65": 342.87 },
@@ -64,19 +245,19 @@
         "6000": { "14-35": 240.15, "36-41": 288.00, "42-47": 360.00, "48-53": 442.00, "54-59": 611.00, "60-65": 886.00 },
         "9000": { "14-35": 340.00, "36-41": 395.00, "42-47": 480.00, "48-53": 590.00, "54-59": 780.00, "60-65": 990.00 }
     };
+
     function gerarSimulacao() {
         const idade = parseInt(document.getElementById('idade').value);
         const benef = document.getElementById('beneficio').value;
         const prof = document.getElementById('profissao').value;
         const cupom = document.getElementById('cupom').value.trim().toUpperCase();
         
-        if(!idade) return alert("Digite sua idade.");
+        if(!idade) return alert("Por favor, informe sua idade.");
         
         const resDiv = document.getElementById('resultado');
         if(idade > 65) {
-            document.getElementById('containerPreco').innerHTML = `<p style="color:red; font-weight:bold;">Para idades acima de 65 anos, consulte condições manuais.</p>`;
-            document.getElementById('resTexto').innerHTML = "";
-            document.getElementById('resWhats').href = `https://wa.me/5517997165139?text=Olá! Tenho ${idade} anos e gostaria de informações sobre o plano de R$ ${benef}.`;
+            document.getElementById('containerPreco').innerHTML = `<div style="color:#b91c1c; font-weight:bold; padding:20px; background:#fef2f2; border-radius:15px; text-align:center;">⚠️ Idade acima de 65 anos sob consulta especial.</div>`;
+            document.getElementById('resSerit').innerHTML = "";
             resDiv.style.display = "block";
             return;
         }
@@ -86,34 +267,30 @@
         
         const isCupom = (cupom === "EAS");
         const preco = isCupom ? tabelaPromo[benef][faixa] : tabelaPadrao[benef][faixa];
-        
         const diaria = (benef / 30).toFixed(2);
         const totalIndenizado = ((30 - 7) * diaria).toFixed(2);
         
-        document.getElementById('containerPreco').innerHTML = `
-            <div class="box-preco">
-                <div style="font-size: 2.2rem; font-weight: 800;">R$ ${preco.toFixed(2)}/mês</div>
-                <div style="font-size: 0.9rem;">${isCupom ? 'Cupom EAS Aplicado (Tabela Promocional)' : 'Tabela Padrão'}</div>
-            </div>`;
-            
-        let msgSaude = prof === 'saude' ? `<p style="color:var(--unimed); font-weight:bold;">✅ Vantagem: Dispensa de comprovação de renda para sua profissão!</p>` : '';
+        document.getElementById('saudeAviso').innerHTML = prof === 'saude' ? 
+            `<div class="badge-saude"><i class="fa-solid fa-circle-check"></i> Dispensa de comprovação de renda ativada!</div>` : '';
 
-        document.getElementById('resTexto').innerHTML = `
-            ${msgSaude}
-            <span class="secao-titulo">ESTUDO SERIT</span>
-            <p>Franquia: <b>7 dias</b>.<br>
-            Sua diária é de <b>R$ ${diaria}</b>.<br>
-            Em 30 dias de afastamento, você recebe por 23 dias (Total: <b>R$ ${totalIndenizado}</b>).</p>
-            <span class="secao-titulo">CARÊNCIAS UNIMED</span>
-            <p>• 30 dias para doenças.<br>
-            • 180 dias para LER/DORT/Hérnias.<br>
-            • Sem carência para acidentes.</p>
+        document.getElementById('containerPreco').innerHTML = `
+            <div class="price-card">
+                <span class="price-label">${isCupom ? 'CONDIÇÃO EXCLUSIVA ATIVADA' : 'TABELA PADRÃO'}</span>
+                <div class="price-value">R$ ${preco.toFixed(2)}</div>
+                <div style="font-size:0.9rem; color:#475569;">por mês</div>
+            </div>`;
+
+        document.getElementById('resSerit').innerHTML = `
+            <p>• <b>Franquia:</b> Apenas 7 dias</p>
+            <p>• <b>Sua Diária:</b> R$ ${diaria}</p>
+            <p>• <b>Exemplo:</b> Em 30 dias parado, você recebe <b>R$ ${totalIndenizado}</b> líquido.</p>
         `;
         
-        // NÚMERO ATUALIZADO AQUI
-        document.getElementById('resWhats').href = `https://wa.me/5517997165139?text=Olá! Simulei o plano de R$ ${benef} (Idade ${idade}) e gostaria de contratar.`;
+        document.getElementById('resWhats').href = `https://wa.me/5517997165139?text=Olá! Fiz a simulação EAS (Idade ${idade}, Renda R$ ${benef}). Tenho interesse!`;
         resDiv.style.display = "block";
+        resDiv.scrollIntoView({ behavior: 'smooth' });
     }
 </script>
+
 </body>
 </html>
