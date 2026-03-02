@@ -12,30 +12,21 @@
         .input-group { margin-bottom: 1.2rem; text-align: left; }
         label { display: block; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 6px; }
         input, select { width: 100%; padding: 14px; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; background: #f8fafc; font-size: 1rem; outline: none; }
-        input:focus { border-color: var(--gold); }
         button { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1em; transition: 0.3s; margin-top: 10px; }
-        button:hover { background: #2a3d5a; transform: translateY(-2px); }
-        
-        #resultado { margin-top: 2rem; display: none; text-align: left; border-top: 2px solid #eee; padding-top: 25px; animation: fadeIn 0.5s; }
+        #resultado { margin-top: 2rem; display: none; text-align: left; border-top: 2px solid #eee; padding-top: 25px; }
         .box-preco { background: #f0fdf4; padding: 20px; border-radius: 1.5rem; border: 2px solid var(--unimed); text-align: center; margin-bottom: 20px; }
-        .status-cupom { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-bottom: 10px; }
         .secao-titulo { color: var(--primary); font-weight: 800; border-bottom: 2px solid var(--gold); display: inline-block; margin-bottom: 10px; margin-top: 15px; }
-        .btn-whats { display: block; background: #25d366; color: white; text-align: center; padding: 16px; border-radius: 12px; text-decoration: none; font-weight: bold; margin-top: 20px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .btn-whats { display: block; background: #25d366; color: white; text-align: center; padding: 16px; border-radius: 12px; text-decoration: none; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
-
 <div class="card">
     <img src="logo oficial.jpg.png" class="logo" alt="EAS Corretora">
     <h2>EAS Corretora</h2>
-    <p style="color:var(--unimed); font-weight:bold; font-size:0.9rem; margin-top:-15px; margin-bottom:25px;">Simulador DIT/SERIT Unimed</p>
-    
     <div class="input-group">
-        <label>SUA IDADE</label>
+        <label>IDADE</label>
         <input type="number" id="idade" placeholder="Ex: 35">
     </div>
-
     <div class="input-group">
         <label>SUA PROFISSÃO</label>
         <select id="profissao">
@@ -43,103 +34,71 @@
             <option value="saude">Médico / Dentista</option>
         </select>
     </div>
-
     <div class="input-group">
-        <label>PLANO DESEJADO (RENDA MENSAL)</label>
+        <label>RENDA MENSAL DESEJADA</label>
         <select id="beneficio">
-            <option value="3000">R$ 3.000,00 (Plano Bronze)</option>
-            <option value="6000">R$ 6.000,00 (Plano Prata)</option>
-            <option value="9000">R$ 9.000,00 (Plano Ouro)</option>
+            <option value="3000">R$ 3.000,00</option>
+            <option value="6000">R$ 6.000,00</option>
+            <option value="9000">R$ 9.000,00</option>
         </select>
     </div>
-
     <div class="input-group">
         <label>CUPOM DE DESCONTO</label>
         <input type="text" id="cupom" placeholder="Ex: EAS">
     </div>
-
     <button onclick="gerarSimulacao()">CALCULAR AGORA</button>
-
     <div id="resultado">
         <div id="containerPreco"></div>
         <div id="resTexto"></div>
-        <a href="" id="resWhats" class="btn-whats">FALAR COM CONSULTOR JONES</a>
+        <a href="" id="resWhats" class="btn-whats">FALAR COM CONSULTOR</a>
     </div>
 </div>
-
 <script>
-    // TABELA PROMOCIONAL (CALL 08 - CSV)
     const tabelaPromo = {
         "3000": { "14-35": 74.05, "36-41": 89.02, "42-47": 116.41, "48-53": 159.55, "54-59": 215.11, "60-65": 342.87 },
         "6000": { "14-35": 148.12, "36-41": 178.03, "42-47": 232.82, "48-53": 319.10, "54-59": 446.40, "60-65": 685.76 },
         "9000": { "14-35": 211.30, "36-41": 245.00, "42-47": 305.00, "48-53": 390.00, "54-59": 510.00, "60-65": 680.00 }
     };
-
-    // TABELA PADRÃO (PDF ANTIGO - ESTIMATIVA)
     const tabelaPadrao = {
         "3000": { "14-35": 120.79, "36-41": 145.00, "42-47": 186.00, "48-53": 242.00, "54-59": 330.00, "60-65": 465.00 },
         "6000": { "14-35": 240.15, "36-41": 288.00, "42-47": 360.00, "48-53": 442.00, "54-59": 611.00, "60-65": 886.00 },
         "9000": { "14-35": 340.00, "36-41": 395.00, "42-47": 480.00, "48-53": 590.00, "54-59": 780.00, "60-65": 990.00 }
     };
-
     function gerarSimulacao() {
         const idade = parseInt(document.getElementById('idade').value);
         const benef = document.getElementById('beneficio').value;
         const prof = document.getElementById('profissao').value;
-        const cupomDigitado = document.getElementById('cupom').value.trim().toUpperCase();
-        
-        if(!idade) return alert("Por favor, digite a sua idade.");
-
+        const cupom = document.getElementById('cupom').value.trim().toUpperCase();
+        if(!idade) return alert("Digite a sua idade.");
         const resDiv = document.getElementById('resultado');
-        const contPreco = document.getElementById('containerPreco');
-
-        // BLOQUEIO 65 ANOS
         if(idade > 65) {
-            contPreco.innerHTML = `<div style="background:#fffcf0; padding:15px; border-radius:15px; border:1px solid #fbd38d; color:#744210; font-weight:bold; text-align:center;">⚠️ Acima de 65 anos, as condições são sob consulta manual com nosso especialista.</div>`;
+            document.getElementById('containerPreco').innerHTML = `<p style="color:red; font-weight:bold;">Para idades acima de 65 anos, consulte condições manuais.</p>`;
             document.getElementById('resTexto').innerHTML = "";
-            document.getElementById('resWhats').href = `https://wa.me/5517988435711?text=Olá Jones! Tenho ${idade} anos e quero ver o plano de R$ ${benef}.`;
             resDiv.style.display = "block";
             return;
         }
-
-        // LÓGICA DE FAIXA ETÁRIA
         let faixa = "14-35";
         if(idade >= 60) faixa = "60-65"; else if(idade >= 54) faixa = "54-59"; else if(idade >= 48) faixa = "48-53"; else if(idade >= 42) faixa = "42-47"; else if(idade >= 36) faixa = "36-41";
-
-        const isCupomValido = (cupomDigitado === "EAS");
-        const precoExibir = isCupomValido ? tabelaPromo[benef][faixa] : tabelaPadrao[benef][faixa];
-
-        // TEXTO CONSULTIVO
+        const isCupom = (cupom === "EAS");
+        const preco = isCupom ? tabelaPromo[benef][faixa] : tabelaPadrao[benef][faixa];
         const diaria = (benef / 30).toFixed(2);
-        const total53dias = ((60 - 7) * diaria).toLocaleString('pt-BR');
-        let mNat = benef == "3000" ? "50.000,00" : "100.000,00";
-        let mAcid = benef == "3000" ? "100.000,00" : "200.000,00";
-
-        contPreco.innerHTML = `
+        const totalIndenizado = ((30 - 7) * diaria).toFixed(2);
+        document.getElementById('containerPreco').innerHTML = `
             <div class="box-preco">
-                <span class="status-cupom" style="background:${isCupomValido ? '#dcfce7':'#fee2e2'}; color:${isCupomValido ? '#166534':'#991b1b'};">
-                    ${isCupomValido ? 'CUPOM "EAS" ATIVADO: TABELA PROMOCIONAL' : 'SEM CUPOM: TABELA PADRÃO'}
-                </span>
-                <div style="font-size: 2.5rem; font-weight: 800; color: var(--primary);">R$ ${precoExibir.toFixed(2)}/mês</div>
-                <div style="font-size: 0.9rem; color: #666; font-weight:bold;">Cobertura Mensal: R$ ${parseFloat(benef).toLocaleString('pt-BR')},00</div>
+                <div style="font-size: 2.2rem; font-weight: 800;">R$ ${preco.toFixed(2)}/mês</div>
+                <div style="font-size: 0.9rem;">${isCupom ? 'Cupom EAS Aplicado (Tabela Promocional)' : 'Tabela Padrão'}</div>
             </div>`;
-
-        let msgSaude = prof === 'saude' ? `<p style="color:var(--unimed); font-weight:bold;">✅ Como é da área da saúde, você tem dispensa de comprovação de renda!</p>` : '';
-
+        let msgSaude = prof === 'saude' ? `<p style="color:var(--unimed); font-weight:bold;">✅ Vantagem: Médicos não precisam comprovar renda até 40 mil!</p>` : '';
         document.getElementById('resTexto').innerHTML = `
             ${msgSaude}
             <span class="secao-titulo">ESTUDO TÉCNICO</span>
-            <p>• <b>Morte Natural:</b> R$ ${mNat}<br>• <b>Morte por Acidente:</b> R$ ${mAcid}<br>• <b>Invalidez por Doença/Acidente:</b> R$ ${mAcid}</p>
-            <span class="secao-titulo">ESTUDO DE DIÁRIAS (SERIT)</span>
-            <p>Sua diária é de <b>R$ ${diaria}</b>. Num afastamento de 60 dias, recebe um total de <b>R$ ${total53dias}</b> (já descontados os 7 dias de franquia).</p>
-            <span class="secao-titulo">CARÊNCIAS</span>
-            <p>30 dias para doenças comuns e 180 dias para LER/DORT/Hérnias. <b>Acidente não tem carência.</b></p>
+            <p>Franquia: <b>7 dias</b>.<br>Diária: <b>R$ ${diaria}</b>.<br>Em 30 dias de afastamento, recebe por 23 dias (R$ ${totalIndenizado}).</p>
+            <span class="secao-titulo">CARÊNCIAS UNIMED</span>
+            <p>• 30 dias para doenças.<br>• 180 dias para LER/DORT/Hérnias.<br>• Acidente não tem carência.</p>
         `;
-
-        document.getElementById('resWhats').href = `https://wa.me/5517988435711?text=Olá Jones! Simulei o plano de R$ ${benef} (Idade ${idade}) com o cupom ${cupomDigitado}. Valor: R$ ${precoExibir.toFixed(2)}.`;
+        document.getElementById('resWhats').href = `https://wa.me/5517988435711?text=Olá! Simulei o plano de R$ ${benef} para ${idade} anos.`;
         resDiv.style.display = "block";
     }
 </script>
-
 </body>
 </html>
