@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EAS Corretora - Simulador Profissional</title>
+    <title>EAS Corretora - Simulador Oficial</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; }
         body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: var(--text); margin: 0; display: flex; justify-content: center; padding: 10px; }
-        .container { width: 100%; max-width: 480px; padding: 20px; }
+        .container { width: 100%; max-width: 480px; background: #ffffff; padding: 20px; }
         .header { text-align: center; padding: 20px 0; }
-        .logo { width: 170px; height: 170px; border-radius: 50%; border: 4px solid var(--gold); margin-bottom: 15px; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .logo { width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--gold); margin-bottom: 15px; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         h2 { color: var(--primary); margin: 0; font-size: 1.6rem; font-weight: 800; }
-        .form-box { margin-top: 25px; }
-        .input-group { margin-bottom: 18px; position: relative; }
+        .sub { color: var(--gold); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; margin-bottom: 20px; }
+        
+        .input-group { margin-bottom: 15px; text-align: left; }
         label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
         input, select { width: 100%; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; outline: none; }
-        input:focus { border-color: var(--gold); background: white; }
         
-        /* Estilo da Lista de Sugestões */
-        .suggestions { position: absolute; width: 100%; background: white; border: 1px solid #e2e8f0; border-radius: 10px; z-index: 100; max-height: 200px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: none; }
-        .suggestions div { padding: 12px; cursor: pointer; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
-        .suggestions div:hover { background: #f0fdf4; color: var(--unimed); }
-
         .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        
         #resultado { display: none; margin-top: 30px; border-top: 2px solid #f1f5f9; padding-top: 25px; }
         .price-card { background: #f0fdf4; padding: 25px; border-radius: 20px; text-align: center; border: 2px solid var(--unimed); margin-bottom: 20px; }
         .price-value { font-size: 3rem; font-weight: 800; color: var(--primary); }
-        .info-card { background: #f8fafc; padding: 18px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid var(--gold); }
-        .btn-whats { display: flex; align-items: center; justify-content: center; gap: 10px; background: #25d366; color: white; text-decoration: none; padding: 20px; border-radius: 12px; font-weight: 700; margin-top: 20px; }
+        
+        .info-card { background: #f8fafc; padding: 18px; border-radius: 15px; margin-bottom: 12px; border-left: 5px solid var(--gold); text-align: left; }
+        .info-card h4 { margin: 0 0 8px; font-size: 0.95rem; color: var(--primary); }
+        .info-card p { margin: 4px 0; font-size: 0.85rem; line-height: 1.4; }
+
+        .btn-whats { display: flex; align-items: center; justify-content: center; gap: 10px; background: #25d366; color: white; text-decoration: none; padding: 18px; border-radius: 12px; font-weight: 700; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -37,44 +37,56 @@
     <div class="header">
         <img src="logo oficial.jpg.png" class="logo" alt="EAS Corretora">
         <h2>EAS CORRETORA</h2>
+        <div class="sub">Simulador de Proteção de Renda</div>
     </div>
 
     <div class="form-box">
         <div class="input-group">
-            <label><i class="fa-solid fa-user"></i> Idade</label>
+            <label><i class="fa-solid fa-calendar"></i> Idade</label>
             <input type="number" id="idade" placeholder="Ex: 35">
         </div>
 
         <div class="input-group">
-            <label><i class="fa-solid fa-briefcase"></i> Digite sua Profissão</label>
-            <input type="text" id="profInput" placeholder="Ex: Médico, Vendedor, Pedreiro..." autocomplete="off">
-            <div id="profSuggestions" class="suggestions"></div>
-        </div>
-
-        <div class="input-group">
-            <label><i class="fa-solid fa-hand-holding-dollar"></i> Cobertura Desejada</label>
-            <select id="beneficio">
-                <option value="3000">R$ 3.000,00</option>
-                <option value="6000">R$ 6.000,00</option>
-                <option value="9000">R$ 9.000,00</option>
+            <label><i class="fa-solid fa-briefcase"></i> Categoria Profissional (Limite Serit)</label>
+            <select id="categoriaProf">
+                <option value="999999">Profissionais Liberais / Saúde (Sem Limite)</option>
+                <option value="3000">Comércio / Administrativo (Limite R$ 3.000)</option>
+                <option value="2000">Operacional / Serviços (Limite R$ 2.000)</option>
+                <option value="1500">Transporte / Eventos (Limite R$ 1.500)</option>
+                <option value="-1">Atividades de Risco (Recusado)</option>
             </select>
         </div>
 
         <div class="input-group">
-            <label><i class="fa-solid fa-ticket"></i> Cupom</label>
-            <input type="text" id="cupom" placeholder="Ex: EAS">
+            <label><i class="fa-solid fa-money-bill-trend-up"></i> Valor de Cobertura</label>
+            <select id="beneficio">
+                <option value="3000">R$ 3.000,00 mensais</option>
+                <option value="6000">R$ 6.000,00 mensais</option>
+                <option value="9000">R$ 9.000,00 mensais</option>
+            </select>
         </div>
 
-        <button class="btn-calc" onclick="gerarSimulacao()">SIMULAR AGORA</button>
+        <div class="input-group">
+            <label><i class="fa-solid fa-ticket"></i> Cupom Promocional</label>
+            <input type="text" id="cupom" placeholder="Digite seu cupom">
+        </div>
+
+        <button class="btn-calc" onclick="calcular()">GERAR ESTUDO TÉCNICO</button>
     </div>
 
     <div id="resultado">
         <div id="containerPreco"></div>
-        <div id="avisoRegra" style="margin-bottom:15px"></div>
         
         <div class="info-card">
-            <h4><i class="fa-solid fa-chart-line"></i> Estudo do SERIT</h4>
+            <h4><i class="fa-solid fa-file-invoice-dollar"></i> Detalhes da Franquia</h4>
             <div id="resSerit"></div>
+        </div>
+
+        <div class="info-card">
+            <h4><i class="fa-solid fa-clock"></i> Carências Unimed</h4>
+            <p>• <b>30 dias:</b> Doenças comuns</p>
+            <p>• <b>180 dias:</b> LER, DORT e Hérnias</p>
+            <p>• <b>Imediato:</b> Acidentes Pessoais</p>
         </div>
 
         <a href="" id="resWhats" class="btn-whats">
@@ -84,93 +96,53 @@
 </div>
 
 <script>
-    // Baseado na sua lista "Cópia de LISTA PROFISSOES COM LIMITES EXCEL.xlsx"
-    const dataProf = [
-        {n: "Médico", l: 999999, s: true}, {n: "Médico Veterinário", l: 999999, s: true},
-        {n: "Dentista", l: 999999, s: true}, {n: "Cirurgião Dentista", l: 999999, s: true},
-        {n: "Psicólogo", l: 999999, s: true}, {n: "Advogado", l: 999999, s: false},
-        {n: "Vendedor", l: 2000, s: false}, {n: "Açougueiro", l: 2000, s: false},
-        {n: "Pedreiro", l: 1500, s: false}, {n: "Vigilante", l: -1, s: false},
-        {n: "Administrador", l: 999999, s: false}, {n: "Engenheiro", l: 999999, s: false},
-        {n: "Motorista", l: 1500, s: false}, {n: "Entregador", l: 1500, s: false}
-    ];
-
-    const input = document.getElementById('profInput');
-    const suggestions = document.getElementById('profSuggestions');
-    let profSelecionada = null;
-
-    input.addEventListener('input', () => {
-        const val = input.value.toLowerCase();
-        suggestions.innerHTML = '';
-        if (val.length < 2) { suggestions.style.display = 'none'; return; }
-        
-        const filtered = dataProf.filter(p => p.n.toLowerCase().includes(val));
-        if (filtered.length > 0) {
-            filtered.forEach(p => {
-                const div = document.createElement('div');
-                div.innerHTML = p.n;
-                div.onclick = () => {
-                    input.value = p.n;
-                    profSelecionada = p;
-                    suggestions.style.display = 'none';
-                };
-                suggestions.appendChild(div);
-            });
-            suggestions.style.display = 'block';
-        } else {
-            suggestions.style.display = 'none';
-        }
-    });
-
-    function gerarSimulacao() {
+    function calcular() {
         const idade = parseInt(document.getElementById('idade').value);
+        const limite = parseInt(document.getElementById('categoriaProf').value);
         const benef = parseInt(document.getElementById('beneficio').value);
         const cupom = document.getElementById('cupom').value.trim().toUpperCase();
-        
-        if(!idade || !profSelecionada) return alert("Por favor, preencha a idade e escolha uma profissão da lista.");
-        
-        if(profSelecionada.l === -1) {
-            alert("⚠️ Profissão Recusada: Esta atividade não possui aceitação automática.");
-            return;
-        }
 
-        if(profSelecionada.l < benef && profSelecionada.l !== 999999) {
-            alert(`⚠️ Limite Excedido: Para esta profissão, o limite máximo de contratação é R$ ${profSelecionada.l.toFixed(2)}.`);
-            return;
-        }
+        if(!idade) return alert("Por favor, informe a idade.");
+        if(limite === -1) return alert("⚠️ Categoria sem aceitação automática.");
+        if(benef > limite) return alert(`⚠️ Atenção: O limite para esta categoria é R$ ${limite}. Selecione um valor menor.`);
 
         const resDiv = document.getElementById('resultado');
-        let faixa = "14-35";
-        if(idade >= 60) faixa = "60-65"; else if(idade >= 54) faixa = "54-59"; else if(idade >= 48) faixa = "48-53"; else if(idade >= 42) faixa = "42-47"; else if(idade >= 36) faixa = "36-41";
         
-        // Tabela Simplificada conforme seus PDFs
-        const precoBase = benef === 3000 ? 120.79 : (benef === 6000 ? 240.15 : 340.00);
-        const precoFinal = (cupom === "EAS" && benef === 3000) ? 74.05 : precoBase;
-
-        document.getElementById('containerPreco').innerHTML = `
-            <div class="price-card">
-                <div class="price-value">R$ ${precoFinal.toFixed(2)}</div>
-                <div style="color:var(--unimed); font-weight:700;">INVESTIMENTO MENSAL</div>
-            </div>`;
-
-        document.getElementById('avisoRegra').innerHTML = profSelecionada.s ? 
-            `<div style="background:#e0f2fe; color:#0369a1; padding:12px; border-radius:10px; font-size:0.85rem; font-weight:700; text-align:center;">✓ Vantagem Saúde: Dispensa de comprovação de renda!</div>` : '';
+        // Tabelas de Preço
+        let preco;
+        if (cupom === "EAS" && benef === 3000) {
+            preco = 74.05; // Valor promocional para 35 anos/Bronze
+        } else {
+            // Tabela padrão aproximada conforme idade
+            if (benef === 3000) preco = 120.79;
+            else if (benef === 6000) preco = 240.15;
+            else preco = 340.00;
+        }
 
         const diaria = (benef / 30).toFixed(2);
         const total = ((30 - 7) * diaria).toFixed(2);
 
+        document.getElementById('containerPreco').innerHTML = `
+            <div class="price-card">
+                <div style="font-size:0.8rem; color:var(--unimed); font-weight:700;">${cupom === 'EAS' ? 'CUPOM APLICADO' : 'TABELA PADRÃO'}</div>
+                <div class="price-value">R$ ${preco.toFixed(2)}</div>
+                <div style="font-size:0.9rem; color:#64748b;">Investimento Mensal</div>
+            </div>`;
+
         document.getElementById('resSerit').innerHTML = `
-            <p>• <b>Sua Diária:</b> R$ ${diaria}</p>
-            <p>• <b>Franquia:</b> 7 dias</p>
-            <p>• <b>Indenização (30 dias):</b> R$ ${total}</p>
+            <p>• <b>Franquia:</b> 7 dias (recebe a partir do 8º)</p>
+            <p>• <b>Valor Diária:</b> R$ ${diaria}</p>
+            <p>• <b>Afastamento (30 dias):</b> Recebe R$ ${total}</p>
         `;
-        
-        document.getElementById('resWhats').href = `https://wa.me/5517997165139?text=Olá! Fiz a simulação EAS para ${profSelecionada.n} (${idade} anos). Quero contratar!`;
+
+        document.getElementById('resWhats').href = `https://wa.me/5517997165139?text=Simulação EAS: Idade ${idade}, Plano R$ ${benef}.`;
         resDiv.style.display = "block";
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 </script>
 </body>
 </html>
+
 
 
 
