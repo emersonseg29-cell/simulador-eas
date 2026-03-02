@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EAS Corretora - Simulador Oficial</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
         :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; }
         body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
@@ -80,7 +84,7 @@
         <div id="pdfArea" class="pdf-content">
             <div style="text-align:center; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 15px;">
                 <h3 style="color:var(--primary); margin:0; text-transform:uppercase;">Estudo Técnico Personalizado</h3>
-                <p style="margin:5px 0;">Preparado exclusivamente para: <b id="outNome"></b></p>
+                <p style="margin:5px 0;">Preparado para: <b id="outNome"></b></p>
             </div>
             <div id="corpoTexto"></div>
             <div style="text-align:right; font-weight:800; color:var(--primary); font-size:1.4rem; border-top: 2px solid #eee; padding-top:15px; margin-top:20px;">
@@ -90,9 +94,14 @@
                 <b>EAS Corretora de Seguros</b> | Emerson: (17) 99716-5139
             </div>
         </div>
+
         <div class="action-buttons">
-            <button class="btn-action btn-pdf" onclick="baixarPDF()"><i class="fa-solid fa-file-pdf"></i> SALVAR PROPOSTA</button>
-            <a href="#" id="linkWhats" class="btn-action btn-w" target="_blank"><i class="fa-brands fa-whatsapp"></i> ENVIAR WHATSAPP</a>
+            <button class="btn-action btn-pdf" id="btnDownloadPdf" onclick="baixarPDF()">
+                <i class="fa-solid fa-file-pdf"></i> SALVAR PROPOSTA
+            </button>
+            <a href="#" id="linkWhats" class="btn-action btn-w" target="_blank">
+                <i class="fa-brands fa-whatsapp"></i> ENVIAR WHATSAPP
+            </a>
         </div>
     </div>
 </div>
@@ -117,55 +126,45 @@
         const cupom = document.getElementById('cupom').value.trim().toUpperCase();
 
         if(!nome || whatsRaw.length !== 11 || !idade) {
-            alert("Por favor, preencha todos os dados corretamente (Nome, WhatsApp com 11 dígitos e Idade).");
+            alert("Preencha Nome, WhatsApp (11 dígitos) e Idade.");
             return;
         }
 
-        // --- TRAVA DE DATA DO CUPOM ---
+        // Validação de Cupom por Data
         const hoje = new Date();
         const diaAtual = hoje.getDate();
-        const cupomNoPrazo = (diaAtual >= 25);
-        let cupomAplicado = false;
+        let valorFinal;
+        const pPadrao = { 3000: 120.79, 6000: 240.15, 9000: 340.00 };
+        const pPromo = { 3000: 74.05, 6000: 148.12, 9000: 211.30 };
 
-        if (cupom === "EAS") {
-            if (cupomNoPrazo) {
-                cupomAplicado = true;
-            } else {
-                alert("Atenção: O cupom EAS é exclusivo para fechamentos entre o dia 25 e o último dia do mês. Aplicando Tabela Padrão.");
-            }
+        if(cupom === "EAS" && diaAtual >= 25) {
+            valorFinal = pPromo[benef];
+        } else {
+            if(cupom === "EAS") alert("Cupom EAS válido apenas do dia 25 em diante. Aplicando tabela padrão.");
+            valorFinal = pPadrao[benef];
         }
 
         const cap = (benef === 9000) ? 100000 : (benef === 6000 ? 60000 : 30000);
         const diaria = (benef / 30);
         const total53 = (diaria * 53);
-        const pPadrao = { 3000: 120.79, 6000: 240.15, 9000: 340.00 };
-        const pPromo = { 3000: 74.05, 6000: 148.12, 9000: 211.30 };
-        
-        const valorFinal = cupomAplicado ? pPromo[benef] : pPadrao[benef];
 
         document.getElementById('outNome').innerText = nome;
         document.getElementById('outPremio').innerText = `R$ ${valorFinal.toFixed(2)}/mês`;
 
-        let textoHtml = `
-            <p>Se ocorrer <b>morte natural</b> a seguradora pagará uma indenização no valor de <b>R$ ${cap.toLocaleString('pt-BR')},00</b>.</p>
-            <p>Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(cap*2).toLocaleString('pt-BR')},00</b>.</p>
-            <p>Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de <b>R$ ${cap.toLocaleString('pt-BR')},00</b>.</p>
-            <p><b>SERIT:</b> Se você precisar ficar afastado por mais de 7 dias, a Seguros Unimed pagará uma renda de <b>R$ ${benef.toLocaleString('pt-BR')},00 mensais</b>.</p>
+        document.getElementById('corpoTexto').innerHTML = `
+            <p>Se ocorrer <b>morte natural</b> a indenização é de <b>R$ ${cap.toLocaleString('pt-BR')},00</b>.</p>
+            <p>Se ocorrer <b>morte por acidente</b>, a indenização é de <b>R$ ${(cap*2).toLocaleString('pt-BR')},00</b>.</p>
+            <p>Se ocorrer <b>invalidez</b>, a indenização é de <b>R$ ${cap.toLocaleString('pt-BR')},00</b>.</p>
+            <p><b>SERIT:</b> Renda mensal de <b>R$ ${benef.toLocaleString('pt-BR')},00</b> após 7 dias de franquia.</p>
             <div class="highlight-box">
-                <b>EXEMPLO PRÁTICO (60 DIAS):</b><br>
-                Diária: R$ ${diaria.toFixed(2).replace('.',',')}.<br>
-                Pagamento: 53 dias (descontada franquia de 7 dias).<br>
-                <b>Indenização: R$ ${total53.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.
+                <b>EXEMPLO 60 DIAS:</b> Diária de R$ ${diaria.toFixed(2).replace('.',',')}.<br>
+                Pagamento de 53 dias líquidos.<br>
+                <b>Total: R$ ${total53.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.
             </div>
-            <p><b>CARÊNCIAS:</b> Doenças comuns (30 dias). LER, DORT, LTC, Doenças Progressivas, Degenerativas e Hérnias (180 dias). Acidente não tem carência.</p>
+            <p><b>CARÊNCIAS:</b> 30 dias doenças / 180 dias LER/DORT/Hérnias / Acidente Isento.</p>
         `;
 
-        if(prof === 'Médico / Dentista') {
-            textoHtml = `<p style="color:var(--unimed); font-weight:bold; border: 1px solid var(--unimed); padding: 12px; border-radius: 10px; text-align:center; margin-bottom: 20px;">✓ Categoria com Dispensa de Comprovação de Renda</p>` + textoHtml;
-        }
-
-        document.getElementById('corpoTexto').innerHTML = textoHtml;
-        const msgWhats = `*EAS CORRETORA*\nOlá ${nome}, segue resumo:\nRenda: R$ ${benef.toLocaleString('pt-BR')}\nExemplo 60 dias: R$ ${total53.toLocaleString('pt-BR')}\nPrêmio: R$ ${valorFinal.toFixed(2)}/mês`;
+        const msgWhats = `*EAS CORRETORA*\nOlá ${nome}, segue seu estudo técnico.\nRenda: R$ ${benef.toLocaleString('pt-BR')}\nPrêmio: R$ ${valorFinal.toFixed(2)}/mês`;
         document.getElementById('linkWhats').href = `https://wa.me/55${whatsRaw}?text=${encodeURIComponent(msgWhats)}`;
         document.getElementById('areaSimulacao').style.display = "block";
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
@@ -173,8 +172,24 @@
 
     function baixarPDF() {
         const element = document.getElementById('pdfArea');
-        const nome = document.getElementById('leadNome').value;
-        html2pdf().set({ margin: 15, filename: `Estudo_EAS_${nome}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(element).save();
+        const nomeOriginal = document.getElementById('leadNome').value;
+        const nomeLimpo = nomeOriginal.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        
+        const opt = {
+            margin: 10,
+            filename: `proposta_eas_${nomeLimpo}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, logging: false },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // EXECUTAR GERAÇÃO
+        html2pdf().set(opt).from(element).save().then(() => {
+            alert("PDF gerado com sucesso!");
+        }).catch(err => {
+            console.error("Erro no PDF:", err);
+            alert("Erro ao gerar PDF. Tente novamente ou use a versão de computador.");
+        });
     }
 </script>
 </body>
