@@ -100,14 +100,11 @@
 <script>
     const telInput = document.getElementById('leadWhats');
     
-    // Máscara e trava de input
     telInput.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é número
-        if (value.length > 11) value = value.slice(0, 11); // Trava em 11 dígitos se inventar número
-        
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 11) value = value.slice(0, 11);
         let x = value.match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
         e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
-        
         if(value.length === 11) telInput.classList.remove('error');
     });
 
@@ -119,20 +116,32 @@
         const prof = document.getElementById('profissao').value;
         const cupom = document.getElementById('cupom').value.trim().toUpperCase();
 
-        // VALIDAÇÃO RIGOROSA
-        if(!nome || nome.length < 3) return alert("Por favor, digite o nome completo do cliente.");
-        if(whatsRaw.length !== 11) {
-            telInput.classList.add('error');
-            return alert("Número de WhatsApp inválido! Digite os 11 dígitos (DDD + 9 + Número).");
+        if(!nome || whatsRaw.length !== 11 || !idade) {
+            alert("Por favor, preencha todos os dados corretamente (Nome, WhatsApp com 11 dígitos e Idade).");
+            return;
         }
-        if(!idade) return alert("Informe a idade.");
+
+        // --- TRAVA DE DATA DO CUPOM ---
+        const hoje = new Date();
+        const diaAtual = hoje.getDate();
+        const cupomNoPrazo = (diaAtual >= 25);
+        let cupomAplicado = false;
+
+        if (cupom === "EAS") {
+            if (cupomNoPrazo) {
+                cupomAplicado = true;
+            } else {
+                alert("Atenção: O cupom EAS é exclusivo para fechamentos entre o dia 25 e o último dia do mês. Aplicando Tabela Padrão.");
+            }
+        }
 
         const cap = (benef === 9000) ? 100000 : (benef === 6000 ? 60000 : 30000);
         const diaria = (benef / 30);
         const total53 = (diaria * 53);
         const pPadrao = { 3000: 120.79, 6000: 240.15, 9000: 340.00 };
         const pPromo = { 3000: 74.05, 6000: 148.12, 9000: 211.30 };
-        const valorFinal = (cupom === "EAS") ? pPromo[benef] : pPadrao[benef];
+        
+        const valorFinal = cupomAplicado ? pPromo[benef] : pPadrao[benef];
 
         document.getElementById('outNome').innerText = nome;
         document.getElementById('outPremio').innerText = `R$ ${valorFinal.toFixed(2)}/mês`;
@@ -170,6 +179,3 @@
 </script>
 </body>
 </html>
-
-
-
