@@ -188,7 +188,7 @@
             <p><small>* Quando prorroga o afastamento pelo mesmo CID não tem franquia.</small></p>
             <p><b>CARÊNCIAS:</b> Doenças comuns (30 dias). LER, DORT, LTC, Doenças Progressivas, Degenerativas e Hérnias (180 dias). Acidente não tem carência.</p>
         `;
-        
+       
         const msg = `*EAS CORRETORA*\nOlá ${nome}, segue resumo da simulação:\nRenda Mensal: R$ ${capSerit.toLocaleString('pt-BR')}\nInvestimento: R$ ${total.toFixed(2)}/mês`;
         document.getElementById('linkWhats').href = `https://wa.me/55${whatsRaw}?text=${encodeURIComponent(msg)}`;
         document.getElementById('areaSimulacao').style.display = "block";
