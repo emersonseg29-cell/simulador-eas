@@ -12,16 +12,26 @@
         :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; }
         body { font-family: 'Inter', sans-serif; background-color: #ffffff; color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 550px; background: #ffffff; padding: 20px; }
-        .logo-img { width: 160px; height: 160px; border-radius: 50%; border: 4px solid var(--gold); margin: 0 auto 15px; display: block; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .logo-img { width: 160px; height: 160px; border-radius: 50%; border: 4px solid var(--gold); margin: 0 auto 15px; display: block; object-fit: cover; }
         h2 { color: var(--primary); text-align: center; margin: 0; font-size: 1.5rem; font-weight: 800; }
         .sub { color: var(--gold); text-align: center; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1px; }
         .section-title { font-size: 0.85rem; font-weight: 800; color: var(--primary); margin: 25px 0 10px; border-bottom: 2px solid var(--gold); display: inline-block; }
         .input-group { margin-bottom: 15px; text-align: left; }
         label { display: block; font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 5px; }
         input, select { width: 100%; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; background: #f8fafc; outline: none; }
-        .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 15px; box-shadow: 0 10px 20px rgba(29, 45, 68, 0.2); }
+        .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 15px; }
         #areaSimulacao { display: none; margin-top: 40px; text-align: left; }
-        .pdf-content { padding: 35px; border: 1px solid #eee; border-radius: 20px; background: #fff; line-height: 1.7; color: #1e293b; font-size: 0.95rem; }
+        
+        /* Ajuste específico para o PDF não sair em branco */
+        .pdf-content { 
+            padding: 30px; 
+            border: 1px solid #eee; 
+            border-radius: 20px; 
+            background: #ffffff !important; 
+            color: #1e293b !important;
+            line-height: 1.6;
+        }
+        
         .highlight-box { background: #f0fdf4; padding: 20px; border-radius: 15px; margin: 20px 0; border: 1px solid var(--unimed); }
         .action-buttons { display: flex; gap: 12px; margin-top: 25px; }
         .btn-action { flex: 1; padding: 18px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-size: 1rem; }
@@ -43,7 +53,7 @@
             <input type="text" id="leadNome" placeholder="Nome Completo">
         </div>
         <div class="input-group">
-            <label>WhatsApp do Cliente (com DDD)</label>
+            <label>WhatsApp do Cliente</label>
             <input type="tel" id="leadWhats" placeholder="(00) 00000-0000" maxlength="15">
         </div>
 
@@ -53,11 +63,11 @@
             <input type="number" id="idade" placeholder="Ex: 35">
         </div>
         <div class="input-group">
-            <label>Qual plano deseja contratar?</label>
+            <label>Plano de Proteção de Renda</label>
             <select id="planoSerit">
-                <option value="3000">R$ 3.000,00 (Plano Bronze)</option>
-                <option value="6000">R$ 6.000,00 (Plano Prata)</option>
-                <option value="9000" selected>R$ 9.000,00 (Plano Ouro)</option>
+                <option value="3000|50000">R$ 3.000,00 (Plano Bronze)</option>
+                <option value="6000|100000">R$ 6.000,00 (Plano Prata)</option>
+                <option value="9000|100000" selected>R$ 9.000,00 (Plano Ouro)</option>
             </select>
         </div>
         <div class="input-group">
@@ -71,14 +81,14 @@
     <div id="areaSimulacao">
         <div id="pdfArea" class="pdf-content">
             <div style="text-align:center; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 15px;">
-                <h3 style="color:var(--primary); margin:0; text-transform:uppercase;">Estudo Técnico de Proteção</h3>
-                <p style="margin:5px 0;">Preparado exclusivamente para: <b id="outNome"></b></p>
+                <h3 style="color:#1d2d44; margin:0; text-transform:uppercase;">Estudo Técnico de Proteção</h3>
+                <p>Preparado exclusivamente para: <b id="outNome"></b></p>
             </div>
             
             <div id="corpoTexto"></div>
 
-            <div style="text-align:right; font-weight:800; color:var(--primary); font-size:1.4rem; border-top: 2px solid #eee; padding-top:15px; margin-top:20px;">
-                PRÊMIO MENSAL: <span id="outPremio" style="color:var(--unimed)"></span>
+            <div style="text-align:right; font-weight:800; color:#1d2d44; font-size:1.4rem; border-top: 2px solid #eee; padding-top:15px; margin-top:20px;">
+                PRÊMIO MENSAL: <span id="outPremio" style="color:#00995d"></span>
             </div>
             <div style="text-align:center; margin-top: 30px; font-size: 0.8rem; color: #94a3b8; border-top: 1px dashed #eee; padding-top: 10px;">
                 <b>EAS Corretora de Seguros</b> | Emerson: (17) 99716-5139<br>
@@ -88,7 +98,7 @@
 
         <div class="action-buttons">
             <button class="btn-action btn-consultor" onclick="baixarPDF()">
-                <i class="fa-solid fa-user-tie"></i> FALAR COM CONSULTOR
+                <i class="fa-solid fa-file-pdf"></i> FALAR COM CONSULTOR
             </button>
             <a href="#" id="linkWhats" class="btn-action btn-contratar" target="_blank">
                 <i class="fa-solid fa-cart-shopping"></i> CONTRATAR AGORA
@@ -98,11 +108,12 @@
 </div>
 
 <script>
+    // Máscara de Telefone
     const telInput = document.getElementById('leadWhats');
     telInput.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 11) value = value.slice(0, 11);
-        let x = value.match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 11) v = v.slice(0, 11);
+        let x = v.match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
         e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
     });
 
@@ -121,13 +132,14 @@
         const nome = document.getElementById('leadNome').value;
         const whatsRaw = telInput.value.replace(/\D/g, '');
         const idade = parseInt(document.getElementById('idade').value);
-        const capSerit = parseInt(document.getElementById('planoSerit').value);
+        const combo = document.getElementById('planoSerit').value.split('|');
+        const capSerit = parseInt(combo[0]);
+        const capMorte = parseInt(combo[1]);
         const cupom = document.getElementById('cupom').value.trim().toUpperCase();
 
-        if(!nome || whatsRaw.length !== 11 || !idade) return alert("Por favor, preencha todos os dados.");
-        if(idade < 16) return alert("Idade mínima de 16 anos.");
+        if(!nome || whatsRaw.length !== 11 || !idade) return alert("Preencha todos os dados.");
+        if(idade < 16) return alert("Mínimo 16 anos.");
 
-        const capMorte = (capSerit === 3000) ? 50000 : 100000;
         let faixa = "30";
         if(idade > 60) faixa = "65"; else if(idade > 55) faixa = "60"; else if(idade > 50) faixa = "55"; 
         else if(idade > 45) faixa = "50"; else if(idade > 40) faixa = "45"; else if(idade > 35) faixa = "40"; 
@@ -147,33 +159,47 @@
         const total53 = diaria * 53;
 
         document.getElementById('corpoTexto').innerHTML = `
-            <p>Se ocorrer <b>morte natural</b> a seguradora pagará uma indenização no valor de <b>R$ ${capMorte.toLocaleString('pt-BR')},00</b>.</p>
-            <p>Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(capMorte*2).toLocaleString('pt-BR')},00</b>.</p>
-            <p>Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de <b>R$ ${capMorte.toLocaleString('pt-BR')},00</b>.</p>
-            
-            <p><b>SERIT:</b> Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de <b>R$ ${capSerit.toLocaleString('pt-BR')},00 por mês</b>.</p>
-            
+            <p>Se ocorrer <b>morte natural</b> a indenização é de <b>R$ ${capMorte.toLocaleString('pt-BR')},00</b>.</p>
+            <p>Se ocorrer <b>morte por acidente</b>, a indenização é de <b>R$ ${(capMorte*2).toLocaleString('pt-BR')},00</b>.</p>
+            <p>Se ocorrer <b>invalidez</b> a indenização é de <b>R$ ${capMorte.toLocaleString('pt-BR')},00</b>.</p>
+            <p><b>SERIT:</b> Renda mensal de <b>R$ ${capSerit.toLocaleString('pt-BR')},00</b>. A indenização é paga da seguinte forma:</p>
             <div class="highlight-box">
                 <b>EXEMPLO PRÁTICO (60 DIAS):</b><br>
-                Diária: R$ ${capSerit.toLocaleString('pt-BR')},00 ÷ 30 dias = <b>R$ ${diaria.toFixed(2).replace('.',',')} por dia</b>.<br>
-                Cálculo: 53 dias pagos (descontada franquia de 7 dias).<br>
+                Suponhamos que receba um atestado de 60 dias. A seguradora paga por dia de afastamento.<br><br>
+                Cálculo da diária (R$ ${capSerit.toLocaleString('pt-BR')},00 ÷ 30 dias) = <b>R$ ${diaria.toFixed(2).replace('.',',')} por dia</b>.<br><br>
+                Em seguida multiplique a diária pelos dias de afastamento descontando a franquia de 7 dias (53 dias totais).<br>
                 <b>Total da Indenização: R$ ${total53.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.
             </div>
-
-            <p><b>CARÊNCIAS:</b> Doenças comuns (30 dias). LER, DORT e Hérnias (180 dias). Acidente sem carência.</p>
+            <p><b>CARÊNCIAS:</b> 30 dias para doenças comuns. 180 dias para LER, DORT e Hérnias. Acidente Isento.</p>
         `;
-        
-        const msg = `*EAS CORRETORA - CONTRATAÇÃO*\nOlá ${nome}, tenho interesse no Plano de R$ ${capSerit} de renda mensal.\nInvestimento: R$ ${total.toFixed(2)}/mês`;
+
+        const msg = `*EAS CORRETORA*\nOlá ${nome}, tenho interesse no Plano de R$ ${capSerit} de renda mensal.`;
         document.getElementById('linkWhats').href = `https://wa.me/55${whatsRaw}?text=${encodeURIComponent(msg)}`;
         document.getElementById('areaSimulacao').style.display = "block";
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 
-    // Mantive a função do PDF vinculada ao botão "Falar com Consultor" para que o PDF seja gerado para você enviar ao cliente
     function baixarPDF() {
         const element = document.getElementById('pdfArea');
         const nome = document.getElementById('leadNome').value.replace(/\s+/g, '_');
-        html2pdf().set({ margin: 15, filename: `Estudo_EAS_${nome}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(element).save();
+        
+        const opt = {
+            margin: 15,
+            filename: `Estudo_EAS_${nome}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+                scale: 2, 
+                logging: false, 
+                useCORS: true,
+                backgroundColor: "#ffffff" 
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // Adiciona um pequeno delay para garantir a renderização antes de capturar
+        setTimeout(() => {
+            html2pdf().set(opt).from(element).save();
+        }, 500);
     }
 </script>
 </body>
