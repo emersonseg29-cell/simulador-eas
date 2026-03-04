@@ -8,30 +8,29 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; }
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 600px; background: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .logo-img { width: 140px; height: 140px; border-radius: 50%; border: 4px solid var(--gold); margin: 0 auto 15px; display: block; object-fit: cover; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 550px; background: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .logo-img { width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--gold); margin: 0 auto 15px; display: block; object-fit: cover; }
         h2 { color: var(--primary); text-align: center; margin: 0; font-size: 1.5rem; }
         .sub { color: var(--gold); text-align: center; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; }
         
-        /* Chave Seletora */
         .type-selector { display: flex; background: #e2e8f0; border-radius: 12px; padding: 5px; margin-bottom: 25px; }
-        .type-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; color: #64748b; background: transparent; transition: 0.3s; }
+        .type-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; color: #64748b; background: transparent; }
         .type-btn.active { background: var(--primary); color: white; }
 
         .section-title { font-size: 0.85rem; font-weight: 800; color: var(--primary); margin: 15px 0 10px; border-bottom: 2px solid var(--gold); display: inline-block; }
-        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group { margin-bottom: 15px; }
         label { display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; box-sizing: border-box; outline: none; }
+        input, select { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; outline: none; }
         
-        .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
         
         #areaSimulacao { display: none; margin-top: 30px; }
-        .pdf-content { padding: 30px; border: 1px solid #eee; border-radius: 15px; background: #fff; line-height: 1.6; font-size: 0.95rem; }
-        .highlight-box { background: #f0fdf4; padding: 18px; border-radius: 12px; margin: 15px 0; border: 1px solid var(--unimed); }
+        .pdf-content { padding: 30px; border: 1px solid #eee; border-radius: 15px; background: #fff; line-height: 1.7; }
+        .highlight-box { background: #f0fdf4; padding: 20px; border-radius: 12px; margin: 15px 0; border: 1px solid var(--unimed); }
         
         .action-buttons { display: flex; gap: 10px; margin-top: 20px; }
-        .btn-action { flex: 1; padding: 16px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-size: 0.9rem; }
+        .btn-action { flex: 1; padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; border: none; cursor: pointer; }
         .btn-consultor { background: #e2e8f0; color: var(--primary); }
         .btn-contratar { background: #25d366; color: white; }
     </style>
@@ -41,169 +40,141 @@
 <div class="container">
     <img src="logo oficial.jpg.png" class="logo-img">
     <h2>EAS CORRETORA</h2>
-    <div class="sub">Portal de Simulação Oficial</div>
+    <div class="sub">Simulador de Proteção Unimed</div>
 
     <div class="type-selector">
-        <button class="type-btn active" onclick="switchType('IND')">INDIVIDUAL (CPF)</button>
-        <button class="type-btn" onclick="switchType('EMP')">EMPRESARIAL (PJ)</button>
+        <button class="type-btn active" id="btnInd" onclick="switchType('IND')">INDIVIDUAL</button>
+        <button class="type-btn" id="btnEmp" onclick="switchType('EMP')">EMPRESARIAL</button>
     </div>
 
-    <div id="formIndividual">
-        <div class="section-title">Dados do Cliente</div>
-        <div class="input-group"><label>Nome Completo</label><input type="text" id="nomeInd" placeholder="Nome do Segurado"></div>
-        <div class="input-group"><label>WhatsApp</label><input type="tel" id="whatsInd" placeholder="(17) 99999-9999" class="mask-tel"></div>
-        <div class="input-group"><label>Idade (16 a 70 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 35"></div>
+    <div id="formInd">
+        <div class="input-group"><label>Nome do Cliente</label><input type="text" id="nomeInd" placeholder="Nome Completo"></div>
+        <div class="input-group"><label>WhatsApp</label><input type="tel" id="whatsInd" placeholder="(17) 99999-9999"></div>
+        <div class="input-group"><label>Idade</label><input type="number" id="idadeInd" placeholder="Ex: 35"></div>
         <div class="input-group">
-            <label>Plano de Proteção</label>
+            <label>Plano de Renda (SERIT)</label>
             <select id="planoInd">
-                <option value="3000|50000">BRONZE (SERIT 3k + 50k Capital)</option>
-                <option value="6000|100000">PRATA (SERIT 6k + 100k Capital)</option>
-                <option value="9000|100000">OURO (SERIT 9k + 100k Capital)</option>
+                <option value="3000|50000">BRONZE (3k SERIT + 50k Morte)</option>
+                <option value="6000|100000">PRATA (6k SERIT + 100k Morte)</option>
+                <option value="9000|100000" selected>OURO (9k SERIT + 100k Morte)</option>
             </select>
         </div>
-        <div class="input-group"><label>Cupom (EAS)</label><input type="text" id="cupomInd" placeholder="Validez dia 25 adiante"></div>
     </div>
 
-    <div id="formEmpresarial" style="display:none;">
-        <div class="section-title">Dados da Empresa</div>
-        <div class="input-group"><label>Razão Social / Nome Fantasia</label><input type="text" id="empNome" placeholder="Nome da Empresa"></div>
-        <div class="input-group"><label>CNPJ</label><input type="text" id="empCNPJ" placeholder="00.000.000/0000-00"></div>
-        <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999" class="mask-tel"></div>
-        <div class="input-group"><label>Tipo de Contratação</label>
-            <select id="tipoContrat">
-                <option value="CLT">Funcionários CLT</option>
-                <option value="Prestador">Prestadores de Serviço / Sócios</option>
-            </select>
-        </div>
-        <div class="input-group"><label>Quantidade de Vidas</label><input type="number" id="empVidas" value="1"></div>
+    <div id="formEmp" style="display:none;">
+        <div class="input-group"><label>Nome da Empresa (CNPJ)</label><input type="text" id="nomeEmp" placeholder="Razão Social"></div>
+        <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
+        <div class="input-group"><label>Nº de Vidas (Colaboradores)</label><input type="number" id="vidasEmp" value="1"></div>
         <div class="input-group">
             <label>Plano Empresarial</label>
             <select id="planoEmp">
-                <option value="49.90|60000|Bronze">Plano BRONZE - R$ 49,90 por vida</option>
-                <option value="69.90|100000|Prata">Plano PRATA - R$ 69,90 por vida</option>
-                <option value="79.90|200000|Ouro">Plano OURO - R$ 79,90 por vida</option>
+                <option value="49.90|60000|BRONZE">BRONZE (R$ 49,90/vida) - 60k Morte</option>
+                <option value="69.90|100000|PRATA">PRATA (R$ 69,90/vida) - 100k Morte</option>
+                <option value="79.90|200000|OURO">OURO (R$ 79,90/vida) - 200k Morte</option>
             </select>
         </div>
     </div>
 
-    <button class="btn-calc" onclick="processarSimulacao()">GERAR ESTUDO TÉCNICO</button>
+    <button class="btn-calc" onclick="gerarSimulacao()">GERAR ESTUDO TÉCNICO</button>
 
     <div id="areaSimulacao">
         <div id="pdfArea" class="pdf-content">
-            <div id="cabecalhoPdf" style="text-align:center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px;"></div>
-            <div id="corpoTexto"></div>
-            <div id="rodapePreco" style="text-align:right; font-weight:800; font-size:1.4rem; border-top: 2px solid #eee; padding-top:15px; margin-top:20px;"></div>
-            <div style="text-align:center; margin-top: 30px; font-size: 0.75rem; color: #94a3b8; border-top: 1px dashed #eee; padding-top: 10px;">
-                EAS Corretora de Seguros | Emerson: (17) 99716-5139
+            <div id="resCabecalho" style="text-align:center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px;"></div>
+            <div id="resTexto"></div>
+            <div id="resPreco" style="text-align:right; font-weight:800; font-size:1.4rem; border-top: 2px solid #eee; padding-top:15px; margin-top:20px;"></div>
+            <div style="text-align:center; margin-top: 30px; font-size: 0.8rem; color: #94a3b8; border-top: 1px dashed #eee; padding-top: 10px;">
+                <b>EAS Corretora de Seguros</b> | Emerson: (17) 99716-5139
             </div>
         </div>
         <div class="action-buttons">
             <button class="btn-action btn-consultor" onclick="baixarPDF()"><i class="fa-solid fa-file-pdf"></i> FALAR COM CONSULTOR</button>
-            <a href="#" id="linkWhats" class="btn-action btn-contratar" target="_blank"><i class="fa-solid fa-cart-shopping"></i> CONTRATAR AGORA</a>
+            <a href="#" id="linkContratar" class="btn-action btn-contratar" target="_blank"><i class="fa-solid fa-cart-shopping"></i> CONTRATAR AGORA</a>
         </div>
     </div>
 </div>
 
 <script>
-    let currentMode = 'IND';
+    let modo = 'IND';
 
-    function switchType(mode) {
-        currentMode = mode;
-        document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
-        document.getElementById('formIndividual').style.display = mode === 'IND' ? 'block' : 'none';
-        document.getElementById('formEmpresarial').style.display = mode === 'EMP' ? 'block' : 'none';
+    function switchType(type) {
+        modo = type;
+        document.getElementById('btnInd').classList.toggle('active', type === 'IND');
+        document.getElementById('btnEmp').classList.toggle('active', type === 'EMP');
+        document.getElementById('formInd').style.display = type === 'IND' ? 'block' : 'none';
+        document.getElementById('formEmp').style.display = type === 'EMP' ? 'block' : 'none';
         document.getElementById('areaSimulacao').style.display = 'none';
     }
 
-    // Máscara de Telefone genérica
-    document.querySelectorAll('.mask-tel').forEach(i => {
-        i.addEventListener('input', e => {
-            let v = e.target.value.replace(/\D/g, '');
-            if (v.length > 11) v = v.slice(0, 11);
-            let x = v.match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
-            e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
-        });
-    });
+    function gerarSimulacao() {
+        let nome, whats, texto, precoFinal, msgWhats;
 
-    function processarSimulacao() {
-        if (currentMode === 'IND') {
-            gerarIndividual();
+        if (modo === 'IND') {
+            nome = document.getElementById('nomeInd').value;
+            whats = document.getElementById('whatsInd').value.replace(/\D/g,'');
+            const idade = document.getElementById('idadeInd').value;
+            const combo = document.getElementById('planoInd').value.split('|');
+            const serit = parseInt(combo[0]);
+            const morte = parseInt(combo[1]);
+
+            if(!nome || !idade) return alert("Preencha Nome e Idade.");
+
+            // Cálculo aproximado Individual (PFAA)
+            const total = ((morte/1000)*0.55) + ((serit/1000)*35) + 1.44;
+            precoFinal = `R$ ${total.toFixed(2)}/mês`;
+            
+            texto = `
+                <p><b>Morte Natural/Invalidez:</b> R$ ${morte.toLocaleString('pt-BR')},00</p>
+                <p><b>Morte Acidental:</b> R$ ${(morte*2).toLocaleString('pt-BR')},00</p>
+                <p><b>SERIT:</b> Renda mensal de <b>R$ ${serit.toLocaleString('pt-BR')},00</b>.</p>
+                <div class="highlight-box">
+                    <b>EXEMPLO PRÁTICO (60 DIAS):</b><br>
+                    Suponhamos que receba um atestado de 60 dias. A seguradora paga por dia de afastamento.<br>
+                    Diária (R$ ${serit.toLocaleString('pt-BR')} ÷ 30) = R$ ${(serit/30).toFixed(2).replace('.',',')}.<br>
+                    Pagamento de 53 dias (descontada franquia de 7 dias).<br>
+                    <b>Total da Indenização: R$ ${((serit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.
+                </div>
+            `;
+            msgWhats = `Olá ${nome}, segue proposta Individual de R$ ${serit} de renda mensal.`;
+
         } else {
-            gerarEmpresarial();
+            nome = document.getElementById('nomeEmp').value;
+            whats = document.getElementById('whatsEmp').value.replace(/\D/g,'');
+            const vidas = parseInt(document.getElementById('vidasEmp').value);
+            const comboEmp = document.getElementById('planoEmp').value.split('|');
+            const precoVida = parseFloat(comboEmp[0]);
+            const capital = parseInt(comboEmp[1]);
+            const nomeP = comboEmp[2];
+
+            if(!nome || !vidas) return alert("Preencha o Nome da Empresa e Nº de Vidas.");
+
+            const totalEmp = precoVida * vidas;
+            precoFinal = `TOTAL: R$ ${totalEmp.toFixed(2)} (${vidas} vidas)`;
+
+            texto = `
+                <p><b>Plano Empresarial Unimed - ${nomeP}</b></p>
+                <p><b>Morte Acidental / IPA:</b> Indenização de <b>R$ ${capital.toLocaleString('pt-BR')},00</b>.</p>
+                <p><b>DIT Acidente:</b> Renda de <b>R$ 3.000,00/mês</b> em caso de afastamento por acidente.</p>
+                <div class="highlight-box">
+                    <b>VANTAGENS EMPRESARIAIS:</b><br>
+                    • Assistência Funeral Completa (Titular, Cônjuge e Filhos).<br>
+                    • Franquia DIT: 15 dias.<br>
+                    • Válido para CLT e Prestadores de Serviço.
+                </div>
+            `;
+            msgWhats = `Olá, segue estudo Empresarial (${nomeP}) para a empresa ${nome}. Total: R$ ${totalEmp.toFixed(2)}`;
         }
-    }
 
-    function gerarIndividual() {
-        const nome = document.getElementById('nomeInd').value;
-        const whats = document.getElementById('whatsInd').value;
-        const idade = parseInt(document.getElementById('idadeInd').value);
-        const combo = document.getElementById('planoInd').value.split('|');
-        const capSerit = parseInt(combo[0]);
-        const capMorte = parseInt(combo[1]);
-        const cupom = document.getElementById('cupomInd').value.trim().toUpperCase();
-
-        if(!nome || !whats || !idade) return alert("Preencha todos os campos.");
-
-        // Taxas PFAA baseadas na tabela
-        const rates = {"30": 26.855, "35": 29.595, "40": 33.645, "45": 38.695, "50": 46.030, "55": 58.020, "60": 77.585, "65": 109.835};
-        let faia = "30";
-        if(idade > 60) faia="65"; else if(idade > 55) faia="60"; else if(idade > 50) faia="55"; else if(idade > 45) faia="50"; else if(idade > 40) faia="45"; else if(idade > 30) faia="35";
-        
-        let total = ((capMorte/1000)*0.55) + ((capSerit/1000)*rates[faia]) + 1.44;
-        if(cupom === "EAS" && new Date().getDate() >= 25) total *= 0.65;
-
-        exibirResultado(nome, `
-            <p>Se ocorrer <b>morte natural</b> a indenização é de <b>R$ ${capMorte.toLocaleString('pt-BR')},00</b>.</p>
-            <p>Se ocorrer <b>morte por acidente</b>, a indenização é de <b>R$ ${(capMorte*2).toLocaleString('pt-BR')},00</b>.</p>
-            <p><b>SERIT (Renda Mensal):</b> Se você ficar doente ou sofrer um acidente e precisar se afastar por mais de 7 dias a Seguros Unimed pagará <b>R$ ${capSerit.toLocaleString('pt-BR')},00 por mês</b>.</p>
-            <div class="highlight-box"><b>EXEMPLO 60 DIAS:</b> Diária de R$ ${(capSerit/30).toFixed(2).replace('.',',')}. Total 53 dias pagos: <b>R$ ${((capSerit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.</div>
-            <p><b>CARÊNCIAS:</b> 30 dias doenças / 180 dias LER, DORT / Acidente isento.</p>
-        `, `R$ ${total.toFixed(2)}/mês`, whats, `Olá ${nome}, segue seu estudo Individual: R$ ${total.toFixed(2)}`);
-    }
-
-    function gerarEmpresarial() {
-        const emp = document.getElementById('empNome').value;
-        const cnpj = document.getElementById('empCNPJ').value;
-        const whats = document.getElementById('whatsEmp').value;
-        const vidas = parseInt(document.getElementById('empVidas').value);
-        const combo = document.getElementById('planoEmp').value.split('|');
-        const precoVida = parseFloat(combo[0]);
-        const capital = parseInt(combo[1]);
-        const nomePlano = combo[2];
-        const regime = document.getElementById('tipoContrat').value;
-
-        if(!emp || !cnpj || !vidas) return alert("Preencha os dados da empresa.");
-
-        const totalGeral = precoVida * vidas;
-
-        exibirResultado(emp, `
-            <p><b>Plano Empresarial Unimed - ${nomePlano}</b></p>
-            <p><b>Morte Acidental:</b> Se ocorrer por acidente seus beneficiários receberão uma indenização no valor de <b>R$ ${capital.toLocaleString('pt-BR')},00</b>.</p>
-            <p><b>IPA:</b> Se ocorrer uma invalidez por acidente, indenização no valor de <b>R$ ${capital.toLocaleString('pt-BR')},00</b>.</p>
-            <p><b>DIT (Renda Mensal):</b> Se ocorrer um acidente e o colaborador ficar incapacitado a Unimed pagará uma renda de <b>R$ 3.000,00 por mês</b> (por até 12 meses).</p>
-            <div class="highlight-box">
-                <b>FRANQUIA DIT:</b> Afastamentos superiores a 15 dias em decorrência de acidente.<br>
-                <b>GARANTIA FUNERAL FAMILIAR:</b> Cobertura completa para Titular, Cônjuge e Filhos (até 21 anos).
-            </div>
-            <p>• Modalidade: ${regime}<br>• Quantidade de Vidas: ${vidas}</p>
-        `, `INVESTIMENTO TOTAL: R$ ${totalGeral.toFixed(2)}`, whats, `Olá, segue estudo Empresarial para ${emp}: ${vidas} vidas, Plano ${nomePlano}.`);
-    }
-
-    function exibirResultado(nome, texto, preco, whats, msgWhats) {
-        document.getElementById('cabecalhoPdf').innerHTML = `<h3 style="color:var(--primary); margin:0;">ESTUDO TÉCNICO PERSONALIZADO</h3><p>Para: <b>${nome}</b></p>`;
-        document.getElementById('corpoTexto').innerHTML = texto;
-        document.getElementById('rodapePreco').innerText = preco;
-        document.getElementById('outNome').innerText = nome; // Para o nome do arquivo PDF
-        document.getElementById('linkWhats').href = `https://wa.me/55${whats.replace(/\D/g,'')}?text=${encodeURIComponent(msgWhats)}`;
+        document.getElementById('resCabecalho').innerHTML = `<h3>ESTUDO TÉCNICO UNIMED</h3><p>Preparado para: <b>${nome}</b></p>`;
+        document.getElementById('resTexto').innerHTML = texto;
+        document.getElementById('resPreco').innerText = precoFinal;
+        document.getElementById('linkContratar').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msgWhats)}`;
         document.getElementById('areaSimulacao').style.display = 'block';
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 
     function baixarPDF() {
         const element = document.getElementById('pdfArea');
-        const nome = document.getElementById('outNome').innerText;
-        html2pdf().set({ margin: 15, filename: `Estudo_EAS_${nome}.pdf`, html2canvas: { scale: 2 }, jsPDF: { format: 'a4' } }).from(element).save();
+        html2pdf().set({ margin: 15, filename: 'Estudo_EAS.pdf', html2canvas: { scale: 2 }, jsPDF: { format: 'a4' } }).from(element).save();
     }
 </script>
 </body>
