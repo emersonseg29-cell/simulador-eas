@@ -130,6 +130,7 @@
             
             explicacaoHtml = `<div class="highlight-box">
                               <b>EXEMPLO PRÁTICO SERIT (60 DIAS):</b><br>
+                              Suponhamos que receba um atestado de 60 dias. A seguradora paga por dia de afastamento.<br><br>
                               Cálculo: R$ ${capSerit.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${(capSerit/30).toFixed(2).replace('.',',')} p/ dia.<br>
                               Multiplicado por 53 dias pagos (descontada franquia de 7 dias).<br>
                               <b>Total Líquido a receber: R$ ${((capSerit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.<br><br>
@@ -144,20 +145,24 @@
 
             const comboEmp = document.getElementById('planoEmp').value.split('|');
             capMorte = parseInt(comboEmp[1]);
+            const valorRendaEmp = 3000;
             precoFinal = `TOTAL MENSAL: R$ ${(parseFloat(comboEmp[0]) * vidas).toFixed(2)} (${vidas} vidas)`;
             
             tabelaHtml = `<tr><td>Morte Natural</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
                           <tr><td>IPA (Invalidez por Acidente)</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
                           <tr><td>Morte Acidental</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
-                          <tr><td>DIT Acidente (Renda)</td><td class="val-destaque">R$ 3.000,00</td></tr>
+                          <tr><td>DIT Acidente (Renda Mensal)</td><td class="val-destaque">R$ ${valorRendaEmp.toLocaleString('pt-BR')},00</td></tr>
                           <tr><td>Carência (Todas Coberturas)</td><td class="val-destaque">ISENTO</td></tr>`;
             
             explicacaoHtml = `<div class="highlight-box">
-                              <b>REGRAS EMPRESARIAIS (DIT):</b><br>
-                              • Cobertura de acidente **independente do local** (proteção 24h).<br>
-                              • Franquia: Afastamento superior a 15 dias.<br>
-                              • <b>Carência:</b> Totalmente ISENTO em todas as coberturas.<br>
-                              • <b>Funeral:</b> Familiar incluso. Prestadores sob análise prévia.
+                              <b>EXEMPLO PRÁTICO DIT ACIDENTE (60 DIAS):</b><br>
+                              Cobre afastamentos decorrentes de <b>QUALQUER ACIDENTE</b> (24h por dia).<br><br>
+                              Suponhamos um afastamento de 60 dias por acidente:<br>
+                              Cálculo: R$ ${valorRendaEmp.toLocaleString('pt-BR')} ÷ 30 dias = R$ 100,00 p/ dia.<br>
+                              Multiplicado por 45 dias pagos (descontada franquia de 15 dias).<br>
+                              <b>Total Líquido a receber: R$ 4.500,00</b>.<br><br>
+                              • <b>VANTAGEM:</b> Sem carência e proteção independente do local.<br>
+                              • <b>Funeral:</b> Familiar incluso para todos os segurados.
                               </div>`;
         }
 
@@ -186,10 +191,10 @@
         msg += `${nome}, seu estudo ficou da seguinte forma:\n\n`;
         msg += `🔹 *Morte Natural:* Indenização de *${morteX}*\n\n`;
         msg += `🔹 *Morte por Acidente:* Indenização de *${morteY}*\n\n`;
-        msg += `🔹 *Invalidez por Acidente (IPA):* Indenização de *${morteX}* (cobertura independente do local).\n\n`;
-        msg += `🔹 *Afastamento:* Renda mensal de *R$ ${(modo === 'IND' ? parseInt(combo[0]) : 3000).toLocaleString('pt-BR')},00*.\n\n`;
-        msg += `📋 *SINISTRO:* Apresentar prontuário, atestado + laudos.\n\n`;
-        msg += `⭐ *VANTAGENS:* Sem aumento por idade, carência zero p/ morte e excelente custo-benefício.\n\n`;
+        msg += `🔹 *Invalidez por Acidente (IPA):* Indenização de *${morteX}* (cobertura 24h).\n\n`;
+        msg += `🔹 *Renda p/ Afastamento (Acidente):* R$ ${(modo === 'IND' ? parseInt(combo[0]) : 3000).toLocaleString('pt-BR')},00/mês.\n\n`;
+        msg += `📋 *SINISTRO:* Cálculo por dia de afastamento (franquia reduzida).\n\n`;
+        msg += `⭐ *VANTAGENS:* No plano ${modo === 'IND' ? 'Individual' : 'Empresarial'} você tem Carência Zero para acidentes e morte.\n\n`;
         msg += `💰 *INVESTIMENTO:* ${preco}`;
         
         window.open(`https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`, '_blank');
