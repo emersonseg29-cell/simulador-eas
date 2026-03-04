@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EAS Corretora - Simulador Oficial Unimed</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; }
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
@@ -12,33 +13,25 @@
         .logo-img { width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--gold); margin: 0 auto 15px; display: block; object-fit: cover; }
         h2 { color: var(--primary); text-align: center; margin: 0; font-size: 1.5rem; }
         .sub { color: var(--gold); text-align: center; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; }
-        
         .type-selector { display: flex; background: #e2e8f0; border-radius: 12px; padding: 5px; margin-bottom: 25px; }
         .type-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; color: #64748b; background: transparent; }
         .type-btn.active { background: var(--primary); color: white; }
-
         .input-group { margin-bottom: 15px; text-align: left; }
         label { display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 5px; }
         input, select { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; outline: none; }
-        
         .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
-        
         #areaSimulacao { display: none; margin-top: 30px; }
         .pdf-content { padding: 30px; border: 1px solid #eee; border-radius: 15px; background: #fff; line-height: 1.7; font-size: 0.95rem; }
         .highlight-box { background: #f0fdf4; padding: 20px; border-radius: 12px; margin: 15px 0; border: 1px solid var(--unimed); }
-        
         .action-buttons { display: grid; gap: 10px; margin-top: 20px; }
         .btn-action { padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; border: none; cursor: pointer; }
-        
-        .btn-equipe { background: var(--gold); color: white; display: none; } /* Oculto por padrão */
+        .btn-equipe { background: var(--gold); color: white; display: none; }
         .btn-consultor { background: #e2e8f0; color: var(--primary); }
         .btn-contratar { background: #25d366; color: white; }
-        
         .badge-equipe { background: var(--gold); color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; display: none; margin-bottom: 10px; text-align: center;}
     </style>
 </head>
 <body>
-
 <div class="container">
     <div id="tagEquipe" class="badge-equipe"><i class="fa-solid fa-unlock"></i> MODO EQUIPE ATIVADO</div>
     <img src="logo oficial.jpg.png" class="logo-img">
@@ -50,33 +43,31 @@
         <button class="type-btn" id="btnEmp" onclick="switchType('EMP')">EMPRESARIAL</button>
     </div>
 
-    <div id="formInputs">
-        <div id="formInd">
-            <div class="input-group"><label>Nome do Cliente</label><input type="text" id="nomeInd" placeholder="Nome Completo"></div>
-            <div class="input-group"><label>WhatsApp do Cliente</label><input type="tel" id="whatsClienteInd" placeholder="(17) 99999-9999"></div>
-            <div class="input-group"><label>Idade</label><input type="number" id="idadeInd" placeholder="Ex: 35"></div>
-            <div class="input-group">
-                <label>Plano Individual (SERIT)</label>
-                <select id="planoInd">
-                    <option value="3000|50000">Bronze (3k SERIT + 50k Morte)</option>
-                    <option value="6000|100000">Prata (6k SERIT + 100k Morte)</option>
-                    <option value="9000|100000" selected>Ouro (9k SERIT + 100k Morte)</option>
-                </select>
-            </div>
+    <div id="formInd">
+        <div class="input-group"><label>Nome do Cliente</label><input type="text" id="nomeInd" placeholder="Nome Completo"></div>
+        <div class="input-group"><label>WhatsApp do Cliente</label><input type="tel" id="whatsInd" placeholder="(17) 99999-9999"></div>
+        <div class="input-group"><label>Idade (16 a 70 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 35"></div>
+        <div class="input-group">
+            <label>Plano Individual (SERIT)</label>
+            <select id="planoInd">
+                <option value="3000|50000">Bronze (3k SERIT + 50k Morte)</option>
+                <option value="6000|100000">Prata (6k SERIT + 100k Morte)</option>
+                <option value="9000|108000" selected>Ouro (9k SERIT + 108k Morte)</option>
+            </select>
         </div>
+    </div>
 
-        <div id="formEmp" style="display:none;">
-            <div class="input-group"><label>Nome da Empresa</label><input type="text" id="nomeEmp" placeholder="Razão Social"></div>
-            <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsClienteEmp" placeholder="(17) 99999-9999"></div>
-            <div class="input-group"><label>Nº de Vidas (Mín 3)</label><input type="number" id="vidasEmp" value="3"></div>
-            <div class="input-group">
-                <label>Plano Empresarial</label>
-                <select id="planoEmp">
-                    <option value="49.90|50000|BRONZE">Bronze (Morte 50k) - R$ 49,90/vida</option>
-                    <option value="69.90|100000|PRATA">Prata (Morte 100k) - R$ 69,90/vida</option>
-                    <option value="79.90|100000|OURO">Ouro (Morte 100k) - R$ 79,90/vida</option>
-                </select>
-            </div>
+    <div id="formEmp" style="display:none;">
+        <div class="input-group"><label>Nome da Empresa</label><input type="text" id="nomeEmp" placeholder="Razão Social"></div>
+        <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
+        <div class="input-group"><label>Nº de Vidas (Mín 3)</label><input type="number" id="vidasEmp" value="3"></div>
+        <div class="input-group">
+            <label>Plano Empresarial</label>
+            <select id="planoEmp">
+                <option value="49.90|50000|BRONZE">Bronze (Morte 50k) - R$ 49,90/vida</option>
+                <option value="69.90|100000|PRATA">Prata (Morte 100k) - R$ 69,90/vida</option>
+                <option value="79.90|108000|OURO">Ouro (Morte 108k) - R$ 79,90/vida</option>
+            </select>
         </div>
     </div>
 
@@ -88,18 +79,10 @@
             <div id="resTexto"></div>
             <div id="resPreco" style="text-align:right; font-weight:800; font-size:1.4rem; border-top: 2px solid #eee; padding-top:15px; margin-top:20px;"></div>
         </div>
-
         <div class="action-buttons">
-            <button id="btnEnviarCliente" class="btn-action btn-equipe" onclick="enviarSimulacaoWhatsApp()">
-                <i class="fa-solid fa-paper-plane"></i> ENVIAR PARA O CLIENTE
-            </button>
-            
-            <a href="#" id="linkConsultor" class="btn-action btn-consultor" target="_blank">
-                <i class="fa-solid fa-user-tie"></i> FALAR COM CONSULTOR
-            </a>
-            <a href="#" id="linkContratar" class="btn-action btn-contratar" target="_blank">
-                <i class="fa-solid fa-cart-shopping"></i> CONTRATAR AGORA
-            </a>
+            <button id="btnEnviarCliente" class="btn-action btn-equipe" onclick="enviarSimulacaoWhatsApp()"><i class="fa-solid fa-paper-plane"></i> ENVIAR PARA O CLIENTE</button>
+            <a href="#" id="linkConsultor" class="btn-action btn-consultor" target="_blank"><i class="fa-solid fa-user-tie"></i> FALAR COM CONSULTOR</a>
+            <a href="#" id="linkContratar" class="btn-action btn-contratar" target="_blank"><i class="fa-solid fa-cart-shopping"></i> CONTRATAR AGORA</a>
         </div>
     </div>
 </div>
@@ -107,11 +90,7 @@
 <script>
     let modo = 'IND';
     let isEquipe = window.location.search.includes('equipe');
-
-    if(isEquipe) {
-        document.getElementById('tagEquipe').style.display = 'block';
-        document.getElementById('btnEnviarCliente').style.display = 'flex';
-    }
+    if(isEquipe) { document.getElementById('tagEquipe').style.display = 'block'; document.getElementById('btnEnviarCliente').style.display = 'flex'; }
 
     function switchType(type) {
         modo = type;
@@ -123,81 +102,48 @@
     }
 
     function gerarSimulacao() {
-        let nome, texto, precoFinal, whats;
+        let nome, texto, precoFinal, capMorte, capSerit;
         if (modo === 'IND') {
             nome = document.getElementById('nomeInd').value;
-            whats = document.getElementById('whatsClienteInd').value.replace(/\D/g,'');
             const combo = document.getElementById('planoInd').value.split('|');
-            const serit = parseInt(combo[0]);
-            const morte = parseInt(combo[1]);
-            const diaria = (serit / 30);
-            const total53 = diaria * 53;
-            let precoVal = ((morte/1000)*0.55) + ((serit/1000)*35) + 1.44;
-            
+            capSerit = parseInt(combo[0]); capMorte = parseInt(combo[1]);
+            let precoVal = ((capMorte/1000)*0.55) + ((capSerit/1000)*35) + 1.44;
             precoFinal = `R$ ${precoVal.toFixed(2)}/mês`;
-            texto = `
-                <p><b>Morte Natural/Invalidez:</b> R$ ${morte.toLocaleString('pt-BR')},00</p>
-                <p><b>Morte Acidental:</b> R$ ${(morte*2).toLocaleString('pt-BR')},00</p>
-                <p><b>SERIT:</b> Renda de R$ ${serit.toLocaleString('pt-BR')},00/mês.</p>
-                <div class="highlight-box">
-                    <b>EXEMPLO 60 DIAS:</b><br>
-                    Cálculo: R$ ${serit.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${diaria.toFixed(2).replace('.',',')} p/ dia.<br>
-                    Multiplicado por 53 dias pagos (descontada franquia de 7 dias).<br>
-                    <b>Indenização: R$ ${total53.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.
-                </div>
-            `;
+            texto = `<p><b>Morte Natural:</b> R$ ${capMorte.toLocaleString('pt-BR')},00</p><p><b>Morte Acidental:</b> R$ ${(capMorte*2).toLocaleString('pt-BR')},00</p><p><b>SERIT:</b> R$ ${capSerit.toLocaleString('pt-BR')},00/mês.</p>`;
         } else {
             nome = document.getElementById('nomeEmp').value;
-            whats = document.getElementById('whatsClienteEmp').value.replace(/\D/g,'');
             const vidas = parseInt(document.getElementById('vidasEmp').value);
             const comboEmp = document.getElementById('planoEmp').value.split('|');
-            const precoVida = parseFloat(comboEmp[0]);
-            const capMorte = parseInt(comboEmp[1]);
+            capMorte = parseInt(comboEmp[1]);
             if (vidas < 3) return alert("Mínimo de 3 vidas.");
-            
-            precoFinal = `TOTAL MENSAL: R$ ${(precoVida * vidas).toFixed(2)} (${vidas} vidas)`;
-            texto = `
-                <p><b>Morte Natural:</b> R$ ${capMorte.toLocaleString('pt-BR')},00</p>
-                <p><b>Morte Acidental:</b> R$ ${(capMorte*2).toLocaleString('pt-BR')},00</p>
-                <p><b>DIT:</b> Renda por acidente de R$ 3.000,00/mês.</p>
-                <div class="highlight-box">
-                    <b>REGRAS DIT:</b> Limite de 12 meses. Franquia superior a 15 dias.<br>
-                    <b>Garantia Funeral Familiar inclusa.</b><br>
-                    *Prestadores sob análise prévia.
-                </div>
-            `;
+            precoFinal = `TOTAL: R$ ${(parseFloat(comboEmp[0]) * vidas).toFixed(2)} (${vidas} vidas)`;
+            texto = `<p><b>Morte Natural:</b> R$ ${capMorte.toLocaleString('pt-BR')},00</p><p><b>Morte Acidental:</b> R$ ${(capMorte*2).toLocaleString('pt-BR')},00</p><p><b>DIT:</b> R$ 3.000,00/mês.</p>`;
         }
-
         document.getElementById('resCabecalho').innerHTML = `<h3>ESTUDO TÉCNICO UNIMED</h3><p>Para: <b>${nome}</b></p>`;
         document.getElementById('resTexto').innerHTML = texto;
         document.getElementById('resPreco').innerText = precoFinal;
+        document.getElementById('areaSimulacao').style.display = 'block';
         
-        // Links Cliente
-        let msgPadrao = encodeURIComponent(`Olá, tenho interesse na simulação de ${nome}. Valor: ${precoFinal}`);
+        let msgPadrao = encodeURIComponent(`Olá, tenho interesse no estudo de ${nome}.`);
         document.getElementById('linkConsultor').href = `https://wa.me/5517997165139?text=${msgPadrao}`;
         document.getElementById('linkContratar').href = `https://wa.me/5517991123532?text=${msgPadrao}`;
-        
-        document.getElementById('areaSimulacao').style.display = 'block';
     }
 
     function enviarSimulacaoWhatsApp() {
         const nome = modo === 'IND' ? document.getElementById('nomeInd').value : document.getElementById('nomeEmp').value;
-        const whats = modo === 'IND' ? document.getElementById('whatsClienteInd').value.replace(/\D/g,'') : document.getElementById('whatsClienteEmp').value.replace(/\D/g,'');
+        const whats = (modo === 'IND' ? document.getElementById('whatsInd').value : document.getElementById('whatsEmp').value).replace(/\D/g,'');
+        const combo = (modo === 'IND' ? document.getElementById('planoInd').value : document.getElementById('planoEmp').value).split('|');
+        const capMorte = parseInt(combo[1]);
         const preco = document.getElementById('resPreco').innerText;
         
-        let msg = `*EAS CORRETORA - ESTUDO TÉCNICO*\n\n`;
-        msg += `Olá ${nome}, conforme conversamos, segue o resumo da sua proteção Unimed:\n\n`;
-        
-        if(modo === 'IND') {
-            msg += `✅ *Renda Mensal (SERIT):* ${document.getElementById('planoInd').options[document.getElementById('planoInd').selectedIndex].text}\n`;
-            msg += `💡 *Exemplo:* Se ficar 60 dias afastado, você recebe 53 dias líquidos.\n`;
-        } else {
-            msg += `✅ *Plano Empresarial:* ${document.getElementById('planoEmp').options[document.getElementById('planoEmp').selectedIndex].text}\n`;
-            msg += `💡 *Vantagem:* Inclui Funeral Familiar e DIT por acidente.\n`;
-        }
-        
-        msg += `\n💰 *Investimento:* ${preco}\n\n`;
-        msg += `Para visualizar o estudo completo, acesse:\n${window.location.origin}${window.location.pathname}`;
+        let msg = `*EAS CORRETORA - PROTEÇÃO UNIMED*\n\n${nome}, seu estudo ficou da seguinte forma:\n\n`;
+        msg += `🔹 *Morte Natural:* Indenização de *R$ ${capMorte.toLocaleString('pt-BR')},00*\n\n`;
+        msg += `🔹 *Morte por Acidente:* Indenização de *R$ ${(capMorte*2).toLocaleString('pt-BR')},00*\n\n`;
+        msg += `🔹 *Invalidez por Acidente ou Doença:* Indenização de *R$ ${capMorte.toLocaleString('pt-BR')},00*\n\n`;
+        msg += `🔹 *Afastamento (DIT/SERIT):* Receberá uma renda mensal no valor de *R$ ${(modo === 'IND' ? parseInt(combo[0]) : 3000).toLocaleString('pt-BR')},00*.\n\n`;
+        msg += `📋 *DIT:* Necessário apresentar prontuário, atestado + laudos. Afastamento superior a ${(modo === 'IND' ? '7' : '15')} dias.\n\n`;
+        msg += `⭐ *VANTAGENS:* Sem aumento por faixa etária, sem carência para acidentes e custo-benefício.\n\n`;
+        msg += `💰 *INVESTIMENTO:* ${preco}`;
         
         window.open(`https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`, '_blank');
     }
