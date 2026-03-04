@@ -52,11 +52,11 @@
         <div class="input-group"><label>WhatsApp do Cliente</label><input type="tel" id="whatsInd" placeholder="(17) 99999-9999"></div>
         <div class="input-group"><label>Idade (16 a 70 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 35"></div>
         <div class="input-group">
-            <label>Plano de Renda Protegida</label>
+            <label>Selecione o Plano de Renda</label>
             <select id="planoInd">
-                <option value="3000|50000">Plano Bronze 3 mil</option>
-                <option value="6000|100000">Plano Prata 6 mil</option>
-                <option value="9000|108000" selected>Plano Ouro 9 mil</option>
+                <option value="3000|50000">Plano Bronze - 3 mil de Renda</option>
+                <option value="6000|100000">Plano Prata - 6 mil de Renda</option>
+                <option value="9000|108000" selected>Plano Ouro - 9 mil de Renda</option>
             </select>
         </div>
     </div>
@@ -66,7 +66,7 @@
         <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
         <div class="input-group"><label>Nº de Vidas (Mínimo 3)</label><input type="number" id="vidasEmp" placeholder="Ex: 5"></div>
         <div class="input-group">
-            <label>Plano de Proteção Empresarial</label>
+            <label>Selecione o Plano Empresarial</label>
             <select id="planoEmp">
                 <option value="49.90|50000|BRONZE">Plano Bronze (R$ 49,90 por vida)</option>
                 <option value="69.90|100000|PRATA">Plano Prata (R$ 69,90 por vida)</option>
@@ -112,12 +112,11 @@
     function gerarSimulacao() {
         let nome, whats, precoFinal, capMorte, capSerit, tabelaHtml, explicacaoHtml;
 
-        // VALIDAÇÃO DE CAMPOS VAZIOS
         if (modo === 'IND') {
             nome = document.getElementById('nomeInd').value.trim();
             whats = document.getElementById('whatsInd').value.trim();
             let idade = document.getElementById('idadeInd').value;
-            if(!nome || !whats || !idade) { alert("Por favor, preencha NOME, WHATSAPP e IDADE para simular."); return; }
+            if(!nome || !whats || !idade) { alert("Preencha Nome, WhatsApp e Idade."); return; }
 
             const combo = document.getElementById('planoInd').value.split('|');
             capSerit = parseInt(combo[0]); capMorte = parseInt(combo[1]);
@@ -138,8 +137,8 @@
             nome = document.getElementById('nomeEmp').value.trim();
             whats = document.getElementById('whatsEmp').value.trim();
             let vidas = document.getElementById('vidasEmp').value;
-            if(!nome || !whats || !vidas) { alert("Por favor, preencha NOME DA EMPRESA, WHATSAPP e Nº DE VIDAS."); return; }
-            if (parseInt(vidas) < 3) { alert("O plano empresarial exige no mínimo 3 vidas."); return; }
+            if(!nome || !whats || !vidas) { alert("Preencha Nome, WhatsApp e Nº de Vidas."); return; }
+            if (parseInt(vidas) < 3) { alert("Mínimo de 3 vidas."); return; }
 
             const comboEmp = document.getElementById('planoEmp').value.split('|');
             capMorte = parseInt(comboEmp[1]);
