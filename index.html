@@ -52,7 +52,7 @@
         <div class="input-group"><label>WhatsApp do Cliente</label><input type="tel" id="whatsInd" placeholder="(17) 99999-9999"></div>
         <div class="input-group"><label>Idade (16 a 70 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 35"></div>
         <div class="input-group">
-            <label>Selecione o Plano de Renda</label>
+            <label>Selecione o Plano de Renda Protegida</label>
             <select id="planoInd">
                 <option value="3000|50000">Plano Bronze - 3 mil de Renda</option>
                 <option value="6000|100000">Plano Prata - 6 mil de Renda</option>
@@ -80,10 +80,12 @@
     <div id="areaSimulacao">
         <div id="pdfArea" class="pdf-content">
             <div id="resCabecalho" style="text-align:center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px;"></div>
+            
             <table class="resumo-table" id="tabelaCoberturas">
                 <thead><tr><th>Cobertura</th><th>Capital Segurado</th></tr></thead>
                 <tbody id="listaCoberturas"></tbody>
             </table>
+
             <div id="resTexto"></div>
             <div id="resPreco" style="text-align:right; font-weight:800; font-size:1.4rem; border-top: 2px solid #eee; padding-top:15px; margin-top:20px;"></div>
         </div>
@@ -115,27 +117,27 @@
         if (modo === 'IND') {
             nome = document.getElementById('nomeInd').value.trim();
             whats = document.getElementById('whatsInd').value.trim();
-            let idade = document.getElementById('idadeInd').value;
-            if(!nome || !whats || !idade) { alert("Preencha Nome, WhatsApp e Idade."); return; }
+            if(!nome || !whats || !document.getElementById('idadeInd').value) { alert("Preencha Nome, WhatsApp e Idade."); return; }
 
             const combo = document.getElementById('planoInd').value.split('|');
             capSerit = parseInt(combo[0]); capMorte = parseInt(combo[1]);
             let precoVal = ((capMorte/1000)*0.55) + ((capSerit/1000)*35) + 1.44;
             precoFinal = `R$ ${precoVal.toFixed(2)}/mês`;
             
-            tabelaHtml = `<tr><td>Morte / Invalidez (IPA)</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
-                          <tr><td>Morte Acidental</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
-                          <tr><td>Renda Mensal (SERIT)</td><td class="val-destaque">R$ ${capSerit.toLocaleString('pt-BR')},00</td></tr>
-                          <tr><td>Carência (Morte/IPA)</td><td class="val-destaque">ISENTO</td></tr>`;
+            tabelaHtml = `
+                <tr><td>Morte Natural</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
+                <tr><td>Morte por Acidente</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
+                <tr><td>Invalidez p/ Acidente ou Doença</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
+                <tr><td>Renda Mensal (SERIT)</td><td class="val-destaque">R$ ${capSerit.toLocaleString('pt-BR')},00</td></tr>
+            `;
             
             explicacaoHtml = `<div class="highlight-box">
-                              <b>EXEMPLO PRÁTICO SERIT (60 DIAS):</b><br>
-                              Suponhamos que receba um atestado de 60 dias. A seguradora paga por dia de afastamento.<br><br>
-                              Cálculo: R$ ${capSerit.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${(capSerit/30).toFixed(2).replace('.',',')} p/ dia.<br>
-                              Multiplicado por 53 dias pagos (descontada franquia de 7 dias).<br>
-                              <b>Total Líquido a receber: R$ ${((capSerit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.<br><br>
-                              <b>CARÊNCIAS:</b> Doenças Comuns (30 dias). LER, DORT e Hérnias (180 dias). Acidente Isento.
-                              </div>`;
+                <b>EXEMPLO MATADOR SERIT (60 DIAS):</b><br>
+                Cálculo: R$ ${capSerit.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${(capSerit/30).toFixed(2).replace('.',',')} p/ dia.<br>
+                Multiplicado por 53 dias pagos (descontada franquia de 7 dias).<br>
+                <b>Total Líquido a receber: R$ ${((capSerit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.<br><br>
+                <b>CARÊNCIAS:</b> Morte/Invalidez (Isento). Doenças (30 dias). LER/DORT (180 dias).
+            </div>`;
         } else {
             nome = document.getElementById('nomeEmp').value.trim();
             whats = document.getElementById('whatsEmp').value.trim();
@@ -145,25 +147,23 @@
 
             const comboEmp = document.getElementById('planoEmp').value.split('|');
             capMorte = parseInt(comboEmp[1]);
-            const valorRendaEmp = 3000;
             precoFinal = `TOTAL MENSAL: R$ ${(parseFloat(comboEmp[0]) * vidas).toFixed(2)} (${vidas} vidas)`;
             
-            tabelaHtml = `<tr><td>Morte Natural</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
-                          <tr><td>IPA (Invalidez por Acidente)</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
-                          <tr><td>Morte Acidental</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
-                          <tr><td>DIT Acidente (Renda Mensal)</td><td class="val-destaque">R$ ${valorRendaEmp.toLocaleString('pt-BR')},00</td></tr>
-                          <tr><td>Carência (Todas Coberturas)</td><td class="val-destaque">ISENTO</td></tr>`;
+            tabelaHtml = `
+                <tr><td>Morte Natural</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
+                <tr><td>Morte por Acidente</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
+                <tr><td>Invalidez p/ Acidente ou Doença</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
+                <tr><td>DIT Acidente (Renda Mensal)</td><td class="val-destaque">R$ 3.000,00</td></tr>
+            `;
             
             explicacaoHtml = `<div class="highlight-box">
-                              <b>EXEMPLO PRÁTICO DIT ACIDENTE (60 DIAS):</b><br>
-                              Cobre afastamentos decorrentes de <b>QUALQUER ACIDENTE</b> (24h por dia).<br><br>
-                              Suponhamos um afastamento de 60 dias por acidente:<br>
-                              Cálculo: R$ ${valorRendaEmp.toLocaleString('pt-BR')} ÷ 30 dias = R$ 100,00 p/ dia.<br>
-                              Multiplicado por 45 dias pagos (descontada franquia de 15 dias).<br>
-                              <b>Total Líquido a receber: R$ 4.500,00</b>.<br><br>
-                              • <b>VANTAGEM:</b> Sem carência e proteção independente do local.<br>
-                              • <b>Funeral:</b> Familiar incluso para todos os segurados.
-                              </div>`;
+                <b>EXEMPLO MATADOR DIT ACIDENTE (60 DIAS):</b><br>
+                Proteção 24h independente do local do acidente.<br><br>
+                Cálculo: R$ 3.000,00 ÷ 30 dias = R$ 100,00 p/ dia.<br>
+                Multiplicado por 45 dias pagos (descontada franquia de 15 dias).<br>
+                <b>Total Líquido a receber: R$ 4.500,00</b>.<br><br>
+                <b>VANTAGENS:</b> Sem carência para nenhuma cobertura e Funeral Familiar incluso.
+            </div>`;
         }
 
         document.getElementById('resCabecalho').innerHTML = `<h3>ESTUDO TÉCNICO UNIMED</h3><p>Para: <b>${nome}</b></p>`;
@@ -184,17 +184,17 @@
         const capMorte = parseInt(combo[1]);
         const preco = document.getElementById('resPreco').innerText;
         
-        const morteX = `R$ ${capMorte.toLocaleString('pt-BR')},00`;
-        const morteY = `R$ ${(capMorte*2).toLocaleString('pt-BR')},00`;
+        const vMorteNat = `R$ ${capMorte.toLocaleString('pt-BR')},00`;
+        const vMorteAcid = `R$ ${(capMorte*2).toLocaleString('pt-BR')},00`;
 
         let msg = `*EAS CORRETORA - PROTEÇÃO UNIMED*\n\n`;
         msg += `${nome}, seu estudo ficou da seguinte forma:\n\n`;
-        msg += `🔹 *Morte Natural:* Indenização de *${morteX}*\n\n`;
-        msg += `🔹 *Morte por Acidente:* Indenização de *${morteY}*\n\n`;
-        msg += `🔹 *Invalidez por Acidente (IPA):* Indenização de *${morteX}* (cobertura 24h).\n\n`;
-        msg += `🔹 *Renda p/ Afastamento (Acidente):* R$ ${(modo === 'IND' ? parseInt(combo[0]) : 3000).toLocaleString('pt-BR')},00/mês.\n\n`;
-        msg += `📋 *SINISTRO:* Cálculo por dia de afastamento (franquia reduzida).\n\n`;
-        msg += `⭐ *VANTAGENS:* No plano ${modo === 'IND' ? 'Individual' : 'Empresarial'} você tem Carência Zero para acidentes e morte.\n\n`;
+        msg += `🔹 *Morte Natural:* Indenização de *${vMorteNat}*\n\n`;
+        msg += `🔹 *Morte por Acidente:* Indenização de *${vMorteAcid}*\n\n`;
+        msg += `🔹 *Invalidez por Acidente ou Doença:* Indenização de *${vMorteNat}*\n\n`;
+        msg += `🔹 *Afastamento:* Renda mensal de *R$ ${(modo === 'IND' ? parseInt(combo[0]) : 3000).toLocaleString('pt-BR')},00*.\n\n`;
+        msg += `📋 *SINISTRO:* Basta apresentar atestado com nº de dias + exames ou laudos.\n\n`;
+        msg += `⭐ *VANTAGENS:* Sem aumento por idade, carência zero para morte e proteção 24h.\n\n`;
         msg += `💰 *INVESTIMENTO:* ${preco}`;
         
         window.open(`https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`, '_blank');
