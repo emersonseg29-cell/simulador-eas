@@ -64,7 +64,7 @@
     <div id="formEmp" style="display:none;">
         <div class="input-group"><label>Nome da Empresa</label><input type="text" id="nomeEmp" placeholder="Razão Social"></div>
         <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
-        <div class="input-group"><label>Nº de Vidas (Mínimo 3)</label><input type="number" id="vidasEmp" value="3"></div>
+        <div class="input-group"><label>Nº de Vidas (Mínimo 3)</label><input type="number" id="vidasEmp" placeholder="Ex: 5"></div>
         <div class="input-group">
             <label>Plano de Proteção Empresarial</label>
             <select id="planoEmp">
@@ -80,17 +80,12 @@
     <div id="areaSimulacao">
         <div id="pdfArea" class="pdf-content">
             <div id="resCabecalho" style="text-align:center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px;"></div>
-            
             <table class="resumo-table" id="tabelaCoberturas">
                 <thead><tr><th>Cobertura</th><th>Capital Segurado</th></tr></thead>
                 <tbody id="listaCoberturas"></tbody>
             </table>
-
             <div id="resTexto"></div>
             <div id="resPreco" style="text-align:right; font-weight:800; font-size:1.4rem; border-top: 2px solid #eee; padding-top:15px; margin-top:20px;"></div>
-            <div style="text-align:center; margin-top: 30px; font-size: 0.8rem; color: #94a3b8; border-top: 1px dashed #eee; padding-top: 10px;">
-                <b>EAS Corretora de Seguros</b> | Emerson: (17) 99716-5139
-            </div>
         </div>
         <div class="action-buttons">
             <button id="btnEnviarCliente" class="btn-action btn-equipe" onclick="enviarSimulacaoWhatsApp()"><i class="fa-solid fa-paper-plane"></i> ENVIAR PARA O CLIENTE</button>
@@ -115,55 +110,50 @@
     }
 
     function gerarSimulacao() {
-        let nome, precoFinal, capMorte, capSerit, tabelaHtml, explicacaoHtml;
+        let nome, whats, precoFinal, capMorte, capSerit, tabelaHtml, explicacaoHtml;
+
+        // VALIDAÇÃO DE CAMPOS VAZIOS
         if (modo === 'IND') {
-            nome = document.getElementById('nomeInd').value;
+            nome = document.getElementById('nomeInd').value.trim();
+            whats = document.getElementById('whatsInd').value.trim();
+            let idade = document.getElementById('idadeInd').value;
+            if(!nome || !whats || !idade) { alert("Por favor, preencha NOME, WHATSAPP e IDADE para simular."); return; }
+
             const combo = document.getElementById('planoInd').value.split('|');
             capSerit = parseInt(combo[0]); capMorte = parseInt(combo[1]);
             let precoVal = ((capMorte/1000)*0.55) + ((capSerit/1000)*35) + 1.44;
             precoFinal = `R$ ${precoVal.toFixed(2)}/mês`;
             
-            tabelaHtml = `
-                <tr><td>Morte / Invalidez</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Morte Acidental</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Renda Mensal (SERIT)</td><td class="val-destaque">R$ ${capSerit.toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Carência (Morte/Invalidez)</td><td class="val-destaque">ISENTO</td></tr>
-            `;
+            tabelaHtml = `<tr><td>Morte / Invalidez</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
+                          <tr><td>Morte Acidental</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
+                          <tr><td>Renda Mensal (SERIT)</td><td class="val-destaque">R$ ${capSerit.toLocaleString('pt-BR')},00</td></tr>
+                          <tr><td>Carência (Morte/Invalidez)</td><td class="val-destaque">ISENTO</td></tr>`;
             
-            explicacaoHtml = `
-                <div class="highlight-box">
-                    <b>EXEMPLO PRÁTICO SERIT (60 DIAS):</b><br>
-                    Suponhamos que receba um atestado de 60 dias. A seguradora paga por dia de afastamento.<br><br>
-                    Para saber o valor exato da indenização você deve calcular o valor do benefício mensal R$ ${capSerit.toLocaleString('pt-BR')},00 dividido por 30 dias = R$ ${(capSerit/30).toFixed(2).replace('.',',')} por dia.<br><br>
-                    Em seguida multiplique a diária pelos 53 dias pagos (descontada franquia de 7 dias).<br>
-                    <b>Total Líquido a receber: R$ ${((capSerit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.<br><br>
-                    <b>CARÊNCIAS:</b> Doenças Comuns (30 dias). LER, DORT e Hérnias (180 dias). Acidente Isento.
-                </div>
-            `;
+            explicacaoHtml = `<div class="highlight-box"><b>EXEMPLO PRÁTICO SERIT (60 DIAS):</b><br>
+                              Cálculo: R$ ${capSerit.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${(capSerit/30).toFixed(2).replace('.',',')} p/ dia.<br>
+                              Multiplicado por 53 dias pagos (descontada franquia).<br>
+                              <b>Total Líquido: R$ ${((capSerit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.<br><br>
+                              <b>CARÊNCIAS:</b> Doenças (30 dias). LER/DORT (180 dias). Acidente Isento.</div>`;
         } else {
-            nome = document.getElementById('nomeEmp').value;
-            const vidas = parseInt(document.getElementById('vidasEmp').value);
+            nome = document.getElementById('nomeEmp').value.trim();
+            whats = document.getElementById('whatsEmp').value.trim();
+            let vidas = document.getElementById('vidasEmp').value;
+            if(!nome || !whats || !vidas) { alert("Por favor, preencha NOME DA EMPRESA, WHATSAPP e Nº DE VIDAS."); return; }
+            if (parseInt(vidas) < 3) { alert("O plano empresarial exige no mínimo 3 vidas."); return; }
+
             const comboEmp = document.getElementById('planoEmp').value.split('|');
             capMorte = parseInt(comboEmp[1]);
-            if (vidas < 3) return alert("Mínimo de 3 vidas.");
             precoFinal = `TOTAL MENSAL: R$ ${(parseFloat(comboEmp[0]) * vidas).toFixed(2)} (${vidas} vidas)`;
             
-            tabelaHtml = `
-                <tr><td>Morte Natural</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Morte Acidental / IPA</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>DIT Acidente (Renda)</td><td class="val-destaque">R$ 3.000,00</td></tr>
-                <tr><td>Carência (Todas Coberturas)</td><td class="val-destaque">ISENTO</td></tr>
-            `;
+            tabelaHtml = `<tr><td>Morte Natural</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
+                          <tr><td>Morte Acidental / IPA</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
+                          <tr><td>DIT Acidente (Renda)</td><td class="val-destaque">R$ 3.000,00</td></tr>
+                          <tr><td>Carência (Todas Coberturas)</td><td class="val-destaque">ISENTO</td></tr>`;
             
-            explicacaoHtml = `
-                <div class="highlight-box">
-                    <b>REGRAS EMPRESARIAIS (DIT):</b><br>
-                    • Cobertura exclusiva para acidentes laborais.<br>
-                    • Franquia: Afastamento superior a 15 dias.<br>
-                    • <b>Carência:</b> Totalmente ISENTO em todas as coberturas.<br>
-                    • <b>Garantia Funeral:</b> Familiar inclusa (Titular, Cônjuge e Filhos).
-                </div>
-            `;
+            explicacaoHtml = `<div class="highlight-box"><b>REGRAS EMPRESARIAIS (DIT):</b><br>
+                              • Franquia: Afastamento superior a 15 dias.<br>
+                              • <b>Carência:</b> Totalmente ISENTO em todas as coberturas.<br>
+                              • <b>Funeral:</b> Familiar incluso. Prestadores sob análise prévia.</div>`;
         }
 
         document.getElementById('resCabecalho').innerHTML = `<h3>ESTUDO TÉCNICO UNIMED</h3><p>Para: <b>${nome}</b></p>`;
@@ -189,15 +179,6 @@
         msg += `🔹 *Morte por Acidente:* Indenização de *R$ ${(capMorte*2).toLocaleString('pt-BR')},00*\n\n`;
         msg += `🔹 *Invalidez:* Indenização de *R$ ${capMorte.toLocaleString('pt-BR')},00*\n\n`;
         msg += `🔹 *Afastamento:* Renda mensal de *R$ ${(modo === 'IND' ? parseInt(combo[0]) : 3000).toLocaleString('pt-BR')},00*.\n\n`;
-        
-        if(modo === 'IND') {
-            msg += `📋 *SINISTRO:* Cálculo por dia de afastamento (Ex: 60 dias recebe 53 líquidos).\n`;
-            msg += `📋 *CARÊNCIAS:* Isento p/ Acidente e Morte. Doenças (30 dias). LER/DORT/Hérnias (180 dias).\n\n`;
-        } else {
-            msg += `📋 *SINISTRO:* Relatório médico + atestado p/ afastamento superior a 15 dias.\n`;
-            msg += `📋 *CARÊNCIAS:* Plano Empresarial ISENTO em todas as coberturas.\n\n`;
-        }
-        
         msg += `💰 *INVESTIMENTO:* ${preco}`;
         window.open(`https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`, '_blank');
     }
