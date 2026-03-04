@@ -25,7 +25,7 @@
         .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
         
         #areaSimulacao { display: none; margin-top: 30px; }
-        .pdf-content { padding: 30px; border: 1px solid #eee; border-radius: 15px; background: #fff; line-height: 1.7; }
+        .pdf-content { padding: 30px; border: 1px solid #eee; border-radius: 15px; background: #fff; line-height: 1.7; font-size: 0.95rem; }
         .highlight-box { background: #f0fdf4; padding: 20px; border-radius: 12px; margin: 15px 0; border: 1px solid var(--unimed); }
         
         .action-buttons { display: flex; gap: 10px; margin-top: 20px; }
@@ -51,11 +51,11 @@
         <div class="input-group"><label>WhatsApp</label><input type="tel" id="whatsInd" placeholder="(17) 99999-9999"></div>
         <div class="input-group"><label>Idade (16 a 70 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 35"></div>
         <div class="input-group">
-            <label>Plano de Renda (SERIT)</label>
+            <label>Plano Individual (SERIT)</label>
             <select id="planoInd">
-                <option value="3000|50000">BRONZE (3k SERIT + 50k Capital)</option>
-                <option value="6000|100000">PRATA (6k SERIT + 100k Capital)</option>
-                <option value="9000|100000" selected>OURO (9k SERIT + 100k Capital)</option>
+                <option value="3000|50000">Bronze (3k SERIT + 50k Morte)</option>
+                <option value="6000|100000">Prata (6k SERIT + 100k Morte)</option>
+                <option value="9000|100000" selected>Ouro (9k SERIT + 100k Morte)</option>
             </select>
         </div>
     </div>
@@ -63,13 +63,13 @@
     <div id="formEmp" style="display:none;">
         <div class="input-group"><label>Nome da Empresa (Razão Social)</label><input type="text" id="nomeEmp" placeholder="Nome da Empresa"></div>
         <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
-        <div class="input-group"><label>Nº de Vidas (Colaboradores)</label><input type="number" id="vidasEmp" value="1"></div>
+        <div class="input-group"><label>Nº de Vidas</label><input type="number" id="vidasEmp" value="1"></div>
         <div class="input-group">
             <label>Plano Empresarial</label>
             <select id="planoEmp">
-                <option value="49.90|60000|BRONZE">Plano BRONZE (60k Morte) - R$ 49,90/vida</option>
-                <option value="69.90|100000|PRATA">Plano PRATA (100k Morte) - R$ 69,90/vida</option>
-                <option value="79.90|200000|OURO">Plano OURO (200k Morte) - R$ 79,90/vida</option>
+                <option value="49.90|50000|BRONZE">Bronze (Morte 50k) - R$ 49,90/vida</option>
+                <option value="69.90|100000|PRATA">Prata (Morte 100k) - R$ 69,90/vida</option>
+                <option value="79.90|100000|OURO">Ouro (Morte 100k) - R$ 79,90/vida</option>
             </select>
         </div>
     </div>
@@ -110,14 +110,13 @@
         if (modo === 'IND') {
             nome = document.getElementById('nomeInd').value;
             whats = document.getElementById('whatsInd').value.replace(/\D/g,'');
-            const idade = parseInt(document.getElementById('idadeInd').value);
+            const idade = document.getElementById('idadeInd').value;
             const combo = document.getElementById('planoInd').value.split('|');
             const serit = parseInt(combo[0]);
             const morte = parseInt(combo[1]);
 
             if(!nome || !idade) return alert("Preencha Nome e Idade.");
 
-            // Cálculo baseado na tabela enviada (Aprox. PFAA)
             let total = ((morte/1000)*0.55) + ((serit/1000)*35) + 1.44;
             precoFinal = `R$ ${total.toFixed(2)}/mês`;
             
@@ -128,12 +127,12 @@
                 <div class="highlight-box">
                     <b>EXEMPLO PRÁTICO (60 DIAS):</b><br>
                     Suponhamos que receba um atestado de 60 dias. A seguradora paga por dia de afastamento.<br><br>
-                    Cálculo da diária (R$ ${serit.toLocaleString('pt-BR')} ÷ 30) = R$ ${(serit/30).toFixed(2).replace('.',',')} por dia.<br><br>
-                    Multiplique a diária pelos 53 dias pagos (descontada franquia de 7 dias).<br>
+                    Para saber o valor exato da indenização você deve calcular o valor do benefício mensal R$ ${serit.toLocaleString('pt-BR')},00 dividido por 30 dias = R$ ${(serit/30).toFixed(2).replace('.',',')} por dia.<br><br>
+                    Em seguida multiplique a diária pelos 53 dias pagos (descontada franquia de 7 dias).<br>
                     <b>Total da Indenização: R$ ${((serit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.
                 </div>
             `;
-            msgWhats = `Olá ${nome}, segue proposta Individual de R$ ${serit} mensais.`;
+            msgWhats = `Olá ${nome}, segue proposta Individual Unimed.`;
 
         } else {
             nome = document.getElementById('nomeEmp').value;
@@ -141,25 +140,27 @@
             const vidas = parseInt(document.getElementById('vidasEmp').value);
             const comboEmp = document.getElementById('planoEmp').value.split('|');
             const precoVida = parseFloat(comboEmp[0]);
-            const capital = parseInt(comboEmp[1]);
+            const capitalMorte = parseInt(comboEmp[1]);
             const nomeP = comboEmp[2];
 
-            if(!nome || !vidas) return alert("Preencha o Nome da Empresa e Nº de Vidas.");
+            if(!nome || !vidas) return alert("Preencha a Empresa e Nº de Vidas.");
 
             const totalEmp = precoVida * vidas;
             precoFinal = `TOTAL MENSAL: R$ ${totalEmp.toFixed(2)} (${vidas} vidas)`;
 
             texto = `
                 <p><b>Plano Empresarial Unimed - ${nomeP}</b></p>
-                <p><b>Morte Acidental / IPA:</b> Indenização de <b>R$ ${capital.toLocaleString('pt-BR')},00</b>.</p>
-                <p><b>DIT (Diária por Incapacidade Temporária):</b> Renda mensal de <b>R$ 3.000,00</b> em caso de acidente.</p>
+                <p><b>Morte:</b> Se ocorrer morte natural, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${capitalMorte.toLocaleString('pt-BR')},00</b>.</p>
+                <p><b>Morte Acidental:</b> Se ocorrer por acidente seus beneficiários receberão uma indenização no valor de <b>R$ ${(capitalMorte*2).toLocaleString('pt-BR')},00</b>.</p>
+                <p><b>IPA:</b> Se ocorrer uma invalidez permanente parcial ou total por acidente, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${capitalMorte.toLocaleString('pt-BR')},00</b>.</p>
+                <p><b>IFPD:</b> Se ocorrer uma invalidez permanente total e funcional por doença a terei direito a receber uma indenização no valor de <b>R$ ${capitalMorte.toLocaleString('pt-BR')},00</b>.</p>
+                <p><b>DIT:</b> Se sofrer um acidente a seguros Unimed pagará uma renda mensal no valor de <b>R$ 3.000,00 (3 mil reais)</b>.</p>
                 <div class="highlight-box">
-                    <b>DETALHES DO DIT EMPRESARIAL:</b><br>
-                    • Cobertura exclusiva para Acidentes Laborais.<br>
-                    • Franquia: Afastamento superior a 15 dias.<br>
-                    • Apresentação obrigatória de atestado e relatório médico.
+                    <b>REGRAS DO DIT EMPRESARIAL:</b><br>
+                    • O limite de indenização para essa cobertura é de 12 meses se for ininterrupto.<br>
+                    • Para acionar a cobertura de DIT (Diária por incapacidade temporária) o afastamento precisa ser superior a 15 dias.<br>
+                    • <b>Garantia Funeral Familiar:</b> Assistência completa para Titular, Cônjuge e Filhos (até 21 anos).
                 </div>
-                <p><b>GARANTIA FUNERAL FAMILIAR:</b> Assistência completa para Titular, Cônjuge e Filhos (até 21 anos).</p>
             `;
             msgWhats = `Olá, gostaria de contratar o Plano Empresarial (${nomeP}) para a empresa ${nome}.`;
         }
