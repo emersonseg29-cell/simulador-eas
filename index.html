@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EAS Corretora - Simulador Unificado</title>
+    <title>EAS Corretora - Simulador Oficial Unimed</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -18,8 +18,7 @@
         .type-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; color: #64748b; background: transparent; }
         .type-btn.active { background: var(--primary); color: white; }
 
-        .section-title { font-size: 0.85rem; font-weight: 800; color: var(--primary); margin: 15px 0 10px; border-bottom: 2px solid var(--gold); display: inline-block; }
-        .input-group { margin-bottom: 15px; }
+        .input-group { margin-bottom: 15px; text-align: left; }
         label { display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 5px; }
         input, select { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; outline: none; }
         
@@ -50,27 +49,27 @@
     <div id="formInd">
         <div class="input-group"><label>Nome do Cliente</label><input type="text" id="nomeInd" placeholder="Nome Completo"></div>
         <div class="input-group"><label>WhatsApp</label><input type="tel" id="whatsInd" placeholder="(17) 99999-9999"></div>
-        <div class="input-group"><label>Idade</label><input type="number" id="idadeInd" placeholder="Ex: 35"></div>
+        <div class="input-group"><label>Idade (16 a 70 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 35"></div>
         <div class="input-group">
             <label>Plano de Renda (SERIT)</label>
             <select id="planoInd">
-                <option value="3000|50000">BRONZE (3k SERIT + 50k Morte)</option>
-                <option value="6000|100000">PRATA (6k SERIT + 100k Morte)</option>
-                <option value="9000|100000" selected>OURO (9k SERIT + 100k Morte)</option>
+                <option value="3000|50000">BRONZE (3k SERIT + 50k Capital)</option>
+                <option value="6000|100000">PRATA (6k SERIT + 100k Capital)</option>
+                <option value="9000|100000" selected>OURO (9k SERIT + 100k Capital)</option>
             </select>
         </div>
     </div>
 
     <div id="formEmp" style="display:none;">
-        <div class="input-group"><label>Nome da Empresa (CNPJ)</label><input type="text" id="nomeEmp" placeholder="Razão Social"></div>
+        <div class="input-group"><label>Nome da Empresa (Razão Social)</label><input type="text" id="nomeEmp" placeholder="Nome da Empresa"></div>
         <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
         <div class="input-group"><label>Nº de Vidas (Colaboradores)</label><input type="number" id="vidasEmp" value="1"></div>
         <div class="input-group">
             <label>Plano Empresarial</label>
             <select id="planoEmp">
-                <option value="49.90|60000|BRONZE">BRONZE (R$ 49,90/vida) - 60k Morte</option>
-                <option value="69.90|100000|PRATA">PRATA (R$ 69,90/vida) - 100k Morte</option>
-                <option value="79.90|200000|OURO">OURO (R$ 79,90/vida) - 200k Morte</option>
+                <option value="49.90|60000|BRONZE">Plano BRONZE (60k Morte) - R$ 49,90/vida</option>
+                <option value="69.90|100000|PRATA">Plano PRATA (100k Morte) - R$ 69,90/vida</option>
+                <option value="79.90|200000|OURO">Plano OURO (200k Morte) - R$ 79,90/vida</option>
             </select>
         </div>
     </div>
@@ -111,30 +110,30 @@
         if (modo === 'IND') {
             nome = document.getElementById('nomeInd').value;
             whats = document.getElementById('whatsInd').value.replace(/\D/g,'');
-            const idade = document.getElementById('idadeInd').value;
+            const idade = parseInt(document.getElementById('idadeInd').value);
             const combo = document.getElementById('planoInd').value.split('|');
             const serit = parseInt(combo[0]);
             const morte = parseInt(combo[1]);
 
             if(!nome || !idade) return alert("Preencha Nome e Idade.");
 
-            // Cálculo aproximado Individual (PFAA)
-            const total = ((morte/1000)*0.55) + ((serit/1000)*35) + 1.44;
+            // Cálculo baseado na tabela enviada (Aprox. PFAA)
+            let total = ((morte/1000)*0.55) + ((serit/1000)*35) + 1.44;
             precoFinal = `R$ ${total.toFixed(2)}/mês`;
             
             texto = `
-                <p><b>Morte Natural/Invalidez:</b> R$ ${morte.toLocaleString('pt-BR')},00</p>
-                <p><b>Morte Acidental:</b> R$ ${(morte*2).toLocaleString('pt-BR')},00</p>
-                <p><b>SERIT:</b> Renda mensal de <b>R$ ${serit.toLocaleString('pt-BR')},00</b>.</p>
+                <p><b>Morte Natural / Invalidez:</b> R$ ${morte.toLocaleString('pt-BR')},00</p>
+                <p><b>Morte Acidental (Capital Dobrado):</b> R$ ${(morte*2).toLocaleString('pt-BR')},00</p>
+                <p><b>SERIT (Renda Mensal):</b> R$ ${serit.toLocaleString('pt-BR')},00.</p>
                 <div class="highlight-box">
                     <b>EXEMPLO PRÁTICO (60 DIAS):</b><br>
-                    Suponhamos que receba um atestado de 60 dias. A seguradora paga por dia de afastamento.<br>
-                    Diária (R$ ${serit.toLocaleString('pt-BR')} ÷ 30) = R$ ${(serit/30).toFixed(2).replace('.',',')}.<br>
-                    Pagamento de 53 dias (descontada franquia de 7 dias).<br>
+                    Suponhamos que receba um atestado de 60 dias. A seguradora paga por dia de afastamento.<br><br>
+                    Cálculo da diária (R$ ${serit.toLocaleString('pt-BR')} ÷ 30) = R$ ${(serit/30).toFixed(2).replace('.',',')} por dia.<br><br>
+                    Multiplique a diária pelos 53 dias pagos (descontada franquia de 7 dias).<br>
                     <b>Total da Indenização: R$ ${((serit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.
                 </div>
             `;
-            msgWhats = `Olá ${nome}, segue proposta Individual de R$ ${serit} de renda mensal.`;
+            msgWhats = `Olá ${nome}, segue proposta Individual de R$ ${serit} mensais.`;
 
         } else {
             nome = document.getElementById('nomeEmp').value;
@@ -148,23 +147,24 @@
             if(!nome || !vidas) return alert("Preencha o Nome da Empresa e Nº de Vidas.");
 
             const totalEmp = precoVida * vidas;
-            precoFinal = `TOTAL: R$ ${totalEmp.toFixed(2)} (${vidas} vidas)`;
+            precoFinal = `TOTAL MENSAL: R$ ${totalEmp.toFixed(2)} (${vidas} vidas)`;
 
             texto = `
                 <p><b>Plano Empresarial Unimed - ${nomeP}</b></p>
                 <p><b>Morte Acidental / IPA:</b> Indenização de <b>R$ ${capital.toLocaleString('pt-BR')},00</b>.</p>
-                <p><b>DIT Acidente:</b> Renda de <b>R$ 3.000,00/mês</b> em caso de afastamento por acidente.</p>
+                <p><b>DIT (Diária por Incapacidade Temporária):</b> Renda mensal de <b>R$ 3.000,00</b> em caso de acidente.</p>
                 <div class="highlight-box">
-                    <b>VANTAGENS EMPRESARIAIS:</b><br>
-                    • Assistência Funeral Completa (Titular, Cônjuge e Filhos).<br>
-                    • Franquia DIT: 15 dias.<br>
-                    • Válido para CLT e Prestadores de Serviço.
+                    <b>DETALHES DO DIT EMPRESARIAL:</b><br>
+                    • Cobertura exclusiva para Acidentes Laborais.<br>
+                    • Franquia: Afastamento superior a 15 dias.<br>
+                    • Apresentação obrigatória de atestado e relatório médico.
                 </div>
+                <p><b>GARANTIA FUNERAL FAMILIAR:</b> Assistência completa para Titular, Cônjuge e Filhos (até 21 anos).</p>
             `;
-            msgWhats = `Olá, segue estudo Empresarial (${nomeP}) para a empresa ${nome}. Total: R$ ${totalEmp.toFixed(2)}`;
+            msgWhats = `Olá, gostaria de contratar o Plano Empresarial (${nomeP}) para a empresa ${nome}.`;
         }
 
-        document.getElementById('resCabecalho').innerHTML = `<h3>ESTUDO TÉCNICO UNIMED</h3><p>Preparado para: <b>${nome}</b></p>`;
+        document.getElementById('resCabecalho').innerHTML = `<h3>ESTUDO TÉCNICO PERSONALIZADO</h3><p>Preparado para: <b>${nome}</b></p>`;
         document.getElementById('resTexto').innerHTML = texto;
         document.getElementById('resPreco').innerText = precoFinal;
         document.getElementById('linkContratar').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msgWhats)}`;
