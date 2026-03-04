@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -22,7 +22,11 @@
         .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
         #areaSimulacao { display: none; margin-top: 30px; }
         .pdf-content { padding: 30px; border: 1px solid #eee; border-radius: 15px; background: #fff; line-height: 1.7; font-size: 0.95rem; }
-        .highlight-box { background: #f0fdf4; padding: 20px; border-radius: 12px; margin: 15px 0; border: 1px solid var(--unimed); }
+        .resumo-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.85rem; }
+        .resumo-table th { background: #f1f5f9; color: var(--primary); text-align: left; padding: 10px; border-bottom: 2px solid var(--gold); }
+        .resumo-table td { padding: 10px; border-bottom: 1px solid #eee; color: #475569; }
+        .val-destaque { font-weight: 800; color: var(--unimed); }
+        .highlight-box { background: #f0fdf4; padding: 20px; border-radius: 12px; margin: 15px 0; border: 1px solid var(--unimed); font-size: 0.9rem; }
         .action-buttons { display: grid; gap: 10px; margin-top: 20px; }
         .btn-action { padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; border: none; cursor: pointer; }
         .btn-equipe { background: var(--gold); color: white; display: none; }
@@ -62,7 +66,7 @@
         <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
         <div class="input-group"><label>Nº de Vidas (Mín 3)</label><input type="number" id="vidasEmp" value="3"></div>
         <div class="input-group">
-            <label>Plano Empresarial</label>
+            <label>Plano Empresarial (DIT)</label>
             <select id="planoEmp">
                 <option value="49.90|50000|BRONZE">Bronze (Morte 50k) - R$ 49,90/vida</option>
                 <option value="69.90|100000|PRATA">Prata (Morte 100k) - R$ 69,90/vida</option>
@@ -76,8 +80,17 @@
     <div id="areaSimulacao">
         <div id="pdfArea" class="pdf-content">
             <div id="resCabecalho" style="text-align:center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px;"></div>
+            
+            <table class="resumo-table" id="tabelaCoberturas">
+                <thead><tr><th>Cobertura</th><th>Capital Segurado</th></tr></thead>
+                <tbody id="listaCoberturas"></tbody>
+            </table>
+
             <div id="resTexto"></div>
             <div id="resPreco" style="text-align:right; font-weight:800; font-size:1.4rem; border-top: 2px solid #eee; padding-top:15px; margin-top:20px;"></div>
+            <div style="text-align:center; margin-top: 30px; font-size: 0.8rem; color: #94a3b8; border-top: 1px dashed #eee; padding-top: 10px;">
+                <b>EAS Corretora de Seguros</b> | Emerson: (17) 99716-5139
+            </div>
         </div>
         <div class="action-buttons">
             <button id="btnEnviarCliente" class="btn-action btn-equipe" onclick="enviarSimulacaoWhatsApp()"><i class="fa-solid fa-paper-plane"></i> ENVIAR PARA O CLIENTE</button>
@@ -102,25 +115,60 @@
     }
 
     function gerarSimulacao() {
-        let nome, texto, precoFinal, capMorte, capSerit;
+        let nome, precoFinal, capMorte, capSerit, tabelaHtml, explicacaoHtml;
         if (modo === 'IND') {
             nome = document.getElementById('nomeInd').value;
             const combo = document.getElementById('planoInd').value.split('|');
             capSerit = parseInt(combo[0]); capMorte = parseInt(combo[1]);
             let precoVal = ((capMorte/1000)*0.55) + ((capSerit/1000)*35) + 1.44;
             precoFinal = `R$ ${precoVal.toFixed(2)}/mês`;
-            texto = `<p><b>Morte Natural:</b> R$ ${capMorte.toLocaleString('pt-BR')},00</p><p><b>Morte Acidental:</b> R$ ${(capMorte*2).toLocaleString('pt-BR')},00</p><p><b>SERIT:</b> R$ ${capSerit.toLocaleString('pt-BR')},00/mês.</p>`;
+            
+            tabelaHtml = `
+                <tr><td>Morte / Invalidez</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
+                <tr><td>Morte Acidental</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
+                <tr><td>SERIT (Renda Mensal)</td><td class="val-destaque">R$ ${capSerit.toLocaleString('pt-BR')},00</td></tr>
+                <tr><td>Carência (Morte/Invalidez)</td><td class="val-destaque">ISENTO</td></tr>
+            `;
+            
+            explicacaoHtml = `
+                <div class="highlight-box">
+                    <b>EXEMPLO PRÁTICO SERIT (60 DIAS):</b><br>
+                    Suponhamos que receba um atestado de 60 dias. A seguradora paga por dia de afastamento.<br><br>
+                    Cálculo: R$ ${capSerit.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${(capSerit/30).toFixed(2).replace('.',',')} p/ dia.<br>
+                    Multiplicado por 53 dias pagos (descontada franquia de 7 dias).<br>
+                    <b>Total Líquido: R$ ${((capSerit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.<br><br>
+                    <b>CARÊNCIAS:</b> Doenças Comuns (30 dias). LER, DORT e Hérnias (180 dias). Acidente Isento.
+                </div>
+            `;
         } else {
             nome = document.getElementById('nomeEmp').value;
             const vidas = parseInt(document.getElementById('vidasEmp').value);
             const comboEmp = document.getElementById('planoEmp').value.split('|');
             capMorte = parseInt(comboEmp[1]);
             if (vidas < 3) return alert("Mínimo de 3 vidas.");
-            precoFinal = `TOTAL: R$ ${(parseFloat(comboEmp[0]) * vidas).toFixed(2)} (${vidas} vidas)`;
-            texto = `<p><b>Morte Natural:</b> R$ ${capMorte.toLocaleString('pt-BR')},00</p><p><b>Morte Acidental:</b> R$ ${(capMorte*2).toLocaleString('pt-BR')},00</p><p><b>DIT:</b> R$ 3.000,00/mês.</p>`;
+            precoFinal = `TOTAL MENSAL: R$ ${(parseFloat(comboEmp[0]) * vidas).toFixed(2)} (${vidas} vidas)`;
+            
+            tabelaHtml = `
+                <tr><td>Morte Natural</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
+                <tr><td>Morte Acidental / IPA</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
+                <tr><td>DIT Acidente (Renda)</td><td class="val-destaque">R$ 3.000,00</td></tr>
+                <tr><td>Carência (Todas Coberturas)</td><td class="val-destaque">ISENTO</td></tr>
+            `;
+            
+            explicacaoHtml = `
+                <div class="highlight-box">
+                    <b>REGRAS EMPRESARIAIS (DIT):</b><br>
+                    • Cobertura exclusiva para acidentes laborais.<br>
+                    • Franquia: Afastamento superior a 15 dias.<br>
+                    • <b>Carência:</b> Totalmente ISENTO em todas as coberturas.<br>
+                    • <b>Garantia Funeral:</b> Familiar inclusa (Titular, Cônjuge e Filhos).
+                </div>
+            `;
         }
+
         document.getElementById('resCabecalho').innerHTML = `<h3>ESTUDO TÉCNICO UNIMED</h3><p>Para: <b>${nome}</b></p>`;
-        document.getElementById('resTexto').innerHTML = texto;
+        document.getElementById('listaCoberturas').innerHTML = tabelaHtml;
+        document.getElementById('resTexto').innerHTML = explicacaoHtml;
         document.getElementById('resPreco').innerText = precoFinal;
         document.getElementById('areaSimulacao').style.display = 'block';
         
@@ -139,12 +187,18 @@
         let msg = `*EAS CORRETORA - PROTEÇÃO UNIMED*\n\n${nome}, seu estudo ficou da seguinte forma:\n\n`;
         msg += `🔹 *Morte Natural:* Indenização de *R$ ${capMorte.toLocaleString('pt-BR')},00*\n\n`;
         msg += `🔹 *Morte por Acidente:* Indenização de *R$ ${(capMorte*2).toLocaleString('pt-BR')},00*\n\n`;
-        msg += `🔹 *Invalidez por Acidente ou Doença:* Indenização de *R$ ${capMorte.toLocaleString('pt-BR')},00*\n\n`;
-        msg += `🔹 *Afastamento (DIT/SERIT):* Receberá uma renda mensal no valor de *R$ ${(modo === 'IND' ? parseInt(combo[0]) : 3000).toLocaleString('pt-BR')},00*.\n\n`;
-        msg += `📋 *DIT:* Necessário apresentar prontuário, atestado + laudos. Afastamento superior a ${(modo === 'IND' ? '7' : '15')} dias.\n\n`;
-        msg += `⭐ *VANTAGENS:* Sem aumento por faixa etária, sem carência para acidentes e custo-benefício.\n\n`;
-        msg += `💰 *INVESTIMENTO:* ${preco}`;
+        msg += `🔹 *Invalidez:* Indenização de *R$ ${capMorte.toLocaleString('pt-BR')},00*\n\n`;
+        msg += `🔹 *Afastamento:* Renda mensal de *R$ ${(modo === 'IND' ? parseInt(combo[0]) : 3000).toLocaleString('pt-BR')},00*.\n\n`;
         
+        if(modo === 'IND') {
+            msg += `📋 *SINISTRO:* Cálculo por dia de afastamento (Ex: 60 dias recebe 53 líquidos).\n`;
+            msg += `📋 *CARÊNCIAS:* Isento p/ Acidente e Morte. Doenças (30 dias). LER/DORT/Hérnias (180 dias).\n\n`;
+        } else {
+            msg += `📋 *SINISTRO:* Relatório médico + atestado p/ afastamento superior a 15 dias.\n`;
+            msg += `📋 *CARÊNCIAS:* Plano Empresarial ISENTO em todas as coberturas.\n\n`;
+        }
+        
+        msg += `💰 *INVESTIMENTO:* ${preco}`;
         window.open(`https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 </script>
