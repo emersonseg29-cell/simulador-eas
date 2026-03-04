@@ -63,7 +63,7 @@
     <div id="formEmp" style="display:none;">
         <div class="input-group"><label>Nome da Empresa (Razão Social)</label><input type="text" id="nomeEmp" placeholder="Nome da Empresa"></div>
         <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
-        <div class="input-group"><label>Nº de Vidas</label><input type="number" id="vidasEmp" value="1"></div>
+        <div class="input-group"><label>Nº de Vidas (Mínimo 3 vidas)</label><input type="number" id="vidasEmp" value="3" min="1"></div>
         <div class="input-group">
             <label>Plano Empresarial</label>
             <select id="planoEmp">
@@ -143,7 +143,9 @@
             const capitalMorte = parseInt(comboEmp[1]);
             const nomeP = comboEmp[2];
 
-            if(!nome || !vidas) return alert("Preencha a Empresa e Nº de Vidas.");
+            // TRAVA DE MÍNIMO DE 3 VIDAS
+            if (vidas < 3) return alert("Para o plano empresarial, o número mínimo de vidas é 3.");
+            if(!nome) return alert("Preencha o Nome da Empresa.");
 
             const totalEmp = precoVida * vidas;
             precoFinal = `TOTAL MENSAL: R$ ${totalEmp.toFixed(2)} (${vidas} vidas)`;
@@ -159,10 +161,12 @@
                     <b>REGRAS DO DIT EMPRESARIAL:</b><br>
                     • O limite de indenização para essa cobertura é de 12 meses se for ininterrupto.<br>
                     • Para acionar a cobertura de DIT (Diária por incapacidade temporária) o afastamento precisa ser superior a 15 dias.<br>
-                    • <b>Garantia Funeral Familiar:</b> Assistência completa para Titular, Cônjuge e Filhos (até 21 anos).
+                    • <b>Garantia Funeral Familiar:</b> Assistência completa para Titular, Cônjuge e Filhos (até 21 anos).<br>
+                    <br>
+                    <b>IMPORTANTE:</b> A inclusão de prestadores de serviço está sujeita à análise prévia da seguradora.
                 </div>
             `;
-            msgWhats = `Olá, gostaria de contratar o Plano Empresarial (${nomeP}) para a empresa ${nome}.`;
+            msgWhats = `Olá, gostaria de contratar o Plano Empresarial (${nomeP}) para a empresa ${nome} (${vidas} vidas).`;
         }
 
         document.getElementById('resCabecalho').innerHTML = `<h3>ESTUDO TÉCNICO PERSONALIZADO</h3><p>Preparado para: <b>${nome}</b></p>`;
