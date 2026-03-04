@@ -128,11 +128,14 @@
                           <tr><td>Renda Mensal (SERIT)</td><td class="val-destaque">R$ ${capSerit.toLocaleString('pt-BR')},00</td></tr>
                           <tr><td>Carência (Morte/Invalidez)</td><td class="val-destaque">ISENTO</td></tr>`;
             
-            explicacaoHtml = `<div class="highlight-box"><b>EXEMPLO PRÁTICO SERIT (60 DIAS):</b><br>
+            explicacaoHtml = `<div class="highlight-box">
+                              <b>EXEMPLO PRÁTICO SERIT (60 DIAS):</b><br>
+                              Suponhamos que receba um atestado de 60 dias. A seguradora paga por dia de afastamento.<br><br>
                               Cálculo: R$ ${capSerit.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${(capSerit/30).toFixed(2).replace('.',',')} p/ dia.<br>
-                              Multiplicado por 53 dias pagos (descontada franquia).<br>
-                              <b>Total Líquido: R$ ${((capSerit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.<br><br>
-                              <b>CARÊNCIAS:</b> Doenças (30 dias). LER/DORT (180 dias). Acidente Isento.</div>`;
+                              Multiplicado por 53 dias pagos (descontada franquia de 7 dias).<br>
+                              <b>Total Líquido a receber: R$ ${((capSerit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.<br><br>
+                              <b>CARÊNCIAS:</b> Doenças Comuns (30 dias). LER, DORT e Hérnias (180 dias). Acidente Isento.
+                              </div>`;
         } else {
             nome = document.getElementById('nomeEmp').value.trim();
             whats = document.getElementById('whatsEmp').value.trim();
@@ -149,15 +152,18 @@
                           <tr><td>DIT Acidente (Renda)</td><td class="val-destaque">R$ 3.000,00</td></tr>
                           <tr><td>Carência (Todas Coberturas)</td><td class="val-destaque">ISENTO</td></tr>`;
             
-            explicacaoHtml = `<div class="highlight-box"><b>REGRAS EMPRESARIAIS (DIT):</b><br>
+            explicacaoHtml = `<div class="highlight-box">
+                              <b>REGRAS EMPRESARIAIS (DIT):</b><br>
+                              • Cobertura exclusiva para acidentes laborais.<br>
                               • Franquia: Afastamento superior a 15 dias.<br>
                               • <b>Carência:</b> Totalmente ISENTO em todas as coberturas.<br>
-                              • <b>Funeral:</b> Familiar incluso. Prestadores sob análise prévia.</div>`;
+                              • <b>Garantia Funeral:</b> Familiar inclusa (Titular, Cônjuge e Filhos).
+                              </div>`;
         }
 
         document.getElementById('resCabecalho').innerHTML = `<h3>ESTUDO TÉCNICO UNIMED</h3><p>Para: <b>${nome}</b></p>`;
         document.getElementById('listaCoberturas').innerHTML = tabelaHtml;
-        document.getElementById('resTexto').innerHTML = explicacaoHtml;
+        document.getElementById('resTexto').innerHTML = explicacaoHtml; // AQUI ESTÁ O AJUSTE PARA EXIBIR O TEXTO
         document.getElementById('resPreco').innerText = precoFinal;
         document.getElementById('areaSimulacao').style.display = 'block';
         
