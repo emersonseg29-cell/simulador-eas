@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -43,8 +43,8 @@
     <div class="sub">Simulador de Proteção Unimed</div>
 
     <div class="type-selector">
-        <button class="type-btn active" id="btnInd" onclick="switchType('IND')">INDIVIDUAL</button>
-        <button class="type-btn" id="btnEmp" onclick="switchType('EMP')">EMPRESARIAL</button>
+        <button class="type-btn active" id="btnInd" onclick="switchType('IND')">INDIVIDUAL (CPF)</button>
+        <button class="type-btn" id="btnEmp" onclick="switchType('EMP')">EMPRESARIAL (PJ)</button>
     </div>
 
     <div id="formInd">
@@ -52,11 +52,11 @@
         <div class="input-group"><label>WhatsApp do Cliente</label><input type="tel" id="whatsInd" placeholder="(17) 99999-9999"></div>
         <div class="input-group"><label>Idade (16 a 70 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 35"></div>
         <div class="input-group">
-            <label>Plano Individual (SERIT)</label>
+            <label>Escolha o valor da Renda (SERIT)</label>
             <select id="planoInd">
-                <option value="3000|50000">Bronze (3k SERIT + 50k Morte)</option>
-                <option value="6000|100000">Prata (6k SERIT + 100k Morte)</option>
-                <option value="9000|108000" selected>Ouro (9k SERIT + 108k Morte)</option>
+                <option value="3000|50000">Bronze - R$ 3.000,00 de Renda</option>
+                <option value="6000|100000">Prata - R$ 6.000,00 de Renda</option>
+                <option value="9000|108000" selected>Ouro - R$ 9.000,00 de Renda</option>
             </select>
         </div>
     </div>
@@ -64,13 +64,13 @@
     <div id="formEmp" style="display:none;">
         <div class="input-group"><label>Nome da Empresa</label><input type="text" id="nomeEmp" placeholder="Razão Social"></div>
         <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
-        <div class="input-group"><label>Nº de Vidas (Mín 3)</label><input type="number" id="vidasEmp" value="3"></div>
+        <div class="input-group"><label>Nº de Vidas (Mínimo 3)</label><input type="number" id="vidasEmp" value="3"></div>
         <div class="input-group">
             <label>Plano Empresarial (DIT)</label>
             <select id="planoEmp">
-                <option value="49.90|50000|BRONZE">Bronze (Morte 50k) - R$ 49,90/vida</option>
-                <option value="69.90|100000|PRATA">Prata (Morte 100k) - R$ 69,90/vida</option>
-                <option value="79.90|108000|OURO">Ouro (Morte 108k) - R$ 79,90/vida</option>
+                <option value="49.90|50000|BRONZE">Bronze (R$ 49,90 por vida)</option>
+                <option value="69.90|100000|PRATA">Prata (R$ 69,90 por vida)</option>
+                <option value="79.90|108000|OURO">Ouro (R$ 79,90 por vida)</option>
             </select>
         </div>
     </div>
@@ -136,7 +136,7 @@
                     Suponhamos que receba um atestado de 60 dias. A seguradora paga por dia de afastamento.<br><br>
                     Cálculo: R$ ${capSerit.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${(capSerit/30).toFixed(2).replace('.',',')} p/ dia.<br>
                     Multiplicado por 53 dias pagos (descontada franquia de 7 dias).<br>
-                    <b>Total Líquido: R$ ${((capSerit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.<br><br>
+                    <b>Total Líquido a receber: R$ ${((capSerit/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.<br><br>
                     <b>CARÊNCIAS:</b> Doenças Comuns (30 dias). LER, DORT e Hérnias (180 dias). Acidente Isento.
                 </div>
             `;
