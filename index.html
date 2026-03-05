@@ -1,195 +1,281 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EAS Corretora - Simulador Oficial Unimed</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 550px; background: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .logo-img { width: 130px; height: 130px; border-radius: 50%; border: 3px solid var(--gold); margin: 0 auto 15px; display: block; object-fit: cover; }
-        h2 { color: var(--primary); text-align: center; margin: 0; font-size: 1.5rem; }
-        .sub { color: var(--gold); text-align: center; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; }
-        .type-selector { display: flex; background: #e2e8f0; border-radius: 12px; padding: 5px; margin-bottom: 25px; }
-        .type-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; color: #64748b; background: transparent; transition: 0.3s; }
-        .type-btn.active { background: var(--primary); color: white; }
-        .input-group { margin-bottom: 15px; text-align: left; }
-        label { display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; outline: none; }
-        .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(29, 45, 68, 0.3); }
-        #areaSimulacao { display: none; margin-top: 30px; border-top: 2px dashed #eee; padding-top: 20px; }
-        .pdf-content { padding: 25px; border-radius: 15px; background: #fff; line-height: 1.6; font-size: 0.95rem; border: 1px solid #eee; }
-        .resumo-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.85rem; }
-        .resumo-table th { background: #f1f5f9; color: var(--primary); text-align: left; padding: 12px; border-bottom: 2px solid var(--gold); }
-        .resumo-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: #475569; }
-        .val-destaque { font-weight: 800; color: var(--unimed); }
-        .highlight-box { background: #f0fdf4; padding: 20px; border-radius: 12px; margin: 15px 0; border-left: 5px solid var(--unimed); font-size: 0.9rem; }
-        .action-buttons { display: grid; gap: 10px; margin-top: 20px; }
-        .btn-action { padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; border: none; cursor: pointer; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EAS Corretora - Simulador Oficial Unimed</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; }
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 550px; background: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    .logo-img { width: 130px; height: 130px; border-radius: 50%; border: 3px solid var(--gold); margin: 0 auto 15px; display: block; object-fit: cover; }
+    h2 { color: var(--primary); text-align: center; margin: 0; font-size: 1.5rem; }
+    .sub { color: var(--gold); text-align: center; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; letter-spacing: .6px; }
+
+    .badge-equipe { background: var(--gold); color: white; padding: 6px 10px; border-radius: 8px; text-align: center; display: none; margin-bottom: 10px; font-size: 0.72rem; font-weight: 800; letter-spacing: .6px; }
+
+    .type-selector { display: flex; background: #e2e8f0; border-radius: 12px; padding: 5px; margin-bottom: 25px; }
+    .type-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 800; color: #64748b; background: transparent; transition: 0.3s; }
+    .type-btn.active { background: var(--primary); color: white; }
+
+    .input-group { margin-bottom: 15px; text-align: left; }
+    label { display: block; font-size: 0.75rem; font-weight: 800; color: #64748b; margin-bottom: 5px; }
+    input, select { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; outline: none; }
+    input:focus, select:focus { border-color: #cbd5e1; }
+
+    .btn-calc { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(29, 45, 68, 0.3); }
+    .btn-calc:active { transform: translateY(1px); }
+
+    #areaSimulacao { display: none; margin-top: 30px; border-top: 2px dashed #eee; padding-top: 20px; }
+    .pdf-content { padding: 25px; border-radius: 15px; background: #fff; line-height: 1.6; font-size: 0.95rem; border: 1px solid #eee; }
+
+    .resumo-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.85rem; }
+    .resumo-table th { background: #f1f5f9; color: var(--primary); text-align: left; padding: 12px; border-bottom: 2px solid var(--gold); }
+    .resumo-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: #475569; }
+
+    .val-destaque { font-weight: 900; color: var(--unimed); }
+    .highlight-box { background: #f0fdf4; padding: 16px; border-radius: 12px; margin: 15px 0; border-left: 5px solid var(--unimed); font-size: 0.9rem; }
+
+    .action-buttons { display: grid; gap: 10px; margin-top: 20px; }
+    .btn-action { padding: 16px; border-radius: 12px; text-decoration: none; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; border: none; cursor: pointer; }
+    .btn-equipe { background: var(--gold); color: white; display: none; }
+    .btn-consultor { background: #e2e8f0; color: var(--primary); }
+  </style>
 </head>
+
 <body>
-<div class="container">
-    <div id="tagEquipe" style="background: var(--gold); color: white; padding: 5px; border-radius: 5px; text-align: center; display: none; margin-bottom: 10px; font-size: 0.7rem;">MODO EQUIPE ATIVADO</div>
-    <img src="logo oficial.jpg.png" class="logo-img">
+  <div class="container">
+    <div id="tagEquipe" class="badge-equipe">MODO EQUIPE ATIVADO</div>
+
+    <img src="LOGO_URL_AQUI" class="logo-img" alt="Logo EAS Corretora">
     <h2>EAS CORRETORA</h2>
     <div class="sub">Simulador de Proteção Unimed</div>
 
     <div class="type-selector">
-        <button class="type-btn active" id="btnInd" onclick="switchType('IND')">INDIVIDUAL (CPF)</button>
-        <button class="type-btn" id="btnEmp" onclick="switchType('EMP')">EMPRESARIAL (PJ)</button>
+      <button class="type-btn active" id="btnInd" onclick="switchType('IND')">INDIVIDUAL (CPF)</button>
+      <button class="type-btn" id="btnEmp" onclick="switchType('EMP')">EMPRESARIAL (PJ)</button>
     </div>
 
     <div id="formInd">
-        <div class="input-group"><label>Nome do Cliente</label><input type="text" id="nomeInd" placeholder="Nome Completo"></div>
-        <div class="input-group"><label>WhatsApp do Cliente</label><input type="tel" id="whatsInd" placeholder="(17) 99999-9999"></div>
-        <div class="input-group"><label>Idade (14 a 65 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 35" min="14" max="65"></div>
-        <div class="input-group">
-            <label>Plano de Renda Protegida</label>
-            <select id="planoInd">
-                <option value="bronze">Plano Bronze 3 mil</option>
-                <option value="prata">Plano Prata 5 mil</option>
-                <option value="ouro" selected>Plano Ouro 10 mil</option>
-            </select>
-        </div>
-        <div class="input-group"><label>Código de Consultor</label><input type="text" id="cupomInd" placeholder="Ex: UNIMED08"></div>
+      <div class="input-group"><label>Nome do Cliente</label><input type="text" id="nomeInd" placeholder="Nome Completo"></div>
+      <div class="input-group"><label>WhatsApp do Cliente</label><input type="tel" id="whatsInd" placeholder="(17) 99999-9999"></div>
+      <div class="input-group"><label>Idade (14 a 65 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 35" min="14" max="65"></div>
+      <div class="input-group">
+        <label>Plano de Renda Protegida</label>
+        <select id="planoInd">
+          <option value="bronze">Plano Bronze 3 mil</option>
+          <option value="prata">Plano Prata 5 mil</option>
+          <option value="ouro" selected>Plano Ouro 10 mil</option>
+        </select>
+      </div>
+      <div class="input-group"><label>Cupom de Desconto</label><input type="text" id="cupomInd" placeholder="Opcional (ex: UNIMED35)"></div>
     </div>
 
     <div id="formEmp" style="display:none;">
-        <div class="input-group"><label>Nome da Empresa</label><input type="text" id="nomeEmp" placeholder="Razão Social"></div>
-        <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
-        <div class="input-group"><label>Nº de Vidas (Mín 3)</label><input type="number" id="vidasEmp" value="3"></div>
-        <div class="input-group">
-            <label>Plano Empresarial</label>
-            <select id="planoEmp">
-                <option value="49.90|50000">Plano Bronze (R$ 49,90/vida)</option>
-                <option value="69.90|100000">Plano Prata (R$ 69,90/vida)</option>
-                <option value="79.90|120000">Plano Ouro (R$ 79,90/vida)</option>
-            </select>
-        </div>
+      <div class="input-group"><label>Nome da Empresa</label><input type="text" id="nomeEmp" placeholder="Razão Social"></div>
+      <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
+      <div class="input-group"><label>Nº de Vidas (Mín 3)</label><input type="number" id="vidasEmp" value="3" min="3"></div>
+      <div class="input-group">
+        <label>Plano Empresarial</label>
+        <select id="planoEmp">
+          <option value="49.90|50000">Plano Bronze (R$ 49,90/vida)</option>
+          <option value="69.90|100000">Plano Prata (R$ 69,90/vida)</option>
+          <option value="79.90|120000" selected>Plano Ouro (R$ 79,90/vida)</option>
+        </select>
+      </div>
     </div>
 
     <button class="btn-calc" onclick="gerarSimulacao()">GERAR ESTUDO TÉCNICO</button>
 
     <div id="areaSimulacao">
-        <div id="pdfArea" class="pdf-content">
-            <div id="resCabecalho" style="text-align:center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px;"></div>
-            <table class="resumo-table">
-                <thead><tr><th>Cobertura</th><th>Capital Segurado</th></tr></thead>
-                <tbody id="listaCoberturas"></tbody>
-            </table>
-            <div id="resTexto"></div>
-            <div id="resPreco" style="text-align:right; font-weight:800; font-size:1.4rem; border-top: 2px solid #eee; padding-top:15px; margin-top:20px;"></div>
-        </div>
-        <div class="action-buttons">
-            <button id="btnEnviarCliente" class="btn-action" onclick="enviarSimulacaoWhatsApp()" style="background: var(--gold); color: white; display: none;">ENVIAR PARA O CLIENTE</button>
-            <a href="#" id="linkConsultor" class="btn-action" style="background: #e2e8f0; color: var(--primary);" target="_blank"><i class="fa-solid fa-user-tie"></i> FALAR COM CONSULTOR</a>
-        </div>
-    </div>
-</div>
+      <div id="pdfArea" class="pdf-content">
+        <div id="resCabecalho" style="text-align:center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px;"></div>
 
-<script>
+        <table class="resumo-table">
+          <thead><tr><th>Cobertura</th><th>Capital Segurado</th></tr></thead>
+          <tbody id="listaCoberturas"></tbody>
+        </table>
+
+        <div id="resTexto"></div>
+        <div id="resPreco" style="text-align:right; font-weight:900; font-size:1.35rem; border-top: 2px solid #eee; padding-top:15px; margin-top:20px;"></div>
+      </div>
+
+      <div class="action-buttons">
+        <button id="btnEnviarCliente" class="btn-action btn-equipe" onclick="enviarSimulacaoWhatsApp()">ENVIAR PARA O CLIENTE</button>
+        <a href="#" id="linkConsultor" class="btn-action btn-consultor" target="_blank" rel="noopener">
+          <i class="fa-solid fa-user-tie"></i> FALAR COM CONSULTOR
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CONSULTOR_WHATSAPP = "17997165139"; // só números
+    document.getElementById('linkConsultor').href = `https://wa.me/55${CONSULTOR_WHATSAPP}?text=${encodeURIComponent("Olá! Quero ajuda com a Proteção Unimed (simulação).")}`;
+
+    // MATRIZ DE PREÇOS BRUTOS - EXEMPLO
     const TABELA_PRECOS = {
-        14: { bronze: 67.30, prata: 117.67, ouro: 208.91 },
-        30: { bronze: 67.30, prata: 117.67, ouro: 208.91 },
-        35: { bronze: 74.05, prata: 129.46, ouro: 229.96 },
-        45: { bronze: 111.41, prata: 198.63, ouro: 354.55 },
-        50: { bronze: 150.04, prata: 270.08, ouro: 482.83 },
-        60: { bronze: 265.41, prata: 483.56, ouro: 869.64 },
-        65: { bronze: 370.10, prata: 678.02, ouro: 1224.97 }
+      14: { bronze: 67.30, prata: 117.67, ouro: 208.91 },
+      30: { bronze: 67.30, prata: 117.67, ouro: 208.91 },
+      35: { bronze: 74.05, prata: 129.46, ouro: 229.96 },
+      45: { bronze: 111.41, prata: 198.63, ouro: 354.55 },
+      50: { bronze: 150.04, prata: 270.08, ouro: 482.83 },
+      60: { bronze: 265.41, prata: 483.56, ouro: 869.64 },
+      65: { bronze: 370.10, prata: 678.02, ouro: 1224.97 }
     };
 
+    function onlyDigits(v) { return (v || "").replace(/\D/g, ""); }
+
+    function validarWhats(whatsDigits) {
+      // Brasil: geralmente 10 (fixo) ou 11 (celular) com DDD
+      return whatsDigits.length === 10 || whatsDigits.length === 11;
+    }
+
     function getPrecoBase(idade, plano) {
-        let idades = Object.keys(TABELA_PRECOS).map(Number).sort((a,b) => a-b);
-        let idRef = idades.find(i => idade <= i) || 65;
-        return TABELA_PRECOS[idRef][plano];
+      if (idade < 14 || idade > 65) return null;
+      const idades = Object.keys(TABELA_PRECOS).map(Number).sort((a,b) => a-b);
+      const idadeRef = idades.find(i => idade <= i) || 65;
+      return TABELA_PRECOS[idadeRef][plano];
     }
 
     let modo = 'IND';
-    let isEquipe = window.location.search.includes('equipe');
-    if(isEquipe) { document.getElementById('tagEquipe').style.display = 'block'; document.getElementById('btnEnviarCliente').style.display = 'block'; }
+
+    const isEquipe = new URLSearchParams(window.location.search).has('equipe');
+    if (isEquipe) {
+      document.getElementById('tagEquipe').style.display = 'block';
+      document.getElementById('btnEnviarCliente').style.display = 'flex';
+    } else {
+      document.getElementById('btnEnviarCliente').style.display = 'none';
+    }
 
     function switchType(type) {
-        modo = type;
-        document.getElementById('btnInd').classList.toggle('active', type === 'IND');
-        document.getElementById('btnEmp').classList.toggle('active', type === 'EMP');
-        document.getElementById('formInd').style.display = type === 'IND' ? 'block' : 'none';
-        document.getElementById('formEmp').style.display = type === 'EMP' ? 'block' : 'none';
-        document.getElementById('areaSimulacao').style.display = 'none';
+      modo = type;
+      document.getElementById('btnInd').classList.toggle('active', type === 'IND');
+      document.getElementById('btnEmp').classList.toggle('active', type === 'EMP');
+      document.getElementById('formInd').style.display = type === 'IND' ? 'block' : 'none';
+      document.getElementById('formEmp').style.display = type === 'EMP' ? 'block' : 'none';
+      document.getElementById('areaSimulacao').style.display = 'none';
+    }
+
+    function formatBRL(valor) {
+      return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
     function gerarSimulacao() {
-        let nome, precoFinal, capMorte, capRenda, tabelaHtml, explicacaoHtml;
+      let nome, precoFinal, capMorte, capRenda, tabelaHtml, explicacaoHtml;
 
-        if (modo === 'IND') {
-            nome = document.getElementById('nomeInd').value.trim();
-            let idade = parseInt(document.getElementById('idadeInd').value);
-            let plano = document.getElementById('planoInd').value;
-            let cupom = document.getElementById('cupomInd').value.trim().toUpperCase();
+      if (modo === 'IND') {
+        nome = document.getElementById('nomeInd').value.trim();
+        const idade = parseInt(document.getElementById('idadeInd').value, 10);
+        const plano = document.getElementById('planoInd').value;
+        const cupom = document.getElementById('cupomInd').value.trim().toUpperCase();
+        const whatsDigits = onlyDigits(document.getElementById('whatsInd').value);
 
-            if(!nome || isNaN(idade)) { alert("Preencha Nome e Idade."); return; }
+        if (!nome) { alert("Preencha o Nome do cliente."); return; }
+        if (isNaN(idade) || idade < 14 || idade > 65) { alert("Idade inválida. Informe entre 14 e 65 anos."); return; }
+        if (!validarWhats(whatsDigits)) { alert("WhatsApp inválido. Informe DDD + número (10 ou 11 dígitos)."); return; }
 
-            let valor = getPrecoBase(idade, plano);
-            if(cupom === "UNIMED08") { valor = valor * 0.65; }
+        let valorBruto = getPrecoBase(idade, plano);
+        if (valorBruto === null) { alert("Não foi possível calcular o preço para essa idade."); return; }
 
-            capRenda = (plano === 'bronze' ? 3000 : plano === 'prata' ? 5000 : 10000);
-            capMorte = (plano === 'bronze' ? 50000 : plano === 'prata' ? 100000 : 120000);
-            precoFinal = `R$ ${valor.toFixed(2)}/mês`;
-            
-            tabelaHtml = `
-                <tr><td>Morte Natural</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Morte por Acidente (Dobra)</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Invalidez por Acidente ou Doença</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Renda p/ Afastamento (SERIT)</td><td class="val-destaque">R$ ${capRenda.toLocaleString('pt-BR')},00</td></tr>
-            `;
-            
-            explicacaoHtml = `<div class="highlight-box">
-                <b>EXEMPLO MATADOR SERIT (60 DIAS):</b><br>
-                Cálculo: R$ ${capRenda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${(capRenda/30).toFixed(2).replace('.',',')} p/ dia.<br>
-                Multiplicado por 53 dias pagos (descontada franquia de 7 dias).<br>
-                <b>Total Líquido a receber: R$ ${((capRenda/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.<br><br>
-                <b>CARÊNCIAS:</b> Doenças (30 dias). Acidentes e Morte (Isento).
-            </div>`;
-        } else {
-            nome = document.getElementById('nomeEmp').value.trim();
-            let vidas = parseInt(document.getElementById('vidasEmp').value);
-            let combo = document.getElementById('planoEmp').value.split('|');
-            if(!nome || vidas < 3) { alert("Mínimo de 3 vidas."); return; }
+        if (cupom === "UNIMED35") valorBruto = valorBruto * 0.65;
 
-            precoFinal = `R$ ${(parseFloat(combo[0]) * vidas).toFixed(2)} (${vidas} vidas)`;
-            capMorte = parseInt(combo[1]);
+        capRenda = (plano === 'bronze' ? 3000 : plano === 'prata' ? 5000 : 10000);
+        capMorte = (plano === 'bronze' ? 50000 : plano === 'prata' ? 100000 : 120000);
 
-            tabelaHtml = `
-                <tr><td>Morte Natural</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Morte por Acidente</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Invalidez por Acidente ou Doença</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>DIT Acidente (Renda Mensal)</td><td class="val-destaque">R$ 3.000,00</td></tr>
-            `;
+        precoFinal = `${formatBRL(valorBruto)}/mês`;
 
-            explicacaoHtml = `<div class="highlight-box">
-                <b>EXEMPLO MATADOR DIT (60 DIAS):</b><br>
-                Cálculo: R$ 3.000,00 ÷ 30 dias = R$ 100,00 p/ dia.<br>
-                Multiplicado por 45 dias pagos (descontada franquia de 15 dias).<br>
-                <b>Total Líquido a receber: R$ 4.500,00</b>.
-            </div>`;
-        }
+        tabelaHtml = `
+          <tr><td>Morte Natural</td><td class="val-destaque">${formatBRL(capMorte)}</td></tr>
+          <tr><td>Morte por Acidente (Dobra)</td><td class="val-destaque">${formatBRL(capMorte * 2)}</td></tr>
+          <tr><td>Invalidez por Acidente ou Doença</td><td class="val-destaque">${formatBRL(capMorte)}</td></tr>
+          <tr><td>Renda p/ Afastamento (SERIT)</td><td class="val-destaque">${formatBRL(capRenda)}</td></tr>
+        `;
 
-        document.getElementById('resCabecalho').innerHTML = `<h3>ESTUDO TÉCNICO UNIMED</h3><p>Para: <b>${nome}</b></p>`;
-        document.getElementById('listaCoberturas').innerHTML = tabelaHtml;
-        document.getElementById('resTexto').innerHTML = explicacaoHtml;
-        document.getElementById('resPreco').innerText = precoFinal;
-        document.getElementById('areaSimulacao').style.display = 'block';
+        const diaria = capRenda / 30;
+        const diasPagos = 53; // 60 - 7 franquia
+        const totalLiquido = diaria * diasPagos;
+
+        explicacaoHtml = `
+          <div class="highlight-box">
+            <b>EXEMPLO MATADOR SERIT (60 DIAS):</b><br>
+            Dinheiro por dia: ${formatBRL(capRenda)} ÷ 30 = <b>${formatBRL(diaria)}</b>.<br>
+            Pagamento em <b>${diasPagos} dias</b> (franquia de 7 dias).<br>
+            <b>Total estimado a receber: ${formatBRL(totalLiquido)}</b>.<br><br>
+            <b>CARÊNCIAS:</b> Doenças (30 dias). Acidentes e Morte (Isento).
+          </div>
+        `;
+      } else {
+        nome = document.getElementById('nomeEmp').value.trim();
+        const vidas = parseInt(document.getElementById('vidasEmp').value, 10);
+        const combo = document.getElementById('planoEmp').value.split('|');
+        const whatsDigits = onlyDigits(document.getElementById('whatsEmp').value);
+
+        if (!nome) { alert("Preencha o nome da empresa."); return; }
+        if (isNaN(vidas) || vidas < 3) { alert("Informe no mínimo 3 vidas."); return; }
+        if (!validarWhats(whatsDigits)) { alert("WhatsApp inválido. Informe DDD + número (10 ou 11 dígitos)."); return; }
+
+        const precoVida = parseFloat(combo[0]);
+        capMorte = parseInt(combo[1], 10);
+
+        precoFinal = `${formatBRL(precoVida * vidas)} (${vidas} vidas)`;
+
+        tabelaHtml = `
+          <tr><td>Morte Natural</td><td class="val-destaque">${formatBRL(capMorte)}</td></tr>
+          <tr><td>Morte por Acidente (Dobra)</td><td class="val-destaque">${formatBRL(capMorte * 2)}</td></tr>
+          <tr><td>Invalidez por Acidente ou Doença</td><td class="val-destaque">${formatBRL(capMorte)}</td></tr>
+          <tr><td>DIT Acidente (Renda Mensal)</td><td class="val-destaque">${formatBRL(3000)}</td></tr>
+        `;
+
+        explicacaoHtml = `
+          <div class="highlight-box">
+            <b>EXEMPLO MATADOR DIT (60 DIAS):</b><br>
+            Cálculo: ${formatBRL(3000)} ÷ 30 = <b>${formatBRL(100)}</b> por dia.<br>
+            Exemplo com 45 dias pagos (franquia 15 dias).<br>
+            <b>Total estimado a receber: ${formatBRL(4500)}</b>.
+          </div>
+        `;
+      }
+
+      document.getElementById('resCabecalho').innerHTML = `<h3 style="margin:0;color:var(--primary)">ESTUDO TÉCNICO UNIMED</h3><p style="margin:6px 0 0">Para: <b>${nome}</b></p>`;
+      document.getElementById('listaCoberturas').innerHTML = tabelaHtml;
+      document.getElementById('resTexto').innerHTML = explicacaoHtml;
+      document.getElementById('resPreco').innerText = precoFinal;
+      document.getElementById('areaSimulacao').style.display = 'block';
     }
 
     function enviarSimulacaoWhatsApp() {
-        const nome = modo === 'IND' ? document.getElementById('nomeInd').value : document.getElementById('nomeEmp').value;
-        const whats = (modo === 'IND' ? document.getElementById('whatsInd').value : document.getElementById('whatsEmp').value).replace(/\D/g,'');
-        const preco = document.getElementById('resPreco').innerText;
-        let msg = `*EAS CORRETORA - PROTEÇÃO UNIMED*\n\n${nome}, seu estudo está pronto:\n\n💰 *INVESTIMENTO:* ${preco}\n\n_Vantagens: Sem aumento por idade e carência zero para acidentes!_`;
-        window.open(`https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`, '_blank');
+      if (!isEquipe) return;
+
+      if (document.getElementById('areaSimulacao').style.display !== 'block') {
+        alert("Gere o estudo técnico antes de enviar.");
+        return;
+      }
+
+      const nome = modo === 'IND' ? document.getElementById('nomeInd').value.trim() : document.getElementById('nomeEmp').value.trim();
+      const whats = onlyDigits(modo === 'IND' ? document.getElementById('whatsInd').value : document.getElementById('whatsEmp').value);
+      const preco = document.getElementById('resPreco').innerText;
+
+      if (!nome) { alert("Nome inválido."); return; }
+      if (!validarWhats(whats)) { alert("WhatsApp inválido."); return; }
+
+      let msg = `*EAS CORRETORA - PROTEÇÃO UNIMED*%0A%0A`;
+      msg += `${nome}, seu estudo está pronto:%0A%0A`;
+      msg += `✅ *Resumo das Coberturas:*%0A`;
+      msg += `• Morte Natural e Invalidez inclusos.%0A`;
+      msg += `• Renda por Afastamento garantida.%0A%0A`;
+      msg += `💰 *INVESTIMENTO:* ${encodeURIComponent(preco)}%0A%0A`;
+      msg += `_Sem aumento por idade e carência zero para acidentes!_`;
+
+      window.open(`https://wa.me/55${whats}?text=${msg}`, '_blank');
     }
-</script>
+  </script>
 </body>
 </html>
