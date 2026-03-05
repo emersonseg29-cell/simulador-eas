@@ -10,20 +10,17 @@
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 550px; background: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         
-        /* CORREÇÃO DE DISTORÇÃO DE IMAGENS */
         .header-logos { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
         .logo-img-header { 
             width: auto; 
-            max-width: 140px; /* Largura máxima para não estourar */
-            height: auto; /* Mantém a proporção original */
-            max-height: 80px; /* Altura máxima para alinhamento */
-            object-fit: contain; /* Garante que a imagem inteira apareça no espaço */
+            max-width: 160px; 
+            height: auto; 
+            max-height: 90px; 
+            object-fit: contain; 
         }
         .divider-logos { width: 2px; height: 50px; background-color: #e2e8f0; }
 
         h2 { color: var(--primary); text-align: center; margin: 0; font-size: 1.4rem; }
-        
-        /* TÍTULO ATUALIZADO */
         .sub { color: var(--unimed); text-align: center; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1px; }
         
         .type-selector { display: flex; background: #e2e8f0; border-radius: 12px; padding: 5px; margin-bottom: 25px; }
@@ -31,7 +28,7 @@
         .type-btn.active { background: var(--primary); color: white; }
         .input-group { margin-bottom: 15px; text-align: left; }
         label { display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input, select { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; outline: none; }
         .btn-calc { width: 100%; padding: 20px; background: var(--unimed); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 153, 93, 0.3); }
         #areaSimulacao { display: none; margin-top: 30px; border-top: 2px dashed #eee; padding-top: 20px; }
         .pdf-content { padding: 25px; border-radius: 15px; background: #fff; line-height: 1.6; font-size: 0.95rem; border: 1px solid #eee; }
@@ -46,7 +43,7 @@
 <body>
 <div class="container">
     <div class="header-logos">
-        <img src="logo-eas.png" class="logo-img-header" alt="EAS Corretora">
+        <img src="logo oficial.jpg.png" class="logo-img-header" alt="EAS Corretora">
         <div class="divider-logos"></div>
         <img src="logo-unimed.png" class="logo-img-header" alt="Seguros Unimed">
     </div>
@@ -104,24 +101,14 @@
 </div>
 
 <script>
-    // Lógica baseada nos PDFs reais de 43 anos enviados pelo Emerson
-    // Sincroniza a Tabela A-37 I (Normal) e CALL 08 (Desconto)
     function calcularValor(idade, plano, temCupom) {
-        // Valores base para 43 anos (Pontos de ancoragem dos PDFs)
         const baseNormal = { ouro: 521.71, prata: 286.94, bronze: 162.83 };
         const baseDesconto = { ouro: 308.75, prata: 170.31, bronze: 96.66 };
-
-        // Define qual tabela usar
         let valorReferencia = temCupom ? baseDesconto[plano] : baseNormal[plano];
-        
-        // Fator de reenquadramento etário baseado nas Condições Gerais (média 5.5% ao ano)
         let diffAnos = idade - 43;
         let fatorEtario = Math.pow(1.055, diffAnos);
-        
-        // Travas de segurança para faixas elevadas conforme CG
         if (idade >= 60) fatorEtario *= 1.12;
         if (idade >= 66) fatorEtario *= 1.10;
-
         return valorReferencia * fatorEtario;
     }
 
@@ -140,33 +127,22 @@
 
     function gerarSimulacao() {
         let nome, precoFinal, capMorte, capRenda, tabelaHtml, explicacaoHtml;
-
         if (modo === 'IND') {
             nome = document.getElementById('nomeInd').value.trim();
             let idade = parseInt(document.getElementById('idadeInd').value);
             let plano = document.getElementById('planoInd').value;
             let cupom = document.getElementById('cupomInd').value.trim().toUpperCase();
-
             if(!nome || isNaN(idade)) { alert("Preencha Nome e Idade."); return; }
-            
             let valorCalculado = calcularValor(idade, plano, cupom === "UNIMED08");
-
             capRenda = (plano === 'bronze' ? 3000 : plano === 'prata' ? 5000 : 10000);
             capMorte = (plano === 'bronze' ? 50000 : plano === 'prata' ? 100000 : 120000);
-            
             let vMorte = `R$ ${capMorte.toLocaleString('pt-BR')},00`;
             let vMorteAc = `R$ ${(capMorte*2).toLocaleString('pt-BR')},00`;
             let vRenda = `R$ ${capRenda.toLocaleString('pt-BR')},00`;
             let vDiaria = (capRenda / 30).toLocaleString('pt-BR', {minimumFractionDigits: 2});
             let vTotal60 = ((capRenda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-
             precoFinal = `INVESTIMENTO: R$ ${valorCalculado.toFixed(2)}/mês`;
-            
-            tabelaHtml = `<tr><td>Morte Natural</td><td class="val-destaque">${vMorte}</td></tr>
-                          <tr><td>Morte por Acidente</td><td class="val-destaque">${vMorteAc}</td></tr>
-                          <tr><td>Invalidez por Acidente ou Doença</td><td class="val-destaque">${vMorte}</td></tr>
-                          <tr><td>Renda Mensal (SERIT)</td><td class="val-destaque">${vRenda}</td></tr>`;
-            
+            tabelaHtml = `<tr><td>Morte Natural</td><td class="val-destaque">${vMorte}</td></tr><tr><td>Morte por Acidente</td><td class="val-destaque">${vMorteAc}</td></tr><tr><td>Invalidez por Acidente ou Doença</td><td class="val-destaque">${vMorte}</td></tr><tr><td>Renda Mensal (SERIT)</td><td class="val-destaque">${vRenda}</td></tr>`;
             explicacaoHtml = `<div class="highlight-box">Seu estudo ficou da seguinte forma: Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de ${vMorte}. Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de ${vMorteAc}. Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de ${vMorte}.<br><br><b>SERIT :</b> Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de ${vRenda} por mes. Cálculo: ${vRenda} ÷ 30 dias = R$ ${vDiaria} p/ dia. Recebimento líquido de 53 dias: <b>R$ ${vTotal60}</b>. Carências: Doenças comuns 30 dias / LER, DORT e Hérnias 180 dias. Acidente não tem carência.</div>`;
         } else {
             nome = document.getElementById('nomeEmp').value.trim();
@@ -177,7 +153,6 @@
             tabelaHtml = `<tr><td>Morte Natural</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')}</td></tr>`;
             explicacaoHtml = `<div class="highlight-box">Seguro Profissional - Embrecat Catanduva.</div>`;
         }
-
         document.getElementById('resCabecalho').innerHTML = `<h3>ESTUDO TÉCNICO: ${nome}</h3>`;
         document.getElementById('listaCoberturas').innerHTML = tabelaHtml;
         document.getElementById('resTexto').innerHTML = explicacaoHtml;
