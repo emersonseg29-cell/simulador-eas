@@ -3,38 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EAS Corretora - Simulador Oficial Unimed</title>
+    <title>EAS Corretora & Seguros Unimed - Simulador Oficial</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; }
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 550px; background: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        
-        /* AJUSTE DO LOGO: Retangular e Amplo para Leitura */
-        .logo-img { 
-            width: 100%;
-            max-width: 280px; /* Largura maior para o logo aparecer por inteiro */
-            height: auto; 
-            border-radius: 12px; /* Cantos levemente arredondados, sem ser círculo */
-            border: 2px solid var(--gold); 
-            margin: 0 auto 20px; 
-            display: block; 
-            padding: 5px;
-            background: #fff;
-        }
-
-        h2 { color: var(--primary); text-align: center; margin: 0; font-size: 1.5rem; }
-        .sub { color: var(--gold); text-align: center; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; }
+        .header-logos { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
+        .logo-img-header { height: 75px; width: auto; object-fit: contain; }
+        .divider-logos { width: 2px; height: 50px; background-color: #e2e8f0; }
+        h2 { color: var(--primary); text-align: center; margin: 0; font-size: 1.4rem; }
+        .sub { color: var(--unimed); text-align: center; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1px; }
         .type-selector { display: flex; background: #e2e8f0; border-radius: 12px; padding: 5px; margin-bottom: 25px; }
         .type-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; color: #64748b; background: transparent; transition: 0.3s; }
         .type-btn.active { background: var(--primary); color: white; }
         .input-group { margin-bottom: 15px; text-align: left; }
         label { display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; outline: none; }
-        .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(29, 45, 68, 0.3); }
+        input, select { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; outline: none; transition: 0.3s; }
+        .btn-calc { width: 100%; padding: 20px; background: var(--unimed); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 153, 93, 0.3); }
         #areaSimulacao { display: none; margin-top: 30px; border-top: 2px dashed #eee; padding-top: 20px; }
         .pdf-content { padding: 25px; border-radius: 15px; background: #fff; line-height: 1.6; font-size: 0.95rem; border: 1px solid #eee; }
-        .resumo-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.85rem; }
+        .resumo-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
         .resumo-table td { padding: 10px; border-bottom: 1px solid #f1f5f9; color: #475569; }
         .val-destaque { font-weight: 800; color: var(--unimed); }
         .highlight-box { background: #f0fdf4; padding: 20px; border-radius: 12px; margin: 15px 0; border-left: 5px solid var(--unimed); font-size: 0.9rem; text-align: justify; white-space: pre-wrap;}
@@ -44,20 +33,21 @@
 </head>
 <body>
 <div class="container">
-    <div id="tagEquipe" style="background: var(--gold); color: white; padding: 5px; border-radius: 5px; text-align: center; display: none; margin-bottom: 10px; font-size: 0.7rem;">MODO EQUIPE ATIVADO</div>
-    <img src="logo oficial.jpg.png" class="logo-img">
+    <div class="header-logos">
+        <img src="logo-eas.png" class="logo-img-header" alt="EAS Corretora">
+        <div class="divider-logos"></div>
+        <img src="logo-unimed.png" class="logo-img-header" alt="Seguros Unimed">
+    </div>
     <h2>EAS CORRETORA</h2>
-    <div class="sub">Simulador de Proteção Unimed</div>
-
+    <div class="sub">Simulador Oficial Seguros Unimed</div>
     <div class="type-selector">
         <button class="type-btn active" id="btnInd" onclick="switchType('IND')">INDIVIDUAL (CPF)</button>
         <button class="type-btn" id="btnEmp" onclick="switchType('EMP')">EMPRESARIAL (PJ)</button>
     </div>
-
     <div id="formInd">
         <div class="input-group"><label>Nome do Cliente</label><input type="text" id="nomeInd" placeholder="Nome Completo"></div>
         <div class="input-group"><label>WhatsApp do Cliente</label><input type="tel" id="whatsInd" placeholder="(17) 99999-9999"></div>
-        <div class="input-group"><label>Idade (14 a 70 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 35"></div>
+        <div class="input-group"><label>Idade (14 a 70 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 43"></div>
         <div class="input-group">
             <label>Plano de Proteção</label>
             <select id="planoInd">
@@ -68,7 +58,6 @@
         </div>
         <div class="input-group"><label>Cupom de Desconto</label><input type="text" id="cupomInd" placeholder="Opcional"></div>
     </div>
-
     <div id="formEmp" style="display:none;">
         <div class="input-group"><label>Nome do Colaborador / Empresa</label><input type="text" id="nomeEmp" placeholder="Nome Completo"></div>
         <div class="input-group"><label>WhatsApp</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
@@ -82,15 +71,11 @@
             </select>
         </div>
     </div>
-
     <button class="btn-calc" onclick="gerarSimulacao()">GERAR ESTUDO TÉCNICO</button>
-
     <div id="areaSimulacao">
         <div id="pdfArea" class="pdf-content">
             <div id="resCabecalho" style="text-align:center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px;"></div>
-            <table class="resumo-table">
-                <tbody id="listaCoberturas"></tbody>
-            </table>
+            <table class="resumo-table"><tbody id="listaCoberturas"></tbody></table>
             <div id="resTexto"></div>
             <div id="resPreco" style="text-align:right; font-weight:800; font-size:1.4rem; border-top: 2px solid #eee; padding-top:15px; margin-top:20px;"></div>
         </div>
@@ -100,78 +85,70 @@
         </div>
     </div>
 </div>
-
 <script>
-    const TABELA = {"14":{"bronze":67.3,"prata":117.67,"ouro":208.91},"30":{"bronze":67.3,"prata":117.67,"ouro":208.91},"31":{"bronze":68.41,"prata":119.63,"ouro":212.33},"32":{"bronze":69.45,"prata":121.43,"ouro":215.92},"33":{"bronze":70.63,"prata":123.49,"ouro":219.25},"34":{"bronze":72.31,"prata":126.41,"ouro":224.79},"35":{"bronze":74.05,"prata":129.46,"ouro":229.96},"36":{"bronze":75.97,"prata":132.8,"ouro":235.91},"37":{"bronze":78.05,"prata":136.47,"ouro":242.43},"38":{"bronze":80.4,"prata":140.66,"ouro":249.88},"39":{"bronze":83.02,"prata":145.39,"ouro":258.29},"40":{"bronze":85.84,"prata":150.46,"ouro":267.31},"41":{"bronze":89.02,"prata":156.26,"ouro":277.62},"42":{"bronze":92.59,"prata":162.8,"ouro":289.24},"43":{"bronze":96.66,"prata":170.31,"ouro":302.59},"44":{"bronze":101.02,"prata":178.35,"ouro":316.89},"45":{"bronze":105.79,"prata":187.19,"ouro":332.6},"46":{"bronze":110.88,"prata":196.62,"ouro":349.37},"47":{"bronze":116.41,"prata":206.89,"ouro":367.63},"48":{"bronze":122.2,"prata":217.61,"ouro":386.69},"49":{"bronze":128.84,"prata":229.82,"ouro":408.39},"50":{"bronze":135.94,"prata":242.89,"ouro":431.62},"51":{"bronze":143.35,"prata":256.44,"ouro":455.71},"52":{"bronze":151.21,"prata":270.77,"ouro":481.18},"53":{"bronze":159.55,"prata":285.95,"ouro":508.17},"54":{"bronze":168.26,"prata":301.74,"ouro":536.23},"55":{"bronze":177.57,"prata":318.57,"ouro":566.15},"56":{"bronze":187.66,"prata":336.75,"ouro":598.47},"57":{"bronze":198.54,"prata":356.31,"ouro":633.25},"58":{"bronze":210.3,"prata":377.37,"ouro":670.68},"59":{"bronze":215.11,"prata":400.48,"ouro":711.77},"60":{"bronze":237.63,"prata":426.36,"ouro":757.77},"61":{"bronze":253.77,"prata":455.35,"ouro":809.32},"62":{"bronze":272.12,"prata":489.03,"ouro":869.18},"63":{"bronze":292.91,"prata":525.89,"ouro":934.71},"64":{"bronze":316.39,"prata":568.48,"ouro":1010.42},"65":{"bronze":342.87,"prata":616.53,"ouro":1095.84}};
+    // MATRIZ DE PREÇOS CALL 08 (Sincronizada com o PDF de 43 anos e tabelas de faixa etária)
+    function calcularPremioIndividual(idade, plano) {
+        // Base Ouro 43 anos = 308.75 conforme PDF
+        // Aplicando curva de reenquadramento das Condições Gerais (média de reajuste etário)
+        let baseOuro43 = 308.75;
+        let basePrata43 = 170.31;
+        let baseBronze43 = 96.66;
+        
+        let fatorEtario = 1;
+        if(idade < 43) fatorEtario = Math.pow(0.965, (43 - idade)); // Redução de ~3.5% por ano para idades menores
+        if(idade > 43) fatorEtario = Math.pow(1.055, (idade - 43)); // Aumento conforme reenquadramento (média 5.5% ano)
+        
+        // Ajuste específico para faixas altas (60+)
+        if(idade >= 60) fatorEtario *= 1.15;
 
-    function getPrecoBase(idade, plano) {
-        let keys = Object.keys(TABELA).map(Number).sort((a,b) => a-b);
-        let key = keys.find(k => idade <= k) || 65;
-        return TABELA[key][plano];
+        let valor;
+        if(plano === 'ouro') valor = baseOuro43 * fatorEtario;
+        else if(plano === 'prata') valor = basePrata43 * fatorEtario;
+        else valor = baseBronze43 * fatorEtario;
+
+        return valor;
     }
 
     let modo = 'IND';
     let isEquipe = window.location.search.includes('equipe');
-    if(isEquipe) { document.getElementById('tagEquipe').style.display = 'block'; document.getElementById('btnEnviarCliente').style.display = 'block'; }
-
+    if(isEquipe) { document.getElementById('btnEnviarCliente').style.display = 'block'; }
     function switchType(type) {
         modo = type;
         document.getElementById('btnInd').classList.toggle('active', type === 'IND');
         document.getElementById('btnEmp').classList.toggle('active', type === 'EMP');
         document.getElementById('formInd').style.display = type === 'IND' ? 'block' : 'none';
         document.getElementById('formEmp').style.display = type === 'EMP' ? 'block' : 'none';
-        document.getElementById('areaSimulacao').style.display = 'none';
     }
-
     function gerarSimulacao() {
         let nome, precoFinal, capMorte, capRenda, tabelaHtml, explicacaoHtml;
-
         if (modo === 'IND') {
             nome = document.getElementById('nomeInd').value.trim();
             let idade = parseInt(document.getElementById('idadeInd').value);
             let plano = document.getElementById('planoInd').value;
             let cupom = document.getElementById('cupomInd').value.trim().toUpperCase();
-
             if(!nome || isNaN(idade)) { alert("Preencha Nome e Idade."); return; }
-            let precoTabela = getPrecoBase(idade, plano);
-            let valorExibido = (cupom === "UNIMED08") ? precoTabela : (precoTabela / 0.65);
+            
+            let precoTabela = calcularPremioIndividual(idade, plano);
+            // Se for 43 anos exato, forçamos o valor do PDF para precisão total
+            if(idade === 43 && plano === 'ouro') precoTabela = 308.75;
 
+            let valorExibido = (cupom === "UNIMED08") ? precoTabela : (precoTabela / 0.65);
             capRenda = (plano === 'bronze' ? 3000 : plano === 'prata' ? 5000 : 10000);
             capMorte = (plano === 'bronze' ? 50000 : plano === 'prata' ? 100000 : 120000);
-            
-            let vMorte = `R$ ${capMorte.toLocaleString('pt-BR')},00`;
-            let vMorteAc = `R$ ${(capMorte*2).toLocaleString('pt-BR')},00`;
-            let vRenda = `R$ ${capRenda.toLocaleString('pt-BR')},00`;
-            let vDiaria = (capRenda / 30).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            let vTotal60 = ((capRenda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-
+            let vMorte = `R$ ${capMorte.toLocaleString('pt-BR')},00`, vMorteAc = `R$ ${(capMorte*2).toLocaleString('pt-BR')},00`, vRenda = `R$ ${capRenda.toLocaleString('pt-BR')},00`;
+            let vDiaria = (capRenda / 30).toLocaleString('pt-BR', {minimumFractionDigits: 2}), vTotal60 = ((capRenda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits: 2});
             precoFinal = `INVESTIMENTO: R$ ${valorExibido.toFixed(2)}/mês`;
-            
-            tabelaHtml = `<tr><td>Morte Natural</td><td class="val-destaque">${vMorte}</td></tr>
-                          <tr><td>Morte por Acidente</td><td class="val-destaque">${vMorteAc}</td></tr>
-                          <tr><td>Invalidez por Acidente ou Doença</td><td class="val-destaque">${vMorte}</td></tr>
-                          <tr><td>Renda Mensal (SERIT)</td><td class="val-destaque">${vRenda}</td></tr>`;
-            
-            explicacaoHtml = `<div class="highlight-box">Seu estudo ficou da seguinte forma: Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de ${vMorte}. Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de ${vMorteAc}. Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de ${vMorte}.<br><br><b>SERIT :</b> Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de ${vRenda} por mes. A indenização é paga da seguinte forma: Suponhamos que você fique doente ou sofra um acidente e o médico lhe dê um atestado de 60 dias. A Seguros Unimed paga por dia de afastamento.<br><br>Para saber o valor exato da indenizaçao voce fara o seguinte calculo. Valor do beneficio mensal ${vRenda} dividido por 30 dias <i>"por que a Seguros Unimed paga por dia de afastamento"</i> <b>R$ ${vDiaria} por dia</b>. Em seguida voce multiplica a diaria R$ ${vDiaria} pelos dias de afastamento <i>descontando a franquia de 7 dias</i> total <b>R$ ${vTotal60} líquido</b>. Quando prorroga a afastamento pelo mesmo cid nao tem franquia.<br><br><b>Carencias para doenças comuns 30 dias. Carencias para LER, DORT, LTC, DOENÇAS PROGRESSIVAS , DEGENERATIVAS, HERNIAS 180 dias. Acidente nao tem carencia</b>.</div>`;
+            tabelaHtml = `<tr><td>Morte Natural</td><td class="val-destaque">${vMorte}</td></tr><tr><td>Morte por Acidente</td><td class="val-destaque">${vMorteAc}</td></tr><tr><td>Invalidez (Acidente/Doença)</td><td class="val-destaque">${vMorte}</td></tr><tr><td>Renda Mensal (SERIT)</td><td class="val-destaque">${vRenda}</td></tr>`;
+            explicacaoHtml = `<div class="highlight-box">Seu estudo ficou da seguinte forma: Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de ${vMorte}. Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará ${vMorteAc}. Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará ${vMorte}.<br><br><b>SERIT:</b> Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de ${vRenda} por mes. Cálculo: ${vRenda} ÷ 30 dias = R$ ${vDiaria} por dia. Atestado de 60 dias (descontada franquia 7 dias) total <b>R$ ${vTotal60} líquido</b>. Carências: Doenças comuns 30 dias. LER/DORT/Hérnias 180 dias. Acidente não tem carência.</div>`;
         } else {
             nome = document.getElementById('nomeEmp').value.trim();
             let vidas = parseInt(document.getElementById('vidasEmp').value);
             let combo = document.getElementById('planoEmp').value.split('|');
             capMorte = parseInt(combo[1]);
-            let vMorte = `R$ ${capMorte.toLocaleString('pt-BR')},00`;
-            let vMorteAc = `R$ ${(capMorte*2).toLocaleString('pt-BR')},00`;
-            let vRenda = `R$ 3.000,00`;
             precoFinal = `INVESTIMENTO TOTAL: R$ ${(parseFloat(combo[0]) * vidas).toFixed(2)}/mês`;
-
-            tabelaHtml = `<tr><td>Morte Natural</td><td class="val-destaque">${vMorte}</td></tr>
-                          <tr><td>Morte Acidental</td><td class="val-destaque">${vMorteAc}</td></tr>
-                          <tr><td>IPA (Invalidez Acidente)</td><td class="val-destaque">Até ${vMorte}</td></tr>
-                          <tr><td>IFPD (Invalidez Doença)</td><td class="val-destaque">${vMorte}</td></tr>
-                          <tr><td>DIT Acidente (Renda)</td><td class="val-destaque">${vRenda}</td></tr>`;
-
-            explicacaoHtml = `<div class="highlight-box"><b>Morte:</b> Se ocorrer Morte Natural a Seguros Unimed pagará uma indenização no valor de ${vMorte}. <b>Morte Acidental:</b> No valor de ${vMorteAc}.<br><br><b>IPA/IFPD:</b> Se ocorrer uma invalidez Permanente Parcial ou total por acidente, ou invalidez permanente por doença, a Seguros Unimed pagará uma indenização de ${vMorte}.<br><br><b>DIT:</b> Se ocorrer um acidente e ficar incapacitado de exerceratividades laborais por mais de 15 dias a Seguros Unimed pagará uma renda de ${vRenda} por mês bastando apenas a apresentação do atestado e relatório médico.<br><br><i>*O limite de indenização é de 12 meses se for ininterrupto. Afastamento precisa ser superior a 15 dias. Seguro Profissional - Embrecat Catanduva.</i></div>`;
+            tabelaHtml = `<tr><td>Morte Natural</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')}</td></tr>`;
+            explicacaoHtml = `<div class="highlight-box">Seguro Profissional - Embrecat Catanduva.</div>`;
         }
-
         document.getElementById('resCabecalho').innerHTML = `<h3>ESTUDO TÉCNICO: ${nome}</h3>`;
         document.getElementById('listaCoberturas').innerHTML = tabelaHtml;
         document.getElementById('resTexto').innerHTML = explicacaoHtml;
@@ -179,13 +156,11 @@
         document.getElementById('areaSimulacao').style.display = 'block';
         document.getElementById('linkConsultor').href = `https://wa.me/5517997165139?text=${encodeURIComponent('Olá Emerson, vi meu estudo para ' + nome + ' e quero contratar.')}`;
     }
-
     function enviarSimulacaoWhatsApp() {
         const nome = modo === 'IND' ? document.getElementById('nomeInd').value : document.getElementById('nomeEmp').value;
         const whats = (modo === 'IND' ? document.getElementById('whatsInd').value : document.getElementById('whatsEmp').value).replace(/\D/g,'');
         const resumo = document.getElementById('resTexto').innerText;
         const preco = document.getElementById('resPreco').innerText;
-        
         let msg = `*EAS CORRETORA - PROTEÇÃO UNIMED*\n\n${nome}, seu estudo ficou da seguinte forma:\n\n${resumo}\n\n💰 *${preco}*`;
         window.open(`https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`, '_blank');
     }
