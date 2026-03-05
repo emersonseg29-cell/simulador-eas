@@ -173,7 +173,7 @@
         if (modoAtual === 'IND') {
             explicacao = `<b>Seu estudo ficou da seguinte forma:</b><br>`;
             explicacao += `Se ocorrer <b>morte natural</b> a seguradora pagará uma indenização no valor de R$ ${capital.toLocaleString('pt-BR')}.<br>`;
-            explicacao += `Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(capital*2).toLocaleString('pt-BR')}</b>.<br>`;
+            explicacao += `Se ocorrer <b>morte morte acidental</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(capital*2).toLocaleString('pt-BR')}</b>.<br>`;
             explicacao += `Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${capital.toLocaleString('pt-BR')}.<br><br>`;
             explicacao += `<b>SERIT:</b> Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${renda.toLocaleString('pt-BR')} por mes.<br><br>`;
             explicacao += `<b>Cálculo:</b> R$ ${renda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${vDiaria} p/ dia. Em um atestado de 60 dias (descontando 7 dias de franquia), você recebe <b>R$ ${vTotalLiq} líquido</b> em conta.<br><br>`;
@@ -181,7 +181,7 @@
         } else {
             explicacao = `<b>Proposta Seguro Empresarial para ${nome.toUpperCase()}:</b><br><br>`;
             explicacao += `<b>Morte:</b> Se ocorrer morte natural a Seguros Unimed pagará uma indenização de R$ ${capital.toLocaleString('pt-BR')}.<br>`;
-            explicacao += `<b>Morte Acidental:</b> Se ocorrer por acidente seus beneficiários receberão R$ ${(capital*2).toLocaleString('pt-BR')}.<br>`;
+            explicacao += `<b>Morte Acidental:</b> Se ocorrer morte por acidente a Seguros Unimed pagará uma indenização de R$ ${(capital*2).toLocaleString('pt-BR')}.<br>`;
             explicacao += `<b>IPA/IFPD:</b> Se ocorrer invalidez por acidente ou doença a Seguros Unimed pagará R$ ${capital.toLocaleString('pt-BR')}.<br><br>`;
             explicacao += `<b>DIT:</b> Se ocorrer um acidente e o colaborador ficar afastado por mais de 15 dias, a Seguros Unimed pagará uma renda mensal de <b>R$ ${renda.toLocaleString('pt-BR')}</b> enquanto durar o atestado (limitado a 12 meses).<br><br>`;
             explicacao += `<b>Exemplo:</b> Benefício mensal R$ ${renda.toLocaleString('pt-BR')} = R$ ${vDiaria} por dia. Atestado de 60 dias (descontando franquia de 15 dias) = 45 dias x R$ ${vDiaria} = <b>R$ ${vTotalLiq} líquido</b>.<br><br>`;
