@@ -23,7 +23,6 @@
         .btn-calc { width: 100%; padding: 22px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(29, 45, 68, 0.25); }
         #resultado { display: none; margin-top: 30px; padding: 25px; border-radius: 18px; background: #f8fafc; border: 1px solid #e2e8f0; }
         .val-total { font-size: 2.2rem; color: var(--unimed); font-weight: 800; text-align: center; margin: 10px 0 20px; }
-        .label-estudo { display: block; text-align: center; color: var(--primary); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; }
         .box-explicacao { background: #f0fdf4; border-left: 5px solid var(--unimed); padding: 20px; border-radius: 12px; margin-top: 20px; font-size: 0.95rem; line-height: 1.6; text-align: justify; color: #1e293b; }
         .box-explicacao b { color: #000; }
         .whatsapp-btn { width: 100%; padding: 18px; background: #25d366; color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; margin-top: 15px; }
@@ -60,9 +59,9 @@
         <div class="input-group">
             <label>Plano e Capitais</label>
             <select id="planoInd">
-                <option value="ouro">Plano OURO: Renda 10k | Capital 120k</option>
-                <option value="prata">Plano PRATA: Renda 5k | Capital 100k</option>
                 <option value="bronze">Plano BRONZE: Renda 3k | Capital 50k</option>
+                <option value="prata">Plano PRATA: Renda 5k | Capital 100k</option>
+                <option value="ouro" selected>Plano OURO: Renda 10k | Capital 120k</option>
             </select>
         </div>
         <div class="input-group">
@@ -79,9 +78,9 @@
         <div class="input-group">
             <label>Plano Coletivo</label>
             <select id="planoEmp">
-                <option value="79.90|120000|60000">Empresarial OURO (R$ 79,90/vida)</option>
-                <option value="69.90|100000|50000">Empresarial PRATA (R$ 69,90/vida)</option>
-                <option value="49.90|50000|30000">Empresarial BRONZE (R$ 49,90/vida)</option>
+                <option value="49.90|50000">PME BRONZE (R$ 49,90/vida)</option>
+                <option value="69.90|100000">PME PRATA (R$ 69,90/vida)</option>
+                <option value="79.90|120000">PME OURO (R$ 79,90/vida)</option>
             </select>
         </div>
     </div>
@@ -98,14 +97,13 @@
     </div>
 
     <div style="font-size: 0.7rem; color: #94a3b8; text-align: center; margin-top: 25px; font-style: italic;">
-        * Limite de aceitação: 70 anos. Valores baseados nas Tabelas Unimed. Sujeito a análise técnica de saúde.
+        * Limite de aceitação: 70 anos. Valores baseados nas Tabelas Unimed. Sujeito a análise técnica.
     </div>
 </div>
 
 <script>
     let modoAtual = 'IND';
 
-    // Máscara WhatsApp
     document.getElementById('whatsapp').addEventListener('input', e => {
         let v = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
         e.target.value = !v[2] ? v[1] : '(' + v[1] + ') ' + v[2] + (v[3] ? '-' + v[3] : '');
@@ -124,84 +122,62 @@
     function calcular() {
         const nome = document.getElementById('nome').value.trim();
         const cleanWhats = document.getElementById('whatsapp').value.replace(/\D/g, '');
-
-        if (!nome || cleanWhats.length < 11) {
-            alert("Preencha o nome e um WhatsApp válido com DDD.");
-            return;
-        }
-
+        if (!nome || cleanWhats.length < 11) { alert("Informe nome e WhatsApp válido."); return; }
         if (modoAtual === 'IND') {
             const idade = parseInt(document.getElementById('idade').value);
-            if (idade > 70 || isNaN(idade)) { alert("Limite de idade atingido: 70 anos."); return; }
-        } else if (parseInt(document.getElementById('vidas').value) < 3) {
-            alert("Mínimo de 3 vidas obrigatório no empresarial.");
-            return;
-        }
-
+            if (idade > 70 || isNaN(idade)) { alert("Limite: 70 anos."); return; }
+        } else if (parseInt(document.getElementById('vidas').value) < 3) { alert("Mínimo 3 vidas."); return; }
         processar(nome, cleanWhats);
     }
 
     function processar(nome, whats) {
-        let precoFinal, morteNat, morteAc, invalidez, renda, diasExemplo;
+        let precoFinal, capital, renda, diasExemplo;
         const cupom = document.getElementById('cupom').value.toUpperCase();
         
         if (modoAtual === 'IND') {
             const plano = document.getElementById('planoInd').value;
-            // Tabela CALL 08 (Ref: 43 anos)
-            let base = 308.75;
+            let base = 308.75; // Ref 43 anos
             if(plano === 'prata') base = 196.62;
             if(plano === 'bronze') base = 110.88;
-
             precoFinal = (cupom === 'UNIMED08') ? base : (base * 1.6897);
-            morteNat = (plano === 'ouro') ? 120000 : (plano === 'prata' ? 100000 : 50000);
+            capital = (plano === 'ouro') ? 120000 : (plano === 'prata' ? 100000 : 50000);
             renda = (plano === 'ouro') ? 10000 : (plano === 'prata' ? 5000 : 3000);
-            morteAc = morteNat * 2;
-            invalidez = morteNat;
-            diasExemplo = 53; // 60 - 7 franquia
+            diasExemplo = 53;
         } else {
             const vidas = parseInt(document.getElementById('vidas').value);
             const p = document.getElementById('planoEmp').value.split('|');
             precoFinal = parseFloat(p[0]) * vidas;
-            morteNat = parseInt(p[1]);
-            morteAc = morteNat * 2;
-            invalidez = parseInt(p[2]);
+            capital = parseInt(p[1]);
             renda = 3000;
-            diasExemplo = 45; // 60 - 15 franquia
+            diasExemplo = 45;
         }
 
         const vDiaria = (renda / 30).toLocaleString('pt-BR', {minimumFractionDigits: 2});
         const vTotalLiq = ((renda / 30) * diasExemplo).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-
         document.getElementById('res-valor').innerText = `R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês`;
 
         let explicacao = "";
         if (modoAtual === 'IND') {
             explicacao = `<b>Seu estudo ficou da seguinte forma:</b><br>`;
-            explicacao += `Se ocorrer morte natural a seguradora pagará uma indenização de R$ ${morteNat.toLocaleString('pt-BR')}.<br>`;
-            explicacao += `Se ocorrer morte por acidente, a Seguros Unimed pagará <b>R$ ${morteAc.toLocaleString('pt-BR')}</b>.<br>`;
-            explicacao += `Se ocorrer uma invalidez por acidente ou doença a Seguros Unimed pagará R$ ${invalidez.toLocaleString('pt-BR')}.<br><br>`;
-            explicacao += `<b>SERIT:</b> Se você precisar ficar afastado por mais de 7 dias, a Unimed pagará uma renda de R$ ${renda.toLocaleString('pt-BR')} por mês. A indenização é paga por dia de afastamento.<br><br>`;
-            explicacao += `<b>Cálculo:</b> R$ ${renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${vDiaria} p/ dia</b>. Em um atestado de 60 dias, você recebe <b>R$ ${vTotalLiq} líquido</b> na sua conta (descontada franquia).<br><br>`;
-            explicacao += `<i>Carências: Comuns 30 dias. Doenças Graves/Hérnias 180 dias. Acidente isento.</i>`;
+            explicacao += `Se ocorrer morte natural a seguradora pagará uma indenização no valor de R$ ${capital.toLocaleString('pt-BR')}.<br>`;
+            explicacao += `Se ocorrer morte por acidente, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(capital*2).toLocaleString('pt-BR')}</b>.<br>`;
+            explicacao += `Se ocorrer uma invalidez por acidente ou doença a Seguros Unimed pagará uma indenização no valor de R$ ${capital.toLocaleString('pt-BR')}.<br><br>`;
+            explicacao += `<b>SERIT:</b> Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${renda.toLocaleString('pt-BR')} por mes. A indenização é paga por dia de afastamento.<br><br>`;
+            explicacao += `<b>Cálculo:</b> R$ ${renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${vDiaria} p/ dia</b>. Em um atestado de 60 dias (descontando 7 dias de franquia), você recebe <b>R$ ${vTotalLiq} líquido</b> em conta.<br><br>`;
+            explicacao += `<i>Carências: Comuns 30 dias. Doenças relacionadas a LER/DORT/LTC/Hérnias 180 dias. Acidente isento.</i>`;
         } else {
-            explicacao = `<b>Colaborador ativo:</b><br>`;
-            explicacao += `<b>Morte Natural:</b> R$ ${morteNat.toLocaleString('pt-BR')}. <b>Morte Acidental:</b> R$ ${morteAc.toLocaleString('pt-BR')}.<br>`;
-            explicacao += `<b>IPA/IFPD:</b> Invalidez paga R$ ${invalidez.toLocaleString('pt-BR')}.<br><br>`;
+            explicacao = `<b>Empresarial - Colaborador ativo:</b><br>`;
+            explicacao += `Morte Natural: R$ ${capital.toLocaleString('pt-BR')}. Morte Acidental: R$ ${(capital*2).toLocaleString('pt-BR')}. Invalidez (IPA/IFPD): R$ ${capital.toLocaleString('pt-BR')}.<br><br>`;
             explicacao += `<b>DIT:</b> Afastamento por acidente superior a 15 dias gera renda de <b>R$ 3.000,00 mensais</b>.<br><br>`;
-            explicacao += `<b>Exemplo (60 dias):</b> R$ 3.000,00 ÷ 30 dias = R$ 100,00/dia. Atestado de 60 dias - 15 dias (franquia) = 45 dias pagos. Total: <b>R$ 4.500,00 líquido</b>.<br><br>`;
+            explicacao += `<b>Exemplo (60 dias):</b> 45 dias pagos x R$ 100,00/dia = <b>R$ 4.500,00 líquido</b>.<br><br>`;
             explicacao += `<b>Vantagens do grupo:</b> Sem DPS, sem reajuste por faixa etária e sem carência.`;
         }
-
         document.getElementById('res-explicacao').innerHTML = explicacao;
         document.getElementById('resultado').style.display = 'block';
 
-        let msg = `*EAS CORRETORA - CONSULTORIA UNIMED*\n\nOlá ${nome.toUpperCase()}, conforme solicitado segue seu estudo:\n\n`;
-        msg += `✅ Morte Natural: R$ ${morteNat.toLocaleString('pt-BR')}\n`;
-        msg += `✅ Morte Acidental: R$ ${morteAc.toLocaleString('pt-BR')}\n`;
-        msg += `✅ Renda Afastamento: R$ ${renda.toLocaleString('pt-BR')}/mês\n\n`;
-        msg += `💰 *INVESTIMENTO:* R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês\n\n`;
-        msg += `*Benefício Líquido (60 dias):* R$ ${vTotalLiq} em conta.\n\n_Deseja garantir sua proteção?_`;
-
+        let msg = `*EAS CORRETORA - CONSULTORIA UNIMED*\n\nOlá ${nome.toUpperCase()}, segue seu estudo:\n\n`;
+        msg += `✅ Morte Natural: R$ ${capital.toLocaleString('pt-BR')}\n✅ Morte Acidental: R$ ${(capital*2).toLocaleString('pt-BR')}\n✅ Invalidez: R$ ${capital.toLocaleString('pt-BR')}\n✅ Renda Afastamento: R$ ${renda.toLocaleString('pt-BR')}/mês\n\n`;
+        msg += `*Benefício Líquido (60 dias):* R$ ${vTotalLiq} em conta.\n\n💰 *INVESTIMENTO:* R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês`;
         document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
     }
 </script>
