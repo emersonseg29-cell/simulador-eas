@@ -9,22 +9,33 @@
         :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; --error: #e11d48; }
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 550px; background: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-top: 8px solid var(--gold); position: relative; }
+        
         .header { text-align: center; margin-bottom: 25px; }
         .logo-img { width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; object-fit: contain; }
+        
         h1 { color: var(--primary); font-size: 1.4rem; margin: 15px 0 0; font-weight: 800; }
         .sub-header { color: var(--gold); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
         .type-selector { display: flex; background: #e2e8f0; border-radius: 12px; padding: 5px; margin: 25px 0; }
         .type-btn { flex: 1; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; color: #64748b; background: transparent; transition: 0.3s; }
         .type-btn.active { background: var(--primary); color: white; }
+
         .input-group { margin-bottom: 18px; }
         label { display: block; font-size: 0.75rem; font-weight: 800; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
         input, select { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; outline: none; transition: 0.3s; }
         input:focus { border-color: var(--unimed); }
+        
         .btn-calc { width: 100%; padding: 22px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(29, 45, 68, 0.25); }
+        
         #resultado { display: none; margin-top: 30px; padding: 25px; border-radius: 18px; background: #f8fafc; border: 1px solid #e2e8f0; }
         .val-total { font-size: 2.2rem; color: var(--unimed); font-weight: 800; text-align: center; margin: 10px 0 20px; }
+        .label-estudo { display: block; text-align: center; color: var(--primary); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; }
+
         .box-explicacao { background: #f0fdf4; border-left: 5px solid var(--unimed); padding: 20px; border-radius: 12px; margin-top: 20px; font-size: 0.95rem; line-height: 1.6; text-align: justify; color: #1e293b; }
         .box-explicacao b { color: #000; }
+
+        .disclaimer { font-size: 0.7rem; color: #94a3b8; text-align: center; margin-top: 25px; line-height: 1.4; font-style: italic; }
+        
         .whatsapp-btn { width: 100%; padding: 18px; background: #25d366; color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; margin-top: 15px; }
     </style>
 </head>
@@ -72,15 +83,15 @@
 
     <div id="campos-emp" style="display:none;">
         <div class="input-group">
-            <label>Número de Vidas (Mínimo 3)</label>
+            <label>Quantidade de Colaboradores (Min 3)</label>
             <input type="number" id="vidas" value="3" min="3">
         </div>
         <div class="input-group">
-            <label>Plano Coletivo</label>
+            <label>Escolha o Plano Empresarial</label>
             <select id="planoEmp">
-                <option value="49.90|50000">PME BRONZE (R$ 49,90/vida)</option>
-                <option value="69.90|100000">PME PRATA (R$ 69,90/vida)</option>
-                <option value="79.90|120000">PME OURO (R$ 79,90/vida)</option>
+                <option value="49.90|50000|2000">Plano BRONZE (R$ 49,90/vida - DIT 2k)</option>
+                <option value="69.90|100000|2500">Plano PRATA (R$ 69,90/vida - DIT 2.5k)</option>
+                <option value="79.90|100000|3000">Plano OURO (R$ 79,90/vida - DIT 3k)</option>
             </select>
         </div>
     </div>
@@ -96,8 +107,8 @@
         </a>
     </div>
 
-    <div style="font-size: 0.7rem; color: #94a3b8; text-align: center; margin-top: 25px; font-style: italic;">
-        * Limite de aceitação: 70 anos. Valores baseados nas Tabelas Unimed. Sujeito a análise técnica.
+    <div class="disclaimer">
+        * Limite de idade: 70 anos. Valores baseados nas Tabelas Unimed. Sujeito a análise técnica.
     </div>
 </div>
 
@@ -115,7 +126,7 @@
         document.getElementById('btnEmp').classList.toggle('active', modo === 'EMP');
         document.getElementById('campos-ind').style.display = modo === 'IND' ? 'block' : 'none';
         document.getElementById('campos-emp').style.display = modo === 'EMP' ? 'block' : 'none';
-        document.getElementById('labelNome').innerText = modo === 'IND' ? 'Nome do Cliente' : 'Nome da Empresa';
+        document.getElementById('labelNome').innerText = modo === 'IND' ? 'Nome do Cliente' : 'Razão Social / Nome da Empresa';
         document.getElementById('resultado').style.display = 'none';
     }
 
@@ -131,24 +142,26 @@
     }
 
     function processar(nome, whats) {
-        let precoFinal, capital, renda, diasExemplo;
+        let precoFinal, capital, renda, diasExemplo, franquia;
         const cupom = document.getElementById('cupom').value.toUpperCase();
         
         if (modoAtual === 'IND') {
             const plano = document.getElementById('planoInd').value;
-            let base = 308.75; // Ref 43 anos
+            let base = 308.75; 
             if(plano === 'prata') base = 196.62;
             if(plano === 'bronze') base = 110.88;
             precoFinal = (cupom === 'UNIMED08') ? base : (base * 1.6897);
             capital = (plano === 'ouro') ? 120000 : (plano === 'prata' ? 100000 : 50000);
             renda = (plano === 'ouro') ? 10000 : (plano === 'prata' ? 5000 : 3000);
+            franquia = 7;
             diasExemplo = 53;
         } else {
             const vidas = parseInt(document.getElementById('vidas').value);
             const p = document.getElementById('planoEmp').value.split('|');
             precoFinal = parseFloat(p[0]) * vidas;
             capital = parseInt(p[1]);
-            renda = 3000;
+            renda = parseInt(p[2]);
+            franquia = 15;
             diasExemplo = 45;
         }
 
@@ -159,18 +172,20 @@
         let explicacao = "";
         if (modoAtual === 'IND') {
             explicacao = `<b>Seu estudo ficou da seguinte forma:</b><br>`;
-            explicacao += `Se ocorrer morte natural a seguradora pagará uma indenização no valor de R$ ${capital.toLocaleString('pt-BR')}.<br>`;
-            explicacao += `Se ocorrer morte por acidente, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(capital*2).toLocaleString('pt-BR')}</b>.<br>`;
-            explicacao += `Se ocorrer uma invalidez por acidente ou doença a Seguros Unimed pagará uma indenização no valor de R$ ${capital.toLocaleString('pt-BR')}.<br><br>`;
-            explicacao += `<b>SERIT:</b> Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${renda.toLocaleString('pt-BR')} por mes. A indenização é paga por dia de afastamento.<br><br>`;
-            explicacao += `<b>Cálculo:</b> R$ ${renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${vDiaria} p/ dia</b>. Em um atestado de 60 dias (descontando 7 dias de franquia), você recebe <b>R$ ${vTotalLiq} líquido</b> em conta.<br><br>`;
-            explicacao += `<i>Carências: Comuns 30 dias. Doenças relacionadas a LER/DORT/LTC/Hérnias 180 dias. Acidente isento.</i>`;
+            explicacao += `Se ocorrer <b>morte natural</b> a seguradora pagará uma indenização no valor de R$ ${capital.toLocaleString('pt-BR')}.<br>`;
+            explicacao += `Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(capital*2).toLocaleString('pt-BR')}</b>.<br>`;
+            explicacao += `Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${capital.toLocaleString('pt-BR')}.<br><br>`;
+            explicacao += `<b>SERIT:</b> Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${renda.toLocaleString('pt-BR')} por mes.<br><br>`;
+            explicacao += `<b>Cálculo:</b> R$ ${renda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${vDiaria} p/ dia. Em um atestado de 60 dias (descontando 7 dias de franquia), você recebe <b>R$ ${vTotalLiq} líquido</b> em conta.<br><br>`;
+            explicacao += `<i>Carências: Comuns 30 dias. LER/DORT/LTC/Hérnias 180 dias. Acidente isento.</i>`;
         } else {
-            explicacao = `<b>Empresarial - Colaborador ativo:</b><br>`;
-            explicacao += `Morte Natural: R$ ${capital.toLocaleString('pt-BR')}. Morte Acidental: R$ ${(capital*2).toLocaleString('pt-BR')}. Invalidez (IPA/IFPD): R$ ${capital.toLocaleString('pt-BR')}.<br><br>`;
-            explicacao += `<b>DIT:</b> Afastamento por acidente superior a 15 dias gera renda de <b>R$ 3.000,00 mensais</b>.<br><br>`;
-            explicacao += `<b>Exemplo (60 dias):</b> 45 dias pagos x R$ 100,00/dia = <b>R$ 4.500,00 líquido</b>.<br><br>`;
-            explicacao += `<b>Vantagens do grupo:</b> Sem DPS, sem reajuste por faixa etária e sem carência.`;
+            explicacao = `<b>Proposta Seguro Empresarial para ${nome.toUpperCase()}:</b><br><br>`;
+            explicacao += `<b>Morte:</b> Se ocorrer morte natural a Seguros Unimed pagará uma indenização de R$ ${capital.toLocaleString('pt-BR')}.<br>`;
+            explicacao += `<b>Morte Acidental:</b> Se ocorrer por acidente seus beneficiários receberão R$ ${(capital*2).toLocaleString('pt-BR')}.<br>`;
+            explicacao += `<b>IPA/IFPD:</b> Se ocorrer invalidez por acidente ou doença a Seguros Unimed pagará R$ ${capital.toLocaleString('pt-BR')}.<br><br>`;
+            explicacao += `<b>DIT:</b> Se ocorrer um acidente e o colaborador ficar afastado por mais de 15 dias, a Seguros Unimed pagará uma renda mensal de <b>R$ ${renda.toLocaleString('pt-BR')}</b> enquanto durar o atestado (limitado a 12 meses).<br><br>`;
+            explicacao += `<b>Exemplo:</b> Benefício mensal R$ ${renda.toLocaleString('pt-BR')} = R$ ${vDiaria} por dia. Atestado de 60 dias (descontando franquia de 15 dias) = 45 dias x R$ ${vDiaria} = <b>R$ ${vTotalLiq} líquido</b>.<br><br>`;
+            explicacao += `<b>Vantagens do grupo:</b><br>• Não preenche DPS e sem carência.<br>• Sem reajuste por faixa etária.<br>• Protege a empresa contra indenizações por acidente de trabalho.`;
         }
         document.getElementById('res-explicacao').innerHTML = explicacao;
         document.getElementById('resultado').style.display = 'block';
