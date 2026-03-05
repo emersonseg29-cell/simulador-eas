@@ -3,37 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultoria Técnica EAS Corretora & Seguros Unimed</title>
+    <title>EAS Corretora - Consultoria Técnica Unimed</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; --error: #e11d48; }
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: var(--text); margin: 0; padding: 15px; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 550px; background: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-top: 6px solid var(--gold); }
         
-        /* LOGO SEM DISTORÇÃO */
-        .header { text-align: center; margin-bottom: 25px; }
-        .logo-img { width: 140px; height: auto; max-height: 140px; margin-bottom: 10px; object-fit: contain; }
+        /* LOGO - RESOLUÇÃO MÁXIMA E SEM DISTORÇÃO */
+        .header { text-align: center; margin-bottom: 20px; }
+        .logo-img { 
+            max-width: 280px;  /* Tamanho grande e elegante */
+            width: 100%; 
+            height: auto;      /* Mantém a proporção real do arquivo */
+            display: block;
+            margin: 0 auto;
+            image-rendering: -webkit-optimize-contrast; /* Melhora nitidez em alguns navegadores */
+        }
         
-        h1 { color: var(--primary); font-size: 1.3rem; margin: 0; line-height: 1.2; }
-        .sub-header { color: var(--gold); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-top: 5px; }
+        h1 { color: var(--primary); font-size: 1.4rem; margin: 10px 0 0; }
+        .sub-header { color: var(--gold); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
 
         .type-selector { display: flex; background: #e2e8f0; border-radius: 12px; padding: 5px; margin: 20px 0; }
         .type-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; color: #64748b; background: transparent; transition: 0.3s; }
         .type-btn.active { background: var(--primary); color: white; }
 
         .input-group { margin-bottom: 15px; }
-        label { display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 5px; }
+        label { display: block; font-size: 0.75rem; font-weight: 800; color: #475569; margin-bottom: 5px; text-transform: uppercase; }
         input, select { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--gold); }
+        input:focus { border-color: var(--unimed); }
         input.invalid { border-color: var(--error); background: #fff1f2; }
 
-        .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 12px rgba(29, 45, 68, 0.2); margin-top: 10px; }
+        .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 12px rgba(29, 45, 68, 0.2); }
         
         #resultado { display: none; margin-top: 25px; padding: 20px; border-radius: 15px; background: #f8fafc; border: 1px solid #e2e8f0; }
         .val-total { font-size: 1.8rem; color: var(--unimed); font-weight: 800; text-align: center; margin: 15px 0; }
         
-        .note-box { background: #fff7ed; border-left: 4px solid #f97316; padding: 15px; font-size: 0.8rem; border-radius: 8px; margin: 15px 0; line-height: 1.4; }
-        .disclaimer { font-size: 0.7rem; color: #94a3b8; text-align: center; margin-top: 20px; line-height: 1.4; }
+        .note-box { background: #f0fdf4; border-left: 5px solid var(--unimed); padding: 15px; font-size: 0.85rem; border-radius: 8px; margin: 15px 0; line-height: 1.5; color: #166534; }
+        .disclaimer { font-size: 0.7rem; color: #94a3b8; text-align: center; margin-top: 20px; line-height: 1.4; font-style: italic; }
         
         .whatsapp-btn { width: 100%; padding: 15px; background: #25d366; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; margin-top: 10px; }
     </style>
@@ -53,8 +60,8 @@
     </div>
 
     <div class="input-group">
-        <label>Nome Completo</label>
-        <input type="text" id="nome" placeholder="Digite o nome do cliente">
+        <label>Nome Completo do Cliente</label>
+        <input type="text" id="nome" placeholder="Ex: João da Silva">
     </div>
     <div class="input-group">
         <label>WhatsApp (DDD + Número)</label>
@@ -63,34 +70,35 @@
 
     <div id="campos-ind">
         <div class="input-group">
-            <label>Profissão do Cliente</label>
+            <label>Qual sua Profissão?</label>
             <select id="profissao">
-                <option value="">Selecione a Profissão...</option>
+                <option value="">Selecione...</option>
                 <option value="Médico">Médico(a)</option>
                 <option value="Advogado">Advogado(a)</option>
                 <option value="Empresário">Empresário(a)</option>
-                <option value="Autônomo">Autônomo / Profissional Liberal</option>
-                <option value="Outros">Outros</option>
+                <option value="Dentista">Dentista / Saúde</option>
+                <option value="Autônomo">Autônomo / Liberal</option>
+                <option value="Outros">Outras Profissões</option>
             </select>
         </div>
         <div class="input-group">
-            <label>Idade (14 a 70 anos)</label>
+            <label>Idade do Segurado (14 a 70 anos)</label>
             <input type="number" id="idade" placeholder="Ex: 35">
         </div>
         <div class="input-group">
-            <label>Destaque Renda SERIT (Escolha o Plano)</label>
+            <label>Escolha o Plano (Foco Renda SERIT)</label>
             <select id="planoInd">
-                <option value="ouro">Plano Ouro (Renda 10k + Morte 120k)</option>
-                <option value="prata">Plano Prata (Renda 5k + Morte 100k)</option>
-                <option value="bronze">Plano Bronze (Renda 3k + Morte 50k)</option>
+                <option value="ouro">Plano OURO: Renda 10k + Morte 120k</option>
+                <option value="prata">Plano PRATA: Renda 5k + Morte 100k</option>
+                <option value="bronze">Plano BRONZE: Renda 3k + Morte 50k</option>
             </select>
         </div>
         <div class="input-group">
-            <label>Cupom (UNIMED08 para Tabela Especial)</label>
-            <input type="text" id="cupom" placeholder="Opcional">
+            <label>Código Promocional (Cupom)</label>
+            <input type="text" id="cupom" placeholder="Ex: UNIMED08">
         </div>
         <div class="note-box">
-            <i class="fas fa-user-shield"></i> <strong>Individual:</strong> Cobertura destinada a Profissionais Liberais e Autônomos. Valores sujeitos a análise de saúde.
+            <strong>Nota Técnica:</strong> Esta cobertura é destinada exclusivamente a Profissionais Liberais e Autônomos. Valores sob análise de saúde.
         </div>
     </div>
 
@@ -100,11 +108,11 @@
             <input type="text" id="cnpj" placeholder="00.000.000/0000-00">
         </div>
         <div class="input-group">
-            <label>Número de Vidas (Mínimo 3 Vidas)</label>
+            <label>Nº de Vidas (Trava: Mínimo 3 vidas)</label>
             <input type="number" id="vidas" value="3" min="1">
         </div>
         <div class="input-group">
-            <label>Plano Empresarial Unimed</label>
+            <label>Plano por Vida</label>
             <select id="planoEmp">
                 <option value="79.90|120000">Empresarial Ouro (R$ 79,90/vida)</option>
                 <option value="69.90|100000">Empresarial Prata (R$ 69,90/vida)</option>
@@ -112,29 +120,29 @@
             </select>
         </div>
         <div class="note-box">
-            <i class="fas fa-building"></i> <strong>Empresarial:</strong> Cobertura para CLT garantida. Prestadores de Serviço (PJ) aceitos sob análise técnica. Mínimo 3 vidas.
+            <strong>Nota Técnica:</strong> Cobertura para CLT garantida. Prestadores de Serviço (PJ/Autônomos) aceitos sob análise técnica da Seguros Unimed.
         </div>
     </div>
 
     <button class="btn-calc" onclick="calcular()">GERAR CONSULTORIA TÉCNICA</button>
 
     <div id="resultado">
-        <div id="res-texto" style="font-size: 0.9rem; line-height: 1.5;"></div>
+        <div id="res-texto" style="line-height: 1.6; font-size: 0.95rem;"></div>
         <div class="val-total" id="res-valor"></div>
-        <a href="#" id="wa-link" class="whatsapp-btn">
-            <i class="fab fa-whatsapp"></i> ENVIAR ESTUDO PARA O CLIENTE
+        <a href="#" id="wa-link" class="whatsapp-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i> ENVIAR CONSULTORIA AO CLIENTE
         </a>
     </div>
 
     <div class="disclaimer">
-        * Esta é uma simulação técnica baseada na Tabela Call 08. Poderá haver alteração de valores e condições conforme análise da Seguros Unimed.
+        * Esta é uma simulação informativa baseada na Tabela Call 08. Poderá haver alteração de valores conforme análise de risco, saúde e profissão.
     </div>
 </div>
 
 <script>
     let modoAtual = 'IND';
 
-    // Máscara e trava de telefone (Apenas números e máscara)
+    // MÁSCARA WHATSAPP RIGOROSA
     document.getElementById('whatsapp').addEventListener('input', e => {
         let v = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
         e.target.value = !v[2] ? v[1] : '(' + v[1] + ') ' + v[2] + (v[3] ? '-' + v[3] : '');
@@ -152,80 +160,72 @@
     function calcular() {
         const nome = document.getElementById('nome').value.trim();
         const whats = document.getElementById('whatsapp').value;
-        const whatsLimpo = whats.replace(/\D/g, '');
+        const cleanWhats = whats.replace(/\D/g, '');
 
-        if (!nome) { alert("Informe o nome do cliente."); return; }
-        
-        // TRAVA WHATSAPP: 11 dígitos
-        if (whatsLimpo.length < 11) {
-            alert("WhatsApp inválido. Informe o DDD e o número completo (11 dígitos).");
-            document.getElementById('whatsapp').classList.add('invalid');
+        if (!nome || cleanWhats.length < 11) {
+            alert("Erro: Preencha o nome e um WhatsApp válido com 11 dígitos.");
             return;
-        } else { document.getElementById('whatsapp').classList.remove('invalid'); }
-
-        if (modoAtual === 'EMP') {
-            const vidas = parseInt(document.getElementById('vidas').value);
-            // TRAVA EMPRESARIAL: Mínimo 3
-            if (vidas < 3) {
-                alert("O Plano Empresarial exige o mínimo de 3 vidas para contratação.");
-                return;
-            }
         }
 
-        gerarSaida(nome, whatsLimpo);
+        if (modoAtual === 'EMP') {
+            const v = parseInt(document.getElementById('vidas').value);
+            if (v < 3) { alert("O Plano Empresarial exige no mínimo 3 vidas."); return; }
+        }
+
+        processar(nome, cleanWhats);
     }
 
-    function gerarSaida(nome, whats) {
-        let precoTotal, morte, renda, desc;
+    function processar(nome, whats) {
+        let preco, morte, renda, prof = "Segurado";
         
         if (modoAtual === 'IND') {
             const idade = document.getElementById('idade').value;
+            prof = document.getElementById('profissao').value || "Profissional";
             const cupom = document.getElementById('cupom').value.toUpperCase();
             if(!idade) { alert("Informe a idade."); return; }
-            
-            // Valores fixos da tabela de referência para exemplo
-            let base = 229.96; // Ouro 35 anos
+
+            // Lógica baseada nos valores que você validou da Call 08
+            let base = 229.96; 
             if(document.getElementById('planoInd').value === 'prata') base = 129.46;
             if(document.getElementById('planoInd').value === 'bronze') base = 74.05;
 
-            precoTotal = (cupom === 'UNIMED08') ? base : (base / 0.65);
-            renda = (base === 229.96) ? 10000 : (base === 129.46 ? 5000 : 3000);
+            preco = (cupom === 'UNIMED08') ? base : (base / 0.65);
             morte = (base === 229.96) ? 120000 : (base === 129.46 ? 100000 : 50000);
-            desc = `Consultoria Individual para Profissional Liberal`;
+            renda = (base === 229.96) ? 10000 : (base === 129.46 ? 5000 : 3000);
         } else {
             const vidas = parseInt(document.getElementById('vidas').value);
-            const parts = document.getElementById('planoEmp').value.split('|');
-            precoTotal = parseFloat(parts[0]) * vidas;
-            morte = parseInt(parts[1]);
+            const p = document.getElementById('planoEmp').value.split('|');
+            preco = parseFloat(p[0]) * vidas;
+            morte = parseInt(p[1]);
             renda = 3000;
-            desc = `Consultoria Empresarial (Grupo de ${vidas} vidas)`;
         }
 
         const diaria = (renda/30).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-        const totalLiquido = (modoAtual === 'IND') ? (renda/30)*53 : (renda/30)*45;
+        const dPagos = (modoAtual === 'IND') ? 53 : 45;
+        const liq = ((renda/30)*dPagos).toLocaleString('pt-BR', {minimumFractionDigits: 2});
 
-        document.getElementById('res-texto').innerHTML = `<b>${desc}</b><br>Morte Natural: R$ ${morte.toLocaleString('pt-BR')}<br>Renda SERIT/DIT: R$ ${renda.toLocaleString('pt-BR')}/mês`;
-        document.getElementById('res-valor').innerText = `R$ ${precoTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês`;
+        document.getElementById('res-texto').innerHTML = `<b>Consultoria para: ${nome.toUpperCase()}</b><br>Proteção Morte Natural: R$ ${morte.toLocaleString('pt-BR')}<br>Morte por Acidente: R$ ${(morte*2).toLocaleString('pt-BR')}<br>Renda p/ Afastamento: R$ ${renda.toLocaleString('pt-BR')}/mês`;
+        document.getElementById('res-valor').innerText = `R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês`;
         document.getElementById('resultado').style.display = 'block';
 
-        // MENSAGEM WHATSAPP FORTE
+        // NARRATIVA WHATSAPP MATADORA
         let msg = `*EAS CORRETORA - CONSULTORIA TÉCNICA UNIMED*\n\n`;
         msg += `Prezado(a) *${nome.toUpperCase()}*,\n`;
-        msg += `Segue o estudo técnico solicitado:\n\n`;
+        msg += `Conforme solicitado, segue o seu estudo técnico exclusivo:\n\n`;
         msg += `✅ *MORTE NATURAL:* R$ ${morte.toLocaleString('pt-BR')}\n`;
         msg += `✅ *MORTE POR ACIDENTE:* R$ ${(morte*2).toLocaleString('pt-BR')}\n`;
-        msg += `✅ *INVALIDEZ POR ACIDENTE OU DOENÇA:* R$ ${morte.toLocaleString('pt-BR')}\n`;
-        msg += `✅ *RENDA POR AFASTAMENTO:* R$ ${renda.toLocaleString('pt-BR')}/mês\n\n`;
-        msg += `*MATEMÁTICA DO BENEFÍCIO (Exemplo 60 dias):*\n`;
-        msg += `Diária: R$ ${diaria}\n`;
-        msg += `Recebimento Líquido: *R$ ${totalLiquido.toLocaleString('pt-BR', {minimumFractionDigits: 2})}*\n\n`;
-        msg += `💰 *INVESTIMENTO:* R$ ${precoTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês\n\n`;
-        msg += `_Simulação sujeita a análise técnica. CLT aceitação imediata, Prestadores sob análise._\n`;
-        msg += `*Podemos garantir sua proteção hoje?*`;
+        msg += `✅ *INVALIDEZ POR ACIDENTE OU DOENÇA:* R$ ${morte.toLocaleString('pt-BR')}\n\n`;
+        msg += `💰 *RENDA MENSAL (AFASTAMENTO):* R$ ${renda.toLocaleString('pt-BR')}\n`;
+        msg += `_Este valor é pago diretamente na sua conta se precisar parar de trabalhar._\n\n`;
+        msg += `*EXEMPLO (60 DIAS DE ATESTADO):*\n`;
+        msg += `Sua diária: R$ ${diaria}\n`;
+        msg += `Você recebe: *R$ ${liq} LÍQUIDO* (descontada franquia).\n\n`;
+        msg += `📊 *INVESTIMENTO:* R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês\n\n`;
+        msg += `*OBSERVAÇÕES:* Carência ZERO para acidentes. Doenças comuns 30 dias. CLT aceitação imediata. Prestador (PJ) sob análise.\n\n`;
+        msg += `*Podemos garantir o seu padrão de vida hoje?*`;
 
         document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
     }
 </script>
-
 </body>
 </html>
