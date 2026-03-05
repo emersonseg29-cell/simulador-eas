@@ -22,7 +22,6 @@
         #areaSimulacao { display: none; margin-top: 30px; border-top: 2px dashed #eee; padding-top: 20px; }
         .pdf-content { padding: 25px; border-radius: 15px; background: #fff; line-height: 1.6; font-size: 0.95rem; border: 1px solid #eee; }
         .resumo-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.85rem; }
-        .resumo-table th { background: #f1f5f9; color: var(--primary); text-align: left; padding: 10px; border-bottom: 2px solid var(--gold); }
         .resumo-table td { padding: 10px; border-bottom: 1px solid #f1f5f9; color: #475569; }
         .val-destaque { font-weight: 800; color: var(--unimed); }
         .highlight-box { background: #f0fdf4; padding: 20px; border-radius: 12px; margin: 15px 0; border-left: 5px solid var(--unimed); font-size: 0.9rem; text-align: justify; white-space: pre-wrap;}
@@ -47,20 +46,20 @@
         <div class="input-group"><label>WhatsApp do Cliente</label><input type="tel" id="whatsInd" placeholder="(17) 99999-9999"></div>
         <div class="input-group"><label>Idade (14 a 70 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 35"></div>
         <div class="input-group">
-            <label>Plano de Renda Protegida</label>
+            <label>Plano de Proteção</label>
             <select id="planoInd">
-                <option value="bronze">Plano Bronze 3 mil</option>
-                <option value="prata">Plano Prata 5 mil</option>
-                <option value="ouro" selected>Plano Ouro 10 mil</option>
+                <option value="bronze">Plano Bronze (3k Renda / 50k VG)</option>
+                <option value="prata">Plano Prata (5k Renda / 100k VG)</option>
+                <option value="ouro" selected>Plano Ouro (10k Renda / 120k VG)</option>
             </select>
         </div>
         <div class="input-group"><label>Cupom de Desconto</label><input type="text" id="cupomInd" placeholder="Opcional"></div>
     </div>
 
     <div id="formEmp" style="display:none;">
-        <div class="input-group"><label>Nome da Empresa / Colaborador</label><input type="text" id="nomeEmp" placeholder="Nome Completo"></div>
-        <div class="input-group"><label>WhatsApp de Contato</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
-        <div class="input-group"><label>Nº de Vidas (Mín 3)</label><input type="number" id="vidasEmp" value="3"></div>
+        <div class="input-group"><label>Nome do Colaborador / Empresa</label><input type="text" id="nomeEmp" placeholder="Nome Completo"></div>
+        <div class="input-group"><label>WhatsApp</label><input type="tel" id="whatsEmp" placeholder="(17) 99999-9999"></div>
+        <div class="input-group"><label>Nº de Vidas</label><input type="number" id="vidasEmp" value="3"></div>
         <div class="input-group">
             <label>Plano Empresarial</label>
             <select id="planoEmp">
@@ -77,7 +76,6 @@
         <div id="pdfArea" class="pdf-content">
             <div id="resCabecalho" style="text-align:center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px;"></div>
             <table class="resumo-table">
-                <thead><tr><th>Cobertura</th><th>Capital Segurado</th></tr></thead>
                 <tbody id="listaCoberturas"></tbody>
             </table>
             <div id="resTexto"></div>
@@ -91,11 +89,12 @@
 </div>
 
 <script>
-    const TABELA_PRECOS = {"14": {"bronze": 67.3, "prata": 117.67, "ouro": 208.91}, "30": {"bronze": 67.3, "prata": 117.67, "ouro": 208.91}, "31": {"bronze": 68.41, "prata": 119.63, "ouro": 212.33}, "32": {"bronze": 69.45, "prata": 121.43, "ouro": 215.92}, "33": {"bronze": 70.63, "prata": 123.49, "ouro": 219.25}, "34": {"bronze": 72.31, "prata": 126.41, "ouro": 224.79}, "35": {"bronze": 74.05, "prata": 129.46, "ouro": 229.96}, "36": {"bronze": 75.97, "prata": 132.8, "ouro": 235.91}, "37": {"bronze": 78.05, "prata": 136.47, "ouro": 242.43}, "38": {"bronze": 80.4, "prata": 140.66, "ouro": 249.88}, "39": {"bronze": 83.02, "prata": 145.39, "ouro": 258.29}, "40": {"bronze": 85.84, "prata": 150.46, "ouro": 267.31}, "41": {"bronze": 89.02, "prata": 156.26, "ouro": 277.62}, "42": {"bronze": 92.59, "prata": 162.8, "ouro": 289.24}, "43": {"bronze": 96.66, "prata": 170.31, "ouro": 302.59}, "44": {"bronze": 101.02, "prata": 178.35, "ouro": 316.89}, "45": {"bronze": 105.79, "prata": 187.19, "ouro": 332.6}, "46": {"bronze": 110.88, "prata": 196.62, "ouro": 349.37}, "47": {"bronze": 116.41, "prata": 206.89, "ouro": 367.63}, "48": {"bronze": 122.2, "prata": 217.61, "ouro": 386.69}, "49": {"bronze": 128.84, "prata": 229.82, "ouro": 408.39}, "50": {"bronze": 135.94, "prata": 242.89, "ouro": 431.62}, "51": {"bronze": 143.35, "prata": 256.44, "ouro": 455.71}, "52": {"bronze": 151.21, "prata": 270.77, "ouro": 481.18}, "53": {"bronze": 159.55, "prata": 285.95, "ouro": 508.17}, "54": {"bronze": 168.26, "prata": 301.74, "ouro": 536.23}, "55": {"bronze": 177.57, "prata": 318.57, "ouro": 566.15}, "56": {"bronze": 187.66, "prata": 336.75, "ouro": 598.47}, "57": {"bronze": 198.54, "prata": 356.31, "ouro": 633.25}, "58": {"bronze": 210.3, "prata": 377.37, "ouro": 670.68}, "59": {"bronze": 215.11, "prata": 400.48, "ouro": 711.77}, "60": {"bronze": 237.63, "prata": 426.36, "ouro": 757.77}, "61": {"bronze": 253.77, "prata": 455.35, "ouro": 809.32}, "62": {"bronze": 272.12, "prata": 489.03, "ouro": 869.18}, "63": {"bronze": 292.91, "prata": 525.89, "ouro": 934.71}, "64": {"bronze": 316.39, "prata": 568.48, "ouro": 1010.42}, "65": {"bronze": 342.87, "prata": 616.53, "ouro": 1095.84}};
+    const TABELA = {"14":{"bronze":67.3,"prata":117.67,"ouro":208.91},"30":{"bronze":67.3,"prata":117.67,"ouro":208.91},"35":{"bronze":74.05,"prata":129.46,"ouro":229.96},"45":{"bronze":105.79,"prata":187.19,"ouro":332.6},"50":{"bronze":135.94,"prata":242.89,"ouro":431.62},"60":{"bronze":237.63,"prata":426.36,"ouro":757.77},"65":{"bronze":342.87,"prata":616.53,"ouro":1095.84}};
 
     function getPrecoBase(idade, plano) {
-        if (idade > 65) return TABELA_PRECOS["65"][plano];
-        return TABELA_PRECOS[idade] ? TABELA_PRECOS[idade][plano] : TABELA_PRECOS["30"][plano];
+        let keys = Object.keys(TABELA).map(Number).sort((a,b) => a-b);
+        let key = keys.find(k => idade <= k) || 65;
+        return TABELA[key][plano];
     }
 
     let modo = 'IND';
@@ -121,8 +120,9 @@
             let cupom = document.getElementById('cupomInd').value.trim().toUpperCase();
 
             if(!nome || isNaN(idade)) { alert("Preencha Nome e Idade."); return; }
-            let valorBase = getPrecoBase(idade, plano);
-            let valorExibido = (cupom === "UNIMED08") ? valorBase : (valorBase / 0.65);
+            
+            let precoTabela = getPrecoBase(idade, plano);
+            let valorExibido = (cupom === "UNIMED08") ? precoTabela : (precoTabela / 0.65);
 
             capRenda = (plano === 'bronze' ? 3000 : plano === 'prata' ? 5000 : 10000);
             capMorte = (plano === 'bronze' ? 50000 : plano === 'prata' ? 100000 : 120000);
@@ -133,14 +133,14 @@
             let vDiaria = (capRenda / 30).toLocaleString('pt-BR', {minimumFractionDigits: 2});
             let vTotal60 = ((capRenda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits: 2});
 
-            precoFinal = `R$ ${valorExibido.toFixed(2)}/mês`;
+            precoFinal = `INVESTIMENTO: R$ ${valorExibido.toFixed(2)}/mês`;
             
             tabelaHtml = `<tr><td>Morte Natural</td><td class="val-destaque">${vMorte}</td></tr>
                           <tr><td>Morte por Acidente</td><td class="val-destaque">${vMorteAc}</td></tr>
                           <tr><td>Invalidez por Acidente ou Doença</td><td class="val-destaque">${vMorte}</td></tr>
                           <tr><td>Renda Mensal (SERIT)</td><td class="val-destaque">${vRenda}</td></tr>`;
             
-            explicacaoHtml = `<div class="highlight-box">Seu estudo ficou da seguinte forma: Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de ${vMorte}. Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de ${vMorteAc}. Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de ${vMorte}.<br><br><b>SERIT :</b> Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de ${vRenda} por mes. A indenização é paga da seguinte forma: Suponhamos que você fique doente ou sofra um acidente e o médico lhe dê um atestado de 60 dias. A Seguros Unimed paga por dia de afastamento.<br><br>Para saber o valor exato da indenizaçao voce fara o seguinte calculo. Valor do beneficio mensal ${vRenda} dividido por 30 dias <i>"por que a Seguros Unimed paga por dia de afastamento"</i> <b>R$ ${vDiaria} por dia</b>. Em seguida voce multiplica a diaria R$ ${vDiaria} pelos dias de afastamento <i>descontando a franquia de 7 dias</i> total <b>R$ ${vTotal60} líquido</b>. Quando prorroga a afastamento pelo mesmo cid nao tem franquia.<br><br><b>Carencias para doenças comuns:</b> 30 dias. <b>Carencias para LER, DORT, LTC, DOENÇAS PROGRESSIVAS, DEGENERATIVAS, HERNIAS:</b> 180 dias. <b>Acidente nao tem carencia</b>.</div>`;
+            explicacaoHtml = `<div class="highlight-box">Seu estudo ficou da seguinte forma: Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de ${vMorte}. Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de ${vMorteAc}. Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de ${vMorte}.<br><br><b>SERIT :</b> Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de ${vRenda} por mes. A indenização é paga da seguinte forma: Suponhamos que você fique doente ou sofra um acidente e o médico lhe dê um atestado de 60 dias. A Seguros Unimed paga por dia de afastamento.<br><br>Para saber o valor exato da indenizaçao voce fara o seguinte calculo. Valor do beneficio mensal ${vRenda} dividido por 30 dias <i>"por que a Seguros Unimed paga por dia de afastamento"</i> <b>R$ ${vDiaria} por dia</b>. Em seguida voce multiplica a diaria R$ ${vDiaria} pelos dias de afastamento <i>descontando a franquia de 7 dias</i> total <b>R$ ${vTotal60} líquido</b>. Quando prorroga a afastamento pelo mesmo cid nao tem franquia.<br><br><b>Carencias para doenças comuns 30 dias. Carencias para LER, DORT, LTC, DOENÇAS PROGRESSIVAS , DEGENERATIVAS, HERNIAS 180 dias. Acidente nao tem carencia</b>.</div>`;
         } else {
             nome = document.getElementById('nomeEmp').value.trim();
             let vidas = parseInt(document.getElementById('vidasEmp').value);
@@ -149,7 +149,7 @@
             let vMorte = `R$ ${capMorte.toLocaleString('pt-BR')},00`;
             let vMorteAc = `R$ ${(capMorte*2).toLocaleString('pt-BR')},00`;
             let vRenda = `R$ 3.000,00`;
-            precoFinal = `R$ ${(parseFloat(combo[0]) * vidas).toFixed(2)} (${vidas} vidas)`;
+            precoFinal = `INVESTIMENTO TOTAL: R$ ${(parseFloat(combo[0]) * vidas).toFixed(2)}/mês`;
 
             tabelaHtml = `<tr><td>Morte Natural</td><td class="val-destaque">${vMorte}</td></tr>
                           <tr><td>Morte Acidental</td><td class="val-destaque">${vMorteAc}</td></tr>
@@ -163,48 +163,20 @@
         document.getElementById('resCabecalho').innerHTML = `<h3>ESTUDO TÉCNICO: ${nome}</h3>`;
         document.getElementById('listaCoberturas').innerHTML = tabelaHtml;
         document.getElementById('resTexto').innerHTML = explicacaoHtml;
-        document.getElementById('resPreco').innerText = `INVESTIMENTO: ${precoFinal}`;
+        document.getElementById('resPreco').innerText = precoFinal;
         document.getElementById('areaSimulacao').style.display = 'block';
-        document.getElementById('linkConsultor').href = `https://wa.me/5517997165139?text=${encodeURIComponent('Olá, vi meu estudo para ' + nome + ' e gostaria de tirar dúvidas.')}`;
+        document.getElementById('linkConsultor').href = `https://wa.me/5517997165139?text=${encodeURIComponent('Olá Emerson, vi meu estudo para ' + nome + ' e quero contratar.')}`;
     }
 
     function enviarSimulacaoWhatsApp() {
         const nome = modo === 'IND' ? document.getElementById('nomeInd').value : document.getElementById('nomeEmp').value;
         const whats = (modo === 'IND' ? document.getElementById('whatsInd').value : document.getElementById('whatsEmp').value).replace(/\D/g,'');
+        const resumo = document.getElementById('resTexto').innerText;
         const preco = document.getElementById('resPreco').innerText;
         
-        let capMorte, capRenda, dias;
-        if (modo === 'IND') {
-            let plano = document.getElementById('planoInd').value;
-            capRenda = (plano === 'bronze' ? 3000 : plano === 'prata' ? 5000 : 10000);
-            capMorte = (plano === 'bronze' ? 50000 : plano === 'prata' ? 100000 : 120000);
-            dias = 7;
-        } else {
-            let combo = document.getElementById('planoEmp').value.split('|');
-            capMorte = parseInt(combo[1]); capRenda = 3000; dias = 15;
-        }
-
-        let vMorte = `R$ ${capMorte.toLocaleString('pt-BR')},00`;
-        let vMorteAc = `R$ ${(capMorte*2).toLocaleString('pt-BR')},00`;
-        let vRenda = `R$ ${capRenda.toLocaleString('pt-BR')},00`;
-        let vDiaria = (capRenda / 30).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-        let vTotal60 = ((capRenda / 30) * (60 - dias)).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-
-        let msg = `*EAS CORRETORA - PROTEÇÃO UNIMED*\n\n${nome}, seu estudo ficou da seguinte forma:\n\n`;
-        
-        if (modo === 'IND') {
-            msg += `Se ocorrer morte natural a Seguros Unimed pagará uma indenização no valor de ${vMorte}. Se ocorrer morte por acidente, a Seguros Unimed pagará uma indenização no valor de ${vMorteAc}. Se ocorrer uma invalidez por acidente ou doença a Seguros Unimed pagará uma indenização no valor de ${vMorte}.\n\n`;
-            msg += `*SERIT:* Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de ${vRenda} por mes. A indenização é paga por dia de afastamento.\n\n`;
-            msg += `*Cálculo:* Valor ${vRenda} ÷ 30 dias = R$ ${vDiaria} p/ dia. Em um atestado de 60 dias, você recebe *R$ ${vTotal60} líquido* (descontada franquia).\n\n`;
-            msg += `*Carencias:* Doenças comuns 30 dias. LER/DORT/Hérnias 180 dias. Acidente NÃO tem carência.\n\n`;
-        } else {
-            msg += `Morte Natural: ${vMorte}\nMorte Acidental: ${vMorteAc}\nIPA/IFPD: ${vMorte}\nDIT (Acidente): ${vRenda}/mês\n\n`;
-            msg += `Exemplo 60 dias: Recebe *R$ 4.500,00 líquido* (após franquia 15 dias).\n\n*Seguro Profissional - Embrecat Catanduva*\n\n`;
-        }
-        
-        msg += `💰 *${preco}*`;
+        let msg = `*EAS CORRETORA - PROTEÇÃO UNIMED*\n\n${nome}, seu estudo ficou da seguinte forma:\n\n${resumo}\n\n💰 *${preco}*`;
         window.open(`https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 </script>
 </body>
-</html>>
+</html>
