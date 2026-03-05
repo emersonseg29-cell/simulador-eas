@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultoria Técnica EAS Corretora & Seguros Unimed</title>
+    <title>Consultoria de Proteção - EAS Corretora & Seguros Unimed</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; --error: #e11d48; }
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 550px; background: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-top: 8px solid var(--gold); position: relative; }
         
+        /* CABEÇALHO LIMPO SEM PDF/SVG */
         .header { text-align: center; margin-bottom: 25px; }
         .logo-img { width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; object-fit: contain; }
         
@@ -24,7 +25,7 @@
         label { display: block; font-size: 0.75rem; font-weight: 800; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
         input, select { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; box-sizing: border-box; outline: none; transition: 0.3s; }
         input:focus { border-color: var(--unimed); }
-        
+
         .btn-calc { width: 100%; padding: 22px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(29, 45, 68, 0.25); }
         
         #resultado { display: none; margin-top: 30px; padding: 25px; border-radius: 18px; background: #f8fafc; border: 1px solid #e2e8f0; }
@@ -35,7 +36,6 @@
         .box-explicacao b { color: #000; }
 
         .disclaimer { font-size: 0.7rem; color: #94a3b8; text-align: center; margin-top: 25px; line-height: 1.4; font-style: italic; }
-        
         .whatsapp-btn { width: 100%; padding: 18px; background: #25d366; color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; margin-top: 15px; }
     </style>
 </head>
@@ -83,15 +83,15 @@
 
     <div id="campos-emp" style="display:none;">
         <div class="input-group">
-            <label>Quantidade de Colaboradores (Min 3)</label>
+            <label>Nº de Colaboradores (Mínimo 3)</label>
             <input type="number" id="vidas" value="3" min="3">
         </div>
         <div class="input-group">
             <label>Escolha o Plano Empresarial</label>
             <select id="planoEmp">
-                <option value="49.90|50000|2000">Plano BRONZE (R$ 49,90/vida - DIT 2k)</option>
-                <option value="69.90|100000|2500">Plano PRATA (R$ 69,90/vida - DIT 2.5k)</option>
-                <option value="79.90|100000|3000">Plano OURO (R$ 79,90/vida - DIT 3k)</option>
+                <option value="49.90|50000|2000">PME Bronze (R$ 50k / R$ 2k DIT)</option>
+                <option value="69.90|100000|2500">PME Prata (R$ 100k / R$ 2.5k DIT)</option>
+                <option value="79.90|100000|3000">PME Ouro (R$ 100k / R$ 3k DIT)</option>
             </select>
         </div>
     </div>
@@ -108,7 +108,7 @@
     </div>
 
     <div class="disclaimer">
-        * Limite de idade: 70 anos. Valores baseados nas Tabelas Unimed. Sujeito a análise técnica.
+        * Limite de idade: 70 anos. Valores calculados com base nas Tabelas Oficiais Seguros Unimed.
     </div>
 </div>
 
@@ -126,7 +126,7 @@
         document.getElementById('btnEmp').classList.toggle('active', modo === 'EMP');
         document.getElementById('campos-ind').style.display = modo === 'IND' ? 'block' : 'none';
         document.getElementById('campos-emp').style.display = modo === 'EMP' ? 'block' : 'none';
-        document.getElementById('labelNome').innerText = modo === 'IND' ? 'Nome do Cliente' : 'Razão Social / Nome da Empresa';
+        document.getElementById('labelNome').innerText = modo === 'IND' ? 'Nome do Cliente' : 'Razão Social / Empresa';
         document.getElementById('resultado').style.display = 'none';
     }
 
@@ -172,25 +172,25 @@
         let explicacao = "";
         if (modoAtual === 'IND') {
             explicacao = `<b>Seu estudo ficou da seguinte forma:</b><br>`;
-            explicacao += `Se ocorrer <b>morte natural</b> a seguradora pagará uma indenização no valor de R$ ${capital.toLocaleString('pt-BR')}.<br>`;
-            explicacao += `Se ocorrer <b>morte morte acidental</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(capital*2).toLocaleString('pt-BR')}</b>.<br>`;
-            explicacao += `Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${capital.toLocaleString('pt-BR')}.<br><br>`;
-            explicacao += `<b>SERIT:</b> Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${renda.toLocaleString('pt-BR')} por mes.<br><br>`;
+            explicacao += `Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de R$ ${capital.toLocaleString('pt-BR')}.<br>`;
+            explicacao += `Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará <b>R$ ${(capital*2).toLocaleString('pt-BR')}</b>.<br>`;
+            explicacao += `Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará R$ ${capital.toLocaleString('pt-BR')}.<br><br>`;
+            explicacao += `<b>SERIT:</b> Se você precisar ficar afastado por mais de 7 dias, a Seguros Unimed pagará uma renda de R$ ${renda.toLocaleString('pt-BR')} por mes.<br><br>`;
             explicacao += `<b>Cálculo:</b> R$ ${renda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${vDiaria} p/ dia. Em um atestado de 60 dias (descontando 7 dias de franquia), você recebe <b>R$ ${vTotalLiq} líquido</b> em conta.<br><br>`;
             explicacao += `<i>Carências: Comuns 30 dias. LER/DORT/LTC/Hérnias 180 dias. Acidente isento.</i>`;
         } else {
             explicacao = `<b>Proposta Seguro Empresarial para ${nome.toUpperCase()}:</b><br><br>`;
             explicacao += `<b>Morte:</b> Se ocorrer morte natural a Seguros Unimed pagará uma indenização de R$ ${capital.toLocaleString('pt-BR')}.<br>`;
-            explicacao += `<b>Morte Acidental:</b> Se ocorrer morte por acidente a Seguros Unimed pagará uma indenização de R$ ${(capital*2).toLocaleString('pt-BR')}.<br>`;
-            explicacao += `<b>IPA/IFPD:</b> Se ocorrer invalidez por acidente ou doença a Seguros Unimed pagará R$ ${capital.toLocaleString('pt-BR')}.<br><br>`;
-            explicacao += `<b>DIT:</b> Se ocorrer um acidente e o colaborador ficar afastado por mais de 15 dias, a Seguros Unimed pagará uma renda mensal de <b>R$ ${renda.toLocaleString('pt-BR')}</b> enquanto durar o atestado (limitado a 12 meses).<br><br>`;
-            explicacao += `<b>Exemplo:</b> Benefício mensal R$ ${renda.toLocaleString('pt-BR')} = R$ ${vDiaria} por dia. Atestado de 60 dias (descontando franquia de 15 dias) = 45 dias x R$ ${vDiaria} = <b>R$ ${vTotalLiq} líquido</b>.<br><br>`;
-            explicacao += `<b>Vantagens do grupo:</b><br>• Não preenche DPS e sem carência.<br>• Sem reajuste por faixa etária.<br>• Protege a empresa contra indenizações por acidente de trabalho.`;
+            explicacao += `<b>Morte Acidental:</b> Beneficiários receberão R$ ${(capital*2).toLocaleString('pt-BR')}.<br>`;
+            explicacao += `<b>IPA/IFPD:</b> Invalidez por acidente ou doença paga R$ ${capital.toLocaleString('pt-BR')}.<br><br>`;
+            explicacao += `<b>DIT:</b> Se o colaborador ficar afastado por mais de 15 dias, a Seguros Unimed pagará uma renda mensal de <b>R$ ${renda.toLocaleString('pt-BR')}</b> (limite 12 meses).<br><br>`;
+            explicacao += `<b>Exemplo:</b> R$ ${renda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${vDiaria}/dia. Atestado de 60 dias (descontando franquia de 15 dias) = 45 dias x R$ ${vDiaria} = <b>R$ ${vTotalLiq} líquido</b>.<br><br>`;
+            explicacao += `<b>Vantagens Seguros Unimed:</b> Sem DPS, sem reajuste por faixa etária, sem carência e proteção total para a empresa.`;
         }
         document.getElementById('res-explicacao').innerHTML = explicacao;
         document.getElementById('resultado').style.display = 'block';
 
-        let msg = `*EAS CORRETORA - CONSULTORIA UNIMED*\n\nOlá ${nome.toUpperCase()}, segue seu estudo:\n\n`;
+        let msg = `*EAS CORRETORA - CONSULTORIA SEGUROS UNIMED*\n\nOlá ${nome.toUpperCase()}, segue seu estudo:\n\n`;
         msg += `✅ Morte Natural: R$ ${capital.toLocaleString('pt-BR')}\n✅ Morte Acidental: R$ ${(capital*2).toLocaleString('pt-BR')}\n✅ Invalidez: R$ ${capital.toLocaleString('pt-BR')}\n✅ Renda Afastamento: R$ ${renda.toLocaleString('pt-BR')}/mês\n\n`;
         msg += `*Benefício Líquido (60 dias):* R$ ${vTotalLiq} em conta.\n\n💰 *INVESTIMENTO:* R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês`;
         document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
