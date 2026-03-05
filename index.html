@@ -9,7 +9,20 @@
         :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; }
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 550px; background: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .logo-img { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--gold); margin: 0 auto 15px; display: block; object-fit: cover; }
+        
+        /* AJUSTE DO LOGO: Retangular e Amplo para Leitura */
+        .logo-img { 
+            width: 100%;
+            max-width: 280px; /* Largura maior para o logo aparecer por inteiro */
+            height: auto; 
+            border-radius: 12px; /* Cantos levemente arredondados, sem ser círculo */
+            border: 2px solid var(--gold); 
+            margin: 0 auto 20px; 
+            display: block; 
+            padding: 5px;
+            background: #fff;
+        }
+
         h2 { color: var(--primary); text-align: center; margin: 0; font-size: 1.5rem; }
         .sub { color: var(--gold); text-align: center; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; }
         .type-selector { display: flex; background: #e2e8f0; border-radius: 12px; padding: 5px; margin-bottom: 25px; }
