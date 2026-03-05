@@ -11,7 +11,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
         body { background-color: var(--bg); color: var(--navy); }
 
-        /* TELA DE CAPA (PÁGINA 1) */
+        /* PÁGINA 1: CAPA */
         #capa {
             height: 100vh; width: 100%; position: fixed; z-index: 100;
             background: linear-gradient(135deg, var(--navy) 0%, #0a141d 100%);
@@ -25,12 +25,11 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.3s;
         }
 
-        /* CONTEÚDO DO APP (PÁGINA 2) */
+        /* PÁGINA 2: SIMULADOR */
         .app-container { opacity: 0; max-width: 650px; margin: 0 auto; padding-bottom: 50px; transition: 1s; }
         .header-app { background: var(--navy); padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--gold); margin-bottom: 30px; }
         .logo-small { height: 60px; }
 
-        /* SELETOR DE MODALIDADE */
         .type-selector { display: flex; gap: 10px; margin-bottom: 25px; padding: 0 15px; }
         .type-btn { flex: 1; padding: 15px; border: 2px solid var(--navy); border-radius: 6px; background: white; color: var(--navy); font-weight: 700; cursor: pointer; transition: 0.3s; }
         .type-btn.active { background: var(--navy); color: white; }
@@ -41,22 +40,16 @@
         .input-box input, .input-box select { width: 100%; padding: 15px; border: 1px solid #e2e8f0; border-radius: 4px; background: #f8fafc; font-size: 1rem; outline: none; }
 
         .btn-gerar { width: 100%; padding: 22px; background: var(--navy); color: white; border: none; border-radius: 4px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-        .btn-gerar:hover { background: var(--unimed); }
 
-        /* RESULTADO E EXPLICAÇÃO DETALHADA */
+        /* RESULTADO E EXPLICAÇÃO */
         #resultado { display: none; margin-top: 30px; animation: slideUp 0.6s ease; }
         .price-card { background: var(--navy); color: white; padding: 40px; border-radius: 8px 8px 0 0; text-align: center; border-bottom: 5px solid var(--gold); }
-        .price-card span { color: var(--gold); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
-        .price-card h2 { font-size: 3.5rem; margin: 10px 0; }
+        .price-card h2 { font-size: 3.5rem; margin: 10px 0; color: #fff; }
 
         .explanation-card { background: white; padding: 35px; border-radius: 0 0 8px 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); line-height: 1.7; }
         .expl-item { background: #f9f8f3; border-left: 4px solid var(--navy); padding: 20px; margin-bottom: 15px; border-radius: 4px; }
-        .expl-item h3 { font-size: 1rem; color: var(--navy); margin-bottom: 10px; text-transform: uppercase; }
-        .expl-item p { font-size: 0.95rem; color: #444; }
-
-        /* ESTILO SERIT LARANJA/DOURADO COMO ANTES */
         .serit-box { border-left-color: var(--gold); background: #fffdf5; }
-
+        
         .btn-whatsapp { width: 100%; padding: 22px; background: #25d366; color: white; border-radius: 4px; text-decoration: none; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 25px; text-transform: uppercase; }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
@@ -68,9 +61,9 @@
 
     <div id="capa">
         <img src="logo oficial.jpg.png" class="logo-capa">
-        <h1 style="margin-bottom: 15px;">Simulador de Proteção</h1>
-        <p style="margin-bottom: 40px; opacity: 0.8; font-weight: 300; max-width: 500px;">Escolha a modalidade de seguro e realize seu estudo técnico agora.</p>
-        <button class="btn-iniciar" onclick="iniciar()">Entrar no Consultor</button>
+        <h1>Simulador de Proteção</h1>
+        <p style="margin-bottom: 40px; opacity: 0.8; font-weight: 300; max-width: 500px;">EAS Corretora & Seguros Unimed</p>
+        <button class="btn-iniciar" onclick="iniciar()">Iniciar Estudo</button>
     </div>
 
     <div class="app-container" id="app">
@@ -86,16 +79,16 @@
 
         <div class="form-card">
             <div id="formInd">
-                <div class="input-box"><label>Nome do Cliente</label><input type="text" id="nomeInd" placeholder="Ex: João Silva"></div>
-                <div class="input-box"><label>WhatsApp</label><input type="text" id="whatsInd" placeholder="(17) 99999-9999"></div>
+                <div class="input-box"><label>Nome do Cliente</label><input type="text" id="nomeInd" placeholder="Nome Completo"></div>
+                <div class="input-box"><label>WhatsApp (DDD + Número)</label><input type="text" id="whatsInd" placeholder="(17) 99999-9999"></div>
                 <div style="display: flex; gap: 15px;">
                     <div class="input-box" style="flex: 1;"><label>Idade</label><input type="number" id="idadeInd" value="43"></div>
                     <div class="input-box" style="flex: 1;">
-                        <label>Plano</label>
+                        <label>Plano de Proteção</label>
                         <select id="planoInd">
-                            <option value="bronze">Bronze (3k)</option>
-                            <option value="prata">Prata (5k)</option>
-                            <option value="ouro" selected>Ouro (10k)</option>
+                            <option value="bronze">plano bronze 3 mil renda</option>
+                            <option value="prata">plano prata 5 mil renda</option>
+                            <option value="ouro" selected>plano ouro 10 mil renda</option>
                         </select>
                     </div>
                 </div>
@@ -103,48 +96,45 @@
             </div>
 
             <div id="formEmp" style="display: none;">
-                <div class="input-box"><label>Nome da Empresa / Colaborador</label><input type="text" id="nomeEmp" placeholder="Ex: Clínica Saúde"></div>
-                <div class="input-box"><label>WhatsApp</label><input type="text" id="whatsEmp" placeholder="(17) 99999-9999"></div>
+                <div class="input-box"><label>Nome da Empresa / Colaborador</label><input type="text" id="nomeEmp" placeholder="Nome"></div>
+                <div class="input-box"><label>WhatsApp PJ</label><input type="text" id="whatsEmp" placeholder="(17) 99999-9999"></div>
                 <div style="display: flex; gap: 15px;">
                     <div class="input-box" style="flex: 1;"><label>Nº de Vidas</label><input type="number" id="vidasEmp" value="1"></div>
                     <div class="input-box" style="flex: 1;">
                         <label>Plano PJ</label>
                         <select id="planoEmp">
-                            <option value="49.90|50000">Bronze (50k)</option>
-                            <option value="69.90|100000">Prata (100k)</option>
-                            <option value="79.90|120000" selected>Ouro (120k)</option>
+                            <option value="49.90|50000">plano bronze 3 mil renda</option>
+                            <option value="69.90|100000">plano prata 5 mil renda</option>
+                            <option value="79.90|120000" selected>plano ouro 10 mil renda</option>
                         </select>
                     </div>
                 </div>
             </div>
 
-            <button class="btn-gerar" onclick="gerarEstudo()">Gerar Estudo Personalizado</button>
+            <button class="btn-gerar" onclick="gerarEstudo()">Gerar Estudo Técnico</button>
         </div>
 
         <div id="resultado">
             <div class="price-card">
-                <span id="labelTabela">Investimento Mensal</span>
+                <span id="labelTabela" style="color: var(--gold); font-weight: 700; text-transform: uppercase;">Investimento Mensal</span>
                 <h2 id="precoFinal">R$ 0,00</h2>
             </div>
             <div class="explanation-card">
                 <div id="conteudoEstudo"></div>
-                <a href="#" id="linkWhats" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Receber no WhatsApp</a>
+                <a href="#" id="linkWhats" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Enviar Estudo via WhatsApp</a>
             </div>
         </div>
     </div>
 
 <script>
     let modo = 'IND';
-
     function iniciar() { document.getElementById('capa').classList.add('move-up'); document.getElementById('app').classList.add('show'); }
-    
     function setModo(m) {
         modo = m;
         document.getElementById('btnInd').classList.toggle('active', m === 'IND');
         document.getElementById('btnEmp').classList.toggle('active', m === 'EMP');
         document.getElementById('formInd').style.display = m === 'IND' ? 'block' : 'none';
         document.getElementById('formEmp').style.display = m === 'EMP' ? 'block' : 'none';
-        document.getElementById('resultado').style.display = 'none';
     }
 
     function calcularPreco(idade, plano, cupom) {
@@ -158,11 +148,15 @@
     }
 
     function gerarEstudo() {
-        let nome, whats_raw, preco, capMorte, capRenda, cupom;
-        
+        let nome = (modo === 'IND' ? document.getElementById('nomeInd').value : document.getElementById('nomeEmp').value);
+        let whats_raw = (modo === 'IND' ? document.getElementById('whatsInd').value : document.getElementById('whatsEmp').value);
+        let whats = whats_raw.replace(/\D/g,'');
+
+        if (whats.length < 10) { alert("Insira um número de WhatsApp válido com DDD."); return; }
+        if (!nome) { alert("Preencha o nome do cliente."); return; }
+
+        let preco, capMorte, capRenda, cupom;
         if (modo === 'IND') {
-            nome = document.getElementById('nomeInd').value;
-            whats_raw = document.getElementById('whatsInd').value;
             let idade = parseInt(document.getElementById('idadeInd').value);
             let plano = document.getElementById('planoInd').value;
             cupom = document.getElementById('cupomInd').value.toUpperCase();
@@ -174,36 +168,28 @@
             let vTotalEx = ((capRenda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits: 2});
 
             document.getElementById('conteudoEstudo').innerHTML = `
-                <div class="expl-item"><h3>Morte Natural</h3><p>Indenização no valor de <strong>R$ ${capMorte.toLocaleString('pt-BR')},00</strong>.</p></div>
-                <div class="expl-item"><h3>Morte por Acidente</h3><p>Indenização no valor de <strong>R$ ${(capMorte*2).toLocaleString('pt-BR')},00</strong>.</p></div>
-                <div class="expl-item"><h3>Invalidez</h3><p>Indenização por acidente ou doença no valor de <strong>R$ ${capMorte.toLocaleString('pt-BR')},00</strong>.</p></div>
+                <p style="margin-bottom:20px;">Seu estudo ficou da seguinte forma:</p>
+                <div class="expl-item">Se ocorrer morte natural a seguradora pagará uma indenização no valor de <strong>${capMorte >= 100000 ? (capMorte/1000)+' mil reais' : 'R$ '+capMorte.toLocaleString('pt-BR')}</strong>.</div>
+                <div class="expl-item">Se ocorrer morte por acidente, a Seguros Unimed pagará uma indenização no valor de <strong>R$ ${(capMorte*2).toLocaleString('pt-BR')},00</strong>.</div>
+                <div class="expl-item">Se ocorrer uma invalidez por acidente ou doença a Seguros Unimed pagará uma indenização no valor de <strong>R$ ${capMorte.toLocaleString('pt-BR')},00</strong>.</div>
                 <div class="expl-item serit-box">
-                    <h3>SERIT (Seguro de Renda)</h3>
-                    <p>Se você se afastar por mais de 7 dias, a Unimed pagará uma renda mensal de <strong>R$ ${capRenda.toLocaleString('pt-BR')},00</strong>.</p>
-                    <h4 style="margin-top:15px; font-size:0.9rem;">Como funciona o pagamento?</h4>
-                    <p style="font-size:0.85rem; color:#555;">Dividimos o valor mensal por 30 dias (Diária de <strong>R$ ${vDiaria}</strong>). Em um atestado de 60 dias, descontamos a franquia de 7 dias e pagamos 53 diárias. <strong>Total: R$ ${vTotalEx}</strong>.</p>
-                    <h4 style="margin-top:15px; font-size:0.9rem;">Carências:</h4>
-                    <p style="font-size:0.85rem; color:#555;">30 dias para doenças comuns / 180 dias para LER, DORT e Hérnias / <strong>Acidentes não têm carência</strong>.</p>
+                    <strong>SERIT :</strong> Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de <strong>R$ ${capRenda.toLocaleString('pt-BR')},00 por mes</strong>. <br><br>
+                    A indenização é paga da seguinte forma: Suponhamos que você fique doente ou sofra um acidente e o médico lhe dê um atestado de 60 dias. A seguradora paga por dia de afastamento. <br><br>
+                    Para saber o valor exato da indenizaçao voce fara o seguinte calculo. Valor do beneficio mensal <strong>R$ ${capRenda.toLocaleString('pt-BR')},00</strong> dividido por 30 dias "por que a seguradora paga por dia de afastamento" <strong>R$ ${vDiaria} por dia</strong>. Em seguida voce multiplica a diaria R$ ${vDiaria} pelos dias de afastamento descontando a franquia de 7 dias total <strong>R$ ${vTotalEx}</strong>. <br><br>
+                    Quando prorroga a afastamento pelo mesmo cid nao tem franquia. <br><br>
+                    <strong>Carencias para doenças comuns 30 dias. Carencias para LER, DORT, LTC, DOENÇAS PROGRESSIVAS , DEGENERATIVAS, HERNIAS 180 dias. Acidente nao tem carencia.</strong>
                 </div>`;
         } else {
-            nome = document.getElementById('nomeEmp').value;
-            whats_raw = document.getElementById('whatsEmp').value;
             let vidas = parseInt(document.getElementById('vidasEmp').value);
             let dados = document.getElementById('planoEmp').value.split('|');
             preco = parseFloat(dados[0]) * vidas;
             capMorte = parseInt(dados[1]);
-            document.getElementById('conteudoEstudo').innerHTML = `
-                <div class="expl-item"><h3>Morte Natural (Vida em Grupo)</h3><p>Indenização de <strong>R$ ${capMorte.toLocaleString('pt-BR')},00</strong> por colaborador.</p></div>
-                <div class="expl-item"><h3>Invalidez por Acidente</h3><p>Indenização de até <strong>R$ ${capMorte.toLocaleString('pt-BR')},00</strong>.</p></div>
-                <div class="expl-item serit-box"><h3>DIT (Diária de Incapacidade)</h3><p>Renda de R$ 3.000,00 para afastamentos superiores a 15 dias em caso de acidente.</p></div>`;
+            document.getElementById('conteudoEstudo').innerHTML = `<div class="expl-item">Estudo de Vida em Grupo Unimed para ${vidas} vida(s). Morte Natural: R$ ${capMorte.toLocaleString('pt-BR')}.</div>`;
         }
 
         document.getElementById('precoFinal').innerText = `R$ ${preco.toFixed(2)}`;
-        document.getElementById('labelTabela').innerText = (modo === 'IND' && cupom === "UNIMED08") ? "Tabela CALL 08 Ativada" : "Investimento Mensal";
         document.getElementById('resultado').style.display = 'block';
-
-        const whats = whats_raw.replace(/\D/g,'');
-        const msg = `*EAS CORRETORA - CONSULTORIA*\n\nPrezado(a) ${nome}, segue seu estudo personalizado:\n\n🛡️ *Renda Mensal:* R$ ${capRenda ? capRenda.toLocaleString('pt-BR') : '3.000,00'}\n🛡️ *Morte Natural:* R$ ${capMorte.toLocaleString('pt-BR')}\n💰 *Investimento:* R$ ${preco.toFixed(2)}/mês\n\n_Seguros Unimed - Proteção Garantida_`;
+        const msg = `*EAS CORRETORA - CONSULTORIA*\n\nPrezado(a) ${nome}, seu estudo de proteção foi gerado. Toque no link para visualizar os detalhes.`;
         document.getElementById('linkWhats').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
