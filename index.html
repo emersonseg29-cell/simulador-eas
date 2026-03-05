@@ -99,7 +99,7 @@
         50: { bronze: 150.04, prata: 270.08, ouro: 482.83 },
         60: { bronze: 265.41, prata: 483.56, ouro: 869.64 },
         65: { bronze: 370.10, prata: 678.02, ouro: 1224.97 },
-        70: { bronze: 370.10, prata: 678.02, ouro: 1224.97 } // Mantém o teto de 65 anos para idades de 66 a 70
+        70: { bronze: 370.10, prata: 678.02, ouro: 1224.97 }
     };
 
     function getPrecoBase(idade, plano) {
@@ -155,7 +155,6 @@
             explicacaoHtml = `<div class="highlight-box">
                 Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de ${vMorte}, se ocorrer <b>morte por acidente</b> a indenização será no valor de ${vMorteAc}, se ocorrer <b>invalidez por acidente ou doença</b> será paga uma indenização no valor de ${vMorte}. Se precisar ficar afastado por mais de 7 dias receberá uma renda mensal no valor de ${vRenda}.<br><br>
                 Para dar entrada no benefício será necessário apresentar boletim de pronto atendimento hospitalar, atestado informando número de diárias + laudos ou exames.<br><br>
-                <b>Vantagens deste estudo:</b> Não tem aumento por faixa etária, sem carência e excelente custo benefício.<br><br>
                 <hr style="border: 0; border-top: 1px dashed #ccc; margin: 15px 0;">
                 <b>EXEMPLO (60 DIAS DE ATESTADO):</b><br>
                 R$ ${capRenda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${(capRenda/30).toFixed(2).replace('.',',')} p/ dia.<br>
@@ -224,9 +223,16 @@
 
         let msg = `*EAS CORRETORA - PROTEÇÃO UNIMED*\n\n`;
         msg += `${nome}, seu estudo ficou da seguinte forma:\n\n`;
-        msg += `Se ocorrer morte natural com o colaborador a seguros unimed pagara uma indenizaçao no valor de ${vMorte}, se ocorrer morte por acidente a indenizaçao sera no valor de ${vMorteAc}, se ocorrer invalidez por acidnete ou doença sera pago uma indenizaçao no valor de ${vMorte}, se o colaborador sofrer um acidente e precisar ficar afastado por mais de ${dias} dias recebera uma renda mensal no valor de ${vRenda}.\n\n`;
-        msg += `Para dar entrada no beneficio sera necessario apresentar boletim de pronto atendimento hospitalar, atestado informando numero de diarias + laudos ou exames.\n\n`;
-        msg += `Vantagens deste estudo. Nao tem aumento por faixa etaria. sem carencia, custo beneficio.\n\n`;
+        
+        if (modo === 'IND') {
+            msg += `Se ocorrer morte natural a Seguros Unimed pagará uma indenização no valor de ${vMorte}, se ocorrer morte por acidente a indenização será no valor de ${vMorteAc}, se ocorrer invalidez por acidente ou doença será paga uma indenização no valor de ${vMorte}. Se precisar ficar afastado por mais de ${dias} dias receberá uma renda mensal no valor de ${vRenda}.\n\n`;
+            msg += `Para dar entrada no benefício será necessário apresentar boletim de pronto atendimento hospitalar, atestado informando número de diárias + laudos ou exames.\n\n`;
+        } else {
+            msg += `Se ocorrer morte natural com o colaborador a Seguros Unimed pagará uma indenização no valor de ${vMorte}, se ocorrer morte por acidente a indenização será no valor de ${vMorteAc}, se ocorrer invalidez por acidente ou doença será paga uma indenização no valor de ${vMorte}. Se o colaborador sofrer um acidente e precisar ficar afastado por mais de ${dias} dias receberá uma renda mensal no valor de ${vRenda}.\n\n`;
+            msg += `Para dar entrada no benefício será necessário apresentar boletim de pronto atendimento hospitalar, atestado informando número de diárias + laudos ou exames.\n\n`;
+            msg += `Vantagens deste estudo: Não tem aumento por faixa etária, sem carência e excelente custo benefício.\n\n`;
+        }
+        
         msg += `💰 *INVESTIMENTO:* ${preco}`;
         
         window.open(`https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`, '_blank');
