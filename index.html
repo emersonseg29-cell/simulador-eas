@@ -3,231 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EAS Corretora | Consultoria SERIT</title>
+    <title>EAS Corretora | Consultoria de Seguros</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { 
-            --eas-navy: #1d2d44; 
-            --eas-gold: #b89b3e; 
-            --unimed: #00995d; 
-            --white: #ffffff;
-        }
-
+        :root { --navy: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --bg: #f8fafc; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
-        body { background-color: #f1f5f9; color: var(--eas-navy); }
+        body { background-color: var(--bg); color: var(--navy); }
 
-        /* PÁGINA 1: CAPA INSTITUCIONAL */
+        /* TELA DE CAPA (PÁGINA 1) */
         #capa {
-            height: 100vh;
-            background: linear-gradient(135deg, var(--eas-navy) 0%, #0a141d 100%);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-            padding: 30px; color: white; position: fixed; width: 100%; z-index: 100;
-            transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+            height: 100vh; width: 100%; position: fixed; z-index: 100;
+            background: linear-gradient(135deg, var(--navy) 0%, #0a141d 100%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; color: white; transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
         }
-        .capa-logo { width: 250px; margin-bottom: 25px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); }
-        .capa-h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 15px; }
-        .btn-entrar {
-            background: var(--eas-gold); color: white; padding: 22px 60px; border-radius: 4px;
+        .logo-capa { width: 250px; margin-bottom: 25px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); }
+        .btn-iniciar {
+            background: var(--gold); color: white; padding: 22px 60px; border-radius: 4px;
             font-weight: 700; text-transform: uppercase; letter-spacing: 2px; border: none; cursor: pointer;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.3s;
         }
 
-        /* PÁGINA 2: O SIMULADOR COM PRESENÇA */
-        .app-container { opacity: 0; max-width: 600px; margin: 0 auto; padding-bottom: 50px; transition: 1s; }
-        
-        .header-app { 
-            background: var(--eas-navy); padding: 25px; display: flex; justify-content: space-between; 
-            align-items: center; border-bottom: 5px solid var(--eas-gold); margin-bottom: 30px;
-        }
-        .logo-small { height: 65px; width: auto; }
+        /* CONTEÚDO DO APP (PÁGINA 2) */
+        .app-container { opacity: 0; max-width: 650px; margin: 0 auto; padding-bottom: 50px; transition: 1s; }
+        .header-app { background: var(--navy); padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--gold); margin-bottom: 30px; }
+        .logo-small { height: 60px; }
 
-        .form-card {
-            background: white; padding: 40px; border-radius: 12px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); margin-bottom: 25px;
-        }
-        .section-title { 
-            font-size: 1rem; font-weight: 800; color: var(--eas-navy); text-transform: uppercase; 
-            margin-bottom: 30px; display: flex; align-items: center; gap: 10px;
-        }
-        .section-title::after { content: ''; flex: 1; height: 2px; background: #e2e8f0; }
+        /* SELETOR DE MODALIDADE */
+        .type-selector { display: flex; gap: 10px; margin-bottom: 25px; padding: 0 15px; }
+        .type-btn { flex: 1; padding: 15px; border: 2px solid var(--navy); border-radius: 6px; background: white; color: var(--navy); font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .type-btn.active { background: var(--navy); color: white; }
 
-        .input-box { margin-bottom: 25px; }
-        .input-box label { font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 10px; display: block; }
-        
-        /* CORREÇÃO DO CAMPO WHATSAPP */
-        .input-field { position: relative; display: flex; align-items: center; }
-        .input-field i { position: absolute; left: 18px; color: var(--eas-gold); font-size: 1.1rem; }
-        .input-field input, .input-field select {
-            width: 100%; padding: 18px 18px 18px 50px; border: 2px solid #e2e8f0;
-            border-radius: 8px; font-size: 1rem; background: #f8fafc; transition: 0.3s;
-        }
-        .input-field input:focus { border-color: var(--eas-gold); background: white; outline: none; box-shadow: 0 0 0 4px rgba(184, 155, 62, 0.1); }
+        .form-card { background: white; padding: 35px; border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); margin-bottom: 25px; border-top: 5px solid var(--navy); }
+        .input-box { margin-bottom: 20px; }
+        .input-box label { font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        .input-box input, .input-box select { width: 100%; padding: 15px; border: 1px solid #e2e8f0; border-radius: 4px; background: #f8fafc; font-size: 1rem; outline: none; }
 
-        .btn-calc {
-            width: 100%; padding: 22px; background: var(--eas-navy); color: white; border: none;
-            border-radius: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            cursor: pointer; transition: 0.4s;
-        }
-        .btn-calc:hover { background: var(--unimed); transform: translateY(-2px); }
+        .btn-gerar { width: 100%; padding: 22px; background: var(--navy); color: white; border: none; border-radius: 4px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+        .btn-gerar:hover { background: var(--unimed); }
 
-        /* RESULTADO TÉCNICO PREMIUM */
+        /* RESULTADO E EXPLICAÇÃO DETALHADA */
         #resultado { display: none; margin-top: 30px; animation: slideUp 0.6s ease; }
-        
-        .price-hero {
-            background: linear-gradient(135deg, var(--eas-navy) 0%, #0f172a 100%);
-            color: white; padding: 45px 30px; border-radius: 12px 12px 0 0; text-align: center;
-            border-bottom: 5px solid var(--eas-gold);
-        }
-        .price-hero span { font-size: 0.8rem; color: var(--eas-gold); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
-        .price-hero h2 { font-size: 3.8rem; margin: 10px 0; font-weight: 800; }
+        .price-card { background: var(--navy); color: white; padding: 40px; border-radius: 8px 8px 0 0; text-align: center; border-bottom: 5px solid var(--gold); }
+        .price-card span { color: var(--gold); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+        .price-card h2 { font-size: 3.5rem; margin: 10px 0; }
 
-        .explanation-card {
-            background: white; padding: 40px; border-radius: 0 0 12px 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); color: #334155;
-        }
-        .explanation-card h4 { color: var(--eas-navy); margin-bottom: 20px; text-transform: uppercase; font-size: 0.9rem; font-weight: 800; }
+        .explanation-card { background: white; padding: 35px; border-radius: 0 0 8px 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); line-height: 1.7; }
+        .expl-item { background: #f9f8f3; border-left: 4px solid var(--navy); padding: 20px; margin-bottom: 15px; border-radius: 4px; }
+        .expl-item h3 { font-size: 1rem; color: var(--navy); margin-bottom: 10px; text-transform: uppercase; }
+        .expl-item p { font-size: 0.95rem; color: #444; }
 
-        .benefit-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f1f5f9; }
-        .benefit-row:last-child { border: none; }
-        .benefit-row span { font-weight: 600; color: #64748b; }
-        .benefit-row strong { color: var(--eas-navy); }
+        /* ESTILO SERIT LARANJA/DOURADO COMO ANTES */
+        .serit-box { border-left-color: var(--gold); background: #fffdf5; }
 
-        .btn-whatsapp-final {
-            width: 100%; padding: 22px; background: #25d366; color: white; border-radius: 8px;
-            text-decoration: none; font-weight: 800; display: flex; align-items: center; justify-content: center;
-            gap: 12px; margin-top: 30px; text-transform: uppercase; transition: 0.3s;
-        }
-        .btn-whatsapp-final:hover { transform: scale(1.02); background: #1ea952; }
+        .btn-whatsapp { width: 100%; padding: 22px; background: #25d366; color: white; border-radius: 4px; text-decoration: none; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 25px; text-transform: uppercase; }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-        .move-capa { transform: translateY(-100vh); }
-        .show-app { opacity: 1 !important; }
+        .move-up { transform: translateY(-100vh); }
+        .show { opacity: 1 !important; }
     </style>
 </head>
 <body>
 
     <div id="capa">
-        <img src="logo oficial.jpg.png" class="capa-logo" alt="EAS Corretora">
-        <h1 class="capa-h1">Simulador SERIT</h1>
-        <button class="btn-entrar" onclick="abrirSimulador()">Iniciar Consultoria</button>
+        <img src="logo oficial.jpg.png" class="logo-capa">
+        <h1 style="margin-bottom: 15px;">Simulador de Proteção</h1>
+        <p style="margin-bottom: 40px; opacity: 0.8; font-weight: 300; max-width: 500px;">Escolha a modalidade de seguro e realize seu estudo técnico agora.</p>
+        <button class="btn-iniciar" onclick="iniciar()">Entrar no Consultor</button>
     </div>
 
     <div class="app-container" id="app">
         <header class="header-app">
             <img src="logo oficial.jpg.png" class="logo-small">
-            <img src="logo-unimed.png" style="height: 35px; opacity: 0.9;">
+            <img src="logo-unimed.png" style="height: 35px;">
         </header>
 
+        <div class="type-selector">
+            <button class="type-btn active" id="btnInd" onclick="setModo('IND')">INDIVIDUAL (CPF)</button>
+            <button class="type-btn" id="btnEmp" onclick="setModo('EMP')">VIDA EM GRUPO (PJ)</button>
+        </div>
+
         <div class="form-card">
-            <span class="section-title"><i class="fa-solid fa-calculator"></i> Estudo Técnico</span>
-            
-            <div class="input-box">
-                <label>Nome do Proponente</label>
-                <div class="input-field"><i class="fa-solid fa-user-tie"></i><input type="text" id="nome_cli" placeholder="Ex: Dr. Roberto Silva"></div>
-            </div>
-
-            <div class="input-box">
-                <label>WhatsApp (DDD + Número)</label>
-                <div class="input-field"><i class="fa-brands fa-whatsapp"></i><input type="text" id="whats_cli" placeholder="(17) 99716-5139"></div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div class="input-box">
-                    <label>Idade Atual</label>
-                    <div class="input-field"><i class="fa-solid fa-calendar-check"></i><input type="number" id="idade_cli" value="43"></div>
+            <div id="formInd">
+                <div class="input-box"><label>Nome do Cliente</label><input type="text" id="nomeInd" placeholder="Ex: João Silva"></div>
+                <div class="input-box"><label>WhatsApp</label><input type="text" id="whatsInd" placeholder="(17) 99999-9999"></div>
+                <div style="display: flex; gap: 15px;">
+                    <div class="input-box" style="flex: 1;"><label>Idade</label><input type="number" id="idadeInd" value="43"></div>
+                    <div class="input-box" style="flex: 1;">
+                        <label>Plano</label>
+                        <select id="planoInd">
+                            <option value="bronze">Bronze (3k)</option>
+                            <option value="prata">Prata (5k)</option>
+                            <option value="ouro" selected>Ouro (10k)</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="input-box">
-                    <label>Plano de Renda</label>
-                    <div class="input-field">
-                        <i class="fa-solid fa-vault"></i>
-                        <select id="plano_cli">
-                            <option value="bronze">Bronze (3k Renda)</option>
-                            <option value="prata">Prata (5k Renda)</option>
-                            <option value="ouro" selected>Ouro (10k Renda)</option>
+                <div class="input-box"><label>Cupom Promocional</label><input type="text" id="cupomInd" placeholder="UNIMED08"></div>
+            </div>
+
+            <div id="formEmp" style="display: none;">
+                <div class="input-box"><label>Nome da Empresa / Colaborador</label><input type="text" id="nomeEmp" placeholder="Ex: Clínica Saúde"></div>
+                <div class="input-box"><label>WhatsApp</label><input type="text" id="whatsEmp" placeholder="(17) 99999-9999"></div>
+                <div style="display: flex; gap: 15px;">
+                    <div class="input-box" style="flex: 1;"><label>Nº de Vidas</label><input type="number" id="vidasEmp" value="1"></div>
+                    <div class="input-box" style="flex: 1;">
+                        <label>Plano PJ</label>
+                        <select id="planoEmp">
+                            <option value="49.90|50000">Bronze (50k)</option>
+                            <option value="69.90|100000">Prata (100k)</option>
+                            <option value="79.90|120000" selected>Ouro (120k)</option>
                         </select>
                     </div>
                 </div>
             </div>
 
-            <div class="input-box">
-                <label>Cupom Promocional</label>
-                <div class="input-field"><i class="fa-solid fa-tag"></i><input type="text" id="cupom_cli" placeholder="UNIMED08"></div>
-            </div>
-
-            <button class="btn-calc" onclick="calcular()">Gerar Estudo Detalhado</button>
+            <button class="btn-gerar" onclick="gerarEstudo()">Gerar Estudo Personalizado</button>
         </div>
 
         <div id="resultado">
-            <div class="price-hero">
-                <span id="label_tabela">Investimento Mensal</span>
-                <h2 id="preco_val">R$ 0,00</h2>
+            <div class="price-card">
+                <span id="labelTabela">Investimento Mensal</span>
+                <h2 id="precoFinal">R$ 0,00</h2>
             </div>
-
             <div class="explanation-card">
-                <h4>Detalhamento do Plano</h4>
-                <div class="benefit-row"><span>Morte Natural:</span><strong id="v_morte">R$ 0,00</strong></div>
-                <div class="benefit-row"><span>Morte Acidental:</span><strong id="v_morte_ac">R$ 0,00</strong></div>
-                <div class="benefit-row"><span>Renda Mensal (SERIT):</span><strong id="v_renda">R$ 0,00</strong></div>
-                <div class="benefit-row"><span>Diária Líquida:</span><strong id="v_diaria">R$ 0,00</strong></div>
-                
-                <p id="texto_explicativo" style="margin-top: 25px; font-size: 0.9rem; line-height: 1.6; color: #475569;"></p>
-
-                <a href="#" id="whats_link" class="btn-whatsapp-final" target="_blank">
-                    <i class="fa-brands fa-whatsapp"></i> Enviar Estudo Completo
-                </a>
+                <div id="conteudoEstudo"></div>
+                <a href="#" id="linkWhats" class="btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> Receber no WhatsApp</a>
             </div>
         </div>
     </div>
 
 <script>
-    function abrirSimulador() {
-        document.getElementById('capa').classList.add('move-capa');
-        document.getElementById('app').classList.add('show-app');
+    let modo = 'IND';
+
+    function iniciar() { document.getElementById('capa').classList.add('move-up'); document.getElementById('app').classList.add('show'); }
+    
+    function setModo(m) {
+        modo = m;
+        document.getElementById('btnInd').classList.toggle('active', m === 'IND');
+        document.getElementById('btnEmp').classList.toggle('active', m === 'EMP');
+        document.getElementById('formInd').style.display = m === 'IND' ? 'block' : 'none';
+        document.getElementById('formEmp').style.display = m === 'EMP' ? 'block' : 'none';
+        document.getElementById('resultado').style.display = 'none';
     }
 
-    function calcular() {
-        const nome = document.getElementById('nome_cli').value;
-        const whats_raw = document.getElementById('whats_cli').value;
-        const whats = whats_raw.replace(/\D/g,''); // Limpa tudo que não é número
-        const idade = parseInt(document.getElementById('idade_cli').value);
-        const plano = document.getElementById('plano_cli').value;
-        const cupom = document.getElementById('cupom_cli').value.toUpperCase();
-
-        if(!nome || isNaN(idade)) { alert("Por favor, preencha os dados corretamente."); return; }
-
-        // PRECIFICAÇÃO (Ancorada nos PDFs de 43 anos)
+    function calcularPreco(idade, plano, cupom) {
         const tabNormal = { ouro: 521.71, prata: 286.94, bronze: 162.83 };
-        const tabDesconto = { ouro: 308.75, prata: 170.31, bronze: 96.66 };
-        
-        const isCupom = (cupom === "UNIMED08");
-        let base = isCupom ? tabDesconto[plano] : tabNormal[plano];
-        
-        // Progressão Etária (Média 5.5% ao ano)
+        const tabCall08 = { ouro: 308.75, prata: 170.31, bronze: 96.66 };
+        let base = (cupom === "UNIMED08") ? tabCall08[plano] : tabNormal[plano];
         let diff = idade - 43;
-        let valorFinal = base * Math.pow(1.055, diff);
-        if(idade >= 60) valorFinal *= 1.12;
+        let valor = base * Math.pow(1.055, diff);
+        if(idade >= 60) valor *= 1.12;
+        return valor;
+    }
 
-        document.getElementById('preco_val').innerText = `R$ ${valorFinal.toFixed(2)}`;
-        document.getElementById('label_tabela').innerText = isCupom ? "TABELA PROMOCIONAL CALL 08" : "TABELA PADRÃO A-37";
-
-        const capRenda = (plano === 'bronze' ? 3000 : plano === 'prata' ? 5000 : 10000);
-        const capMorte = (plano === 'bronze' ? 50000 : plano === 'prata' ? 100000 : 120000);
-        const vDiaria = (capRenda / 30).toFixed(2);
-        const vTotalAtestado = ((capRenda / 30) * 53).toFixed(2);
-
-        document.getElementById('v_morte').innerText = `R$ ${capMorte.toLocaleString('pt-BR')},00`;
-        document.getElementById('v_morte_ac').innerText = `R$ ${(capMorte*2).toLocaleString('pt-BR')},00`;
-        document.getElementById('v_renda').innerText = `R$ ${capRenda.toLocaleString('pt-BR')},00`;
-        document.getElementById('v_diaria').innerText = `R$ ${vDiaria.replace('.',',')}`;
-
-        document.getElementById('texto_explicativo').innerHTML = `Em caso de afastamento superior a 7 dias, você recebe <b>R$ ${vDiaria.replace('.',',')} por dia</b>. Um atestado de 60 dias gera um pagamento de <b>R$ ${vTotalAtestado.replace('.',',')} líquidos</b>.`;
+    function gerarEstudo() {
+        let nome, whats_raw, preco, capMorte, capRenda, cupom;
         
+        if (modo === 'IND') {
+            nome = document.getElementById('nomeInd').value;
+            whats_raw = document.getElementById('whatsInd').value;
+            let idade = parseInt(document.getElementById('idadeInd').value);
+            let plano = document.getElementById('planoInd').value;
+            cupom = document.getElementById('cupomInd').value.toUpperCase();
+            preco = calcularPreco(idade, plano, cupom);
+            capRenda = (plano === 'bronze' ? 3000 : plano === 'prata' ? 5000 : 10000);
+            capMorte = (plano === 'bronze' ? 50000 : plano === 'prata' ? 100000 : 120000);
+            
+            let vDiaria = (capRenda / 30).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            let vTotalEx = ((capRenda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+
+            document.getElementById('conteudoEstudo').innerHTML = `
+                <div class="expl-item"><h3>Morte Natural</h3><p>Indenização no valor de <strong>R$ ${capMorte.toLocaleString('pt-BR')},00</strong>.</p></div>
+                <div class="expl-item"><h3>Morte por Acidente</h3><p>Indenização no valor de <strong>R$ ${(capMorte*2).toLocaleString('pt-BR')},00</strong>.</p></div>
+                <div class="expl-item"><h3>Invalidez</h3><p>Indenização por acidente ou doença no valor de <strong>R$ ${capMorte.toLocaleString('pt-BR')},00</strong>.</p></div>
+                <div class="expl-item serit-box">
+                    <h3>SERIT (Seguro de Renda)</h3>
+                    <p>Se você se afastar por mais de 7 dias, a Unimed pagará uma renda mensal de <strong>R$ ${capRenda.toLocaleString('pt-BR')},00</strong>.</p>
+                    <h4 style="margin-top:15px; font-size:0.9rem;">Como funciona o pagamento?</h4>
+                    <p style="font-size:0.85rem; color:#555;">Dividimos o valor mensal por 30 dias (Diária de <strong>R$ ${vDiaria}</strong>). Em um atestado de 60 dias, descontamos a franquia de 7 dias e pagamos 53 diárias. <strong>Total: R$ ${vTotalEx}</strong>.</p>
+                    <h4 style="margin-top:15px; font-size:0.9rem;">Carências:</h4>
+                    <p style="font-size:0.85rem; color:#555;">30 dias para doenças comuns / 180 dias para LER, DORT e Hérnias / <strong>Acidentes não têm carência</strong>.</p>
+                </div>`;
+        } else {
+            nome = document.getElementById('nomeEmp').value;
+            whats_raw = document.getElementById('whatsEmp').value;
+            let vidas = parseInt(document.getElementById('vidasEmp').value);
+            let dados = document.getElementById('planoEmp').value.split('|');
+            preco = parseFloat(dados[0]) * vidas;
+            capMorte = parseInt(dados[1]);
+            document.getElementById('conteudoEstudo').innerHTML = `
+                <div class="expl-item"><h3>Morte Natural (Vida em Grupo)</h3><p>Indenização de <strong>R$ ${capMorte.toLocaleString('pt-BR')},00</strong> por colaborador.</p></div>
+                <div class="expl-item"><h3>Invalidez por Acidente</h3><p>Indenização de até <strong>R$ ${capMorte.toLocaleString('pt-BR')},00</strong>.</p></div>
+                <div class="expl-item serit-box"><h3>DIT (Diária de Incapacidade)</h3><p>Renda de R$ 3.000,00 para afastamentos superiores a 15 dias em caso de acidente.</p></div>`;
+        }
+
+        document.getElementById('precoFinal').innerText = `R$ ${preco.toFixed(2)}`;
+        document.getElementById('labelTabela').innerText = (modo === 'IND' && cupom === "UNIMED08") ? "Tabela CALL 08 Ativada" : "Investimento Mensal";
         document.getElementById('resultado').style.display = 'block';
 
-        const msg = `*EAS CORRETORA - CONSULTORIA SERIT*\n\nPrezado(a) ${nome}, segue seu estudo técnico:\n\n🛡️ *Renda Mensal:* R$ ${capRenda.toLocaleString('pt-BR')}\n🛡️ *Morte Natural:* R$ ${capMorte.toLocaleString('pt-BR')}\n\n💰 *Investimento:* R$ ${valorFinal.toFixed(2)}/mês\n\n_Seguros Unimed - Proteção de Renda Profissional_`;
-        document.getElementById('whats_link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
-
+        const whats = whats_raw.replace(/\D/g,'');
+        const msg = `*EAS CORRETORA - CONSULTORIA*\n\nPrezado(a) ${nome}, segue seu estudo personalizado:\n\n🛡️ *Renda Mensal:* R$ ${capRenda ? capRenda.toLocaleString('pt-BR') : '3.000,00'}\n🛡️ *Morte Natural:* R$ ${capMorte.toLocaleString('pt-BR')}\n💰 *Investimento:* R$ ${preco.toFixed(2)}/mês\n\n_Seguros Unimed - Proteção Garantida_`;
+        document.getElementById('linkWhats').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 </script>
