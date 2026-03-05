@@ -25,7 +25,7 @@
         .resumo-table th { background: #f1f5f9; color: var(--primary); text-align: left; padding: 12px; border-bottom: 2px solid var(--gold); }
         .resumo-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: #475569; }
         .val-destaque { font-weight: 800; color: var(--unimed); }
-        .highlight-box { background: #f0fdf4; padding: 20px; border-radius: 12px; margin: 15px 0; border-left: 5px solid var(--unimed); font-size: 0.9rem; }
+        .highlight-box { background: #f0fdf4; padding: 20px; border-radius: 12px; margin: 15px 0; border-left: 5px solid var(--unimed); font-size: 0.9rem; text-align: justify;}
         .action-buttons { display: grid; gap: 10px; margin-top: 20px; }
         .btn-action { padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; border: none; cursor: pointer; }
     </style>
@@ -45,7 +45,7 @@
     <div id="formInd">
         <div class="input-group"><label>Nome do Cliente</label><input type="text" id="nomeInd" placeholder="Nome Completo"></div>
         <div class="input-group"><label>WhatsApp do Cliente</label><input type="tel" id="whatsInd" placeholder="(17) 99999-9999"></div>
-        <div class="input-group"><label>Idade (14 a 65 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 35" min="14" max="65"></div>
+        <div class="input-group"><label>Idade (14 a 70 anos)</label><input type="number" id="idadeInd" placeholder="Ex: 35" min="14" max="70"></div>
         <div class="input-group">
             <label>Plano de Renda Protegida</label>
             <select id="planoInd">
@@ -54,7 +54,7 @@
                 <option value="ouro" selected>Plano Ouro 10 mil</option>
             </select>
         </div>
-        <div class="input-group"><label>Cupão de Desconto</label><input type="text" id="cupomInd" placeholder="Opcional"></div>
+        <div class="input-group"><label>Cupom de Desconto</label><input type="text" id="cupomInd" placeholder="Opcional"></div>
     </div>
 
     <div id="formEmp" style="display:none;">
@@ -98,12 +98,13 @@
         45: { bronze: 111.41, prata: 198.63, ouro: 354.55 },
         50: { bronze: 150.04, prata: 270.08, ouro: 482.83 },
         60: { bronze: 265.41, prata: 483.56, ouro: 869.64 },
-        65: { bronze: 370.10, prata: 678.02, ouro: 1224.97 }
+        65: { bronze: 370.10, prata: 678.02, ouro: 1224.97 },
+        70: { bronze: 370.10, prata: 678.02, ouro: 1224.97 } // Mantém o teto de 65 anos para idades de 66 a 70
     };
 
     function getPrecoBase(idade, plano) {
         let idades = Object.keys(TABELA_PRECOS).map(Number).sort((a,b) => a-b);
-        let idRef = idades.find(i => idade <= i) || 65;
+        let idRef = idades.find(i => idade <= i) || 70;
         return TABELA_PRECOS[idRef][plano];
     }
 
@@ -130,28 +131,36 @@
             let cupom = document.getElementById('cupomInd').value.trim().toUpperCase();
 
             if(!nome || isNaN(idade)) { alert("Preencha Nome e Idade."); return; }
+            if(idade < 14 || idade > 70) { alert("A idade permitida é de 14 a 70 anos."); return; }
 
             let valor = getPrecoBase(idade, plano);
-            // O código secreto permanece no motor de cálculo, mas não no ecrã como exemplo
+            // O código secreto permanece no motor de cálculo
             if(cupom === "UNIMED08") { valor = valor * 0.65; }
 
             capRenda = (plano === 'bronze' ? 3000 : plano === 'prata' ? 5000 : 10000);
             capMorte = (plano === 'bronze' ? 50000 : plano === 'prata' ? 100000 : 120000);
+            let vMorte = `R$ ${capMorte.toLocaleString('pt-BR')},00`;
+            let vMorteAc = `R$ ${(capMorte*2).toLocaleString('pt-BR')},00`;
+            let vRenda = `R$ ${capRenda.toLocaleString('pt-BR')},00`;
+            
             precoFinal = `R$ ${valor.toFixed(2)}/mês`;
             
             tabelaHtml = `
-                <tr><td>Morte Natural</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Morte por Acidente (Dobra)</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Invalidez por Acidente ou Doença</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Renda p/ Afastamento (SERIT)</td><td class="val-destaque">R$ ${capRenda.toLocaleString('pt-BR')},00</td></tr>
+                <tr><td>Morte Natural</td><td class="val-destaque">${vMorte}</td></tr>
+                <tr><td>Morte por Acidente</td><td class="val-destaque">${vMorteAc}</td></tr>
+                <tr><td>Invalidez por Acidente ou Doença</td><td class="val-destaque">${vMorte}</td></tr>
+                <tr><td>Renda Mensal</td><td class="val-destaque">${vRenda}</td></tr>
             `;
             
             explicacaoHtml = `<div class="highlight-box">
-                <b>EXEMPLO MATADOR SERIT (60 DIAS):</b><br>
-                Cálculo: R$ ${capRenda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${(capRenda/30).toFixed(2).replace('.',',')} p/ dia.<br>
-                Multiplicado por 53 dias pagos (descontada franquia de 7 dias).<br>
-                <b>Total Líquido a receber: R$ ${((capRenda/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.<br><br>
-                <b>CARÊNCIAS:</b> Doenças (30 dias). Acidentes e Morte (Isento).
+                Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de ${vMorte}, se ocorrer <b>morte por acidente</b> a indenização será no valor de ${vMorteAc}, se ocorrer <b>invalidez por acidente ou doença</b> será paga uma indenização no valor de ${vMorte}. Se precisar ficar afastado por mais de 7 dias receberá uma renda mensal no valor de ${vRenda}.<br><br>
+                Para dar entrada no benefício será necessário apresentar boletim de pronto atendimento hospitalar, atestado informando número de diárias + laudos ou exames.<br><br>
+                <b>Vantagens deste estudo:</b> Não tem aumento por faixa etária, sem carência e excelente custo benefício.<br><br>
+                <hr style="border: 0; border-top: 1px dashed #ccc; margin: 15px 0;">
+                <b>EXEMPLO (60 DIAS DE ATESTADO):</b><br>
+                R$ ${capRenda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${(capRenda/30).toFixed(2).replace('.',',')} p/ dia.<br>
+                Multiplicado por 53 dias pagos (descontada franquia).<br>
+                <b>Total Líquido a receber: R$ ${((capRenda/30)*53).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</b>.
             </div>`;
         } else {
             nome = document.getElementById('nomeEmp').value.trim();
@@ -161,18 +170,25 @@
 
             precoFinal = `R$ ${(parseFloat(combo[0]) * vidas).toFixed(2)} (${vidas} vidas)`;
             capMorte = parseInt(combo[1]);
+            let vMorte = `R$ ${capMorte.toLocaleString('pt-BR')},00`;
+            let vMorteAc = `R$ ${(capMorte*2).toLocaleString('pt-BR')},00`;
+            let vRenda = `R$ 3.000,00`;
 
             tabelaHtml = `
-                <tr><td>Morte Natural</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Morte por Acidente</td><td class="val-destaque">R$ ${(capMorte*2).toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>Invalidez por Acidente ou Doença</td><td class="val-destaque">R$ ${capMorte.toLocaleString('pt-BR')},00</td></tr>
-                <tr><td>DIT Acidente (Renda Mensal)</td><td class="val-destaque">R$ 3.000,00</td></tr>
+                <tr><td>Morte Natural</td><td class="val-destaque">${vMorte}</td></tr>
+                <tr><td>Morte por Acidente</td><td class="val-destaque">${vMorteAc}</td></tr>
+                <tr><td>Invalidez por Acidente ou Doença</td><td class="val-destaque">${vMorte}</td></tr>
+                <tr><td>Renda Mensal (Acidente)</td><td class="val-destaque">${vRenda}</td></tr>
             `;
 
             explicacaoHtml = `<div class="highlight-box">
-                <b>EXEMPLO MATADOR DIT (60 DIAS):</b><br>
-                Cálculo: R$ 3.000,00 ÷ 30 dias = R$ 100,00 p/ dia.<br>
-                Multiplicado por 45 dias pagos (descontada franquia de 15 dias).<br>
+                Se ocorrer <b>morte natural</b> com o colaborador a Seguros Unimed pagará uma indenização no valor de ${vMorte}, se ocorrer <b>morte por acidente</b> a indenização será no valor de ${vMorteAc}, se ocorrer <b>invalidez por acidente ou doença</b> será paga uma indenização no valor de ${vMorte}. Se o colaborador sofrer um acidente e precisar ficar afastado por mais de 15 dias receberá uma renda mensal no valor de ${vRenda}.<br><br>
+                Para dar entrada no benefício será necessário apresentar boletim de pronto atendimento hospitalar, atestado informando número de diárias + laudos ou exames.<br><br>
+                <b>Vantagens deste estudo:</b> Não tem aumento por faixa etária, sem carência e excelente custo benefício.<br><br>
+                <hr style="border: 0; border-top: 1px dashed #ccc; margin: 15px 0;">
+                <b>EXEMPLO (60 DIAS DE ATESTADO):</b><br>
+                R$ 3.000,00 ÷ 30 dias = R$ 100,00 p/ dia.<br>
+                Multiplicado por 45 dias pagos (descontada franquia).<br>
                 <b>Total Líquido a receber: R$ 4.500,00</b>.
             </div>`;
         }
@@ -189,7 +205,30 @@
         const whats = (modo === 'IND' ? document.getElementById('whatsInd').value : document.getElementById('whatsEmp').value).replace(/\D/g,'');
         const preco = document.getElementById('resPreco').innerText;
         
-        let msg = `*EAS CORRETORA - PROTEÇÃO UNIMED*\n\n${nome}, seu estudo está pronto:\n\n💰 *INVESTIMENTO:* ${preco}\n\n_Vantagens: Sem aumento por idade e carência zero para acidentes!_`;
+        let capMorte, capRenda, dias;
+        if (modo === 'IND') {
+            let plano = document.getElementById('planoInd').value;
+            capRenda = (plano === 'bronze' ? 3000 : plano === 'prata' ? 5000 : 10000);
+            capMorte = (plano === 'bronze' ? 50000 : plano === 'prata' ? 100000 : 120000);
+            dias = 7;
+        } else {
+            let combo = document.getElementById('planoEmp').value.split('|');
+            capMorte = parseInt(combo[1]);
+            capRenda = 3000;
+            dias = 15;
+        }
+
+        let vMorte = `R$ ${capMorte.toLocaleString('pt-BR')},00`;
+        let vMorteAc = `R$ ${(capMorte*2).toLocaleString('pt-BR')},00`;
+        let vRenda = `R$ ${capRenda.toLocaleString('pt-BR')},00`;
+
+        let msg = `*EAS CORRETORA - PROTEÇÃO UNIMED*\n\n`;
+        msg += `${nome}, seu estudo ficou da seguinte forma:\n\n`;
+        msg += `Se ocorrer morte natural com o colaborador a seguros unimed pagara uma indenizaçao no valor de ${vMorte}, se ocorrer morte por acidente a indenizaçao sera no valor de ${vMorteAc}, se ocorrer invalidez por acidnete ou doença sera pago uma indenizaçao no valor de ${vMorte}, se o colaborador sofrer um acidente e precisar ficar afastado por mais de ${dias} dias recebera uma renda mensal no valor de ${vRenda}.\n\n`;
+        msg += `Para dar entrada no beneficio sera necessario apresentar boletim de pronto atendimento hospitalar, atestado informando numero de diarias + laudos ou exames.\n\n`;
+        msg += `Vantagens deste estudo. Nao tem aumento por faixa etaria. sem carencia, custo beneficio.\n\n`;
+        msg += `💰 *INVESTIMENTO:* ${preco}`;
+        
         window.open(`https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 </script>
