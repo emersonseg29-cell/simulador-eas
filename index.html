@@ -293,19 +293,19 @@
 <script>
     let modo = 'IND';
     
-    // Matriz de preços reais extraída das suas tabelas
+    // MATRIZ REAL EXTRAÍDA DOS PDFS (IDADE 35 COMO REFERÊNCIA)
     const DATABASE = {
         ouro: { 
-            normal: { 16: 365.30, 35: 400.87, 43: 389.48, 53: 521.69 }, 
-            call08: { 16: 216.19, 35: 237.24, 43: 230.50, 50: 310.00 } 
+            normal: 400.87, // Conforme PDF 1990 Ouro A37I
+            call08: 237.24  // Conforme PDF 1990 Ouro Call 08
         },
         prata: { 
-            normal: { 16: 211.13, 35: 231.04, 43: 268.34, 53: 359.12 }, 
-            call08: { 16: 124.95, 35: 124.95, 43: 158.81, 50: 228.38 } 
+            normal: 231.04, // Conforme PDF 1990 Prata A37I
+            call08: 124.95  // Conforme PDF 2009 Prata Call 08 (Base)
         },
         bronze: { 
-            normal: { 16: 126.00, 35: 137.42, 43: 105.00, 53: 146.00 }, 
-            call08: { 16: 75.00, 35: 81.33, 43: 62.14, 50: 92.43 } 
+            normal: 137.42, // Conforme PDF 1990 Bronze A37I
+            call08: 81.33   // Conforme PDF 1990 Bronze Call 08
         }
     };
 
@@ -336,16 +336,17 @@
             const cupom = document.getElementById('cupom').value.toUpperCase();
             
             const planoKey = cap === 120000 ? 'ouro' : (cap === 100000 ? 'prata' : 'bronze');
-            const tabela = cupom === "UNIMED08" ? DATABASE[planoKey].call08 : DATABASE[planoKey].normal;
             
-            const keys = Object.keys(tabela).map(Number).sort((a,b) => b-a);
-            const match = keys.find(k => idade >= k) || keys[keys.length-1];
-            preco = tabela[match];
+            // BUSCA VALOR EXATO NA MATRIZ
+            preco = (cupom === "UNIMED08") ? DATABASE[planoKey].call08 : DATABASE[planoKey].normal;
+            
+            // Reajuste por idade simplificado para demonstração baseado nas Condições Gerais
+            if(idade > 43) preco *= 1.25; 
 
             const diaria = (renda/30).toLocaleString('pt-BR', {minimumFractionDigits:2});
             const liq = ((renda/30)*53).toLocaleString('pt-BR', {minimumFractionDigits:2});
 
-            // Explicações - O cerne do simulador
+            // CERNE EXPLICATIVO INDIVIDUAL
             html = `
                 <div class="info-card">
                     <h4><i class="fas fa-file-invoice-dollar"></i> Capitais Seguros Unimed</h4>
@@ -375,6 +376,7 @@
             const diariaEmp = (renda/30).toLocaleString('pt-BR', {minimumFractionDigits:2});
             const liqEmp = ((renda/30)*45).toLocaleString('pt-BR', {minimumFractionDigits:2});
 
+            // CERNE EXPLICATIVO EMPRESARIAL
             html = `
                 <div class="info-card">
                     <h4><i class="fas fa-building"></i> Proposta Vida em Grupo</h4>
