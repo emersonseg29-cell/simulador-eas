@@ -39,9 +39,8 @@
     </style>
 </head>
 <body>
-<nav><img src="logo oficial.jpg.png" alt="EAS Corretora" class="nav-logo"></nav>
+<nav><img src="logo oficial.jpg.png" alt="EAS Corretora" class="nav-logo" onerror="this.style.display='none'"></nav>
 <section class="hero">
-    <img src="logo oficial.jpg.png" alt="EAS Corretora">
     <h1>Portal de Consultoria Técnica</h1>
     <p>Seguros Unimed • Proteção de Renda e Vida</p>
 </section>
@@ -68,7 +67,7 @@
             <div class="input-group"><label>WhatsApp</label><input type="tel" id="whatsapp" placeholder="(17) 99999-9999" maxlength="15"></div>
         </div>
         <div id="form-ind">
-            <div class="input-group"><label>Idade (14 a 70 anos)</label><input type="number" id="idade" id="idade" placeholder="Ex: 43"></div>
+            <div class="input-group"><label>Idade (16 a 70 anos)</label><input type="number" id="idade" placeholder="Ex: 43" min="16" max="70"></div>
             <div class="input-group">
                 <label>Plano e Capitais</label>
                 <select id="planoInd">
@@ -105,7 +104,7 @@
 <script>
     let modo = 'IND';
 
-    // Máscaras
+    // Máscaras de Input
     document.getElementById('whatsapp').addEventListener('input', e => {
         let v = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
         e.target.value = !v[2] ? v[1] : '(' + v[1] + ') ' + v[2] + (v[3] ? '-' + v[3] : '');
@@ -127,53 +126,86 @@
         document.getElementById('resultado').style.display = 'none';
     }
 
-    // MATRIZ DE PREÇOS EXTRAÍDA DA TABELA CALL 08 E INDIVIDUAL NORMAL
-    function calcularPremio(idade, capital, cupom) {
-        let valor = 0;
-        const isDesconto = (cupom === "UNIMED08");
+    // MATRIZ ATUARIAL: Reenquadramento Etário (CG Versão 07.2023 - pág 21)
+    const fatoresReajuste = {
+        31: {vg: 1.0395, serit: 1.0161}, 32: {vg: 1.0253, serit: 1.0164},
+        33: {vg: 1.0370, serit: 1.0167}, 34: {vg: 1.0476, serit: 1.0250},
+        35: {vg: 1.0455, serit: 1.0256}, 36: {vg: 1.0543, serit: 1.0263},
+        37: {vg: 1.0619, serit: 1.0270}, 38: {vg: 1.0777, serit: 1.0277},
+        39: {vg: 1.0991, serit: 1.0247}, 40: {vg: 1.0984, serit: 1.0254},
+        41: {vg: 1.1119, serit: 1.0260}, 42: {vg: 1.1208, serit: 1.0267},
+        43: {vg: 1.1317, serit: 1.0280}, 44: {vg: 1.1270, serit: 1.0290},
+        45: {vg: 1.1268, serit: 1.0298}, 46: {vg: 1.1208, serit: 1.0307},
+        47: {vg: 1.1190, serit: 1.0317}, 48: {vg: 1.1096, serit: 1.0327},
+        49: {vg: 1.1048, serit: 1.0399}, 50: {vg: 1.1003, serit: 1.0416},
+        51: {vg: 1.0911, serit: 1.0434}, 52: {vg: 1.0858, serit: 1.0454},
+        53: {vg: 1.0811, serit: 1.0475}, 54: {vg: 1.0750, serit: 1.0491},
+        55: {vg: 1.0716, serit: 1.0516}, 56: {vg: 1.0701, serit: 1.0544},
+        57: {vg: 1.0671, serit: 1.0576}, 58: {vg: 1.0658, serit: 1.0611},
+        59: {vg: 1.0672, serit: 1.0724}, 60: {vg: 1.0720, serit: 1.0848},
+        61: {vg: 1.0767, serit: 1.0972}, 62: {vg: 1.0846, serit: 1.1096},
+        63: {vg: 1.0914, serit: 1.1286}, 64: {vg: 1.0969, serit: 1.1301},
+        65: {vg: 1.1021, serit: 1.1349}
+    };
 
-        // Lógica simplificada baseada nos arquivos enviados para o plano OURO (Capital 120k / Renda 10k)
-        if (capital == 120000) {
-            if (idade <= 30) valor = isDesconto ? 191.98 : 310.45;
-            else if (idade <= 35) valor = isDesconto ? 211.30 : 345.80;
-            else if (idade <= 40) valor = isDesconto ? 206.29 : 340.50; // Reajuste técnico da tabela
-            else if (idade <= 43) valor = isDesconto ? 230.50 : 389.48;
-            else if (idade <= 47) valor = isDesconto ? 300.20 : 510.15;
-            else if (idade <= 53) valor = isDesconto ? 310.00 : 521.69;
-            else if (idade <= 59) valor = isDesconto ? 480.10 : 810.30;
-            else if (idade <= 65) valor = isDesconto ? 750.00 : 1250.00;
-            else valor = isDesconto ? 980.00 : 1600.00;
-        } 
-        // Lógica para Prata (Capital 100k / Renda 5k)
-        else if (capital == 100000) {
-            if (idade <= 30) valor = isDesconto ? 109.21 : 185.34;
-            else if (idade <= 43) valor = isDesconto ? 158.81 : 268.34;
-            else if (idade <= 53) valor = isDesconto ? 228.38 : 359.12;
-            else valor = isDesconto ? 581.92 : 980.00;
+    function calcularPremioExato(idade, capital, renda, cupom) {
+        // Taxas Base (Tabela A37 - Idade 16 a 30) por cada R$ 1.000
+        const taxaMorte = 0.2192;
+        const taxaIFPD  = 0.0328;
+        const taxaIEA   = 0.1854;
+        const taxaIPA   = 0.1206;
+        const taxaSERIT = 28.60;
+        const funeral   = 12.30; 
+
+        // 1. Cálculo da Taxa Pura Inicial
+        let premioVG = (capital / 1000) * (taxaMorte + taxaIFPD);
+        let premioAcidente = (capital / 1000) * (taxaIEA + taxaIPA);
+        let premioSERIT = (renda / 1000) * taxaSERIT;
+
+        // 2. Aplicação de Juros Compostos (Reenquadramento Etário)
+        if (idade > 30) {
+            for (let i = 31; i <= idade; i++) {
+                // Trava atuarial: Acima de 65 anos, o reajuste é fixo.
+                let fatorVG = i <= 65 ? fatoresReajuste[i].vg : 1.10;
+                let fatorSERIT = i <= 65 ? fatoresReajuste[i].serit : 1.14;
+
+                premioVG *= fatorVG;
+                premioSERIT *= fatorSERIT;
+            }
         }
-        // Lógica para Bronze (Capital 50k / Renda 3k)
-        else {
-            if (idade <= 30) valor = isDesconto ? 41.91 : 71.19;
-            else if (idade <= 43) valor = isDesconto ? 62.14 : 105.00;
-            else if (idade <= 53) valor = isDesconto ? 92.43 : 146.00;
-            else valor = isDesconto ? 239.03 : 380.00;
+
+        // 3. Somatório Tabela Padrão (A37)
+        let premioTotal = premioVG + premioAcidente + premioSERIT + funeral;
+
+        // 4. Aplicação do Fator Comercial (Desconto CALL08)
+        if (cupom === "UNIMED08") {
+            premioTotal *= 0.5918;
         }
-        return valor;
+
+        // 5. Atualização Monetária (IPC-A Projetado Março/2026 ~10.8%)
+        const fatorIPCA = 1.108;
+        premioTotal *= fatorIPCA;
+
+        return premioTotal;
     }
 
     function gerarEstudo() {
         const nome = document.getElementById('nome').value.trim();
         const whats = document.getElementById('whatsapp').value.replace(/\D/g, '');
-        if (!nome || whats.length < 11) { alert("Preencha Nome e WhatsApp."); return; }
+        if (!nome || whats.length < 11) { alert("Preencha o Nome e WhatsApp corretamente."); return; }
 
         if (modo === 'IND') {
             const idade = parseInt(document.getElementById('idade').value);
-            if (isNaN(idade) || idade < 14 || idade > 70) { alert("Idade entre 14 e 70 anos."); return; }
+            if (isNaN(idade) || idade < 16 || idade > 70) { alert("Idade inválida. Permitido entre 16 e 70 anos."); return; }
+            
             const cupom = document.getElementById('cupom').value.toUpperCase();
             const p = document.getElementById('planoInd').value.split('|');
-            const cap = parseInt(p[0]); const renda = parseInt(p[1]);
+            const cap = parseInt(p[0]); 
+            const renda = parseInt(p[1]);
 
-            const precoFinal = calcularPremio(idade, cap, cupom);
+            // Chamada do motor de cálculo atuarial
+            const precoFinal = calcularPremioExato(idade, cap, renda, cupom);
+            
             const diaria = (renda/30).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
             const liq = ((renda/30)*53).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 
@@ -192,11 +224,11 @@
                     </div>
                 </div>`;
             
-            let msg = `Olá ${nome.toUpperCase()}, seu estudo individual pronto!\n💰 Total: R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;
+            let msg = `Olá ${nome.toUpperCase()}, seu estudo individual da Seguros Unimed está pronto!\n💰 Investimento Mensal: R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
             document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
 
         } else {
-            // Módulo Equipe
+            // Módulo Equipe (Mantido a lógica original, passível de refatoração atuarial PME no futuro)
             const vidas = parseInt(document.getElementById('vidas').value);
             const p = document.getElementById('planoEmp').value.split('|');
             const precoVidas = parseFloat(p[0]) * vidas;
@@ -216,7 +248,7 @@
                     <div class="calc-box">Exemplo 60 dias: 45 dias pagos = <b>R$ ${liqEmp} líquido</b> em conta.</div>
                 </div>`;
             
-            let msgEmp = `*PROPOSTA EQUIPE SEGURADOS UNIMED*\n\nEmpresa: ${nome.toUpperCase()}\nVidas: ${vidas}\n💰 Investimento: R$ ${precoVidas.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;
+            let msgEmp = `*PROPOSTA EQUIPE SEGUROS UNIMED*\n\nEmpresa: ${nome.toUpperCase()}\nVidas: ${vidas}\n💰 Investimento Mensal: R$ ${precoVidas.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
             document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msgEmp)}`;
         }
         document.getElementById('resultado').style.display = 'block';
