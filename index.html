@@ -9,36 +9,31 @@
         :root { --primary: #1d2d44; --gold: #b89b3e; --unimed: #00995d; --text: #334155; --bg: #f8fafc; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; scroll-behavior: smooth; }
         
-        /* NAVBAR LIMPA */
         nav { background: white; padding: 15px 5%; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top:0; z-index: 1000; }
         .nav-logo { height: 65px; width: auto; }
         
-        /* HERO */
         .hero { text-align: center; padding: 40px 20px; background: white; border-bottom: 5px solid var(--gold); }
         .hero img { max-width: 320px; width: 100%; height: auto; margin-bottom: 15px; }
         .hero h1 { font-size: 1.8rem; color: var(--primary); margin: 0; font-weight: 800; }
         .hero p { color: var(--gold); font-weight: 700; text-transform: uppercase; margin-top: 10px; letter-spacing: 1px; }
 
-        /* SELEÇÃO DE PERFIL */
         .selector-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 900px; margin: -30px auto 40px; padding: 0 20px; }
-        .card-select { background: white; padding: 35px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.3s; border: 3px solid transparent; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .card-select { background: white; padding: 30px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.3s; border: 3px solid transparent; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .card-select:hover { border-color: var(--unimed); transform: translateY(-5px); }
-        .card-select i { font-size: 2.5rem; color: var(--unimed); margin-bottom: 15px; }
+        .card-select i { font-size: 2.5rem; color: var(--unimed); margin-bottom: 12px; }
         .card-select h3 { margin: 10px 0; color: var(--primary); font-size: 1.1rem; }
         .card-select.active { border-color: var(--gold); background: #f0fdf4; }
 
-        /* SIMULADOR */
         .main-content { max-width: 650px; margin: 0 auto 100px; padding: 0 20px; }
         .simulador-box { background: white; padding: 35px; border-radius: 25px; box-shadow: 0 15px 45px rgba(0,0,0,0.1); display: none; }
         
-        .input-group { margin-bottom: 20px; }
+        .input-group { margin-bottom: 18px; }
         label { display: block; font-size: 0.7rem; font-weight: 800; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
         input, select { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; outline: none; }
         input:focus { border-color: var(--unimed); }
         
         .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 10px; }
 
-        /* DIAGRAMAÇÃO DO RESULTADO */
         #resultado { display: none; margin-top: 30px; padding: 0; border-radius: 20px; overflow: hidden; border: 1px solid #e2e8f0; background: white; }
         .res-header { background: #f8fafc; padding: 25px; text-align: center; border-bottom: 1px solid #e2e8f0; }
         .val-total { font-size: 2.5rem; color: var(--unimed); font-weight: 800; margin: 5px 0; }
@@ -46,25 +41,16 @@
         .res-body { padding: 25px; }
         .info-card { background: #f0fdf4; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 5px solid var(--unimed); }
         .info-card h4 { margin: 0 0 10px; color: var(--primary); display: flex; align-items: center; gap: 10px; font-size: 1rem; text-transform: uppercase; }
-        .info-card p { margin: 6px 0; font-size: 0.95rem; line-height: 1.6; color: #1e293b; }
+        .info-card p { margin: 6px 0; font-size: 0.95rem; line-height: 1.6; color: #1e293b; text-align: justify; }
         
-        /* BOX DE CÁLCULO / EXEMPLO */
-        .calc-box { background: #fffbeb; border: 1px dashed #f59e0b; padding: 15px; border-radius: 10px; margin: 15px 0; }
-        .calc-box strong { color: #b45309; }
-
-        .list-advantages { padding-left: 20px; margin: 15px 0; }
-        .list-advantages li { margin-bottom: 8px; font-size: 0.9rem; color: #475569; list-style-type: disc; }
+        .calc-box { background: #fffbeb; border: 1px dashed #f59e0b; padding: 15px; border-radius: 10px; margin: 15px 0; font-size: 0.95rem; line-height: 1.6; }
 
         .whatsapp-btn { background: #25d366; color:white; padding: 20px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-weight: 800; margin: 20px 25px 30px; }
-        
-        @media (max-width: 600px) { .selector-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-<nav>
-    <img src="logo oficial.jpg.png" alt="EAS Corretora" class="nav-logo">
-</nav>
+<nav><img src="logo oficial.jpg.png" alt="EAS Corretora" class="nav-logo"></nav>
 
 <section class="hero">
     <img src="logo oficial.jpg.png" alt="EAS Corretora">
@@ -76,21 +62,21 @@
     <div class="card-select" id="cardInd" onclick="abrirSimulador('IND')">
         <i class="fas fa-user-shield"></i>
         <h3>Individual</h3>
-        <p>Profissionais Liberais e Autônomos (SERIT)</p>
+        <p>Profissionais Liberais e Autônomos</p>
     </div>
     <div class="card-select" id="cardEmp" onclick="abrirSimulador('EMP')">
         <i class="fas fa-users-cog"></i>
-        <h3>Empresarial</h3>
-        <p>Proteção para Empresas e Colaboradores (DIT)</p>
+        <h3>Módulo Equipe</h3>
+        <p>Seguro em Grupo para Empresas</p>
     </div>
 </section>
 
 <main class="main-content">
     <div id="simulador" class="simulador-box">
-        <h2 id="sim-title" style="text-align: center; color: var(--primary); margin-bottom: 30px; font-size: 1.4rem;"></h2>
+        <h2 id="sim-title" style="text-align: center; color: var(--primary); margin-bottom: 30px;"></h2>
         
         <div class="input-group">
-            <label id="labelNome">Nome Completo</label>
+            <label id="labelNome">Nome do Cliente</label>
             <input type="text" id="nome" placeholder="Digite o nome completo">
         </div>
         
@@ -101,7 +87,7 @@
 
         <div id="form-ind">
             <div class="input-group">
-                <label>Idade do Segurado (Máx 70 anos)</label>
+                <label>Idade (Máximo 70 anos)</label>
                 <input type="number" id="idade" placeholder="Ex: 43">
             </div>
             <div class="input-group">
@@ -113,44 +99,41 @@
                 </select>
             </div>
             <div class="input-group">
-                <label>Código Interno</label>
-                <input type="text" id="cupom" placeholder="Insira o código promocional">
+                <label>Código Promocional</label>
+                <input type="text" id="cupom" placeholder="Insira se houver">
             </div>
         </div>
 
         <div id="form-emp" style="display:none;">
             <div class="input-group">
-                <label>Nº de Colaboradores (Mínimo 3)</label>
+                <label>Quantidade de Colaboradores (Mínimo 3)</label>
                 <input type="number" id="vidas" value="3">
             </div>
             <div class="input-group">
-                <label>Plano Coletivo</label>
+                <label>Plano Sugerido</label>
                 <select id="planoEmp">
-                    <option value="49.90|50000|2000">PME Bronze (R$ 50k / R$ 2k DIT)</option>
-                    <option value="69.90|100000|2500">PME Prata (R$ 100k / R$ 2.5k DIT)</option>
-                    <option value="79.90|100000|3000">PME Ouro (R$ 100k / R$ 3k DIT)</option>
+                    <option value="49.90|50000|2000">Bronze: R$ 50k / R$ 2k DIT</option>
+                    <option value="69.90|100000|2500">Prata: R$ 100k / R$ 2.5k DIT</option>
+                    <option value="79.90|100000|3000">Ouro: R$ 100k / R$ 3k DIT</option>
                 </select>
             </div>
         </div>
 
-        <button class="btn-calc" onclick="gerarEstudo()">GERAR CONSULTORIA TÉCNICA</button>
+        <button class="btn-calc" onclick="gerarEstudo()">GERAR ESTUDO TÉCNICO</button>
 
         <div id="resultado">
             <div class="res-header">
-                <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary); text-transform: uppercase;">Investimento Mensal</span>
+                <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary);">INVESTIMENTO MENSAL CONSULTORIA</span>
                 <div class="val-total" id="res-valor"></div>
             </div>
             <div class="res-body" id="res-explicacao"></div>
-            <a href="#" id="wa-link" class="whatsapp-btn">
-                <i class="fab fa-whatsapp"></i> RECEBER NO MEU WHATSAPP
-            </a>
+            <a href="#" id="wa-link" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> ENVIAR AO WHATSAPP</a>
         </div>
     </div>
 </main>
 
 <script>
     let modo = 'IND';
-
     document.getElementById('whatsapp').addEventListener('input', e => {
         let v = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
         e.target.value = !v[2] ? v[1] : '(' + v[1] + ') ' + v[2] + (v[3] ? '-' + v[3] : '');
@@ -161,10 +144,7 @@
         document.getElementById('simulador').style.display = 'block';
         document.getElementById('form-ind').style.display = tipo === 'IND' ? 'block' : 'none';
         document.getElementById('form-emp').style.display = tipo === 'EMP' ? 'block' : 'none';
-        document.getElementById('cardInd').classList.toggle('active', tipo === 'IND');
-        document.getElementById('cardEmp').classList.toggle('active', tipo === 'EMP');
-        document.getElementById('labelNome').innerText = tipo === 'IND' ? 'Nome do Cliente' : 'Razão Social / Nome da Empresa';
-        document.getElementById('sim-title').innerText = tipo === 'IND' ? 'Proteção Profissional Liberal' : 'Proposta Seguro Empresarial';
+        document.getElementById('sim-title').innerText = tipo === 'IND' ? 'Proteção Individual' : 'Módulo Equipe';
         document.getElementById('resultado').style.display = 'none';
         window.scrollTo({ top: document.getElementById('simulador').offsetTop - 50, behavior: 'smooth' });
     }
@@ -172,85 +152,68 @@
     function gerarEstudo() {
         const nome = document.getElementById('nome').value.trim();
         const whats = document.getElementById('whatsapp').value.replace(/\D/g, '');
-        if (!nome || whats.length < 11) { alert("Informe nome e WhatsApp (11 dígitos)."); return; }
+        if (!nome || whats.length < 11) { alert("Informe nome e WhatsApp."); return; }
 
-        let preco, cap, renda, html, msgWhats;
+        let preco, cap, renda, html, msg;
 
         if (modo === 'IND') {
             const idade = parseInt(document.getElementById('idade').value);
-            if (idade > 70 || isNaN(idade)) { alert("Limite de idade: 70 anos."); return; }
+            if (idade > 70) { alert("Limite: 70 anos."); return; }
             const plano = document.getElementById('planoInd').value;
             const cupom = document.getElementById('cupom').value.toUpperCase();
-            
             let base = (plano === 'ouro' ? 308.75 : (plano === 'prata' ? 196.62 : 110.88));
             preco = (cupom === 'UNIMED08') ? base : (base * 1.6897);
             cap = (plano === 'ouro' ? 120000 : (plano === 'prata' ? 100000 : 50000));
             renda = (plano === 'ouro' ? 10000 : (plano === 'prata' ? 5000 : 3000));
             
-            const diaria = (renda/30).toLocaleString('pt-BR', {minimumFractionDigits:2});
-            const liq = ((renda/30)*53).toLocaleString('pt-BR', {minimumFractionDigits:2});
+            const diaria = (renda/30).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+            const liq = ((renda/30)*53).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 
             html = `
                 <div class="info-card">
-                    <h4><i class="fas fa-shield-alt"></i> Coberturas e Capitais</h4>
-                    <p>• <b>Morte Natural:</b> R$ ${cap.toLocaleString('pt-BR')}</p>
-                    <p>• <b>Morte por Acidente:</b> R$ ${(cap*2).toLocaleString('pt-BR')}</p>
-                    <p>• <b>Invalidez (Acidente/Doença):</b> R$ ${cap.toLocaleString('pt-BR')}</p>
+                    <h4><i class="fas fa-shield-alt"></i> Capitais Seguros Unimed</h4>
+                    <p>Seu estudo ficou da seguinte forma:<br>
+                    Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de R$ ${cap.toLocaleString('pt-BR')}.<br>
+                    Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(cap*2).toLocaleString('pt-BR')}</b>.<br>
+                    Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${cap.toLocaleString('pt-BR')}.</p>
                 </div>
                 <div class="info-card">
-                    <h4><i class="fas fa-hand-holding-usd"></i> Renda SERIT</h4>
-                    <p>Garante <b>R$ ${renda.toLocaleString('pt-BR')}/mês</b> em caso de afastamento superior a 7 dias (pago por dia parado).</p>
+                    <h4><i class="fas fa-hand-holding-usd"></i> SERIT (Renda Mensal)</h4>
+                    <p>Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${renda.toLocaleString('pt-BR')} por mes. A indenização é paga por dia de afastamento.</p>
                     <div class="calc-box">
-                        <strong>Análise de Benefício Líquido (60 dias):</strong><br>
-                        Diária de R$ ${diaria}. Descontando 7 dias de franquia, você recebe <b>R$ ${liq} líquido</b> direto em sua conta.
+                        Para saber o valor exato da indenizaçao voce fara o seguinte calculo: Valor do beneficio mensal R$ ${renda.toLocaleString('pt-BR')} dividido por 30 dias <i>"por que a seguradora paga por dia de afastamento"</i> <b>R$ ${diaria} por dia</b>. Em seguida voce multiplica a diaria pelos dias de afastamento descontando a franquia de 7 dias total <b>R$ ${liq}</b>.
                     </div>
-                    <p style="font-size: 0.8rem;"><i>Carências: Comuns 30 dias. LER/DORT/LTC/Hérnias 180 dias. Acidente isento.</i></p>
+                    <p style="font-size: 0.8rem;"><i>Carencias para doenças comuns 30 dias. LER, DORT, LTC, DOENÇAS PROGRESSIVAS, DEGENERATIVAS, HERNIAS 180 dias. Acidente isento.</i></p>
                 </div>`;
-            msgWhats = `Olá ${nome.toUpperCase()}, seu estudo individual pronto!\n✅ Morte: R$ ${cap.toLocaleString('pt-BR')}\n✅ Renda: R$ ${renda.toLocaleString('pt-BR')}/mês\n💰 Total: R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;
+            msg = `Olá ${nome.toUpperCase()}, seu estudo individual:\n✅ Morte: R$ ${cap.toLocaleString('pt-BR')}\n✅ Renda: R$ ${renda.toLocaleString('pt-BR')}/mês\n💰 Total: R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}/mês`;
         } else {
             const vidas = parseInt(document.getElementById('vidas').value);
-            if (vidas < 3) { alert("Mínimo 3 vidas."); return; }
             const p = document.getElementById('planoEmp').value.split('|');
             preco = parseFloat(p[0]) * vidas;
-            cap = parseInt(p[1]);
-            renda = parseInt(p[2]);
-
-            const diariaEmp = (renda/30).toLocaleString('pt-BR', {minimumFractionDigits:2});
-            const liqEmp = ((renda/30)*45).toLocaleString('pt-BR', {minimumFractionDigits:2});
+            cap = parseInt(p[1]); renda = parseInt(p[2]);
+            const dEmp = (renda/30).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+            const lEmp = ((renda/30)*45).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 
             html = `
                 <div class="info-card">
-                    <h4><i class="fas fa-user-friends"></i> Proteção ao Colaborador</h4>
-                    <p>• <b>Morte Natural:</b> R$ ${cap.toLocaleString('pt-BR')}</p>
-                    <p>• <b>Morte Acidental:</b> R$ ${(cap*2).toLocaleString('pt-BR')}</p>
-                    <p>• <b>Invalidez (IPA/IFPD):</b> R$ ${cap.toLocaleString('pt-BR')}</p>
+                    <h4><i class="fas fa-users"></i> Proposta Módulo Equipe</h4>
+                    <p><b>Morte Natural:</b> R$ ${cap.toLocaleString('pt-BR')}. <b>Morte Acidental:</b> R$ ${(cap*2).toLocaleString('pt-BR')}. <b>IPA/IFPD:</b> R$ ${cap.toLocaleString('pt-BR')}.</p>
                 </div>
                 <div class="info-card">
-                    <h4><i class="fas fa-clinic-medical"></i> Renda DIT (Acidente)</h4>
-                    <p>Afastamentos superiores a 15 dias garantem <b>R$ ${renda.toLocaleString('pt-BR')}/mês</b> (limitado a 12 meses).</p>
+                    <h4><i class="fas fa-ambulance"></i> Cobertura DIT</h4>
+                    <p>Afastamentos por acidente > 15 dias garantem renda mensal de R$ ${renda.toLocaleString('pt-BR')}.</p>
                     <div class="calc-box">
-                        <strong>Análise de Benefício Líquido (60 dias):</strong><br>
-                        60 dias - 15 dias (franquia) = 45 dias pagos x R$ ${diariaEmp}/dia = <b>R$ ${liqEmp} líquido</b> em conta.
+                        Diária R$ ${dEmp}. Atestado 60 dias - 15 (franquia) = 45 dias pagos. Total: <b>R$ ${lEmp} líquido</b> em conta.
                     </div>
-                </div>
-                <div class="info-card" style="background: #f8fafc; border-left-color: var(--gold);">
-                    <h4><i class="fas fa-check-circle"></i> Vantagens Seguros Unimed</h4>
-                    <ul class="list-advantages">
-                        <li>Sem preenchimento de DPS e sem carência.</li>
-                        <li>Sem reajuste por faixa etária (custo fixo).</li>
-                        <li>Proteção jurídica para a empresa contra acidentes de trabalho.</li>
-                        <li>Para receber o benefício, basta apresentar atestado e laudos à Seguros Unimed.</li>
-                    </ul>
                 </div>`;
-            msgWhats = `Olá ${nome.toUpperCase()}, sua proposta empresarial Seguros Unimed pronta!\n👥 Vidas: ${vidas}\n✅ Capital: R$ ${cap.toLocaleString('pt-BR')}\n💰 Total: R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;
+            msg = `Olá ${nome.toUpperCase()}, proposta equipe Seguros Unimed pronta!\n💰 Total: R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}/mês`;
         }
 
-        document.getElementById('res-valor').innerText = `R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;
+        document.getElementById('res-valor').innerText = `R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}/mês`;
         document.getElementById('res-explicacao').innerHTML = html;
         document.getElementById('resultado').style.display = 'block';
-        document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msgWhats)}`;
+        document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
     }
 </script>
-
 </body>
 </html>
