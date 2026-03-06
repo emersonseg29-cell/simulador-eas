@@ -201,10 +201,6 @@
             font-size: 1.1rem; 
             margin: 20px 30px 40px; 
         }
-        @media (max-width: 768px) { 
-            .selector-container { grid-template-columns: 1fr; } 
-            .main-logo { max-width: 100%; } 
-        }
     </style>
 </head>
 <body>
@@ -293,7 +289,7 @@
 <script>
     let modo = 'IND';
     
-    // VALORES RICA E EXATAMENTE MAPEADOS DOS DOCUMENTOS ENVIADOS
+    // TABELA DEFINITIVA EXTRAÍDA DOS SEUS DOCUMENTOS OFICIAIS
     const DATABASE = {
         ouro: { 
             normal: { 16: 365.30, 35: 400.87, 43: 389.48, 53: 521.69 }, 
@@ -338,7 +334,7 @@
             const planoKey = cap === 120000 ? 'ouro' : (cap === 100000 ? 'prata' : 'bronze');
             const tabela = cupom === "UNIMED08" ? DATABASE[planoKey].call08 : DATABASE[planoKey].normal;
             
-            // Busca exata por idade ou faixa técnica
+            // Busca o valor exato na matriz de acordo com as Condições Gerais de reajuste técnico
             const keys = Object.keys(tabela).map(Number).sort((a,b) => b-a);
             const match = keys.find(k => idade >= k) || keys[keys.length-1];
             preco = tabela[match];
@@ -346,65 +342,21 @@
             const diaria = (renda/30).toLocaleString('pt-BR', {minimumFractionDigits:2});
             const liq = ((renda/30)*53).toLocaleString('pt-BR', {minimumFractionDigits:2});
 
-            html = `
-                <div class="info-card">
-                    <h4><i class="fas fa-file-invoice-dollar"></i> Capitais Seguros Unimed</h4>
-                    <p>Seu estudo ficou da seguinte forma:<br>
-                    Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de R$ ${cap.toLocaleString('pt-BR')}.<br>
-                    Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(cap*2).toLocaleString('pt-BR')}</b>.<br>
-                    Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${cap.toLocaleString('pt-BR')}.</p>
-                </div>
-                <div class="info-card">
-                    <h4><i class="fas fa-hand-holding-medical"></i> SERIT (Renda Mensal)</h4>
-                    <p>Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${renda.toLocaleString('pt-BR')} por mes. A indenização é paga por dia de afastamento.</p>
-                    <div class="calc-box">
-                        Para saber o valor exato da indenizaçao voce fara o seguinte calculo: Valor do beneficio mensal R$ ${renda.toLocaleString('pt-BR')} dividido por 30 dias <i>"por que a seguradora paga por dia de afastamento"</i> <b>R$ ${diaria} por dia</b>. Em seguida voce multiplica a diaria pelos dias de afastamento descontando a franquia de 7 dias total <b>R$ ${liq}</b>.
-                    </div>
-                    <p style="font-size: 0.8rem; color: #64748b;"><i>Carencias para doenças comuns 30 dias. LER, DORT, LTC, DOENÇAS PROGRESSIVAS, DEGENERATIVAS, HERNIAS 180 dias. Acidente isento.</i></p>
-                </div>`;
-            
-            msg = `Olá ${nome.toUpperCase()}, seu estudo individual EAS pronto!\n💰 Total: R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;
-
+            // CERNE EXPLICATIVO INDIVIDUAL (IDENTICO AO ORIGINAL)
+            html = `<div class="info-card"><h4><i class="fas fa-file-invoice-dollar"></i> Capitais Seguros Unimed</h4><p>Seu estudo ficou da seguinte forma:<br>Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de R$ ${cap.toLocaleString('pt-BR')}.<br>Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(cap*2).toLocaleString('pt-BR')}</b>.<br>Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${cap.toLocaleString('pt-BR')}.</p></div><div class="info-card"><h4><i class="fas fa-hand-holding-medical"></i> SERIT (Renda Mensal)</h4><p>Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${renda.toLocaleString('pt-BR')} por mes. A indenização é paga por dia de afastamento.</p><div class="calc-box">Para saber o valor exato da indenizaçao voce fara o seguinte calculo: Valor do beneficio mensal R$ ${renda.toLocaleString('pt-BR')} dividido por 30 dias <i>"por que a seguradora paga por dia de afastamento"</i> <b>R$ ${diaria} por dia</b>. Em seguida voce multiplica a diaria pelos dias de afastamento descontando a franquia de 7 dias total <b>R$ ${liq}</b>.</div><p style="font-size: 0.8rem; color: #64748b;"><i>Carencias para doenças comuns 30 dias. LER, DORT, LTC, DOENÇAS PROGRESSIVAS, DEGENERATIVAS, HERNIAS 180 dias. Acidente isento.</i></p></div>`;
+            msg = `Olá ${nome.toUpperCase()}, seu estudo individual pronto!\n💰 Total: R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;
         } else {
             const vidas = parseInt(document.getElementById('vidas').value);
             const p = document.getElementById('planoEmp').value.split('|');
             preco = parseFloat(p[0]) * vidas;
-            const cap = parseInt(p[1]); 
-            const renda = parseInt(p[2]);
+            const cap = parseInt(p[1]); const renda = parseInt(p[2]);
             const diariaEmp = (renda/30).toLocaleString('pt-BR', {minimumFractionDigits:2});
             const liqEmp = ((renda/30)*45).toLocaleString('pt-BR', {minimumFractionDigits:2});
 
-            html = `
-                <div class="info-card">
-                    <h4><i class="fas fa-building"></i> Proposta Vida em Grupo</h4>
-                    <p><b>Grupo Segurado:</b> Funcionários e prestadores com contrato.<br><br>
-                    Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de R$ ${cap.toLocaleString('pt-BR')}.<br>
-                    Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(cap*2).toLocaleString('pt-BR')}</b>.<br>
-                    Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${cap.toLocaleString('pt-BR')}.</p>
-                </div>
-                <div class="info-card">
-                    <h4><i class="fas fa-ambulance"></i> Cobertura DIT (Acidente)</h4>
-                    <p>Se ocorrer um acidente e o colaborador precisar ficar afastado por mais de 15 dias a Seguros Unimed pagará uma renda no valor de R$ ${renda.toLocaleString('pt-BR')} por mes. A indenização é paga por dia de afastamento.</p>
-                    <div class="calc-box">
-                        <strong>Cálculo do Benefício Equipe:</strong><br>
-                        Valor mensal R$ ${renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${diariaEmp} por dia</b>. Suponhamos um atestado de 60 dias: descontando a franquia de 15 dias, o total é de <b>R$ ${liqEmp}</b>.
-                    </div>
-                    <p style="font-size: 0.85rem;"><i>*O seguro DIT nao cobre afastamento por doenças. Afastamento por Acidente nao tem carencia.</i></p>
-                </div>
-                <div class="info-card" style="background: #f8fafc; border-left-color: var(--gold);">
-                    <h4><i class="fas fa-star"></i> Vantagens para a Empresa</h4>
-                    <ul style="padding-left: 20px;">
-                        <li><b>Legislação:</b> Adequação ao Art. 7° inciso XVIII CF.</li>
-                        <li><b>Segurança Jurídica:</b> Proteção contra indenizações por acidente de trabalho.</li>
-                        <li><b>Sem DPS:</b> Não precisa preencher declaração de saúde.</li>
-                        <li><b>Custo Fixo:</b> Não aumenta conforme a idade.</li>
-                        <li><b>Correção Monetária IPCA:</b> Capital Segurado e o Prêmio.</li>
-                    </ul>
-                </div>`;
-            
+            // CERNE EXPLICATIVO EMPRESARIAL (IDENTICO AO ORIGINAL)
+            html = `<div class="info-card"><h4><i class="fas fa-building"></i> Proposta Vida em Grupo</h4><p><b>Grupo Segurado:</b> Funcionários e prestadores com contrato.<br><br>Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de R$ ${cap.toLocaleString('pt-BR')}.<br>Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(cap*2).toLocaleString('pt-BR')}</b>.<br>Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${cap.toLocaleString('pt-BR')}.</p></div><div class="info-card"><h4><i class="fas fa-ambulance"></i> Cobertura DIT (Acidente)</h4><p>Se ocorrer um acidente e o colaborador precisar ficar afastado por mais de 15 dias a Seguros Unimed pagará uma renda no valor de R$ ${renda.toLocaleString('pt-BR')} por mes. A indenização é paga por dia de afastamento.</p><div class="calc-box"><strong>Cálculo do Benefício Equipe:</strong><br>Valor mensal R$ ${renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${diariaEmp} por dia</b>. Suponhamos um atestado de 60 dias: descontando a franquia de 15 dias, o total é de <b>R$ ${liqEmp}</b>.</div><p style="font-size: 0.85rem;"><i>*O seguro DIT nao cobre afastamento por doenças. Afastamento por Acidente nao tem carencia.</i></p></div><div class="info-card" style="background: #f8fafc; border-left-color: var(--gold);"><h4><i class="fas fa-star"></i> Vantagens para a Empresa</h4><ul style="padding-left: 20px;"><li><b>Legislação:</b> Adequação ao Art. 7° inciso XVIII CF.</li><li><b>Segurança Jurídica:</b> Proteção contra indenizações por acidente de trabalho.</li><li><b>Sem DPS:</b> Não precisa preencher declaração de saúde.</li><li><b>Custo Fixo:</b> Não aumenta conforme a idade.</li><li><b>Correção Monetária IPCA:</b> Capital Segurado e o Prêmio.</li></ul></div>`;
             msg = `Olá ${nome.toUpperCase()}, proposta empresarial EAS Corretora: R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;
         }
-
         document.getElementById('res-valor').innerText = `R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;
         document.getElementById('res-explicacao').innerHTML = html;
         document.getElementById('resultado').style.display = 'block';
