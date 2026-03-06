@@ -33,7 +33,6 @@
         input:focus { border-color: var(--unimed); background: #fdfdfd; }
         
         .btn-calc { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .btn-calc:hover { background: #2c3e50; transform: translateY(-2px); }
 
         #resultado { display: none; margin-top: 30px; padding: 0; border-radius: 20px; overflow: hidden; border: 1px solid #e2e8f0; background: white; }
         .res-header { background: #f8fafc; padding: 25px; text-align: center; border-bottom: 1px solid #e2e8f0; }
@@ -50,7 +49,6 @@
         .list-advantages li { margin-bottom: 8px; font-size: 0.9rem; color: #475569; list-style-type: disc; }
 
         .whatsapp-btn { background: #25d366; color:white; padding: 20px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-weight: 800; margin: 20px 25px 30px; transition: 0.3s; }
-        .whatsapp-btn:hover { background: #128c7e; }
 
         @media (max-width: 600px) { .selector-container { grid-template-columns: 1fr; } }
     </style>
@@ -135,7 +133,7 @@
 
         <div id="resultado">
             <div class="res-header">
-                <span id="labelResValor" style="font-size: 0.8rem; font-weight: 800; color: var(--primary);">INVESTIMENTO MENSAL</span>
+                <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary);">INVESTIMENTO MENSAL CONSULTORIA</span>
                 <div class="val-total" id="res-valor"></div>
             </div>
             <div class="res-body" id="res-explicacao"></div>
@@ -242,6 +240,7 @@
                         <li><b>Segurança Jurídica:</b> Proteção contra indenizações por acidente de trabalho.</li>
                         <li><b>Sem DPS:</b> Não precisa preencher declaração de saúde.</li>
                         <li><b>Custo Fixo:</b> Não aumenta conforme a idade.</li>
+                        <li><b>Correção Monetária IPCA:</b> Capital Segurado e o Prêmio.</li>
                     </ul>
                 </div>`;
             
