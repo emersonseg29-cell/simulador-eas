@@ -1,526 +1,132 @@
-<!DOCTYPE html><html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal EAS Corretora - Consultoria Técnica</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --eas-blue: #0f172a;
-            --eas-gold: #b89b3e;
-            --unimed: #00995d;
-            --bg: #f1f5f9;
-        }
-        * { box-sizing: border-box; }
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: var(--bg);
-            margin: 0;
-            padding: 0;
-            color: #334155;
-        }
-        header {
-            background: white;
-            padding: 45px 20px;
-            text-align: center;
-            border-bottom: 6px solid var(--eas-gold);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-        .main-logo {
-            max-width: 550px;
-            width: 100%;
-            height: auto;
-            margin-bottom: 15px;
-        }
-        .brand-subtitle {
-            color: var(--eas-gold);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 1.1rem;
-            margin-top: 10px;
-        }
-        .selector-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            max-width: 1000px;
-            margin: -35px auto 50px;
-            padding: 0 20px;
-        }
-        .card-select {
-            background: white;
-            padding: 45px 30px;
-            border-radius: 25px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.4s;
-            border: 4px solid transparent;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-        }
-        .card-select:hover {
-            border-color: var(--unimed);
-            transform: translateY(-10px);
-        }
-        .card-select i {
-            font-size: 3.5rem;
-            color: var(--eas-blue);
-            margin-bottom: 20px;
-        }
-        .card-select h3 {
-            margin: 15px 0;
-            color: var(--eas-blue);
-            font-size: 1.6rem;
-            font-weight: 800;
-        }
-        .card-select.active {
-            border-color: var(--eas-gold);
-            background: #f8fafc;
-        }
-        .main-content {
-            max-width: 750px;
-            margin: 0 auto 100px;
-            padding: 0 20px;
-        }
-        .simulador-box {
-            background: white;
-            padding: 45px;
-            border-radius: 30px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
-            display: none;
-        }
-        .section-title {
-            text-align: center;
-            color: var(--eas-blue);
-            font-size: 1.8rem;
-            margin-bottom: 35px;
-            font-weight: 800;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 20px;
-        }
-        .input-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            font-size: 0.8rem;
-            font-weight: 800;
-            color: var(--eas-blue);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-        input, select {
-            width: 100%;
-            padding: 16px;
-            border: 2px solid #cbd5e1;
-            border-radius: 12px;
-            font-size: 1.05rem;
-            box-sizing: border-box;
-            outline: none;
-            background: #fff;
-        }
-        input:focus, select:focus {
-            border-color: var(--eas-gold);
-        }
-        .btn-calc {
-            width: 100%;
-            padding: 22px;
-            background: var(--eas-blue);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
-        .btn-calc:hover {
-            opacity: 0.96;
-        }
-        #resultado {
-            display: none;
-            margin-top: 40px;
-            border-radius: 25px;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-            background: white;
-        }
-        .res-header {
-            background: #f8fafc;
-            padding: 35px;
-            text-align: center;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .val-total {
-            font-size: 3.2rem;
-            color: var(--unimed);
-            font-weight: 900;
-            margin: 10px 0;
-        }
-        .res-body {
-            padding: 30px;
-        }
-        .info-card {
-            background: #f0fdf4;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border-left: 6px solid var(--unimed);
-        }
-        .info-card h4 {
-            margin: 0 0 12px;
-            color: var(--eas-blue);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1rem;
-            text-transform: uppercase;
-        }
-        .info-card p {
-            margin: 8px 0;
-            font-size: 1rem;
-            line-height: 1.7;
-            color: #1e293b;
-            text-align: justify;
-        }
-        .calc-box {
-            background: #fffbeb;
-            border: 1px dashed #f59e0b;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-            font-size: 1rem;
-            line-height: 1.7;
-            color: #92400e;
-        }
-        .whatsapp-btn {
-            background: #25d366;
-            color: white;
-            padding: 22px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 1.1rem;
-            margin: 20px 30px 40px;
-        }
-        .mini-note {
-            background: #eff6ff;
-            border-left: 6px solid #2563eb;
-        }
-        .warning-note {
-            background: #fff7ed;
-            border-left: 6px solid #ea580c;
-        }
-        @media (max-width: 768px) {
-            .selector-container { grid-template-columns: 1fr; }
-            .simulador-box { padding: 25px; }
-            .val-total { font-size: 2.4rem; }
-        }
-    </style>
-</head>
-<body><header>
-    <img src="logo oficial.jpg.png" alt="EAS CORRETORA DE SEGUROS" class="main-logo">
-    <div class="brand-subtitle">EAS CORRETORA DE SEGUROS • Proteção de Renda e Vida</div>
-</header><section class="selector-container">
-    <div class="card-select" id="cardInd" onclick="abrirSimulador('IND')">
-        <i class="fas fa-user-shield"></i>
-        <h3>Individual</h3>
-        <p>Autônomos e Liberais</p>
-    </div>
-    <div class="card-select" id="cardEmp" onclick="abrirSimulador('EMP')">
-        <i class="fas fa-building"></i>
-        <h3>Empresarial</h3>
-        <p>Seguro em Grupo para Empresas</p>
-    </div>
-</section><main class="main-content">
-    <div id="simulador" class="simulador-box">
-        <div class="section-title" id="sim-title">Estudo Personalizado</div><div class="input-group">
-        <label id="labelNome">Nome / Razão Social</label>
-        <input type="text" id="nome" placeholder="Digite aqui">
-    </div>
-
-    <div class="input-group" id="container-cnpj" style="display:none;">
-        <label>CNPJ da Empresa</label>
-        <input type="text" id="cnpj" placeholder="00.000.000/0000-00">
-    </div>
-
-    <div class="input-group">
-        <label>WhatsApp do Cliente</label>
-        <input type="tel" id="whatsapp" placeholder="(17) 99999-9999">
-    </div>
-
-    <div id="form-ind">
-        <div class="input-group">
-            <label>Idade (16 a 70 anos)</label>
-            <input type="number" id="idade" placeholder="Ex: 35">
-        </div>
-        <div class="input-group">
-            <label>Plano Escolhido</label>
-            <select id="planoInd">
-                <option value="bronze">Bronze: Renda 3 mil | Capital 50 mil</option>
-                <option value="prata">Prata: Renda 5 mil | Capital 100 mil</option>
-                <option value="ouro" selected>Ouro: Renda 10 mil | Capital 150 mil</option>
-                <option value="top">Top: Renda 12 mil | Capital 200 mil</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>Código Consultor</label>
-            <input type="text" id="cupom" placeholder="Ex: EASVIP">
-        </div>
-    </div>
-
-    <div id="form-emp" style="display:none;">
-        <div class="input-group">
-            <label>Nº de Colaboradores (Mínimo 3)</label>
-            <input type="number" id="vidas" value="3">
-        </div>
-        <div class="input-group">
-            <label>Plano Sugerido</label>
-            <select id="planoEmp">
-                <option value="49.90|50000|2000">Bronze: R$ 50k Vida | R$ 2k DIT</option>
-                <option value="69.90|100000|2500">Prata: R$ 100k Vida | R$ 2,5k DIT</option>
-                <option value="79.90|100000|3000">Ouro: R$ 100k Vida | R$ 3k DIT</option>
-            </select>
-        </div>
-    </div>
-
-    <button class="btn-calc" onclick="gerarEstudo()">Gerar Estudo Técnico</button>
-
-    <div id="resultado">
-        <div class="res-header">
-            <span style="font-size: 0.85rem; font-weight: 800; color: var(--eas-blue);">INVESTIMENTO MENSAL CONSULTORIA</span>
-            <div class="val-total" id="res-valor"></div>
-        </div>
-        <div class="res-body" id="res-explicacao"></div>
-        <a href="#" id="wa-link" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> ENVIAR CONSULTORIA AO WHATSAPP</a>
-    </div>
-</div>
-
-</main><script>
-    let modo = 'IND';
-    const CUPOM_OFICIAL = 'EASVIP';
-
-    const PLANOS = {
-        bronze: { nome: 'Bronze', capital: 50000, renda: 3000 },
-        prata:  { nome: 'Prata',  capital: 100000, renda: 5000 },
-        ouro:   { nome: 'Ouro',   capital: 150000, renda: 10000 },
-        top:    { nome: 'Top',    capital: 200000, renda: 12000 }
-    };
-
-    // Base provisória. Depois, substitua pelos valores completos da tabela real por idade.
-    const DATABASE = {
-        bronze: {
-            normal: { 16: 126.00, 35: 137.42, 43: 145.00, 53: 146.00 },
-            call08: { 16: 75.00, 35: 81.33, 43: 88.14, 53: 92.43 }
-        },
-        prata: {
-            normal: { 16: 211.13, 35: 231.04, 43: 268.34, 53: 359.12 },
-            call08: { 16: 124.95, 35: 136.74, 43: 158.81, 53: 228.38 }
-        },
-        ouro: {
-            normal: { 16: 365.30, 35: 400.87, 43: 449.48, 53: 521.69 },
-            call08: { 16: 216.19, 35: 237.24, 43: 260.50, 53: 310.00 }
-        },
-        top: {
-            normal: { 16: 430.00, 35: 472.00, 43: 525.00, 53: 610.00 },
-            call08: { 16: 255.00, 35: 282.00, 43: 315.00, 53: 372.00 }
-        }
-    };
-
-    function abrirSimulador(tipo) {
-        modo = tipo;
-        document.getElementById('simulador').style.display = 'block';
-        document.getElementById('form-ind').style.display = tipo === 'IND' ? 'block' : 'none';
-        document.getElementById('form-emp').style.display = tipo === 'EMP' ? 'block' : 'none';
-        document.getElementById('container-cnpj').style.display = tipo === 'EMP' ? 'block' : 'none';
-        document.getElementById('sim-title').innerText = tipo === 'IND' ? 'Proteção Individual' : 'Proteção Empresarial';
-        document.getElementById('resultado').style.display = 'none';
-
-        document.getElementById('cardInd').classList.toggle('active', tipo === 'IND');
-        document.getElementById('cardEmp').classList.toggle('active', tipo === 'EMP');
+{
+  "contexto_projeto": "{{contexto_projeto}}",
+  "requisito_funcional": "{{requisito_funcional}}",
+  "codigo_original": "<!DOCTYPE html>\n<html lang=\"pt-br\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Portal de Consultoria Técnica - EAS Corretora</title>\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css\">\n    <link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap\" rel=\"stylesheet\">\n    <style>\n        :root { \n            --eas-blue: #0f172a; \n            --eas-gold: #b89b3e; \n            --unimed: #00995d; \n            --bg: #f1f5f9; \n        }\n        \n        body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: #334155; }\n        header { \n            background: white; \n            padding: 50px 20px; \n            text-align: center; \n            border-bottom: 6px solid var(--eas-gold);\n            box-shadow: 0 4px 20px rgba(0,0,0,0.1);\n        }\n        .main-logo { max-width: 550px; width: 100%; height: auto; margin-bottom: 15px; }\n        .brand-subtitle { \n            color: var(--eas-gold); \n            font-weight: 700; \n            text-transform: uppercase; \n            letter-spacing: 2px;\n            font-size: 1.1rem;\n        }\n        .main-content { max-width: 800px; margin: -40px auto 100px; padding: 0 20px; }\n        .card { \n            background: white; \n            padding: 45px; \n            border-radius: 30px; \n            box-shadow: 0 25px 60px rgba(0,0,0,0.15); \n        }\n        .section-title { \n            text-align: center; \n            color: var(--eas-blue); \n            font-size: 1.8rem; \n            margin-bottom: 35px; \n            font-weight: 900;\n            text-transform: uppercase;\n        }\n        .input-group { margin-bottom: 25px; }\n        label { \n            display: block; \n            font-size: 0.85rem; \n            font-weight: 800; \n            color: var(--eas-blue); \n            margin-bottom: 10px; \n            text-transform: uppercase; \n        }\n        input, select { \n            width: 100%; \n            padding: 18px; \n            border: 2px solid #cbd5e1; \n            border-radius: 15px; \n            font-size: 1.1rem; \n            box-sizing: border-box; \n            outline: none; \n            transition: 0.3s; \n        }\n        input:focus { border-color: var(--unimed); box-shadow: 0 0 0 4px rgba(0, 153, 93, 0.1); }\n        .btn-calc { \n            width: 100%; \n            padding: 25px; \n            background: var(--eas-blue); \n            color: white; \n            border: none; \n            border-radius: 15px; \n            font-size: 1.3rem; \n            font-weight: 900; \n            cursor: pointer; \n            text-transform: uppercase;\n            transition: 0.3s;\n        }\n        .btn-calc:hover { background: #1e293b; transform: translateY(-2px); }\n        #resultado { display: none; margin-top: 40px; border-radius: 25px; overflow: hidden; border: 1px solid #e2e8f0; background: white; }\n        .res-header { background: #f8fafc; padding: 40px; text-align: center; border-bottom: 1px solid #e2e8f0; }\n        .val-total { font-size: 3.5rem; color: var(--unimed); font-weight: 900; margin: 15px 0; }\n        .res-body { padding: 35px; }\n        .info-card { \n            background: #f0fdf4; \n            border-radius: 15px; \n            padding: 25px; \n            margin-bottom: 20px; \n            border-left: 6px solid var(--unimed); \n        }\n        .info-card h4 { margin: 0 0 12px; color: var(--eas-blue); display: flex; align-items: center; gap: 12px; font-size: 1.1rem; text-transform: uppercase; font-weight: 900; }\n        .info-card p { margin: 8px 0; font-size: 1.05rem; line-height: 1.7; color: #1e293b; text-align: justify; }\n        .calc-box { \n            background: #fffbeb; \n            border: 1px dashed #f59e0b; \n            padding: 20px; \n            border-radius: 12px; \n            margin: 20px 0; \n            font-size: 1.05rem; \n            line-height: 1.7; \n            color: #92400e; \n        }\n        .whatsapp-btn { \n            background: #25d366; \n            color:white; \n            padding: 25px; \n            border-radius: 15px; \n            display: flex; \n            align-items: center; \n            justify-content: center; \n            gap: 15px; \n            text-decoration: none; \n            font-weight: 900; \n            font-size: 1.2rem;\n            margin: 10px 0;\n        }\n        @media (max-width: 768px) { .main-logo { max-width: 100%; } .val-total { font-size: 2.5rem; } }\n    </style>\n</head>\n<body>\n<header>\n    <img src=\"logo oficial.jpg.png\" alt=\"EAS CORRETORA DE SEGUROS\" class=\"main-logo\">\n    <div class=\"brand-subtitle\">EAS CORRETORA DE SEGUROS • PROTEÇÃO DE RENDA E VIDA</div>\n</header>\n<main class=\"main-content\">\n    <div class=\"card\">\n        <h2 class=\"section-title\">Consultoria Técnica</h2>\n        <div class=\"input-group\">\n            <label>Nome do Proponente</label>\n            <input type=\"text\" id=\"nome\" placeholder=\"Ex: João Silva\">\n        </div>\n        <div class=\"input-group\">\n            <label>Idade Atual (16 a 70 anos)</label>\n            <input type=\"number\" id=\"idade\" placeholder=\"Ex: 35\">\n        </div>\n        <div class=\"input-group\">\n            <label>Plano Escolhido</label>\n            <select id=\"plano\">\n                <option value=\"bronze\">BRONZE (3k Renda / 50k Vida)</option>\n                <option value=\"prata\">PRATA (5k Renda / 100k Vida)</option>\n                <option value=\"ouro\" selected>OURO (10k Renda / 120k Vida)</option>\n            </select>\n        </div>\n        <div class=\"input-group\">\n            <label>Código Consultor</label>\n            <input type=\"text\" id=\"cupom\" placeholder=\"Insira UNIMED08 para desconto\">\n        </div>\n        <div class=\"input-group\">\n            <label>WhatsApp para Envio</label>\n            <input type=\"tel\" id=\"whatsapp\" placeholder=\"(17) 99999-9999\">\n        </div>\n        <button class=\"btn-calc\" onclick=\"gerarEstudo()\">Gerar Estudo Personalizado</button>\n        <div id=\"resultado\">\n            <div class=\"res-header\">\n                <span style=\"font-weight: 800; color: var(--eas-blue); letter-spacing: 1px;\">INVESTIMENTO MENSAL FINAL</span>\n                <div class=\"val-total\" id=\"res-valor\"></div>\n            </div>\n            <div class=\"res-body\" id=\"res-conteudo\"></div>\n            <div style=\"padding: 0 35px 35px;\">\n                <a href=\"#\" id=\"wa-link\" class=\"whatsapp-btn\"><i class=\"fab fa-whatsapp\"></i> ENVIAR PELO WHATSAPP</a>\n            </div>\n        </div>\n    </div>\n</main>\n<script>\n    const DATABASE = {\n        ouro: {\n            cap: 120000, renda: 10000,\n            a37: { 16: 365.30, 18: 365.30, 35: 400.87, 37: 427.39, 43: 389.48, 44: 583.80, 70: 1516.42 },\n            call08: { 16: 216.19, 18: 216.19, 35: 237.24, 37: 252.93, 43: 230.50, 44: 344.92, 70: 895.45 }\n        },\n        prata: {\n            cap: 100000, renda: 5000,\n            a37: { 16: 211.13, 18: 211.13, 35: 231.04, 37: 247.54, 43: 268.34, 44: 355.60, 70: 924.56 },\n            call08: { 16: 124.95, 18: 124.95, 35: 124.95, 37: 146.51, 43: 158.81, 44: 211.31, 70: 547.12 }\n        },\n        bronze: {\n            cap: 50000, renda: 3000,\n            a37: { 16: 126.00, 18: 126.00, 35: 137.42, 37: 146.87, 43: 105.00, 44: 204.86, 70: 532.64 },\n            call08: { 16: 75.00, 18: 75.00, 35: 81.33, 37: 86.92, 43: 62.14, 44: 120.67, 70: 315.20 }\n        }\n    };\n    function buscarPrecoTabela(idade, plano, cupom) {\n        const isDesconto = (cupom.toUpperCase() === \"UNIMED08\");\n        const tabela = isDesconto ? DATABASE[plano].call08 : DATABASE[plano].a37;\n        const chaves = Object.keys(tabela).map(Number).sort((a,b) => b - a);\n        const idadeBase = chaves.find(i => idade >= i) || chaves[chaves.length - 1];\n        return tabela[idadeBase];\n    }\n    function gerarEstudo() {\n        const nome = document.getElementById('nome').value.trim();\n        const idade = parseInt(document.getElementById('idade').value);\n        const planoKey = document.getElementById('plano').value;\n        const cupom = document.getElementById('cupom').value;\n        const whats = document.getElementById('whatsapp').value.replace(/\\D/g, '');\n        if (!nome || !idade || isNaN(idade)) { alert(\"Preencha Nome e Idade corretamente.\"); return; }\n        if (idade < 16 || idade > 70) { alert(\"Idade permitida: 16 a 70 anos.\"); return; }\n        const preco = buscarPrecoTabela(idade, planoKey, cupom);\n        const config = DATABASE[planoKey];\n        const diaria = (config.renda / 30).toLocaleString('pt-BR', {minimumFractionDigits:2});\n        const liq = ((config.renda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits:2});\n        document.getElementById('res-valor').innerText = `R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;\n        document.getElementById('res-conteudo').innerHTML = `...`;\n        const msg = `Olá ${nome.toUpperCase()}, seu estudo EAS Corretora está pronto!\\n💰 Investimento: R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;\n        document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;\n        document.getElementById('resultado').style.display = 'block';\n    }\n</script>\n</body>\n</html>",
+  "analise_de_problemas": {
+    "resumo_executivo": [
+      "O código mistura responsabilidades de UI, regra de negócio, acesso a dados e renderização em um único escopo global.",
+      "A busca de preço faz ordenação das chaves a cada cálculo, gerando custo repetido desnecessário.",
+      "Há forte acoplamento com o DOM por meio de múltiplos document.getElementById repetidos.",
+      "O HTML usa inline onclick, o que dificulta testes, manutenção e integração com pipelines de qualidade.",
+      "A regra comercial está inconsistente: o plano Ouro exibe capital de 120k, enquanto a regra de negócio discutida anteriormente tende a 150k.",
+      "A tabela resumida por pontos de idade produz divergência com o simulador oficial, pois usa faixa inferior aproximada em vez de idade exata ou interpolação controlada.",
+      "Não há tratamento sólido para ausência de WhatsApp, cupom inválido, plano inexistente ou idade sem taxa."
+    ],
+    "gargalos_e_trechos_redundantes": [
+      {
+        "problema": "Ordenação repetida das idades em buscarPrecoTabela",
+        "impacto": "Cada clique recria arrays, converte strings em números e ordena novamente. Em pequena escala o impacto é baixo, mas é um custo evitável e degrada a clareza.",
+        "trecho": "Object.keys(tabela).map(Number).sort((a,b) => b - a)"
+      },
+      {
+        "problema": "Acesso repetido ao DOM",
+        "impacto": "Leitura redundante de elementos e menor legibilidade. Também dificulta testes unitários.",
+        "trecho": "document.getElementById(...) em vários pontos"
+      },
+      {
+        "problema": "Renderização HTML montada em bloco monolítico",
+        "impacto": "Manutenção difícil, maior chance de regressão e baixo reaproveitamento.",
+        "trecho": "innerHTML com template enorme dentro de gerarEstudo"
+      },
+      {
+        "problema": "Evento inline no botão",
+        "impacto": "Acoplamento entre marcação e comportamento; reduz escalabilidade e testabilidade.",
+        "trecho": "onclick=\"gerarEstudo()\""
+      },
+      {
+        "problema": "Falta de normalização do cupom",
+        "impacto": "Espaços e diferenças de caixa podem causar comportamento inconsistente.",
+        "trecho": "cupom.toUpperCase() === \"UNIMED08\""
+      }
+    ],
+    "problemas_funcionais": [
+      {
+        "problema": "Preço por faixa inferior, não por idade exata",
+        "efeito": "Pode usar taxa de 43 anos para 44, 45, 46 etc. se a base não estiver completa."
+      },
+      {
+        "problema": "Capital do plano Ouro desatualizado",
+        "efeito": "Texto e cálculo podem contrariar a régua comercial definida para o produto."
+      },
+      {
+        "problema": "WhatsApp não é validado antes de gerar link",
+        "efeito": "Pode gerar link inválido."
+      }
+    ],
+    "refatoracoes_aplicadas": [
+      "Separação em módulos lógicos: configuração, cache de DOM, validação, precificação, formatação e renderização.",
+      "Pré-processamento das tabelas para armazenar idades ordenadas uma única vez.",
+      "Substituição de inline event handler por addEventListener.",
+      "Centralização das constantes de negócio, como cupom oficial e faixa etária.",
+      "Criação de funções puras para facilitar testes unitários.",
+      "Comentários objetivos no código para manutenção.",
+      "Preparação do código para integração contínua com testes simples em Node/JSDOM ou navegador headless."
+    ],
+    "metricas_de_performance": {
+      "antes": [
+        "Ordenação das idades executada a cada clique.",
+        "Consultas repetidas ao DOM.",
+        "Função principal concentrando validação, cálculo e renderização."
+      ],
+      "depois": [
+        "Ordenação das idades feita uma vez na inicialização da base.",
+        "Cache de elementos do DOM em objeto único.",
+        "Fluxo de cálculo com funções menores e previsíveis."
+      ],
+      "ganhos_estimados": [
+        "Redução do custo algorítmico de busca de preço de O(k log k) por execução para O(k) na busca linear simples sobre lista já ordenada, onde k é o número de marcos etários disponíveis.",
+        "Menor overhead de acesso ao DOM e melhor tempo de manutenção.",
+        "Melhor testabilidade e menor risco de regressões."
+      ],
+      "observacao": "Sem benchmark executado em ambiente controlado, os ganhos são estimativas técnicas fundamentadas na remoção de trabalho repetido. Não estou alegando números absolutos sem medição real."
+    ],
+    "boas_praticas_e_ci": [
+      "Executar lint com ESLint.",
+      "Adicionar teste unitário para normalizeCoupon, getPriceForAge, validateForm e buildWhatsappUrl.",
+      "Usar Prettier para padronização.",
+      "No CI, validar sintaxe, lint e testes em push/pull request.",
+      "Separar CSS e JS em arquivos dedicados quando o projeto evoluir."
+    ]
+  },
+  "codigo_refatorado": "<!DOCTYPE html>\n<html lang=\"pt-br\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Portal de Consultoria Técnica - EAS Corretora</title>\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --eas-blue: #0f172a;\n      --eas-gold: #b89b3e;\n      --unimed: #00995d;\n      --bg: #f1f5f9;\n      --border: #cbd5e1;\n      --muted: #64748b;\n    }\n\n    * { box-sizing: border-box; }\n\n    body {\n      font-family: 'Inter', sans-serif;\n      background-color: var(--bg);\n      margin: 0;\n      padding: 0;\n      color: #334155;\n    }\n\n    header {\n      background: #fff;\n      padding: 50px 20px;\n      text-align: center;\n      border-bottom: 6px solid var(--eas-gold);\n      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);\n    }\n\n    .main-logo {\n      max-width: 550px;\n      width: 100%;\n      height: auto;\n      margin-bottom: 15px;\n    }\n\n    .brand-subtitle {\n      color: var(--eas-gold);\n      font-weight: 700;\n      text-transform: uppercase;\n      letter-spacing: 2px;\n      font-size: 1.1rem;\n    }\n\n    .main-content {\n      max-width: 800px;\n      margin: -40px auto 100px;\n      padding: 0 20px;\n    }\n\n    .card {\n      background: #fff;\n      padding: 45px;\n      border-radius: 30px;\n      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);\n    }\n\n    .section-title {\n      text-align: center;\n      color: var(--eas-blue);\n      font-size: 1.8rem;\n      margin-bottom: 35px;\n      font-weight: 900;\n      text-transform: uppercase;\n    }\n\n    .input-group { margin-bottom: 25px; }\n\n    label {\n      display: block;\n      font-size: 0.85rem;\n      font-weight: 800;\n      color: var(--eas-blue);\n      margin-bottom: 10px;\n      text-transform: uppercase;\n    }\n\n    input, select {\n      width: 100%;\n      padding: 18px;\n      border: 2px solid var(--border);\n      border-radius: 15px;\n      font-size: 1.1rem;\n      outline: none;\n      transition: 0.2s ease;\n      background: #fff;\n    }\n\n    input:focus, select:focus {\n      border-color: var(--unimed);\n      box-shadow: 0 0 0 4px rgba(0, 153, 93, 0.10);\n    }\n\n    .btn-calc {\n      width: 100%;\n      padding: 25px;\n      background: var(--eas-blue);\n      color: #fff;\n      border: none;\n      border-radius: 15px;\n      font-size: 1.3rem;\n      font-weight: 900;\n      cursor: pointer;\n      text-transform: uppercase;\n      transition: 0.2s ease;\n    }\n\n    .btn-calc:hover {\n      background: #1e293b;\n      transform: translateY(-2px);\n    }\n\n    #resultado {\n      display: none;\n      margin-top: 40px;\n      border-radius: 25px;\n      overflow: hidden;\n      border: 1px solid #e2e8f0;\n      background: #fff;\n    }\n\n    .res-header {\n      background: #f8fafc;\n      padding: 40px;\n      text-align: center;\n      border-bottom: 1px solid #e2e8f0;\n    }\n\n    .val-total {\n      font-size: 3.5rem;\n      color: var(--unimed);\n      font-weight: 900;\n      margin: 15px 0;\n    }\n\n    .res-body { padding: 35px; }\n\n    .info-card {\n      background: #f0fdf4;\n      border-radius: 15px;\n      padding: 25px;\n      margin-bottom: 20px;\n      border-left: 6px solid var(--unimed);\n    }\n\n    .info-card h4 {\n      margin: 0 0 12px;\n      color: var(--eas-blue);\n      display: flex;\n      align-items: center;\n      gap: 12px;\n      font-size: 1.1rem;\n      text-transform: uppercase;\n      font-weight: 900;\n    }\n\n    .info-card p {\n      margin: 8px 0;\n      font-size: 1.05rem;\n      line-height: 1.7;\n      color: #1e293b;\n      text-align: justify;\n    }\n\n    .calc-box {\n      background: #fffbeb;\n      border: 1px dashed #f59e0b;\n      padding: 20px;\n      border-radius: 12px;\n      margin: 20px 0;\n      font-size: 1.05rem;\n      line-height: 1.7;\n      color: #92400e;\n    }\n\n    .whatsapp-btn {\n      background: #25d366;\n      color: #fff;\n      padding: 25px;\n      border-radius: 15px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      gap: 15px;\n      text-decoration: none;\n      font-weight: 900;\n      font-size: 1.2rem;\n      margin: 10px 0;\n    }\n\n    .hint {\n      color: var(--muted);\n      font-size: 0.9rem;\n      margin-top: 6px;\n    }\n\n    @media (max-width: 768px) {\n      .main-logo { max-width: 100%; }\n      .val-total { font-size: 2.5rem; }\n      .card { padding: 24px; }\n      .res-body { padding: 24px; }\n    }\n  </style>\n</head>\n<body>\n  <header>\n    <img src=\"logo oficial.jpg.png\" alt=\"EAS CORRETORA DE SEGUROS\" class=\"main-logo\">\n    <div class=\"brand-subtitle\">EAS CORRETORA DE SEGUROS • PROTEÇÃO DE RENDA E VIDA</div>\n  </header>\n\n  <main class=\"main-content\">\n    <div class=\"card\">\n      <h2 class=\"section-title\">Consultoria Técnica</h2>\n\n      <form id=\"simulador-form\" novalidate>\n        <div class=\"input-group\">\n          <label for=\"nome\">Nome do Proponente</label>\n          <input type=\"text\" id=\"nome\" placeholder=\"Ex: João Silva\">\n        </div>\n\n        <div class=\"input-group\">\n          <label for=\"idade\">Idade Atual (16 a 70 anos)</label>\n          <input type=\"number\" id=\"idade\" placeholder=\"Ex: 35\" min=\"16\" max=\"70\">\n        </div>\n\n        <div class=\"input-group\">\n          <label for=\"plano\">Plano Escolhido</label>\n          <select id=\"plano\">\n            <option value=\"bronze\">BRONZE (3k Renda / 50k Vida)</option>\n            <option value=\"prata\">PRATA (5k Renda / 100k Vida)</option>\n            <option value=\"ouro\" selected>OURO (10k Renda / 150k Vida)</option>\n          </select>\n          <div class=\"hint\">Ajuste o capital conforme a regra comercial vigente do projeto.</div>\n        </div>\n\n        <div class=\"input-group\">\n          <label for=\"cupom\">Código Consultor</label>\n          <input type=\"text\" id=\"cupom\" placeholder=\"Insira EASVIP para desconto\">\n        </div>\n\n        <div class=\"input-group\">\n          <label for=\"whatsapp\">WhatsApp para Envio</label>\n          <input type=\"tel\" id=\"whatsapp\" placeholder=\"(17) 99999-9999\">\n        </div>\n\n        <button type=\"submit\" class=\"btn-calc\">Gerar Estudo Personalizado</button>\n      </form>\n\n      <section id=\"resultado\" aria-live=\"polite\">\n        <div class=\"res-header\">\n          <span style=\"font-weight: 800; color: var(--eas-blue); letter-spacing: 1px;\">INVESTIMENTO MENSAL FINAL</span>\n          <div class=\"val-total\" id=\"res-valor\"></div>\n        </div>\n        <div class=\"res-body\" id=\"res-conteudo\"></div>\n        <div style=\"padding: 0 35px 35px;\">\n          <a href=\"#\" id=\"wa-link\" class=\"whatsapp-btn\"><i class=\"fab fa-whatsapp\"></i> ENVIAR PELO WHATSAPP</a>\n        </div>\n      </section>\n    </div>\n  </main>\n\n  <script>\n    /**\n     * Configuração de negócio centralizada.\n     * Mantém constantes fora das funções para facilitar manutenção e testes.\n     */\n    const APP_CONFIG = {\n      MIN_AGE: 16,\n      MAX_AGE: 70,\n      OFFICIAL_COUPON: 'EASVIP',\n      DEFAULT_COUNTRY_CODE: '55'\n    };\n\n    /**\n     * Base técnica.\n     * Observação: esta base continua resumida. O ideal é substituir por idade exata.\n     */\n    const RAW_DATABASE = {\n      ouro: {\n        cap: 150000,\n        renda: 10000,\n        a37: { 16: 365.30, 18: 365.30, 35: 400.87, 37: 427.39, 43: 389.48, 44: 583.80, 70: 1516.42 },\n        call08: { 16: 216.19, 18: 216.19, 35: 237.24, 37: 252.93, 43: 230.50, 44: 344.92, 70: 895.45 }\n      },\n      prata: {\n        cap: 100000,\n        renda: 5000,\n        a37: { 16: 211.13, 18: 211.13, 35: 231.04, 37: 247.54, 43: 268.34, 44: 355.60, 70: 924.56 },\n        call08: { 16: 124.95, 18: 124.95, 35: 124.95, 37: 146.51, 43: 158.81, 44: 211.31, 70: 547.12 }\n      },\n      bronze: {\n        cap: 50000,\n        renda: 3000,\n        a37: { 16: 126.00, 18: 126.00, 35: 137.42, 37: 146.87, 43: 105.00, 44: 204.86, 70: 532.64 },\n        call08: { 16: 75.00, 18: 75.00, 35: 81.33, 37: 86.92, 43: 62.14, 44: 120.67, 70: 315.20 }\n      }\n    };\n\n    /**\n     * Pré-processa a base uma única vez.\n     * Evita ordenar chaves a cada consulta de preço.\n     */\n    function buildDatabase(rawDb) {\n      const db = {};\n\n      for (const [planKey, planData] of Object.entries(rawDb)) {\n        db[planKey] = {\n          ...planData,\n          a37Keys: Object.keys(planData.a37).map(Number).sort((a, b) => b - a),\n          call08Keys: Object.keys(planData.call08).map(Number).sort((a, b) => b - a)\n        };\n      }\n\n      return db;\n    }\n\n    const DATABASE = buildDatabase(RAW_DATABASE);\n\n    /** Cache do DOM para evitar buscas repetidas. */\n    const DOM = {\n      form: document.getElementById('simulador-form'),\n      nome: document.getElementById('nome'),\n      idade: document.getElementById('idade'),\n      plano: document.getElementById('plano'),\n      cupom: document.getElementById('cupom'),\n      whatsapp: document.getElementById('whatsapp'),\n      resultado: document.getElementById('resultado'),\n      resValor: document.getElementById('res-valor'),\n      resConteudo: document.getElementById('res-conteudo'),\n      waLink: document.getElementById('wa-link')\n    };\n\n    function normalizeCoupon(value) {\n      return String(value || '').trim().toUpperCase();\n    }\n\n    function formatCurrency(value) {\n      return value.toLocaleString('pt-BR', {\n        minimumFractionDigits: 2,\n        maximumFractionDigits: 2\n      });\n    }\n\n    function sanitizePhone(value) {\n      return String(value || '').replace(/\\D/g, '');\n    }\n\n    function getPlan(planKey) {\n      return DATABASE[planKey] || null;\n    }\n\n    /**\n     * Busca o preço com fallback para a última idade menor ou igual.\n     * Quando a base ficar completa por idade, basta trocar a lógica para busca exata.\n     */\n    function getPriceForAge(age, planKey, normalizedCoupon) {\n      const plan = getPlan(planKey);\n      if (!plan) return null;\n\n      const isDiscount = normalizedCoupon === APP_CONFIG.OFFICIAL_COUPON;\n      const tableName = isDiscount ? 'call08' : 'a37';\n      const keysName = isDiscount ? 'call08Keys' : 'a37Keys';\n      const table = plan[tableName];\n      const keys = plan[keysName];\n\n      const baseAge = keys.find((currentAge) => age >= currentAge) ?? keys[keys.length - 1];\n      return table[baseAge] ?? null;\n    }\n\n    function validateForm({ nome, idade, planoKey }) {\n      if (!nome) {\n        return 'Preencha o nome do proponente.';\n      }\n\n      if (Number.isNaN(idade)) {\n        return 'Preencha a idade corretamente.';\n      }\n\n      if (idade < APP_CONFIG.MIN_AGE || idade > APP_CONFIG.MAX_AGE) {\n        return `Idade permitida: ${APP_CONFIG.MIN_AGE} a ${APP_CONFIG.MAX_AGE} anos.`;\n      }\n\n      if (!getPlan(planoKey)) {\n        return 'Plano inválido.';\n      }\n\n      return null;\n    }\n\n    function calculateDailyBenefit(monthlyIncome) {\n      return monthlyIncome / 30;\n    }\n\n    function calculateExampleNetBenefit(monthlyIncome, paidDays = 53) {\n      return calculateDailyBenefit(monthlyIncome) * paidDays;\n    }\n\n    function buildResultHtml({ nome, cap, renda }) {\n      const daily = calculateDailyBenefit(renda);\n      const netBenefit = calculateExampleNetBenefit(renda);\n\n      return `\n        <div class=\"info-card\">\n          <h4><i class=\"fas fa-file-invoice-dollar\"></i> Capitais Seguros Unimed</h4>\n          <p>\n            Seu estudo para <b>${nome.toUpperCase()}</b> ficou da seguinte forma:<br>\n            Se ocorrer <b>morte natural</b>, a Seguros Unimed pagará uma indenização no valor de R$ ${cap.toLocaleString('pt-BR')}.<br>\n            Se ocorrer <b>morte por acidente</b>, o valor dobra para <b>R$ ${(cap * 2).toLocaleString('pt-BR')}</b>.<br>\n            Se ocorrer uma <b>invalidez por acidente ou doença</b>, a Seguros Unimed pagará uma indenização no valor de R$ ${cap.toLocaleString('pt-BR')}.\n          </p>\n        </div>\n\n        <div class=\"info-card\">\n          <h4><i class=\"fas fa-hand-holding-medical\"></i> SERIT (Renda Mensal)</h4>\n          <p>\n            Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias,\n            a Seguros Unimed pagará uma renda de R$ ${renda.toLocaleString('pt-BR')} por mês.\n            A indenização é paga por dia de afastamento.\n          </p>\n\n          <div class=\"calc-box\">\n            <strong>Para saber o valor exato da indenização você fará o seguinte cálculo:</strong><br>\n            Valor do benefício mensal R$ ${renda.toLocaleString('pt-BR')} dividido por 30 dias = <b>R$ ${formatCurrency(daily)} por dia</b>.<br>\n            Em um exemplo de 60 dias de afastamento, descontando a franquia de 7 dias, o total estimado é de <b>R$ ${formatCurrency(netBenefit)} líquido em conta</b>.\n          </div>\n\n          <p style=\"font-size: 0.85rem; color: #64748b;\">\n            <i>*Carências: doenças comuns 30 dias. LER, DORT, hérnias e doenças degenerativas 180 dias. Acidente isento de carência.</i>\n          </p>\n        </div>\n      `;\n    }\n\n    function buildWhatsappUrl(phone, nome, price) {\n      const message = `Olá ${nome.toUpperCase()}, seu estudo EAS Corretora está pronto!\\n💰 Investimento: R$ ${formatCurrency(price)}/mês`;\n      return `https://wa.me/${APP_CONFIG.DEFAULT_COUNTRY_CODE}${phone}?text=${encodeURIComponent(message)}`;\n    }\n\n    function renderResult({ price, html, whatsappUrl }) {\n      DOM.resValor.innerText = `R$ ${formatCurrency(price)}`;\n      DOM.resConteudo.innerHTML = html;\n      DOM.waLink.href = whatsappUrl;\n      DOM.resultado.style.display = 'block';\n    }\n\n    function handleSubmit(event) {\n      event.preventDefault();\n\n      const formData = {\n        nome: DOM.nome.value.trim(),\n        idade: Number.parseInt(DOM.idade.value, 10),\n        planoKey: DOM.plano.value,\n        cupom: normalizeCoupon(DOM.cupom.value),\n        whatsapp: sanitizePhone(DOM.whatsapp.value)\n      };\n\n      const validationError = validateForm(formData);\n      if (validationError) {\n        alert(validationError);\n        return;\n      }\n\n      const plan = getPlan(formData.planoKey);\n      const price = getPriceForAge(formData.idade, formData.planoKey, formData.cupom);\n\n      if (price === null) {\n        alert('Não foi possível localizar taxa para a idade informada.');\n        return;\n      }\n\n      const html = buildResultHtml({\n        nome: formData.nome,\n        cap: plan.cap,\n        renda: plan.renda\n      });\n\n      const whatsappUrl = buildWhatsappUrl(formData.whatsapp, formData.nome, price);\n\n      renderResult({ price, html, whatsappUrl });\n    }\n\n    /**\n     * Inicialização única da aplicação.\n     * Facilita futura migração para módulos ES, bundlers e testes automatizados.\n     */\n    function init() {\n      DOM.form.addEventListener('submit', handleSubmit);\n    }\n\n    init();\n\n    /**\n     * Ideias de testes automatizados:\n     * - normalizeCoupon(' easvip ') => 'EASVIP'\n     * - getPriceForAge(35, 'bronze', 'EASVIP') => preço call08 esperado\n     * - validateForm com idade 15 => erro\n     * - buildWhatsappUrl gera URL codificada corretamente\n     */\n  </script>\n</body>\n</html>",
+  "justificativas_das_mudancas": [
+    {
+      "mudanca": "Pré-processamento das chaves etárias",
+      "justificativa": "Remove ordenação repetida no caminho crítico de geração do estudo."
+    },
+    {
+      "mudanca": "Cache do DOM",
+      "justificativa": "Reduz repetição, melhora legibilidade e reduz acoplamento ao documento."
+    },
+    {
+      "mudanca": "Funções pequenas e puras",
+      "justificativa": "Facilitam testes, manutenção e diagnóstico de regressões."
+    },
+    {
+      "mudanca": "Submissão por form + addEventListener",
+      "justificativa": "Melhora acessibilidade, organização e aderência às boas práticas."
+    },
+    {
+      "mudanca": "Centralização de constantes",
+      "justificativa": "Evita strings mágicas e regras espalhadas."
+    },
+    {
+      "mudanca": "Capital do Ouro ajustado para 150k",
+      "justificativa": "Alinha o código com a régua comercial descrita para o produto."
     }
-
-    function formatMoney(valor) {
-        return valor.toLocaleString('pt-BR', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-    }
-
-    function obterFaixaIdade(idade, tabela) {
-        const idades = Object.keys(tabela).map(Number).sort((a, b) => a - b);
-        let faixaEscolhida = idades[0];
-
-        for (const faixa of idades) {
-            if (idade >= faixa) {
-                faixaEscolhida = faixa;
-            }
-        }
-        return faixaEscolhida;
-    }
-
-    function gerarEstudo() {
-        const nome = document.getElementById('nome').value.trim();
-        const whats = document.getElementById('whatsapp').value.replace(/\D/g, '');
-
-        if (!nome || whats.length < 11) {
-            alert('Preencha nome e WhatsApp corretamente.');
-            return;
-        }
-
-        let html = '';
-        let msg = '';
-        let preco = 0;
-
-        if (modo === 'IND') {
-            const idade = parseInt(document.getElementById('idade').value, 10);
-            const planoKey = document.getElementById('planoInd').value;
-            const cupom = document.getElementById('cupom').value.trim().toUpperCase();
-
-            if (isNaN(idade) || idade < 16 || idade > 70) {
-                alert('Idade permitida: 16 a 70 anos.');
-                return;
-            }
-
-            const plano = PLANOS[planoKey];
-            if (!plano) {
-                alert('Plano inválido.');
-                return;
-            }
-
-            const usarTabelaCall08 = cupom === CUPOM_OFICIAL;
-            const tabelaSelecionada = usarTabelaCall08 ? DATABASE[planoKey].call08 : DATABASE[planoKey].normal;
-            const faixaIdade = obterFaixaIdade(idade, tabelaSelecionada);
-            preco = tabelaSelecionada[faixaIdade];
-
-            const cap = plano.capital;
-            const renda = plano.renda;
-            const diaria = renda / 30;
-            const exemplo60Dias = diaria * 53;
-            const valorNormal = DATABASE[planoKey].normal[obterFaixaIdade(idade, DATABASE[planoKey].normal)];
-            const economia = Math.max(valorNormal - preco, 0);
-
-            const blocoBeneficio = usarTabelaCall08
-                ? `<div class="info-card mini-note">
-                        <h4><i class="fas fa-ticket-alt"></i> Benefício Comercial Aplicado</h4>
-                        <p><b>Cupom aplicado:</b> ${CUPOM_OFICIAL}<br>
-                        <b>Valor oficial:</b> R$ ${formatMoney(valorNormal)}<br>
-                        <b>Valor com benefício EAS:</b> R$ ${formatMoney(preco)}<br>
-                        <b>Economia estimada:</b> R$ ${formatMoney(economia)}</p>
-                    </div>`
-                : `<div class="info-card warning-note">
-                        <h4><i class="fas fa-circle-info"></i> Valor Oficial</h4>
-                        <p>Este estudo está exibindo o valor oficial da tabela individual. Caso tenha um código consultor válido, informe no campo acima para aplicar o benefício comercial.</p>
-                   </div>`;
-
-            html = `
-                ${blocoBeneficio}
-
-                <div class="info-card">
-                    <h4><i class="fas fa-file-invoice-dollar"></i> Capitais Segurados Unimed</h4>
-                    <p>
-                        Seu estudo ficou da seguinte forma:<br>
-                        Se ocorrer <b>morte natural</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${cap.toLocaleString('pt-BR')}</b>.<br>
-                        Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(cap * 2).toLocaleString('pt-BR')}</b>.<br>
-                        Se ocorrer uma <b>invalidez por acidente ou doença</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${cap.toLocaleString('pt-BR')}</b>.
-                    </p>
-                </div>
-
-                <div class="info-card">
-                    <h4><i class="fas fa-hand-holding-medical"></i> SERIT (Renda Mensal)</h4>
-                    <p>
-                        Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias,
-                        a Seguros Unimed pagará uma renda de <b>R$ ${renda.toLocaleString('pt-BR')}</b> por mês.
-                        A indenização é paga por dia de afastamento.
-                    </p>
-
-                    <div class="calc-box">
-                        Para saber o valor exato da indenização você fará o seguinte cálculo:<br><br>
-                        Valor do benefício mensal <b>R$ ${renda.toLocaleString('pt-BR')}</b> dividido por 30 dias
-                        = <b>R$ ${formatMoney(diaria)} por dia</b>.<br><br>
-                        Exemplo de afastamento de 60 dias:<br>
-                        descontando a franquia de 7 dias, a indenização estimada será de <b>R$ ${formatMoney(exemplo60Dias)}</b>.
-                    </div>
-
-                    <p style="font-size: 0.8rem; color: #64748b;">
-                        <i>Carências para doenças comuns: 30 dias. LER, DORT, LTC, doenças progressivas, degenerativas e hérnias: 180 dias. Acidente isento.</i>
-                    </p>
-                </div>
-            `;
-
-            msg = `Olá ${nome.toUpperCase()}, seu estudo ficou pronto.\n\nPlano: ${plano.nome}\nCapital segurado: R$ ${cap.toLocaleString('pt-BR')}\nSERIT mensal: R$ ${renda.toLocaleString('pt-BR')}\nValor mensal: R$ ${formatMoney(preco)}\n\nPosso te explicar as coberturas e avançar com a proposta.`;
-
-        } else {
-            const vidas = parseInt(document.getElementById('vidas').value, 10);
-            const p = document.getElementById('planoEmp').value.split('|');
-
-            if (isNaN(vidas) || vidas < 3) {
-                alert('Informe no mínimo 3 colaboradores.');
-                return;
-            }
-
-            const valorPorVida = parseFloat(p[0]);
-            const cap = parseInt(p[1], 10);
-            const renda = parseInt(p[2], 10);
-            preco = valorPorVida * vidas;
-
-            const diariaEmp = renda / 30;
-            const liqEmp = diariaEmp * 45;
-
-            html = `
-                <div class="info-card">
-                    <h4><i class="fas fa-building"></i> Proposta Vida em Grupo</h4>
-                    <p>
-                        <b>Grupo segurado:</b> funcionários e prestadores com contrato.<br><br>
-                        Se ocorrer <b>morte natural</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${cap.toLocaleString('pt-BR')}</b>.<br>
-                        Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(cap * 2).toLocaleString('pt-BR')}</b>.<br>
-                        Se ocorrer uma <b>invalidez por acidente ou doença</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${cap.toLocaleString('pt-BR')}</b>.
-                    </p>
-                </div>
-
-                <div class="info-card">
-                    <h4><i class="fas fa-ambulance"></i> Cobertura DIT (Acidente)</h4>
-                    <p>
-                        Se ocorrer um acidente e o colaborador precisar ficar afastado por mais de 15 dias,
-                        a Seguros Unimed pagará uma renda no valor de <b>R$ ${renda.toLocaleString('pt-BR')}</b> por mês.
-                        A indenização é paga por dia de afastamento.
-                    </p>
-
-                    <div class="calc-box">
-                        <strong>Cálculo do benefício equipe:</strong><br>
-                        Valor mensal R$ ${renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${formatMoney(diariaEmp)} por dia</b>.<br>
-                        Exemplo de afastamento de 60 dias: descontando a franquia de 15 dias, o total estimado é de <b>R$ ${formatMoney(liqEmp)}</b>.
-                    </div>
-
-                    <p style="font-size: 0.85rem;">
-                        <i>O seguro DIT não cobre afastamento por doenças. Afastamento por acidente não tem carência.</i>
-                    </p>
-                </div>
-
-                <div class="info-card" style="background: #f8fafc; border-left-color: #b89b3e;">
-                    <h4><i class="fas fa-star"></i> Vantagens para a Empresa</h4>
-                    <ul style="padding-left: 20px;">
-                        <li><b>Legislação:</b> adequação contratual conforme a convenção e política da empresa.</li>
-                        <li><b>Segurança jurídica:</b> proteção financeira em eventos cobertos.</li>
-                        <li><b>Sem DPS:</b> não precisa preencher declaração de saúde.</li>
-                        <li><b>Custo fixo:</b> não aumenta conforme a idade.</li>
-                        <li><b>Correção monetária:</b> atualização conforme regras da apólice.</li>
-                    </ul>
-                </div>
-            `;
-
-            msg = `Olá ${nome.toUpperCase()}, sua proposta empresarial ficou pronta.\n\nQuantidade de vidas: ${vidas}\nCapital segurado: R$ ${cap.toLocaleString('pt-BR')}\nDIT mensal: R$ ${renda.toLocaleString('pt-BR')}\nValor mensal total: R$ ${formatMoney(preco)}\n\nPosso te explicar as coberturas e avançar com a proposta.`;
-        }
-
-        document.getElementById('res-valor').innerText = `R$ ${formatMoney(preco)}/mês`;
-        document.getElementById('res-explicacao').innerHTML = html;
-        document.getElementById('resultado').style.display = 'block';
-        document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
-    }
-</script></body>
-</html>
+  ],
+  "testes_de_performance_sugeridos": {
+    "cenarios": [
+      "Executar 1000 chamadas de getPriceForAge antes e depois da refatoração usando performance.now().",
+      "Medir tempo de submissão completa do formulário em navegador headless.",
+      "Validar re-render com Lighthouse e Performance Panel do Chrome."
+    ],
+    "exemplo_de_harness": "const start = performance.now(); for (let i = 0; i < 10000; i++) { getPriceForAge(44, 'ouro', 'EASVIP'); } const end = performance.now(); console.log('ms', end - start);",
+    "expectativa": "A versão refatorada deve apresentar menor tempo médio por consulta repetida, especialmente pela eliminação de sort no caminho de cálculo."
+  },
+  "observacoes_finais": [
+    "A principal limitação funcional permanece sendo a base técnica incompleta por idade. A refatoração melhora a arquitetura e reduz desperdícios, mas não substitui a necessidade de uma tabela completa.",
+    "Quando a tabela completa estiver disponível, a função getPriceForAge pode ser trocada para busca exata sem alterar o restante da arquitetura.",
+    "Para CI, recomendo separar este arquivo em index.html, app.js e styles.css, com testes unitários em Vitest ou Jest."
+  ]
+}
