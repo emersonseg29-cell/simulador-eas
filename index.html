@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EAS Corretora - Consultoria Técnica</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --eas-blue: #0f172a; --eas-gold: #b89b3e; --unimed: #00995d; --bg: #f1f5f9; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: #334155; }
-        header { background: white; padding: 50px 20px; text-align: center; border-bottom: 6px solid var(--eas-gold); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        header { background: white; padding: 40px 20px; text-align: center; border-bottom: 6px solid var(--eas-gold); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
         .main-logo { max-width: 500px; width: 100%; height: auto; }
         .main-content { max-width: 800px; margin: 40px auto 100px; padding: 0 20px; }
         .card { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 25px 60px rgba(0,0,0,0.15); }
@@ -16,11 +17,15 @@
         label { display: block; font-size: 0.85rem; font-weight: 800; color: var(--eas-blue); margin-bottom: 8px; text-transform: uppercase; }
         input, select { width: 100%; padding: 16px; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 1.1rem; box-sizing: border-box; outline: none; }
         .btn-calc { width: 100%; padding: 22px; background: var(--eas-blue); color: white; border: none; border-radius: 12px; font-size: 1.2rem; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        
         #resultado { display: none; margin-top: 40px; border-radius: 25px; border: 1px solid #e2e8f0; background: white; overflow: hidden; }
         .res-header { background: #f8fafc; padding: 35px; text-align: center; border-bottom: 1px solid #e2e8f0; }
         .val-total { font-size: 3.2rem; color: var(--unimed); font-weight: 900; margin: 10px 0; }
+        
         .info-card { background: #f0fdf4; border-radius: 15px; padding: 25px; margin: 20px 30px; border-left: 6px solid var(--unimed); }
-        .calc-box { background: #fffbeb; border: 1px dashed #f59e0b; padding: 20px; border-radius: 12px; margin: 20px 0; font-size: 1rem; color: #92400e; }
+        .info-card h4 { margin: 0 0 12px; color: var(--eas-blue); display: flex; align-items: center; gap: 12px; font-size: 1.1rem; text-transform: uppercase; font-weight: 900; }
+        .calc-box { background: #fffbeb; border: 1px dashed #f59e0b; padding: 20px; border-radius: 12px; margin: 20px 0; font-size: 1rem; color: #92400e; line-height: 1.6; }
+        
         .whatsapp-area { padding: 0 30px 30px; display: none; }
         .whatsapp-btn { background: #25d366; color:white; padding: 22px; border-radius: 15px; display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; font-weight: 900; font-size: 1.2rem; }
     </style>
@@ -29,14 +34,14 @@
 
 <header>
     <img src="logo oficial.jpg.png" alt="EAS CORRETORA" class="main-logo">
-    <div style="color: var(--eas-gold); font-weight: 700; margin-top:10px;">EAS CORRETORA DE SEGUROS • CONSULTORIA TÉCNICA</div>
+    <div style="color: var(--eas-gold); font-weight: 700; margin-top:10px; letter-spacing: 1px;">CONSULTORIA TÉCNICA DE PROTEÇÃO DE RENDA</div>
 </header>
 
 <main class="main-content">
     <div class="card">
-        <div class="input-group"><label>Nome do Cliente</label><input type="text" id="nome"></div>
-        <div class="input-group"><label>WhatsApp (com DDD)</label><input type="tel" id="whatsapp"></div>
-        <div class="input-group"><label>Idade Atual</label><input type="number" id="idade"></div>
+        <div class="input-group"><label>Nome do Cliente</label><input type="text" id="nome" placeholder="Nome Completo"></div>
+        <div class="input-group"><label>WhatsApp (DDD + Número)</label><input type="tel" id="whatsapp" placeholder="Ex: 17991234567" maxlength="11"></div>
+        <div class="input-group"><label>Idade Atual</label><input type="number" id="idade" placeholder="Ex: 35"></div>
         <div class="input-group">
             <label>Plano</label>
             <select id="plano">
@@ -45,15 +50,19 @@
                 <option value="bronze">BRONZE (3k Renda / 50k Vida)</option>
             </select>
         </div>
-        <div class="input-group"><label>Cupom de Desconto</label><input type="text" id="cupom" placeholder="Ex: UNIMED08"></div>
-        <button class="btn-calc" onclick="gerarSimulacao()">GERAR CONSULTORIA TÉCNICA</button>
+        <div class="input-group"><label>Código Consultor</label><input type="text" id="cupom" placeholder="Ex: UNIMED08"></div>
+        
+        <button class="btn-calc" onclick="gerarSimulacao()">Gerar Estudo Técnico</button>
 
         <div id="resultado">
             <div class="res-header">
                 <span style="font-weight: 800; color: var(--eas-blue);">INVESTIMENTO MENSAL FINAL</span>
                 <div class="val-total" id="res-valor"></div>
             </div>
-            <div id="res-conteudo"></div>
+            
+            <div id="res-conteudo">
+                </div>
+
             <div class="whatsapp-area" id="wa-area">
                 <a href="#" id="wa-link" class="whatsapp-btn" target="_blank"><i class="fab fa-whatsapp"></i> ENVIAR PELO WHATSAPP</a>
             </div>
@@ -62,76 +71,61 @@
 </main>
 
 <script>
-    // MATRIZ TÉCNICA BASEADA NOS REAJUSTES DAS CONDIÇÕES GERAIS (Pág 21)
-    function calcularPrecoReal(idade, plano, cupom) {
-        const isDesconto = (cupom.toUpperCase() === "UNIMED08");
-        
-        // Valores Base (35 anos - conforme seus PDFs de 1990)
-        let base = {
-            ouro: { normal: 400.87, call08: 237.24 },
-            prata: { normal: 231.04, call08: 124.95 },
-            bronze: { normal: 137.42, call08: 81.33 }
-        };
-
-        let preco = isDesconto ? base[plano].call08 : base[plano].normal;
-
-        // Fator de Reenquadramento Etário (Estimativa técnica baseada na curva da Unimed)
-        if (idade > 35) {
-            let anosAdicionais = idade - 35;
-            let fatorReajuste = 1 + (anosAdicionais * 0.055); // Média ponderada de 5.5% ao ano conforme CG
-            preco = preco * fatorReajuste;
-        } else if (idade < 35) {
-            let anosAbaixo = 35 - idade;
-            preco = preco / (1 + (anosAbaixo * 0.03)); // Redução técnica para idades menores
-        }
-
-        // Trava para idades específicas validadas
-        if (idade == 70 && plano == 'ouro' && !isDesconto) return 1516.42;
-        if (idade == 70 && plano == 'ouro' && isDesconto) return 895.45;
-        if (idade == 18 && plano == 'ouro' && isDesconto) return 216.19;
-
-        return preco;
-    }
+    const TABELA = {
+        ouro:   { cap: 120000, renda: 10000, p35: 400.87, p44: 583.80, c35: 237.24, c44: 344.92 },
+        prata:  { cap: 100000, renda: 5000,  p35: 231.04, p44: 355.60, c35: 124.95, c44: 211.31 },
+        bronze: { cap: 50000,  renda: 3000,  p35: 137.42, p44: 204.86, c35: 81.33,  c44: 120.67 }
+    };
 
     function gerarSimulacao() {
         const nome = document.getElementById('nome').value.trim();
         const idade = parseInt(document.getElementById('idade').value);
         const planoKey = document.getElementById('plano').value;
-        const cupom = document.getElementById('cupom').value;
-        const whats = document.getElementById('whatsapp').value.replace(/\D/g, '');
-
-        if (!nome || !idade || isNaN(idade)) { alert("Preencha os dados corretamente."); return; }
-
-        const precoFinal = calcularPrecoReal(idade, planoKey, cupom);
-        const cap = planoKey === 'ouro' ? 120000 : (planoKey === 'prata' ? 100000 : 50000);
-        const renda = planoKey === 'ouro' ? 10000 : (planoKey === 'prata' ? 5000 : 3000);
+        const cupom = document.getElementById('cupom').value.toUpperCase();
         
-        const diaria = (renda / 30).toLocaleString('pt-BR', {minimumFractionDigits:2});
-        const liq = ((renda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits:2});
+        // TRAVA E LIMPEZA DO WHATSAPP
+        let whatsRaw = document.getElementById('whatsapp').value.replace(/\D/g, '');
+        if (whatsRaw.length > 11) whatsRaw = whatsRaw.substring(0, 11); // Evita número a mais
 
-        document.getElementById('res-valor').innerText = `R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+        if (!nome || !idade || whatsRaw.length < 10) {
+            alert("⚠️ Por favor, preencha Nome, Idade e WhatsApp (10 ou 11 dígitos).");
+            return;
+        }
+
+        const plano = TABELA[planoKey];
+        const isCall = (cupom === "UNIMED08");
+        let preco = (idade >= 44) ? (isCall ? plano.c44 : plano.p44) : (isCall ? plano.c35 : plano.p35);
+
+        const diaria = (plano.renda / 30).toLocaleString('pt-BR', {minimumFractionDigits:2});
+        const liq = ((plano.renda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits:2});
+
+        document.getElementById('res-valor').innerText = `R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
         
+        // EXPLICAÇÕES RESTAURADAS
         document.getElementById('res-conteudo').innerHTML = `
             <div class="info-card">
                 <h4><i class="fas fa-file-invoice-dollar"></i> Capitais Seguros Unimed</h4>
                 <p>Seu estudo para <b>${nome.toUpperCase()}</b> ficou da seguinte forma:<br>
-                Morte Natural: R$ ${cap.toLocaleString('pt-BR')}. Morte por Acidente: <b>R$ ${(cap*2).toLocaleString('pt-BR')}</b>.</p>
+                Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de R$ ${plano.cap.toLocaleString('pt-BR')}.<br>
+                Se ocorrer <b>morte por acidente</b>, o valor dobra para <b>R$ ${(plano.cap*2).toLocaleString('pt-BR')}</b>.<br>
+                Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${plano.cap.toLocaleString('pt-BR')}.</p>
             </div>
             <div class="info-card">
                 <h4><i class="fas fa-hand-holding-medical"></i> SERIT (Renda Mensal)</h4>
-                <p>Se você precisar se afastar por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${renda.toLocaleString('pt-BR')} por mês.</p>
+                <p>Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${plano.renda.toLocaleString('pt-BR')} por mes. A indenização é paga por dia de afastamento.</p>
                 <div class="calc-box">
-                    <strong>Cálculo do Benefício:</strong><br>
-                    R$ ${renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${diaria} por dia</b>. <br>
-                    Atestado de 60 dias (menos 7 dias franquia) = 53 dias pagos. Total: <b>R$ ${liq} líquido</b> em conta.
+                    <strong>Para saber o valor exato da indenizaçao voce fara o seguinte calculo:</strong><br>
+                    Valor do beneficio mensal R$ ${plano.renda.toLocaleString('pt-BR')} dividido por 30 dias <i>"por que a seguradora paga por dia de afastamento"</i> = <b>R$ ${diaria} por dia</b>. Em seguida voce multiplica a diaria pelos dias de afastamento descontando a franquia de 7 dias (exemplo 60 dias total 53 dias pagos) total <b>R$ ${liq} líquido direto em conta</b>.
                 </div>
-            </div>`;
+            </div>
+        `;
 
-        // Ativação da Trava e Link do WhatsApp
-        const msg = `Olá ${nome.toUpperCase()}, seu estudo EAS Corretora está pronto!\n💰 Investimento: R$ ${precoFinal.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;
-        document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
-        document.getElementById('wa-area').style.display = 'block';
+        // CONFIGURAÇÃO DO LINK DO WHATSAPP
+        const msg = `Olá ${nome.toUpperCase()}, seu estudo EAS Corretora está pronto!\n💰 Investimento: R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;
+        document.getElementById('wa-link').href = `https://wa.me/55${whatsRaw}?text=${encodeURIComponent(msg)}`;
+        
         document.getElementById('resultado').style.display = 'block';
+        document.getElementById('wa-area').style.display = 'block';
     }
 </script>
 </body>
