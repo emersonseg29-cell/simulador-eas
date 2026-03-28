@@ -1,366 +1,607 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EAS Corretora - Consultoria Técnica de Renda</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --eas-blue: #0f172a;
-            --eas-gold: #b89b3e;
-            --unimed: #00995d;
-            --bg: #f1f5f9;
-            --muted: #64748b;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EAS Corretora - Consultoria Técnica de Proteção de Renda</title>
 
-        * { box-sizing: border-box; }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            margin: 0;
-            padding: 0;
-            color: #334155;
-        }
+  <style>
+    :root {
+      --eas-blue: #0f172a;
+      --eas-blue-2: #1e293b;
+      --eas-gold: #b89b3e;
+      --unimed: #00995d;
+      --unimed-dark: #007d4d;
+      --bg: #eef3f8;
+      --card: #ffffff;
+      --text: #334155;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --soft-green: #f0fdf4;
+      --soft-gold: #fff8eb;
+      --shadow-1: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --shadow-2: 0 24px 70px rgba(15, 23, 42, 0.16);
+      --radius-xl: 28px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+    }
 
-        header {
-            background: white;
-            padding: 40px 20px;
-            text-align: center;
-            border-bottom: 6px solid var(--eas-gold);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        .main-logo {
-            max-width: 500px;
-            width: 100%;
-            height: auto;
-        }
+    html {
+      scroll-behavior: smooth;
+    }
 
-        .card {
-            background: white;
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
-            max-width: 800px;
-            margin: 40px auto;
-        }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(184,155,62,0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(0,153,93,0.06), transparent 26%),
+        linear-gradient(180deg, #f8fbfe 0%, var(--bg) 100%);
+      color: var(--text);
+    }
 
-        .input-group {
-            margin-bottom: 20px;
-        }
+    .page-shell {
+      min-height: 100vh;
+      padding: 24px 16px 48px;
+    }
 
-        label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: var(--eas-blue);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+    }
 
-        input, select {
-            width: 100%;
-            padding: 16px;
-            border: 2px solid #cbd5e1;
-            border-radius: 12px;
-            font-size: 1.05rem;
-            outline: none;
-            transition: 0.3s;
-        }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(15,23,42,0.98) 0%, rgba(30,41,59,0.97) 60%, rgba(11,20,37,0.98) 100%);
+      color: white;
+      border-radius: 30px;
+      box-shadow: var(--shadow-2);
+      padding: 32px 24px 28px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
 
-        input:focus, select:focus {
-            border-color: var(--unimed);
-        }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(184,155,62,0.18), transparent 22%),
+        radial-gradient(circle at 85% 15%, rgba(0,153,93,0.12), transparent 22%);
+      pointer-events: none;
+    }
 
-        .btn-calc,
-        .btn-secondary,
-        .btn-success,
-        .btn-download {
-            width: 100%;
-            padding: 18px 20px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 900;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.3s;
-            text-decoration: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: center;
+    }
 
-        .btn-calc {
-            background: var(--eas-blue);
-            color: white;
-        }
+    .brand-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+    }
 
-        .btn-calc:hover {
-            background: #1e293b;
-        }
+    .brand-logo-box {
+      width: 100%;
+      max-width: 520px;
+      min-height: 110px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      backdrop-filter: blur(6px);
+    }
 
-        #resultado {
-            display: none;
-            margin-top: 40px;
-            border-radius: 25px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            overflow: hidden;
-        }
+    .brand-logo {
+      max-width: 100%;
+      max-height: 90px;
+      object-fit: contain;
+      display: block;
+    }
 
-        .res-header {
-            background: #f8fafc;
-            padding: 35px;
-            text-align: center;
-            border-bottom: 1px solid #e2e8f0;
-        }
+    .brand-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(184,155,62,0.12);
+      color: #f3df99;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid rgba(184,155,62,0.24);
+    }
 
-        .val-total {
-            font-size: 3.2rem;
-            color: var(--unimed);
-            font-weight: 900;
-            margin: 10px 0;
-        }
+    .hero-copy h1 {
+      margin: 0;
+      font-size: clamp(1.7rem, 2.8vw, 2.6rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      text-align: center;
+    }
 
-        .sub-info {
-            color: var(--muted);
-            font-size: 0.95rem;
-            margin-top: 6px;
-        }
+    .hero-copy p {
+      margin: 12px auto 0;
+      max-width: 760px;
+      text-align: center;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.82);
+    }
 
-        .info-card {
-            background: #f0fdf4;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 30px;
-            border-left: 6px solid var(--unimed);
-        }
+    .main-card {
+      margin-top: 24px;
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-2);
+      border: 1px solid rgba(15,23,42,0.05);
+      overflow: hidden;
+    }
 
-        .info-card h4 {
-            margin-top: 0;
-            color: var(--eas-blue);
-        }
+    .card-header {
+      padding: 28px 28px 18px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(248,250,252,0.9) 0%, rgba(255,255,255,1) 100%);
+    }
 
-        .calc-box {
-            background: #fffbeb;
-            border: 1px dashed #f59e0b;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0 0;
-            font-size: 1rem;
-            color: #92400e;
-            line-height: 1.6;
-        }
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.45rem;
+      color: var(--eas-blue);
+      letter-spacing: -0.02em;
+    }
 
-        .actions-area {
-            padding: 0 30px 30px;
-            display: none;
-        }
+    .card-header p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 0.97rem;
+    }
 
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 14px;
-        }
+    .form-body {
+      padding: 28px;
+    }
 
-        .btn-success {
-            background: #25d366;
-            color: white;
-        }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
 
-        .btn-success:hover {
-            background: #1fb85a;
-        }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-        .btn-secondary {
-            background: #0ea5e9;
-            color: white;
-        }
+    label {
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: var(--eas-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-        .btn-secondary:hover {
-            background: #0284c7;
-        }
+    input, select {
+      width: 100%;
+      border: 1.8px solid #cfd8e3;
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 16px 16px;
+      font-size: 1rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
 
-        .btn-download {
-            background: #f59e0b;
-            color: white;
-        }
+    input:focus, select:focus {
+      border-color: var(--unimed);
+      box-shadow: 0 0 0 4px rgba(0,153,93,0.10);
+    }
 
-        .btn-download:hover {
-            background: #d97706;
-        }
+    .hint {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
 
-        .badge {
-            display: inline-block;
-            background: #ecfeff;
-            color: #0f766e;
-            border: 1px solid #99f6e4;
-            border-radius: 999px;
-            padding: 8px 14px;
-            font-size: 0.8rem;
-            font-weight: 800;
-            margin-top: 10px;
-        }
+    .btn-calc {
+      width: 100%;
+      margin-top: 22px;
+      border: none;
+      border-radius: 16px;
+      padding: 18px 22px;
+      background: linear-gradient(135deg, var(--eas-blue) 0%, var(--eas-blue-2) 100%);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 16px 30px rgba(15,23,42,0.18);
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
 
-        @media (min-width: 700px) {
-            .btn-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .btn-grid .full {
-                grid-column: 1 / -1;
-            }
-        }
-    </style>
+    .btn-calc:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 34px rgba(15,23,42,0.22);
+    }
+
+    #resultado {
+      display: none;
+      margin-top: 28px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: var(--shadow-1);
+    }
+
+    .res-header {
+      padding: 30px 22px;
+      text-align: center;
+      background:
+        linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .res-label {
+      display: inline-block;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--eas-blue);
+    }
+
+    .val-total {
+      margin: 10px 0 6px;
+      font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+      line-height: 1;
+      font-weight: 900;
+      color: var(--unimed);
+      letter-spacing: -0.04em;
+    }
+
+    .sub-info {
+      color: var(--muted);
+      font-size: 0.97rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: #ecfeff;
+      border: 1px solid #bff7ef;
+      color: #0f766e;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .content-wrap {
+      padding: 22px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .info-card {
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      border: 1px solid #e8edf3;
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.04);
+    }
+
+    .info-card.title-green {
+      border-left: 6px solid var(--unimed);
+    }
+
+    .info-card.title-gold {
+      border-left: 6px solid var(--eas-gold);
+    }
+
+    .info-card h4 {
+      margin: 0 0 14px;
+      color: var(--eas-blue);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+    }
+
+    .info-card p {
+      margin: 0;
+      line-height: 1.8;
+      font-size: 0.98rem;
+      color: var(--text);
+    }
+
+    .calc-box {
+      margin-top: 18px;
+      background: var(--soft-gold);
+      border: 1px dashed #efb54f;
+      border-radius: 16px;
+      padding: 18px;
+      color: #7c5310;
+      line-height: 1.8;
+      font-size: 0.97rem;
+    }
+
+    .actions-area {
+      display: none;
+      padding: 0 22px 24px;
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .action-btn {
+      text-decoration: none;
+      border: none;
+      border-radius: 16px;
+      padding: 18px 20px;
+      font-size: 1rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+      cursor: pointer;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-send {
+      background: linear-gradient(135deg, #25d366 0%, #16a34a 100%);
+      color: white;
+      box-shadow: 0 16px 28px rgba(34,197,94,0.22);
+    }
+
+    .btn-contract {
+      background: linear-gradient(135deg, #b89b3e 0%, #9a7f26 100%);
+      color: white;
+      box-shadow: 0 16px 28px rgba(184,155,62,0.24);
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+
+    @media (min-width: 760px) {
+      .page-shell {
+        padding: 28px 24px 60px;
+      }
+
+      .hero {
+        padding: 40px 34px 34px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .input-group.full {
+        grid-column: 1 / -1;
+      }
+
+      .btn-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .content-wrap {
+        padding: 26px;
+      }
+
+      .actions-area {
+        padding: 0 26px 28px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="page-shell">
+    <div class="container">
 
-<header>
-    <img src="logo oficial.jpg.png" alt="EAS CORRETORA" class="main-logo">
-    <div style="color: var(--eas-gold); font-weight: 700; margin-top:10px; letter-spacing: 1px;">
-        CONSULTORIA TÉCNICA DE PROTEÇÃO DE RENDA
-    </div>
-</header>
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="brand-wrap">
+            <div class="brand-logo-box">
+              <!-- Troque pelo arquivo LIMPO exportado em PNG ou WEBP -->
+              <img src="logo-eas.png" alt="EAS Corretora" class="brand-logo">
+            </div>
 
-<main class="main-content">
-    <div class="card">
-        <div class="input-group">
-            <label>Nome do Proponente</label>
-            <input type="text" id="nome" placeholder="Nome Completo">
+            <div class="brand-kicker">
+              <i class="fa-solid fa-shield-heart"></i>
+              Consultoria técnica de proteção de renda
+            </div>
+          </div>
+
+          <div class="hero-copy">
+            <h1>Simulador Profissional de Proteção de Renda</h1>
+            <p>
+              Gere o estudo técnico do cliente com visual mais elegante, linguagem comercial clara
+              e envio direto pelo WhatsApp.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="main-card">
+        <div class="card-header">
+          <h2>Preencha os dados do proponente</h2>
+          <p>
+            Informe nome, WhatsApp, idade, plano e cupom promocional. O sistema apresentará o valor mensal,
+            o estudo técnico detalhado e os botões para envio ao cliente ou contratação.
+          </p>
         </div>
 
-        <div class="input-group">
-            <label>WhatsApp (DDD + Número)</label>
-            <input type="tel" id="whatsapp" placeholder="Ex: 17991234567" maxlength="11">
-        </div>
+        <div class="form-body">
+          <div class="form-grid">
+            <div class="input-group full">
+              <label for="nome">Nome do Proponente</label>
+              <input type="text" id="nome" placeholder="Nome completo do cliente">
+            </div>
 
-        <div class="input-group">
-            <label>Idade Atual (16 a 70 anos)</label>
-            <input type="number" id="idade" placeholder="Ex: 35">
-        </div>
+            <div class="input-group">
+              <label for="whatsapp">WhatsApp (DDD + número)</label>
+              <input type="tel" id="whatsapp" placeholder="Ex: 17991234567" maxlength="11">
+              <div class="hint">Digite apenas números.</div>
+            </div>
 
-        <div class="input-group">
-            <label>Plano Escolhido</label>
-            <select id="plano">
+            <div class="input-group">
+              <label for="idade">Idade Atual (16 a 70 anos)</label>
+              <input type="number" id="idade" placeholder="Ex: 35" min="16" max="70">
+            </div>
+
+            <div class="input-group">
+              <label for="plano">Plano Escolhido</label>
+              <select id="plano">
                 <option value="ouro">OURO (10k Renda / 120k Vida)</option>
                 <option value="prata">PRATA (5k Renda / 100k Vida)</option>
                 <option value="bronze">BRONZE (3k Renda / 50k Vida)</option>
-            </select>
-        </div>
-
-        <div class="input-group">
-            <label>Cupom</label>
-            <input type="text" id="cupom" placeholder="Insira UNIMED08 para desconto">
-        </div>
-
-        <button class="btn-calc" onclick="gerarSimulacao()">
-            <i class="fas fa-calculator"></i> Gerar Estudo Técnico
-        </button>
-
-        <div id="resultado">
-            <div class="res-header">
-                <span style="font-weight: 800; color: var(--eas-blue);">INVESTIMENTO MENSAL FINAL</span>
-                <div class="val-total" id="res-valor"></div>
-                <div class="sub-info" id="res-meta"></div>
-                <div class="badge" id="res-cupom-badge" style="display:none;"></div>
+              </select>
             </div>
 
-            <div id="res-conteudo"></div>
+            <div class="input-group">
+              <label for="cupom">Cupom</label>
+              <input type="text" id="cupom" placeholder="Ex: UNIMED08">
+              <div class="hint">Cupons aceitos: UNIMED08 ou CALL08.</div>
+            </div>
+          </div>
+
+          <button class="btn-calc" onclick="gerarSimulacao()">
+            <i class="fa-solid fa-calculator"></i>
+            Gerar Estudo Técnico
+          </button>
+
+          <div id="resultado">
+            <div class="res-header">
+              <span class="res-label">Investimento mensal final</span>
+              <div class="val-total" id="res-valor"></div>
+              <div class="sub-info" id="res-meta"></div>
+              <div class="badge" id="res-cupom-badge" style="display:none;"></div>
+            </div>
+
+            <div class="content-wrap" id="res-conteudo"></div>
 
             <div class="actions-area" id="actions-area">
-                <div class="btn-grid">
-                    <a href="#" id="btn-contratar" class="btn-success full" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Contratar
-                    </a>
+              <div class="btn-grid">
+                <a href="#" id="btn-enviar-cliente" class="action-btn btn-send" target="_blank">
+                  <i class="fab fa-whatsapp"></i>
+                  Enviar ao Cliente
+                </a>
 
-                    <a href="#" id="btn-enviar-cliente" class="btn-success" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Enviar ao Cliente
-                    </a>
+                <a href="#" id="btn-contratar" class="action-btn btn-contract" target="_blank">
+                  <i class="fa-solid fa-file-signature"></i>
+                  Contratar
+                </a>
+              </div>
 
-                    <button type="button" id="btn-enviar-equipe" class="btn-secondary" onclick="compartilharEstudo()">
-                        <i class="fas fa-share-alt"></i> Enviar Estudo
-                    </button>
-
-                    <button type="button" id="btn-baixar-estudo" class="btn-download full" onclick="baixarEstudo()">
-                        <i class="fas fa-file-download"></i> Baixar Arquivo do Estudo
-                    </button>
-                </div>
+              <div class="footer-note">
+                Estudo técnico com envio direto pelo WhatsApp. Verifique sempre a tabela vigente da seguradora antes da formalização.
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</main>
+      </section>
 
-<script>
+    </div>
+  </div>
+
+  <script>
     const CONFIG = {
-        WHATSAPP_CORRETORA: "5517991123532",
-        NOME_CORRETORA: "EAS Corretora"
+      WHATSAPP_CORRETORA: "5517991123532",
+      NOME_CORRETORA: "EAS Corretora"
     };
 
     const DATA_MAP = {
-        ouro: {
-            cap: 120000, renda: 10000,
-            a37: { 16: 365.30, 17: 365.30, 18: 365.30, 19: 365.30, 20: 365.30, 21: 365.30, 22: 365.30, 23: 365.30, 24: 365.30, 25: 365.30, 26: 365.30, 27: 365.30, 28: 365.30, 29: 365.30, 30: 365.30, 31: 365.30, 32: 365.30, 33: 365.30, 34: 365.30, 35: 400.88, 36: 413.15, 37: 426.68, 38: 442.26, 39: 459.47, 40: 477.93, 41: 499.21, 42: 523.39, 43: 551.51, 44: 581.92, 45: 615.37, 46: 651.13, 47: 690.10, 48: 730.72, 49: 776.67, 50: 825.74, 51: 876.49, 52: 930.00, 53: 986.47, 54: 1045.05, 55: 1107.25, 56: 1174.32, 57: 1246.11, 58: 1324.05, 59: 1416.00, 60: 1527.09, 61: 1660.70, 62: 1823.46, 63: 2027.48, 64: 2261.51, 65: 2534.43, 66: 2846.54, 67: 3198.25, 68: 3594.68, 69: 4041.66, 70: 4545.75 },
-            call08: { 16: 216.19, 17: 216.19, 18: 216.19, 19: 216.19, 20: 216.19, 21: 216.19, 22: 216.19, 23: 216.19, 24: 216.19, 25: 216.19, 26: 216.19, 27: 216.19, 28: 216.19, 29: 216.19, 30: 216.19, 31: 216.19, 32: 216.19, 33: 216.19, 34: 216.19, 35: 237.24, 36: 244.50, 37: 252.51, 38: 261.73, 39: 271.91, 40: 282.83, 41: 295.43, 42: 309.74, 43: 326.38, 44: 344.37, 45: 364.17, 46: 385.33, 47: 408.39, 48: 432.43, 49: 459.62, 50: 488.66, 51: 518.69, 52: 550.35, 53: 583.78, 54: 618.44, 55: 655.25, 56: 694.94, 57: 737.42, 58: 783.55, 59: 837.96, 60: 903.70, 61: 982.77, 62: 1079.09, 63: 1199.82, 64: 1338.32, 65: 1499.83, 66: 1684.53, 67: 1892.67, 68: 2127.27, 69: 2391.79, 70: 2690.10 }
-        },
-        prata: {
-            cap: 100000, renda: 5000,
-            a37: { 16: 211.13, 17: 211.13, 18: 211.13, 19: 211.13, 20: 211.13, 21: 211.13, 22: 211.13, 23: 211.13, 24: 211.13, 25: 211.13, 26: 211.13, 27: 211.13, 28: 211.13, 29: 211.13, 30: 211.13, 31: 211.13, 32: 211.13, 33: 211.13, 34: 211.13, 35: 231.04, 36: 238.50, 37: 246.86, 38: 256.78, 39: 268.31, 40: 280.73, 41: 295.35, 42: 312.23, 43: 332.13, 44: 353.72, 45: 377.62, 46: 403.20, 47: 431.20, 48: 460.28, 49: 492.56, 50: 526.93, 51: 562.13, 52: 598.98, 53: 637.59, 54: 677.24, 55: 718.98, 56: 763.67, 57: 811.00, 58: 861.94, 59: 920.93, 60: 991.37, 61: 1075.17, 62: 1176.74, 63: 1302.41, 64: 1446.81, 65: 1614.91, 66: 1805.12, 67: 2018.54, 68: 2258.08, 69: 2527.03, 70: 2829.08 },
-            call08: { 16: 124.95, 17: 124.95, 18: 124.95, 19: 124.95, 20: 124.95, 21: 124.95, 22: 124.95, 23: 124.95, 24: 124.95, 25: 124.95, 26: 124.95, 27: 124.95, 28: 124.95, 29: 124.95, 30: 124.95, 31: 124.95, 32: 124.95, 33: 124.95, 34: 124.95, 35: 136.74, 36: 141.16, 37: 146.10, 38: 151.98, 39: 158.80, 40: 166.15, 41: 174.81, 42: 184.80, 43: 196.58, 44: 209.36, 45: 223.51, 46: 238.65, 47: 255.22, 48: 272.44, 49: 291.54, 50: 311.89, 51: 332.73, 52: 354.54, 53: 377.40, 54: 400.87, 55: 425.57, 56: 452.03, 57: 480.04, 58: 510.19, 59: 545.11, 60: 586.80, 61: 636.41, 62: 696.53, 63: 770.91, 64: 856.37, 65: 955.87, 66: 1068.45, 67: 1194.77, 68: 1336.55, 69: 1495.74, 70: 1674.52 }
-        },
-        bronze: {
-            cap: 50000, renda: 3000,
-            a37: { 16: 126.00, 17: 126.00, 18: 126.00, 19: 126.00, 20: 126.00, 21: 126.00, 22: 126.00, 23: 126.00, 24: 126.00, 25: 126.00, 26: 126.00, 27: 126.00, 28: 126.00, 29: 126.00, 30: 126.00, 31: 126.00, 32: 126.00, 33: 126.00, 34: 126.00, 35: 137.42, 36: 141.57, 37: 146.18, 38: 151.60, 39: 157.78, 40: 164.44, 41: 172.22, 42: 181.14, 43: 191.62, 44: 202.98, 45: 215.52, 46: 228.95, 47: 243.61, 48: 258.87, 49: 275.91, 50: 294.07, 51: 312.73, 52: 332.31, 53: 352.88, 54: 374.08, 55: 396.46, 56: 420.48, 57: 446.02, 58: 473.58, 59: 505.72, 60: 544.26, 61: 590.28, 62: 646.17, 63: 715.65, 64: 795.43, 65: 888.37, 66: 993.95, 67: 1112.60, 68: 1245.98, 69: 1395.96, 70: 1564.68 },
-            call08: { 16: 75.00, 17: 75.00, 18: 75.00, 19: 75.00, 20: 75.00, 21: 75.00, 22: 75.00, 23: 75.00, 24: 75.00, 25: 75.00, 26: 75.00, 27: 75.00, 28: 75.00, 29: 75.00, 30: 75.00, 31: 75.00, 32: 75.00, 33: 75.00, 34: 75.00, 35: 81.33, 36: 83.78, 37: 86.52, 38: 89.72, 39: 93.38, 40: 97.32, 41: 101.93, 42: 107.21, 43: 113.41, 44: 120.13, 45: 127.56, 46: 135.50, 47: 144.19, 48: 153.21, 49: 163.30, 50: 174.05, 51: 185.09, 52: 196.69, 53: 208.86, 54: 221.41, 55: 234.65, 56: 248.87, 57: 263.99, 58: 280.30, 59: 299.32, 60: 322.13, 61: 349.37, 62: 382.45, 63: 423.57, 64: 470.79, 65: 525.80, 66: 588.29, 67: 658.51, 68: 737.45, 69: 826.22, 70: 926.07 }
-        }
+      ouro: {
+        cap: 120000, renda: 10000,
+        a37: { 16: 365.30, 17: 365.30, 18: 365.30, 19: 365.30, 20: 365.30, 21: 365.30, 22: 365.30, 23: 365.30, 24: 365.30, 25: 365.30, 26: 365.30, 27: 365.30, 28: 365.30, 29: 365.30, 30: 365.30, 31: 365.30, 32: 365.30, 33: 365.30, 34: 365.30, 35: 400.88, 36: 413.15, 37: 426.68, 38: 442.26, 39: 459.47, 40: 477.93, 41: 499.21, 42: 523.39, 43: 551.51, 44: 581.92, 45: 615.37, 46: 651.13, 47: 690.10, 48: 730.72, 49: 776.67, 50: 825.74, 51: 876.49, 52: 930.00, 53: 986.47, 54: 1045.05, 55: 1107.25, 56: 1174.32, 57: 1246.11, 58: 1324.05, 59: 1416.00, 60: 1527.09, 61: 1660.70, 62: 1823.46, 63: 2027.48, 64: 2261.51, 65: 2534.43, 66: 2846.54, 67: 3198.25, 68: 3594.68, 69: 4041.66, 70: 4545.75 },
+        call08: { 16: 216.19, 17: 216.19, 18: 216.19, 19: 216.19, 20: 216.19, 21: 216.19, 22: 216.19, 23: 216.19, 24: 216.19, 25: 216.19, 26: 216.19, 27: 216.19, 28: 216.19, 29: 216.19, 30: 216.19, 31: 216.19, 32: 216.19, 33: 216.19, 34: 216.19, 35: 237.24, 36: 244.50, 37: 252.51, 38: 261.73, 39: 271.91, 40: 282.83, 41: 295.43, 42: 309.74, 43: 326.38, 44: 344.37, 45: 364.17, 46: 385.33, 47: 408.39, 48: 432.43, 49: 459.62, 50: 488.66, 51: 518.69, 52: 550.35, 53: 583.78, 54: 618.44, 55: 655.25, 56: 694.94, 57: 737.42, 58: 783.55, 59: 837.96, 60: 903.70, 61: 982.77, 62: 1079.09, 63: 1199.82, 64: 1338.32, 65: 1499.83, 66: 1684.53, 67: 1892.67, 68: 2127.27, 69: 2391.79, 70: 2690.10 }
+      },
+      prata: {
+        cap: 100000, renda: 5000,
+        a37: { 16: 211.13, 17: 211.13, 18: 211.13, 19: 211.13, 20: 211.13, 21: 211.13, 22: 211.13, 23: 211.13, 24: 211.13, 25: 211.13, 26: 211.13, 27: 211.13, 28: 211.13, 29: 211.13, 30: 211.13, 31: 211.13, 32: 211.13, 33: 211.13, 34: 211.13, 35: 231.04, 36: 238.50, 37: 246.86, 38: 256.78, 39: 268.31, 40: 280.73, 41: 295.35, 42: 312.23, 43: 332.13, 44: 353.72, 45: 377.62, 46: 403.20, 47: 431.20, 48: 460.28, 49: 492.56, 50: 526.93, 51: 562.13, 52: 598.98, 53: 637.59, 54: 677.24, 55: 718.98, 56: 763.67, 57: 811.00, 58: 861.94, 59: 920.93, 60: 991.37, 61: 1075.17, 62: 1176.74, 63: 1302.41, 64: 1446.81, 65: 1614.91, 66: 1805.12, 67: 2018.54, 68: 2258.08, 69: 2527.03, 70: 2829.08 },
+        call08: { 16: 124.95, 17: 124.95, 18: 124.95, 19: 124.95, 20: 124.95, 21: 124.95, 22: 124.95, 23: 124.95, 24: 124.95, 25: 124.95, 26: 124.95, 27: 124.95, 28: 124.95, 29: 124.95, 30: 124.95, 31: 124.95, 32: 124.95, 33: 124.95, 34: 124.95, 35: 136.74, 36: 141.16, 37: 146.10, 38: 151.98, 39: 158.80, 40: 166.15, 41: 174.81, 42: 184.80, 43: 196.58, 44: 209.36, 45: 223.51, 46: 238.65, 47: 255.22, 48: 272.44, 49: 291.54, 50: 311.89, 51: 332.73, 52: 354.54, 53: 377.40, 54: 400.87, 55: 425.57, 56: 452.03, 57: 480.04, 58: 510.19, 59: 545.11, 60: 586.80, 61: 636.41, 62: 696.53, 63: 770.91, 64: 856.37, 65: 955.87, 66: 1068.45, 67: 1194.77, 68: 1336.55, 69: 1495.74, 70: 1674.52 }
+      },
+      bronze: {
+        cap: 50000, renda: 3000,
+        a37: { 16: 126.00, 17: 126.00, 18: 126.00, 19: 126.00, 20: 126.00, 21: 126.00, 22: 126.00, 23: 126.00, 24: 126.00, 25: 126.00, 26: 126.00, 27: 126.00, 28: 126.00, 29: 126.00, 30: 126.00, 31: 126.00, 32: 126.00, 33: 126.00, 34: 126.00, 35: 137.42, 36: 141.57, 37: 146.18, 38: 151.60, 39: 157.78, 40: 164.44, 41: 172.22, 42: 181.14, 43: 191.62, 44: 202.98, 45: 215.52, 46: 228.95, 47: 243.61, 48: 258.87, 49: 275.91, 50: 294.07, 51: 312.73, 52: 332.31, 53: 352.88, 54: 374.08, 55: 396.46, 56: 420.48, 57: 446.02, 58: 473.58, 59: 505.72, 60: 544.26, 61: 590.28, 62: 646.17, 63: 715.65, 64: 795.43, 65: 888.37, 66: 993.95, 67: 1112.60, 68: 1245.98, 69: 1395.96, 70: 1564.68 },
+        call08: { 16: 75.00, 17: 75.00, 18: 75.00, 19: 75.00, 20: 75.00, 21: 75.00, 22: 75.00, 23: 75.00, 24: 75.00, 25: 75.00, 26: 75.00, 27: 75.00, 28: 75.00, 29: 75.00, 30: 75.00, 31: 75.00, 32: 75.00, 33: 75.00, 34: 75.00, 35: 81.33, 36: 83.78, 37: 86.52, 38: 89.72, 39: 93.38, 40: 97.32, 41: 101.93, 42: 107.21, 43: 113.41, 44: 120.13, 45: 127.56, 46: 135.50, 47: 144.19, 48: 153.21, 49: 163.30, 50: 174.05, 51: 185.09, 52: 196.69, 53: 208.86, 54: 221.41, 55: 234.65, 56: 248.87, 57: 263.99, 58: 280.30, 59: 299.32, 60: 322.13, 61: 349.37, 62: 382.45, 63: 423.57, 64: 470.79, 65: 525.80, 66: 588.29, 67: 658.51, 68: 737.45, 69: 826.22, 70: 926.07 }
+      }
     };
 
-    let ultimoEstudo = null;
-
     function escapeHtml(str) {
-        return String(str)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
     function moeda(valor) {
-        return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function somenteDigitos(valor) {
-        return valor.replace(/\D/g, '');
+      return valor.replace(/\D/g, '');
     }
 
     function nomePlanoBonito(planoKey) {
-        const mapa = {
-            ouro: "OURO",
-            prata: "PRATA",
-            bronze: "BRONZE"
-        };
-        return mapa[planoKey] || planoKey.toUpperCase();
+      const mapa = { ouro: "OURO", prata: "PRATA", bronze: "BRONZE" };
+      return mapa[planoKey] || planoKey.toUpperCase();
     }
 
     function gerarTextoEstudo(dados) {
-        const {
-            nome,
-            idade,
-            whatsapp,
-            planoKey,
-            preco,
-            info,
-            diaria,
-            liq,
-            cupom,
-            cupomAplicado
-        } = dados;
+      const {
+        nome, idade, whatsapp, planoKey, preco, info, diaria, liq, cupom, cupomAplicado
+      } = dados;
 
-        return `Olá ${nome.toUpperCase()}, seu estudo ficou da seguinte forma:
+      return `Olá ${nome.toUpperCase()}, seu estudo ficou da seguinte forma:
 
 Se ocorrer morte natural a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
 Se ocorrer morte por acidente, a Seguros Unimed pagará uma indenização no valor de R$ ${(info.cap * 2).toLocaleString('pt-BR')}.
@@ -368,6 +609,11 @@ Se ocorrer uma invalidez por acidente ou doença a Seguros Unimed pagará uma in
 
 SERIT:
 Se você ficar doente ou sofrer um acidente e ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de R$ ${info.renda.toLocaleString('pt-BR')} por mes.
+
+Carências do SERIT:
+- Doenças comuns: 30 dias de carência.
+- LER, DORT, LTC, hérnias, doenças progressivas e degenerativas: 180 dias de carência.
+- Acidente: sem carência.
 
 A indenização é paga da seguinte forma:
 R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${diaria} por dia.
@@ -389,161 +635,119 @@ Dados do estudo:
 ${CONFIG.NOME_CORRETORA}`;
     }
 
-    function gerarArquivoEstudo() {
-        if (!ultimoEstudo) return null;
-
-        const conteudo = gerarTextoEstudo(ultimoEstudo);
-        const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
-        const fileName = `estudo-${ultimoEstudo.nome.toLowerCase().replace(/\s+/g, '-')}.txt`;
-
-        return { blob, fileName, conteudo };
-    }
-
-    function baixarEstudo() {
-        const arquivo = gerarArquivoEstudo();
-        if (!arquivo) {
-            alert("Gere um estudo antes de baixar o arquivo.");
-            return;
-        }
-
-        const url = URL.createObjectURL(arquivo.blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = arquivo.fileName;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-    }
-
-    async function compartilharEstudo() {
-        const arquivo = gerarArquivoEstudo();
-        if (!arquivo) {
-            alert("Gere um estudo antes de enviar.");
-            return;
-        }
-
-        try {
-            if (navigator.canShare && navigator.share) {
-                const file = new File([arquivo.blob], arquivo.fileName, { type: "text/plain" });
-
-                if (navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        title: "Estudo Técnico - EAS Corretora",
-                        text: "Segue o estudo técnico gerado no simulador.",
-                        files: [file]
-                    });
-                    return;
-                }
-            }
-
-            baixarEstudo();
-            alert("Seu navegador não permite compartilhar o arquivo diretamente. O estudo foi baixado para envio manual.");
-        } catch (erro) {
-            console.error(erro);
-            alert("Não foi possível compartilhar o arquivo diretamente. O estudo pode ser baixado e enviado manualmente.");
-        }
-    }
-
     function gerarSimulacao() {
-        const nomeBruto = document.getElementById('nome').value.trim();
-        const nomeSeguro = escapeHtml(nomeBruto);
-        const idade = parseInt(document.getElementById('idade').value, 10);
-        const planoKey = document.getElementById('plano').value;
-        const cupom = document.getElementById('cupom').value.trim().toUpperCase();
+      const nomeBruto = document.getElementById('nome').value.trim();
+      const nomeSeguro = escapeHtml(nomeBruto);
+      const idade = parseInt(document.getElementById('idade').value, 10);
+      const planoKey = document.getElementById('plano').value;
+      const cupom = document.getElementById('cupom').value.trim().toUpperCase();
 
-        let whats = somenteDigitos(document.getElementById('whatsapp').value);
-        if (whats.length > 11) whats = whats.substring(0, 11);
+      let whats = somenteDigitos(document.getElementById('whatsapp').value);
+      if (whats.length > 11) whats = whats.substring(0, 11);
 
-        if (!nomeBruto || !idade || whats.length < 10) {
-            alert("Preencha Nome, Idade e um WhatsApp válido (DDD + Número).");
-            return;
-        }
+      if (!nomeBruto || !idade || whats.length < 10) {
+        alert("Preencha Nome, Idade e um WhatsApp válido (DDD + Número).");
+        return;
+      }
 
-        if (idade < 16 || idade > 70) {
-            alert("O sistema calcula precificação apenas para idades entre 16 e 70 anos.");
-            return;
-        }
+      if (idade < 16 || idade > 70) {
+        alert("O sistema calcula precificação apenas para idades entre 16 e 70 anos.");
+        return;
+      }
 
-        const info = DATA_MAP[planoKey];
-        const cupomAplicado = (cupom === "UNIMED08" || cupom === "CALL08");
-        const tabela = cupomAplicado ? info.call08 : info.a37;
+      const info = DATA_MAP[planoKey];
+      const cupomAplicado = (cupom === "UNIMED08" || cupom === "CALL08");
+      const tabela = cupomAplicado ? info.call08 : info.a37;
+      const preco = tabela[idade];
 
-        const preco = tabela[idade];
+      if (typeof preco !== "number") {
+        alert("Não foi encontrada precificação para essa idade.");
+        return;
+      }
 
-        if (typeof preco !== "number") {
-            alert("Não foi encontrada precificação para essa idade.");
-            return;
-        }
+      const diaria = moeda(info.renda / 30);
+      const liq = moeda((info.renda / 30) * 53);
 
-        const diaria = moeda(info.renda / 30);
-        const liq = moeda((info.renda / 30) * 53);
+      document.getElementById('res-valor').innerText = `R$ ${moeda(preco)}`;
+      document.getElementById('res-meta').innerText = `Plano ${nomePlanoBonito(planoKey)} • ${idade} anos`;
 
-        document.getElementById('res-valor').innerText = `R$ ${moeda(preco)}`;
-        document.getElementById('res-meta').innerText = `Plano ${nomePlanoBonito(planoKey)} • ${idade} anos`;
+      const badge = document.getElementById('res-cupom-badge');
+      if (cupomAplicado) {
+        badge.style.display = 'inline-flex';
+        badge.innerHTML = `<i class="fa-solid fa-ticket"></i> Cupom aplicado: ${cupom}`;
+      } else {
+        badge.style.display = 'none';
+        badge.innerHTML = '';
+      }
 
-        const badge = document.getElementById('res-cupom-badge');
-        if (cupomAplicado) {
-            badge.style.display = 'inline-block';
-            badge.innerText = `Cupom aplicado: ${cupom}`;
-        } else {
-            badge.style.display = 'none';
-            badge.innerText = '';
-        }
+      document.getElementById('res-conteudo').innerHTML = `
+        <div class="info-card title-gold">
+          <h4><i class="fa-solid fa-file-invoice-dollar"></i> Capitais Seguros Unimed</h4>
+          <p>
+            Seu estudo para <b>${nomeSeguro.toUpperCase()}</b> ficou da seguinte forma:<br><br>
+            Se ocorrer <b>morte natural</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${info.cap.toLocaleString('pt-BR')}</b>.<br>
+            Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(info.cap * 2).toLocaleString('pt-BR')}</b>.<br>
+            Se ocorrer uma <b>invalidez por acidente ou doença</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${info.cap.toLocaleString('pt-BR')}</b>.
+          </p>
+        </div>
 
-        document.getElementById('res-conteudo').innerHTML = `
-            <div class="info-card">
-                <h4><i class="fas fa-file-invoice-dollar"></i> Capitais Seguros Unimed</h4>
-                <p>Seu estudo para <b>${nomeSeguro.toUpperCase()}</b> ficou da seguinte forma:<br>
-                Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.<br>
-                Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(info.cap * 2).toLocaleString('pt-BR')}</b>.<br>
-                Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.</p>
-            </div>
-            <div class="info-card">
-                <h4><i class="fas fa-hand-holding-medical"></i> SERIT (Renda Mensal)</h4>
-                <p>Se você ficar doente ou sofrer um acidente e ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de R$ ${info.renda.toLocaleString('pt-BR')} por mes.</p>
-                <div class="calc-box">
-                    <strong>A indenização é paga da seguinte forma:</strong><br>
-                    R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${diaria} por dia</b>.<br><br>
-                    Suponhamos que você receba um atestado de 60 dias.<br>
-                    A seguradora paga 53 dias, pois os 7 primeiros dias são franquia.<br><br>
-                    Neste caso, você receberia <b>R$ ${liq} líquido direto em conta</b>.
-                </div>
-            </div>
-        `;
+        <div class="info-card title-green">
+          <h4><i class="fa-solid fa-hand-holding-medical"></i> SERIT (Renda Mensal)</h4>
+          <p>
+            Se você ficar doente ou sofrer um acidente e ficar afastado por mais de 7 dias,
+            a Seguros Unimed pagará uma renda no valor de <b>R$ ${info.renda.toLocaleString('pt-BR')}</b> por mes.
+          </p>
 
-        ultimoEstudo = {
-            nome: nomeBruto,
-            idade,
-            whatsapp: whats,
-            planoKey,
-            preco,
-            info,
-            diaria,
-            liq,
-            cupom,
-            cupomAplicado
-        };
+          <div class="calc-box">
+            <strong>Carências do SERIT:</strong><br>
+            • Doenças comuns: <b>30 dias</b> de carência.<br>
+            • LER, DORT, LTC, hérnias, doenças progressivas e degenerativas: <b>180 dias</b> de carência.<br>
+            • Acidente: <b>sem carência</b>.<br><br>
 
-        const mensagemCliente = gerarTextoEstudo(ultimoEstudo);
+            <strong>A indenização é paga da seguinte forma:</strong><br>
+            R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${diaria} por dia</b>.<br><br>
 
-        const mensagemContratar = `Olá, quero contratar o plano ${nomePlanoBonito(planoKey)} do estudo gerado para ${nomeBruto.toUpperCase()}.
+            Suponhamos que você receba um atestado de 60 dias.<br>
+            A seguradora paga 53 dias, pois os 7 primeiros dias são franquia.<br><br>
+
+            Neste caso, você receberia <b>R$ ${liq} líquido direto em conta</b>.<br><br>
+
+            <strong>Importante:</strong> o seguro cobre afastamentos reais comprovados por atestado médico, garantindo sua renda mesmo sem poder trabalhar.
+          </div>
+        </div>
+      `;
+
+      const dadosEstudo = {
+        nome: nomeBruto,
+        idade,
+        whatsapp: whats,
+        planoKey,
+        preco,
+        info,
+        diaria,
+        liq,
+        cupom,
+        cupomAplicado
+      };
+
+      const mensagemCliente = gerarTextoEstudo(dadosEstudo);
+
+      const mensagemContratar = `Olá, quero contratar o plano ${nomePlanoBonito(planoKey)} do estudo gerado para ${nomeBruto.toUpperCase()}.
 
 Idade: ${idade}
 Investimento mensal: R$ ${moeda(preco)}
 Cupom: ${cupom || "NÃO INFORMADO"}`;
 
-        document.getElementById('btn-enviar-cliente').href =
-            `https://wa.me/55${whats}?text=${encodeURIComponent(mensagemCliente)}`;
+      document.getElementById('btn-enviar-cliente').href =
+        `https://wa.me/55${whats}?text=${encodeURIComponent(mensagemCliente)}`;
 
-        document.getElementById('btn-contratar').href =
-            `https://wa.me/${CONFIG.WHATSAPP_CORRETORA}?text=${encodeURIComponent(mensagemContratar)}`;
+      document.getElementById('btn-contratar').href =
+        `https://wa.me/${CONFIG.WHATSAPP_CORRETORA}?text=${encodeURIComponent(mensagemContratar)}`;
 
-        document.getElementById('resultado').style.display = 'block';
-        document.getElementById('actions-area').style.display = 'block';
-
-        document.getElementById('resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('resultado').style.display = 'block';
+      document.getElementById('actions-area').style.display = 'block';
+      document.getElementById('resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-</script>
+  </script>
 </body>
 </html>
