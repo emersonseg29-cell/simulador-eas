@@ -300,11 +300,6 @@
         NOME_CORRETORA: "EAS Corretora"
     };
 
-    /**
-     * MATRIZ ATUARIAL EAS CORRETORA
-     * Base: Simulações originais (16 e 35 anos) projetadas com os índices de
-     * Reenquadramento Etário das Condições Gerais da Seguros Unimed.
-     */
     const DATA_MAP = {
         ouro: {
             cap: 120000, renda: 10000,
@@ -365,21 +360,24 @@
             cupomAplicado
         } = dados;
 
-        const texto = `Seu estudo para ${nome.toUpperCase()} ficou da seguinte forma:
+        return `Olá ${nome.toUpperCase()}, seu estudo ficou da seguinte forma:
 
 Se ocorrer morte natural a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
-Se ocorrer morte por acidente, o valor dobra para R$ ${(info.cap * 2).toLocaleString('pt-BR')}.
+Se ocorrer morte por acidente, a Seguros Unimed pagará uma indenização no valor de R$ ${(info.cap * 2).toLocaleString('pt-BR')}.
 Se ocorrer uma invalidez por acidente ou doença a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
 
-SERIT (Renda Mensal)
-Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${info.renda.toLocaleString('pt-BR')} por mes.
+SERIT:
+Se você ficar doente ou sofrer um acidente e ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de R$ ${info.renda.toLocaleString('pt-BR')} por mes.
 
-Cálculo do Benefício:
+A indenização é paga da seguinte forma:
 R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${diaria} por dia.
-Atestado de 60 dias (menos 7 dias franquia) = 53 dias pagos.
-Total: R$ ${liq} líquido direto em conta.
 
-Investimento mensal final: R$ ${moeda(preco)}
+Suponhamos que você receba um atestado de 60 dias.
+A seguradora paga 53 dias, pois os 7 primeiros dias são franquia.
+
+Neste caso, você receberia R$ ${liq} líquido direto em conta.
+
+💰 Investimento mensal: R$ ${moeda(preco)}/mês
 
 Dados do estudo:
 - Idade: ${idade} anos
@@ -389,8 +387,6 @@ Dados do estudo:
 - Tabela aplicada: ${cupomAplicado ? "PROMOCIONAL" : "PADRÃO"}
 
 ${CONFIG.NOME_CORRETORA}`;
-
-        return texto;
     }
 
     function gerarArquivoEstudo() {
@@ -465,7 +461,7 @@ ${CONFIG.NOME_CORRETORA}`;
         }
 
         if (idade < 16 || idade > 70) {
-            alert("O sistema calcula precificação atuarial apenas para idades entre 16 e 70 anos conforme Condições Gerais.");
+            alert("O sistema calcula precificação apenas para idades entre 16 e 70 anos.");
             return;
         }
 
@@ -500,16 +496,18 @@ ${CONFIG.NOME_CORRETORA}`;
                 <h4><i class="fas fa-file-invoice-dollar"></i> Capitais Seguros Unimed</h4>
                 <p>Seu estudo para <b>${nomeSeguro.toUpperCase()}</b> ficou da seguinte forma:<br>
                 Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.<br>
-                Se ocorrer <b>morte por acidente</b>, o valor dobra para <b>R$ ${(info.cap * 2).toLocaleString('pt-BR')}</b>.<br>
+                Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(info.cap * 2).toLocaleString('pt-BR')}</b>.<br>
                 Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.</p>
             </div>
             <div class="info-card">
                 <h4><i class="fas fa-hand-holding-medical"></i> SERIT (Renda Mensal)</h4>
-                <p>Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${info.renda.toLocaleString('pt-BR')} por mes.</p>
+                <p>Se você ficar doente ou sofrer um acidente e ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de R$ ${info.renda.toLocaleString('pt-BR')} por mes.</p>
                 <div class="calc-box">
-                    <strong>Cálculo do Benefício:</strong><br>
-                    R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${diaria} por dia</b>. <br>
-                    Atestado de 60 dias (menos 7 dias franquia) = 53 dias pagos. Total: <b>R$ ${liq} líquido direto em conta</b>.
+                    <strong>A indenização é paga da seguinte forma:</strong><br>
+                    R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${diaria} por dia</b>.<br><br>
+                    Suponhamos que você receba um atestado de 60 dias.<br>
+                    A seguradora paga 53 dias, pois os 7 primeiros dias são franquia.<br><br>
+                    Neste caso, você receberia <b>R$ ${liq} líquido direto em conta</b>.
                 </div>
             </div>
         `;
@@ -527,22 +525,7 @@ ${CONFIG.NOME_CORRETORA}`;
             cupomAplicado
         };
 
-        const mensagemCliente = `Olá ${nomeBruto.toUpperCase()}, seu estudo ${CONFIG.NOME_CORRETORA} está pronto!
-
-Plano: ${nomePlanoBonito(planoKey)}
-Investimento mensal final: R$ ${moeda(preco)}
-
-Se ocorrer morte natural a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
-Se ocorrer morte por acidente, o valor dobra para R$ ${(info.cap * 2).toLocaleString('pt-BR')}.
-Se ocorrer uma invalidez por acidente ou doença a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
-
-SERIT:
-Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${info.renda.toLocaleString('pt-BR')} por mes.
-
-Cálculo do Benefício:
-R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${diaria} por dia.
-Atestado de 60 dias (menos 7 dias franquia) = 53 dias pagos.
-Total: R$ ${liq} líquido direto em conta.`;
+        const mensagemCliente = gerarTextoEstudo(ultimoEstudo);
 
         const mensagemContratar = `Olá, quero contratar o plano ${nomePlanoBonito(planoKey)} do estudo gerado para ${nomeBruto.toUpperCase()}.
 
