@@ -1,1 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EAS Corretora | Área da Equipe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --navy:#0f172a;
+      --navy2:#162338;
+      --gold:#b89b3e;
+      --green:#00995d;
+      --green2:#16a34a;
+      --bg:#eef3f8;
+      --white:#ffffff;
+      --text:#1e293b;
+      --muted:#64748b;
+      --line:#e2e8f0;
+      --shadow1:0 12px 32px rgba(15,23,42,.08);
+      --shadow2:0 24px 60px rgba(15,23,42,.14);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:'Inter',sans-serif;color:var(--text);
+      background:linear-gradient(180deg,#f8fbff 0%,var(--bg) 100%);
+    }
+    .page{max-width:1100px;margin:0 auto;padding:18px 14px 50px}
+    .top{
+      background:linear-gradient(135deg,var(--navy2) 0%,var(--navy) 100%);
+      color:#fff;border-radius:30px;padding:24px 20px;box-shadow:var(--shadow2)
+    }
+    .logo-box{
+      width:100%;max-width:460px;min-height:118px;margin:0 auto 18px;padding:18px 22px;
+      border-radius:24px;display:flex;align-items:center;justify-content:center;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10)
+    }
+    .logo-box img{max-width:100%;max-height:92px;object-fit:contain;display:block}
+    .top h1{margin:0 0 10px;text-align:center;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:-.04em}
+    .top p{margin:0;text-align:center;color:rgba(255,255,255,.84);line-height:1.75}
+    .panel{margin-top:20px;background:#fff;border-radius:28px;box-shadow:var(--shadow1);overflow:hidden}
+    .panel-header{padding:26px 22px 14px;border-bottom:1px solid var(--line)}
+    .panel-header h2{margin:0 0 8px;font-size:2rem;letter-spacing:-.03em;color:var(--navy)}
+    .panel-header p{margin:0;color:var(--muted);line-height:1.7}
+    .panel-body{padding:22px}
+    .layout{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+    .card{
+      background:linear-gradient(180deg,#fff 0%,#fbfdff 100%);
+      border:1px solid #e8edf3;border-radius:22px;padding:20px
+    }
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .field{display:flex;flex-direction:column;gap:8px}
+    .field.full{grid-column:1/-1}
+    label{font-size:.82rem;font-weight:900;text-transform:uppercase;letter-spacing:.05em;color:var(--navy)}
+    input,select{
+      width:100%;padding:15px 15px;border-radius:16px;border:2px solid #d7dee8;
+      background:#fff;font-size:1rem;color:var(--text);outline:none
+    }
+    input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(0,153,93,.10)}
+    .hint{font-size:.8rem;color:var(--muted);line-height:1.5}
+    .btn{
+      text-decoration:none;border:none;border-radius:18px;padding:18px 22px;font-size:.96rem;
+      font-weight:900;text-transform:uppercase;letter-spacing:.04em;display:inline-flex;
+      align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:.18s ease
+    }
+    .btn:hover{transform:translateY(-1px);opacity:.98}
+    .btn-dark{width:100%;margin-top:18px;background:linear-gradient(135deg,var(--navy) 0%,#1e293b 100%);color:#fff}
+    .btn-primary{background:linear-gradient(135deg,#25d366 0%,#16a34a 100%);color:#fff}
+    .btn-secondary{background:linear-gradient(135deg,#b89b3e 0%,#8f7320 100%);color:#fff}
+    .resultado-top{display:none;margin-bottom:12px;padding:14px 16px;border-radius:16px;background:#f0fdf4;border:1px solid #b7efcf;color:#106b43;font-weight:700;line-height:1.6}
+    .resultado{display:none;margin-top:16px;background:#f8fafc;border:1px solid var(--line);border-radius:18px;padding:18px;line-height:1.75;white-space:pre-line}
+    .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+    .info-box{display:grid;gap:12px}
+    .mini{
+      border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff
+    }
+    .mini h4{margin:0 0 8px;color:var(--navy)}
+    .mini p{margin:0;color:var(--text);line-height:1.7}
+    .footer{text-align:center;margin-top:16px;color:var(--muted);font-size:.82rem}
+    @media (max-width: 979px){
+      .layout{grid-template-columns:1fr}
+      .form-grid{grid-template-columns:1fr}
+      .btn-row{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="top">
+      <div class="logo-box">
+        <img src="logo oficial.jpg.png" alt="EAS Corretora">
+      </div>
+      <h1>Área da Equipe</h1>
+      <p>Ferramenta interna para simulação, geração de estudo e envio comercial ao cliente.</p>
+    </section>
 
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Simulador comercial</h2>
+        <p>Preencha os dados do proponente, gere o estudo e envie o texto pronto pelo WhatsApp.</p>
+      </div>
+
+      <div class="panel-body">
+        <div class="layout">
+          <div class="card">
+            <div class="form-grid">
+              <div class="field full">
+                <label for="nome">Nome do proponente</label>
+                <input type="text" id="nome" placeholder="Nome completo do cliente">
+              </div>
+              <div class="field">
+                <label for="whatsapp">WhatsApp</label>
+                <input type="tel" id="whatsapp" placeholder="Ex: 17991234567" maxlength="11">
+                <div class="hint">Digite apenas números com DDD.</div>
+              </div>
+              <div class="field">
+                <label for="idade">Idade</label>
+                <input type="number" id="idade" min="16" max="70" placeholder="Ex: 35">
+              </div>
+              <div class="field">
+                <label for="plano">Plano</label>
+                <select id="plano">
+                  <option value="ouro">OURO (10k renda / 120k vida)</option>
+                  <option value="prata">PRATA (5k renda / 100k vida)</option>
+                  <option value="bronze">BRONZE (3k renda / 50k vida)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="cupom">Cupom</label>
+                <input type="text" id="cupom" placeholder="Ex: UNIMED08">
+                <div class="hint">Cupons válidos: UNIMED08 ou CALL08.</div>
+              </div>
+            </div>
+
+            <button class="btn btn-dark" onclick="gerarSimulacao()">
+              <i class="fa-solid fa-calculator"></i> Gerar estudo técnico
+            </button>
+
+            <div class="resultado-top" id="resultadoTop"></div>
+            <div class="resultado" id="resultado"></div>
+
+            <div class="btn-row">
+              <a href="#" id="btnEnviarCliente" class="btn btn-primary" target="_blank">
+                <i class="fab fa-whatsapp"></i> Enviar ao cliente
+              </a>
+              <a href="#" id="btnFalarConsultor" class="btn btn-secondary" target="_blank">
+                <i class="fa-solid fa-headset"></i> Falar com consultor
+              </a>
+            </div>
+          </div>
+
+          <div class="info-box">
+            <div class="mini">
+              <h4>Objetivo</h4>
+              <p>Gerar o estudo com rapidez, manter o padrão comercial e acelerar o fechamento.</p>
+            </div>
+            <div class="mini">
+              <h4>Carências</h4>
+              <p>Doenças comuns: 30 dias. LER, DORT, LTC, hérnias, doenças progressivas e degenerativas: 180 dias. Acidente: sem carência.</p>
+            </div>
+            <div class="mini">
+              <h4>Melhor uso</h4>
+              <p>Use esta página apenas para a equipe. A página pública do cliente deve ser mais limpa e voltada à captação.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">EAS Corretora • Página interna da equipe</div>
+  </div>
+
+  <script>
+    const CONFIG = {
+      WHATSAPP_CORRETORA: "5517991123532",
+      NOME_CORRETORA: "EAS Corretora"
+    };
+
+    const DATA_MAP = {
+      ouro: {
+        cap: 120000, renda: 10000,
+        a37: { 16: 365.30, 17: 365.30, 18: 365.30, 19: 365.30, 20: 365.30, 21: 365.30, 22: 365.30, 23: 365.30, 24: 365.30, 25: 365.30, 26: 365.30, 27: 365.30, 28: 365.30, 29: 365.30, 30: 365.30, 31: 365.30, 32: 365.30, 33: 365.30, 34: 365.30, 35: 400.88, 36: 413.15, 37: 426.68, 38: 442.26, 39: 459.47, 40: 477.93, 41: 499.21, 42: 523.39, 43: 551.51, 44: 581.92, 45: 615.37, 46: 651.13, 47: 690.10, 48: 730.72, 49: 776.67, 50: 825.74, 51: 876.49, 52: 930.00, 53: 986.47, 54: 1045.05, 55: 1107.25, 56: 1174.32, 57: 1246.11, 58: 1324.05, 59: 1416.00, 60: 1527.09, 61: 1660.70, 62: 1823.46, 63: 2027.48, 64: 2261.51, 65: 2534.43, 66: 2846.54, 67: 3198.25, 68: 3594.68, 69: 4041.66, 70: 4545.75 },
+        call08: { 16: 216.19, 17: 216.19, 18: 216.19, 19: 216.19, 20: 216.19, 21: 216.19, 22: 216.19, 23: 216.19, 24: 216.19, 25: 216.19, 26: 216.19, 27: 216.19, 28: 216.19, 29: 216.19, 30: 216.19, 31: 216.19, 32: 216.19, 33: 216.19, 34: 216.19, 35: 237.24, 36: 244.50, 37: 252.51, 38: 261.73, 39: 271.91, 40: 282.83, 41: 295.43, 42: 309.74, 43: 326.38, 44: 344.37, 45: 364.17, 46: 385.33, 47: 408.39, 48: 432.43, 49: 459.62, 50: 488.66, 51: 518.69, 52: 550.35, 53: 583.78, 54: 618.44, 55: 655.25, 56: 694.94, 57: 737.42, 58: 783.55, 59: 837.96, 60: 903.70, 61: 982.77, 62: 1079.09, 63: 1199.82, 64: 1338.32, 65: 1499.83, 66: 1684.53, 67: 1892.67, 68: 2127.27, 69: 2391.79, 70: 2690.10 }
+      },
+      prata: {
+        cap: 100000, renda: 5000,
+        a37: { 16: 211.13, 17: 211.13, 18: 211.13, 19: 211.13, 20: 211.13, 21: 211.13, 22: 211.13, 23: 211.13, 24: 211.13, 25: 211.13, 26: 211.13, 27: 211.13, 28: 211.13, 29: 211.13, 30: 211.13, 31: 211.13, 32: 211.13, 33: 211.13, 34: 211.13, 35: 231.04, 36: 238.50, 37: 246.86, 38: 256.78, 39: 268.31, 40: 280.73, 41: 295.35, 42: 312.23, 43: 332.13, 44: 353.72, 45: 377.62, 46: 403.20, 47: 431.20, 48: 460.28, 49: 492.56, 50: 526.93, 51: 562.13, 52: 598.98, 53: 637.59, 54: 677.24, 55: 718.98, 56: 763.67, 57: 811.00, 58: 861.94, 59: 920.93, 60: 991.37, 61: 1075.17, 62: 1176.74, 63: 1302.41, 64: 1446.81, 65: 1614.91, 66: 1805.12, 67: 2018.54, 68: 2258.08, 69: 2527.03, 70: 2829.08 },
+        call08: { 16: 124.95, 17: 124.95, 18: 124.95, 19: 124.95, 20: 124.95, 21: 124.95, 22: 124.95, 23: 124.95, 24: 124.95, 25: 124.95, 26: 124.95, 27: 124.95, 28: 124.95, 29: 124.95, 30: 124.95, 31: 124.95, 32: 124.95, 33: 124.95, 34: 124.95, 35: 136.74, 36: 141.16, 37: 146.10, 38: 151.98, 39: 158.80, 40: 166.15, 41: 174.81, 42: 184.80, 43: 196.58, 44: 209.36, 45: 223.51, 46: 238.65, 47: 255.22, 48: 272.44, 49: 291.54, 50: 311.89, 51: 332.73, 52: 354.54, 53: 377.40, 54: 400.87, 55: 425.57, 56: 452.03, 57: 480.04, 58: 510.19, 59: 545.11, 60: 586.80, 61: 636.41, 62: 696.53, 63: 770.91, 64: 856.37, 65: 955.87, 66: 1068.45, 67: 1194.77, 68: 1336.55, 69: 1495.74, 70: 1674.52 }
+      },
+      bronze: {
+        cap: 50000, renda: 3000,
+        a37: { 16: 126.00, 17: 126.00, 18: 126.00, 19: 126.00, 20: 126.00, 21: 126.00, 22: 126.00, 23: 126.00, 24: 126.00, 25: 126.00, 26: 126.00, 27: 126.00, 28: 126.00, 29: 126.00, 30: 126.00, 31: 126.00, 32: 126.00, 33: 126.00, 34: 126.00, 35: 137.42, 36: 141.57, 37: 146.18, 38: 151.60, 39: 157.78, 40: 164.44, 41: 172.22, 42: 181.14, 43: 191.62, 44: 202.98, 45: 215.52, 46: 228.95, 47: 243.61, 48: 258.87, 49: 275.91, 50: 294.07, 51: 312.73, 52: 332.31, 53: 352.88, 54: 374.08, 55: 396.46, 56: 420.48, 57: 446.02, 58: 473.58, 59: 505.72, 60: 544.26, 61: 590.28, 62: 646.17, 63: 715.65, 64: 795.43, 65: 888.37, 66: 993.95, 67: 1112.60, 68: 1245.98, 69: 1395.96, 70: 1564.68 },
+        call08: { 16: 75.00, 17: 75.00, 18: 75.00, 19: 75.00, 20: 75.00, 21: 75.00, 22: 75.00, 23: 75.00, 24: 75.00, 25: 75.00, 26: 75.00, 27: 75.00, 28: 75.00, 29: 75.00, 30: 75.00, 31: 75.00, 32: 75.00, 33: 75.00, 34: 75.00, 35: 81.33, 36: 83.78, 37: 86.52, 38: 89.72, 39: 93.38, 40: 97.32, 41: 101.93, 42: 107.21, 43: 113.41, 44: 120.13, 45: 127.56, 46: 135.50, 47: 144.19, 48: 153.21, 49: 163.30, 50: 174.05, 51: 185.09, 52: 196.69, 53: 208.86, 54: 221.41, 55: 234.65, 56: 248.87, 57: 263.99, 58: 280.30, 59: 299.32, 60: 322.13, 61: 349.37, 62: 382.45, 63: 423.57, 64: 470.79, 65: 525.80, 66: 588.29, 67: 658.51, 68: 737.45, 69: 826.22, 70: 926.07 }
+      }
+    };
+
+    function moeda(valor) {
+      return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function somenteDigitos(valor) {
+      return valor.replace(/\D/g, '');
+    }
+    function nomePlanoBonito(planoKey) {
+      const mapa = { ouro: "OURO", prata: "PRATA", bronze: "BRONZE" };
+      return mapa[planoKey] || planoKey.toUpperCase();
+    }
+    function gerarTextoEstudo(dados) {
+      const { nome, idade, whatsapp, planoKey, preco, info, diaria, liq, cupom, cupomAplicado } = dados;
+      return `Olá ${nome.toUpperCase()}, seu estudo ficou da seguinte forma:
+
+Se ocorrer morte natural a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
+Se ocorrer morte por acidente, a Seguros Unimed pagará uma indenização no valor de R$ ${(info.cap * 2).toLocaleString('pt-BR')}.
+Se ocorrer uma invalidez por acidente ou doença a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
+
+SERIT:
+Se você ficar doente ou sofrer um acidente e ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de R$ ${info.renda.toLocaleString('pt-BR')} por mes.
+
+Carências do SERIT:
+- Doenças comuns: 30 dias de carência.
+- LER, DORT, LTC, hérnias, doenças progressivas e degenerativas: 180 dias de carência.
+- Acidente: sem carência.
+
+A indenização é paga da seguinte forma:
+R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${diaria} por dia.
+
+Suponhamos que você receba um atestado de 60 dias.
+A seguradora paga 53 dias, pois os 7 primeiros dias são franquia.
+
+Neste caso, você receberia R$ ${liq} líquido direto em conta.
+
+💰 Investimento mensal: R$ ${moeda(preco)}/mês
+
+Dados do estudo:
+- Idade: ${idade} anos
+- Plano: ${nomePlanoBonito(planoKey)}
+- WhatsApp: ${whatsapp}
+- Cupom informado: ${cupom || "NÃO INFORMADO"}
+- Tabela aplicada: ${cupomAplicado ? "PROMOCIONAL" : "PADRÃO"}
+
+${CONFIG.NOME_CORRETORA}`;
+    }
+
+    function gerarSimulacao() {
+      const nome = document.getElementById('nome').value.trim();
+      const idade = parseInt(document.getElementById('idade').value, 10);
+      const planoKey = document.getElementById('plano').value;
+      const cupom = document.getElementById('cupom').value.trim().toUpperCase();
+      let whats = somenteDigitos(document.getElementById('whatsapp').value);
+
+      if (whats.length > 11) whats = whats.substring(0, 11);
+      if (!nome || !idade || whats.length < 10) { alert('Preencha nome, idade e WhatsApp válido.'); return; }
+      if (idade < 16 || idade > 70) { alert('O sistema calcula apenas para idades entre 16 e 70 anos.'); return; }
+
+      const info = DATA_MAP[planoKey];
+      const cupomAplicado = (cupom === "UNIMED08" || cupom === "CALL08");
+      const tabela = cupomAplicado ? info.call08 : info.a37;
+      const preco = tabela[idade];
+      if (typeof preco !== 'number') { alert('Não foi encontrada precificação para essa idade.'); return; }
+
+      const diaria = moeda(info.renda / 30);
+      const liq = moeda((info.renda / 30) * 53);
+
+      const dados = { nome, idade, whatsapp: whats, planoKey, preco, info, diaria, liq, cupom, cupomAplicado };
+      const texto = gerarTextoEstudo(dados);
+
+      document.getElementById('resultadoTop').style.display = 'block';
+      document.getElementById('resultadoTop').innerHTML = `<strong>Estudo gerado com sucesso.</strong><br>Plano ${nomePlanoBonito(planoKey)} • Investimento mensal: <strong>R$ ${moeda(preco)}</strong>`;
+
+      document.getElementById('resultado').style.display = 'block';
+      document.getElementById('resultado').textContent = texto;
+
+      document.getElementById('btnEnviarCliente').href =
+        `https://wa.me/55${whats}?text=${encodeURIComponent(texto)}`;
+
+      const msgConsultor = `Olá, quero falar com um consultor sobre este estudo.
+
+Nome: ${nome.toUpperCase()}
+Idade: ${idade}
+Plano: ${nomePlanoBonito(planoKey)}
+Investimento: R$ ${moeda(preco)}
+Cupom: ${cupom || "NÃO INFORMADO"}`;
+
+      document.getElementById('btnFalarConsultor').href =
+        `https://wa.me/${CONFIG.WHATSAPP_CORRETORA}?text=${encodeURIComponent(msgConsultor)}`;
+
+      document.getElementById('resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  </script>
+</body>
+</html>
