@@ -12,18 +12,19 @@
   <style>
     :root {
       --navy: #0f172a;
-      --navy2: #162338;
+      --navy-2: #162338;
+      --navy-3: #0a1220;
       --gold: #b89b3e;
-      --gold2: #8f7320;
+      --gold-2: #8f7320;
       --green: #25d366;
-      --green2: #16a34a;
+      --green-2: #16a34a;
       --bg: #eef3f8;
       --white: #ffffff;
       --text: #1e293b;
       --muted: #64748b;
       --line: #e2e8f0;
-      --shadow1: 0 12px 32px rgba(15,23,42,.08);
-      --shadow2: 0 24px 60px rgba(15,23,42,.16);
+      --shadow-1: 0 12px 32px rgba(15,23,42,.08);
+      --shadow-2: 0 24px 60px rgba(15,23,42,.16);
       --radius-xl: 32px;
       --radius-lg: 24px;
       --radius-md: 18px;
@@ -31,6 +32,10 @@
 
     * {
       box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
@@ -50,22 +55,23 @@
     }
 
     .hero {
+      position: relative;
+      overflow: hidden;
       background:
         radial-gradient(circle at 15% 15%, rgba(184,155,62,.16), transparent 22%),
         radial-gradient(circle at 85% 10%, rgba(0,153,93,.10), transparent 22%),
-        linear-gradient(135deg, var(--navy2) 0%, var(--navy) 72%, #0a1220 100%);
+        linear-gradient(135deg, var(--navy-2) 0%, var(--navy) 72%, var(--navy-3) 100%);
       color: #fff;
       border-radius: var(--radius-xl);
-      padding: 20px 20px 30px;
-      box-shadow: var(--shadow2);
+      padding: 20px 20px 34px;
+      box-shadow: var(--shadow-2);
       border: 1px solid rgba(255,255,255,.05);
-      overflow: hidden;
     }
 
     .topbar {
       display: flex;
       justify-content: flex-end;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .top-link {
@@ -79,6 +85,7 @@
       border: 1px solid rgba(255,255,255,.10);
       transition: .18s ease;
       white-space: nowrap;
+      backdrop-filter: blur(6px);
     }
 
     .top-link:hover {
@@ -96,37 +103,46 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       gap: 14px;
       margin: 0 auto 22px;
       text-align: center;
     }
 
-    .logo-box {
+    .logo-container {
       width: 100%;
       max-width: 520px;
-      min-height: 140px;
-      padding: 18px 22px;
-      border-radius: 26px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .logo-wrapper {
+      width: 100%;
+      max-width: 260px;
+      height: 150px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.10);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
+      border-radius: 28px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+      box-shadow:
+        0 10px 30px rgba(0,0,0,0.25),
+        inset 0 0 0 1px rgba(255,255,255,0.05);
+      overflow: hidden;
     }
 
-    .logo-box img {
-      max-width: 100%;
-      max-height: 120px;
+    .logo-wrapper img {
+      width: 180%;
+      max-width: none;
       object-fit: contain;
       display: block;
-      filter: drop-shadow(0 8px 14px rgba(0,0,0,.15));
+      filter: drop-shadow(0 12px 20px rgba(0,0,0,0.35));
     }
 
     .brand-text h2 {
       margin: 0;
-      font-size: clamp(1.5rem, 3vw, 2.3rem);
+      font-size: clamp(1.55rem, 3vw, 2.5rem);
       line-height: 1.05;
       font-weight: 900;
       letter-spacing: -0.03em;
@@ -135,9 +151,9 @@
 
     .brand-text p {
       margin: 6px 0 0;
-      max-width: 720px;
-      font-size: clamp(.92rem, 1.8vw, 1.02rem);
-      line-height: 1.7;
+      max-width: 760px;
+      font-size: clamp(.92rem, 1.8vw, 1.04rem);
+      line-height: 1.72;
       color: rgba(255,255,255,.78);
     }
 
@@ -145,7 +161,7 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      padding: 10px 16px;
+      padding: 11px 18px;
       border-radius: 999px;
       background: rgba(184,155,62,.12);
       border: 1px solid rgba(184,155,62,.28);
@@ -233,13 +249,13 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #25d366 0%, #16a34a 100%);
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-2) 100%);
       color: #fff;
       box-shadow: 0 14px 30px rgba(34,197,94,.22);
     }
 
     .btn-secondary {
-      background: linear-gradient(135deg, #b89b3e 0%, #8f7320 100%);
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-2) 100%);
       color: #fff;
       box-shadow: 0 14px 30px rgba(184,155,62,.26);
     }
@@ -256,7 +272,7 @@
       margin-top: 20px;
       background: #fff;
       border-radius: 30px;
-      box-shadow: var(--shadow1);
+      box-shadow: var(--shadow-1);
       overflow: hidden;
       border: 1px solid rgba(15,23,42,.04);
     }
@@ -286,7 +302,7 @@
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(3,1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
     }
 
@@ -344,13 +360,13 @@
         font-size: clamp(2rem, 8vw, 3.3rem);
       }
 
-      .logo-box {
-        min-height: 132px;
-        max-width: 100%;
+      .logo-wrapper {
+        max-width: 235px;
+        height: 140px;
       }
 
-      .logo-box img {
-        max-height: 106px;
+      .logo-wrapper img {
+        width: 175%;
       }
 
       .brand-text h2 {
@@ -376,8 +392,10 @@
 
       <div class="hero-inner">
         <div class="brand-block">
-          <div class="logo-box">
-            <img src="logo oficial.jpg.png" alt="EAS Corretora">
+          <div class="logo-container">
+            <div class="logo-wrapper">
+              <img src="logo oficial.jpg.png" alt="EAS Corretora">
+            </div>
           </div>
 
           <div class="brand-text">
@@ -391,7 +409,7 @@
           Proteção de renda para profissionais e famílias
         </div>
 
-        <h1>Se você precisar parar, sua renda não pode parar junto.</h1>
+        <h1>Se você parar de trabalhar, sua renda continua entrando.</h1>
 
         <p class="lead">
           Proteja sua renda mensal com uma solução pensada para quem não pode depender da sorte.
@@ -415,7 +433,7 @@
         </div>
 
         <div class="cta-bottom">
-          <a href="https://wa.me/5517991123532?text=Olá,%20quero%20contratar%20uma%20proteção%20de%20renda." target="_blank" class="btn btn-contract">
+          <a href="https://wa.me/5517991123532?text=Olá,%20quero%20fechar%20agora%20uma%20proteção%20de%20renda." target="_blank" class="btn btn-contract">
             <i class="fa-solid fa-file-signature"></i> Contratar
           </a>
         </div>
