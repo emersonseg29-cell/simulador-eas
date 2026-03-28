@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EAS Corretora - Simulador Profissional de Proteção de Renda</title>
+  <title>EAS Corretora | Proteja sua renda com inteligência</title>
+  <meta name="description" content="Receba um estudo gratuito e descubra como proteger sua renda em caso de afastamento por doença ou acidente.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,24 +13,26 @@
 
   <style>
     :root {
-      --eas-blue: #0f172a;
-      --eas-blue-2: #162338;
-      --eas-gold: #b89b3e;
-      --eas-gold-2: #d8c27b;
-      --unimed: #00995d;
-      --unimed-dark: #007f4d;
+      --navy: #0f172a;
+      --navy-2: #162338;
+      --gold: #b89b3e;
+      --gold-2: #d4bf76;
+      --green: #00995d;
+      --green-2: #16a34a;
       --bg: #eef3f8;
-      --card: #ffffff;
+      --white: #ffffff;
       --text: #1e293b;
-      --muted: #667085;
-      --line: #e5e7eb;
+      --muted: #64748b;
+      --line: #e2e8f0;
       --soft: #f8fafc;
+      --soft-green: #f0fdf4;
       --soft-gold: #fff8e8;
-      --shadow-1: 0 12px 30px rgba(15, 23, 42, 0.08);
-      --shadow-2: 0 22px 55px rgba(15, 23, 42, 0.14);
-      --radius-xl: 28px;
-      --radius-lg: 20px;
+      --shadow-1: 0 12px 32px rgba(15, 23, 42, 0.08);
+      --shadow-2: 0 24px 60px rgba(15, 23, 42, 0.14);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
       --radius-md: 16px;
+      --radius-sm: 12px;
     }
 
     * {
@@ -43,143 +46,321 @@
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
+      color: var(--text);
       background:
         radial-gradient(circle at top left, rgba(184,155,62,0.08), transparent 24%),
-        radial-gradient(circle at top right, rgba(0,153,93,0.06), transparent 24%),
-        linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
-      color: var(--text);
+        radial-gradient(circle at top right, rgba(0,153,93,0.05), transparent 26%),
+        linear-gradient(180deg, #f9fbfe 0%, var(--bg) 100%);
     }
 
     .page {
-      width: 100%;
-      max-width: 980px;
+      max-width: 1140px;
       margin: 0 auto;
-      padding: 18px 14px 42px;
+      padding: 18px 14px 56px;
     }
 
     .hero {
-      background:
-        radial-gradient(circle at top left, rgba(184,155,62,0.14), transparent 24%),
-        radial-gradient(circle at top right, rgba(0,153,93,0.10), transparent 24%),
-        linear-gradient(135deg, #16233a 0%, #0f172a 70%, #0c1422 100%);
-      border-radius: 30px;
-      box-shadow: var(--shadow-2);
-      padding: 22px 18px 26px;
-      color: #fff;
-      overflow: hidden;
       position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(184,155,62,0.16), transparent 22%),
+        radial-gradient(circle at 85% 10%, rgba(0,153,93,0.10), transparent 22%),
+        linear-gradient(135deg, var(--navy-2) 0%, var(--navy) 72%, #0a1220 100%);
+      color: var(--white);
+      border-radius: 34px;
+      padding: 22px 18px 28px;
+      box-shadow: var(--shadow-2);
       border: 1px solid rgba(255,255,255,0.05);
     }
 
-    .hero-inner {
-      text-align: center;
-      position: relative;
-      z-index: 1;
+    .hero-top {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 18px;
     }
 
     .logo-box {
       width: 100%;
       max-width: 430px;
       min-height: 88px;
-      margin: 0 auto 16px;
       padding: 14px 18px;
       border-radius: 22px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.09);
       display: flex;
       align-items: center;
       justify-content: center;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.09);
       backdrop-filter: blur(6px);
     }
 
-    .brand-logo {
+    .logo-box img {
       max-width: 100%;
-      max-height: 60px;
+      max-height: 62px;
       object-fit: contain;
       display: block;
     }
 
     .logo-fallback {
       display: none;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 800;
       color: rgba(255,255,255,0.92);
-      letter-spacing: 0.01em;
     }
 
-    .hero-badge {
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .badge {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 10px;
-      padding: 12px 18px;
-      margin-bottom: 16px;
+      padding: 10px 16px;
       border-radius: 999px;
+      background: rgba(184,155,62,0.12);
       border: 1px solid rgba(184,155,62,0.28);
-      background: rgba(184,155,62,0.10);
-      color: #f0d98c;
-      font-size: 0.80rem;
+      color: #f2dc96;
+      font-size: 0.8rem;
       font-weight: 800;
-      letter-spacing: 0.06em;
       text-transform: uppercase;
-      line-height: 1.3;
+      letter-spacing: 0.06em;
+      margin-bottom: 14px;
     }
 
     .hero h1 {
       margin: 0 0 12px;
-      font-size: clamp(1.85rem, 5.8vw, 3rem);
-      line-height: 1.08;
+      font-size: clamp(2rem, 6vw, 4.1rem);
+      line-height: 1.02;
+      letter-spacing: -0.05em;
       font-weight: 900;
-      letter-spacing: -0.03em;
     }
 
-    .hero p {
-      margin: 0 auto;
-      max-width: 720px;
-      font-size: clamp(1rem, 3.8vw, 1.12rem);
-      line-height: 1.65;
+    .hero p.lead {
+      margin: 0 0 20px;
+      font-size: clamp(1rem, 3.7vw, 1.15rem);
+      line-height: 1.75;
       color: rgba(255,255,255,0.84);
+      max-width: 700px;
     }
 
-    .panel {
-      margin-top: 18px;
-      background: var(--card);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-2);
-      overflow: hidden;
-      border: 1px solid rgba(15,23,42,0.04);
+    .hero-points {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
     }
 
-    .panel-header {
-      padding: 26px 22px 18px;
-      border-bottom: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(248,250,252,0.9) 0%, rgba(255,255,255,1) 100%);
+    .hero-point {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      color: rgba(255,255,255,0.92);
+      line-height: 1.55;
+      font-size: 0.97rem;
     }
 
-    .panel-header h2 {
-      margin: 0 0 10px;
-      font-size: clamp(1.7rem, 5vw, 2.3rem);
-      line-height: 1.08;
+    .hero-point i {
+      color: #79f2bf;
+      margin-top: 4px;
+    }
+
+    .hero-cta-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .btn {
+      text-decoration: none;
+      border: none;
+      border-radius: 18px;
+      padding: 18px 20px;
+      font-size: 0.98rem;
       font-weight: 900;
-      letter-spacing: -0.03em;
-      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: transform .18s ease, opacity .18s ease, box-shadow .18s ease;
     }
 
-    .panel-header p {
+    .btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.98;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #25d366 0%, var(--green-2) 100%);
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(34,197,94,0.24);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--gold) 0%, #947823 100%);
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(184,155,62,0.26);
+    }
+
+    .hero-side-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 18px;
+      backdrop-filter: blur(8px);
+    }
+
+    .mini-proof {
+      display: grid;
+      gap: 14px;
+    }
+
+    .mini-proof-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .mini-proof-card h4 {
+      margin: 0 0 8px;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+
+    .mini-proof-card p {
       margin: 0;
-      font-size: 1rem;
-      line-height: 1.72;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .section {
+      margin-top: 20px;
+      background: var(--white);
+      border-radius: 28px;
+      box-shadow: var(--shadow-1);
+      border: 1px solid rgba(15,23,42,0.04);
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: 26px 22px 14px;
+    }
+
+    .section-header h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.6rem, 5vw, 2.3rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      color: var(--navy);
+    }
+
+    .section-header p {
+      margin: 0;
       color: var(--muted);
+      line-height: 1.75;
+      font-size: 0.98rem;
     }
 
-    .form-area {
-      padding: 22px;
+    .section-body {
+      padding: 0 22px 24px;
     }
 
-    .grid {
+    .cards-3,
+    .cards-4 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      border: 1px solid #e8edf3;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(15,23,42,0.04);
+    }
+
+    .card h3,
+    .card h4 {
+      margin: 0 0 10px;
+      color: var(--navy);
+      font-size: 1rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 0.95rem;
+    }
+
+    .icon-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--soft-gold);
+      color: #8b6a12;
+      font-size: 1.15rem;
+      margin-bottom: 12px;
+    }
+
+    .strip {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 0 22px 24px;
+    }
+
+    .strip-box {
+      border-radius: 18px;
+      padding: 16px 18px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .simulador-wrap {
       display: grid;
       grid-template-columns: 1fr;
       gap: 18px;
+      padding: 0 22px 24px;
+    }
+
+    .sim-card {
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      border: 1px solid #e8edf3;
+      border-radius: 22px;
+      padding: 20px;
+    }
+
+    .sim-card h3 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 1.2rem;
+    }
+
+    .sim-card p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
     }
 
     .field {
@@ -193,258 +374,181 @@
     }
 
     label {
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: #0f172a;
+      color: var(--navy);
     }
 
-    input, select {
+    input, select, textarea {
       width: 100%;
-      padding: 16px 16px;
-      border-radius: var(--radius-md);
-      border: 2px solid #d6dde6;
+      padding: 15px 15px;
+      border-radius: 16px;
+      border: 2px solid #d7dee8;
       background: #fff;
       font-size: 1rem;
       color: var(--text);
       outline: none;
-      transition: 0.2s ease;
+      transition: border-color .2s ease, box-shadow .2s ease;
+      font-family: inherit;
     }
 
-    input:focus, select:focus {
-      border-color: var(--unimed);
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--green);
       box-shadow: 0 0 0 4px rgba(0,153,93,0.10);
     }
 
     .hint {
-      font-size: 0.82rem;
       color: var(--muted);
+      font-size: 0.81rem;
       line-height: 1.5;
     }
 
-    .btn-calc {
-      width: 100%;
-      margin-top: 20px;
-      padding: 18px 20px;
-      border: none;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    .btn-dark {
+      background: linear-gradient(135deg, var(--navy) 0%, #1e293b 100%);
       color: #fff;
-      font-size: 1rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      box-shadow: 0 14px 28px rgba(15,23,42,0.16);
+    }
+
+    .resultado {
+      display: none;
+      margin-top: 18px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      line-height: 1.75;
+      color: var(--text);
+      white-space: pre-line;
+    }
+
+    .resultado-top {
+      display: none;
+      margin-bottom: 12px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--soft-green);
+      border: 1px solid #b7efcf;
+      color: #106b43;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .faq-item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 18px;
+      font-weight: 800;
+      color: var(--navy);
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
-      cursor: pointer;
-      box-shadow: 0 14px 28px rgba(15,23,42,0.18);
-      transition: transform .18s ease, opacity .18s ease;
+      justify-content: space-between;
+      gap: 12px;
     }
 
-    .btn-calc:hover {
-      opacity: 0.97;
-      transform: translateY(-1px);
-    }
-
-    #resultado {
+    .faq-item summary::-webkit-details-marker {
       display: none;
-      margin-top: 24px;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      overflow: hidden;
-      background: #fff;
-      box-shadow: var(--shadow-1);
     }
 
-    .res-header {
-      padding: 28px 20px 24px;
+    .faq-item .faq-content {
+      padding: 0 18px 18px;
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 0.95rem;
+    }
+
+    .cta-final {
       text-align: center;
-      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at top left, rgba(184,155,62,0.12), transparent 22%),
+        linear-gradient(135deg, #132136 0%, #0f172a 100%);
+      color: #fff;
+      border-radius: 30px;
+      padding: 30px 20px;
+      box-shadow: var(--shadow-2);
+      margin-top: 20px;
     }
 
-    .res-label {
-      display: inline-block;
-      font-size: 0.82rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--eas-blue);
-    }
-
-    .val-total {
-      margin: 10px 0 6px;
-      font-size: clamp(2.15rem, 7vw, 3.4rem);
-      line-height: 1;
-      font-weight: 900;
-      color: var(--unimed);
+    .cta-final h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      line-height: 1.08;
       letter-spacing: -0.04em;
     }
 
-    .sub-info {
-      color: var(--muted);
-      font-size: 0.96rem;
-      line-height: 1.5;
+    .cta-final p {
+      margin: 0 auto 18px;
+      max-width: 760px;
+      color: rgba(255,255,255,0.84);
+      line-height: 1.75;
     }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 14px;
-      padding: 9px 14px;
-      border-radius: 999px;
-      background: #ecfeff;
-      border: 1px solid #bff7ef;
-      color: #0f766e;
-      font-size: 0.82rem;
-      font-weight: 800;
-    }
-
-    .content-wrap {
-      padding: 20px;
-      display: grid;
-      gap: 16px;
-    }
-
-    .info-card {
-      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-      border: 1px solid #e7edf3;
-      border-radius: 20px;
-      padding: 22px;
-      box-shadow: 0 8px 22px rgba(15,23,42,0.04);
-    }
-
-    .info-card.title-gold {
-      border-left: 6px solid var(--eas-gold);
-    }
-
-    .info-card.title-green {
-      border-left: 6px solid var(--unimed);
-    }
-
-    .info-card h4 {
-      margin: 0 0 14px;
-      color: var(--eas-blue);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.04rem;
-    }
-
-    .info-card p {
-      margin: 0;
-      line-height: 1.82;
-      font-size: 0.98rem;
-      color: var(--text);
-    }
-
-    .calc-box {
-      margin-top: 18px;
-      background: var(--soft-gold);
-      border: 1px dashed #efb54f;
-      border-radius: 16px;
-      padding: 18px;
-      color: #7c5310;
-      line-height: 1.8;
-      font-size: 0.96rem;
-    }
-
-    .actions-area {
-      display: none;
-      padding: 0 20px 22px;
-    }
-
-    .btn-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
-
-    .action-btn {
-      text-decoration: none;
-      border: none;
-      border-radius: 18px;
-      padding: 18px 20px;
-      font-size: 1rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: transform .18s ease, opacity .18s ease;
-      cursor: pointer;
-    }
-
-    .action-btn:hover {
-      transform: translateY(-1px);
-      opacity: 0.98;
-    }
-
-    .btn-send {
-      background: linear-gradient(135deg, #25d366 0%, #16a34a 100%);
-      color: #fff;
-      box-shadow: 0 14px 26px rgba(34,197,94,0.22);
-    }
-
-    .btn-contract {
-      background: linear-gradient(135deg, #b89b3e 0%, #987d27 100%);
-      color: #fff;
-      box-shadow: 0 14px 26px rgba(184,155,62,0.24);
-    }
-
-    .footer-note {
-      margin-top: 14px;
+    .footer {
       text-align: center;
+      margin-top: 18px;
       color: var(--muted);
-      font-size: 0.81rem;
-      line-height: 1.65;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      padding: 0 10px;
     }
 
     @media (min-width: 768px) {
       .page {
-        padding: 28px 20px 52px;
+        padding: 24px 18px 60px;
       }
 
       .hero {
-        padding: 30px 28px 34px;
+        padding: 28px 26px 32px;
       }
 
-      .logo-box {
-        min-height: 100px;
+      .hero-cta-row {
+        grid-template-columns: 1fr 1fr;
+        max-width: 560px;
       }
 
-      .brand-logo {
-        max-height: 68px;
+      .cards-3 {
+        grid-template-columns: repeat(3, 1fr);
       }
 
-      .grid {
+      .cards-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .form-grid {
         grid-template-columns: 1fr 1fr;
       }
 
-      .panel-header {
-        padding: 30px 28px 20px;
+      .simulador-wrap {
+        grid-template-columns: 1.1fr 0.9fr;
       }
 
-      .form-area {
-        padding: 28px;
-      }
-
-      .content-wrap {
-        padding: 24px;
-      }
-
-      .actions-area {
-        padding: 0 24px 26px;
-      }
-
-      .btn-grid {
+      .btn-grid-2 {
+        display: grid;
         grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+    }
+
+    @media (min-width: 980px) {
+      .hero-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+      }
+
+      .cards-4 {
+        grid-template-columns: repeat(4, 1fr);
       }
     }
   </style>
@@ -453,108 +557,305 @@
   <div class="page">
 
     <section class="hero">
-      <div class="hero-inner">
+      <div class="hero-top">
         <div class="logo-box">
-          <img
-            src="logo oficial.jpg.png"
-            alt="EAS Corretora"
-            class="brand-logo"
-            onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='block';"
-          >
-          <div id="logoFallback" class="logo-fallback">EAS Corretora</div>
+          <img src="logo oficial.jpg.png" alt="EAS Corretora"
+               onerror="this.style.display='none';document.getElementById('logoFallbackV2').style.display='block';">
+          <div id="logoFallbackV2" class="logo-fallback">EAS Corretora</div>
         </div>
-
-        <div class="hero-badge">
-          <i class="fa-solid fa-shield-heart"></i>
-          Consultoria Técnica de Proteção de Renda
-        </div>
-
-        <h1>Simulador Profissional de Proteção de Renda</h1>
-        <p>
-          Gere o estudo técnico do cliente com visual elegante, linguagem comercial clara
-          e envio direto pelo WhatsApp.
-        </p>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="panel-header">
-        <h2>Preencha os dados do proponente</h2>
-        <p>
-          Informe nome, WhatsApp, idade, plano e cupom promocional.
-          O sistema apresentará o valor mensal, o estudo técnico detalhado e os botões para envio ao cliente ou contratação.
-        </p>
       </div>
 
-      <div class="form-area">
-        <div class="grid">
-          <div class="field full">
-            <label for="nome">Nome do Proponente</label>
-            <input type="text" id="nome" placeholder="Nome completo do cliente">
+      <div class="hero-grid">
+        <div>
+          <div class="badge">
+            <i class="fa-solid fa-shield-heart"></i>
+            Proteção de renda para profissionais e famílias
           </div>
 
-          <div class="field">
-            <label for="whatsapp">WhatsApp (DDD + número)</label>
-            <input type="tel" id="whatsapp" placeholder="Ex: 17991234567" maxlength="11">
-            <div class="hint">Digite apenas números.</div>
-          </div>
+          <h1>Se você precisar parar, sua renda não pode parar junto.</h1>
 
-          <div class="field">
-            <label for="idade">Idade Atual (16 a 70 anos)</label>
-            <input type="number" id="idade" placeholder="Ex: 35" min="16" max="70">
-          </div>
+          <p class="lead">
+            Descubra como proteger sua renda mensal em caso de afastamento por doença ou acidente,
+            com um estudo técnico rápido, claro e personalizado.
+          </p>
 
-          <div class="field">
-            <label for="plano">Plano Escolhido</label>
-            <select id="plano">
-              <option value="ouro">OURO (10k Renda / 120k Vida)</option>
-              <option value="prata">PRATA (5k Renda / 100k Vida)</option>
-              <option value="bronze">BRONZE (3k Renda / 50k Vida)</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="cupom">Cupom</label>
-            <input type="text" id="cupom" placeholder="Ex: UNIMED08">
-            <div class="hint">Cupons aceitos: UNIMED08 ou CALL08.</div>
-          </div>
-        </div>
-
-        <button class="btn-calc" onclick="gerarSimulacao()">
-          <i class="fa-solid fa-calculator"></i>
-          Gerar Estudo Técnico
-        </button>
-
-        <div id="resultado">
-          <div class="res-header">
-            <span class="res-label">Investimento mensal final</span>
-            <div class="val-total" id="res-valor"></div>
-            <div class="sub-info" id="res-meta"></div>
-            <div class="badge" id="res-cupom-badge" style="display:none;"></div>
-          </div>
-
-          <div class="content-wrap" id="res-conteudo"></div>
-
-          <div class="actions-area" id="actions-area">
-            <div class="btn-grid">
-              <a href="#" id="btn-enviar-cliente" class="action-btn btn-send" target="_blank">
-                <i class="fab fa-whatsapp"></i>
-                Enviar ao Cliente
-              </a>
-
-              <a href="#" id="btn-contratar" class="action-btn btn-contract" target="_blank">
-                <i class="fa-solid fa-file-signature"></i>
-                Contratar
-              </a>
+          <div class="hero-points">
+            <div class="hero-point">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Simulação rápida com explicação simples e comercial.</span>
             </div>
+            <div class="hero-point">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Proteção por morte, invalidez e renda temporária por afastamento.</span>
+            </div>
+            <div class="hero-point">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Atendimento humano pelo WhatsApp com consultor da EAS Corretora.</span>
+            </div>
+          </div>
 
-            <div class="footer-note">
-              Estudo técnico com envio direto pelo WhatsApp. Confira sempre a tabela vigente da seguradora antes da formalização.
+          <div class="hero-cta-row">
+            <a href="#simulador" class="btn btn-primary">
+              <i class="fa-solid fa-bolt"></i>
+              Quero minha simulação
+            </a>
+            <a href="https://wa.me/5517991123532?text=Olá,%20quero%20falar%20com%20um%20consultor%20sobre%20proteção%20de%20renda." target="_blank" class="btn btn-secondary">
+              <i class="fab fa-whatsapp"></i>
+              Falar com consultor
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-side-card">
+          <div class="mini-proof">
+            <div class="mini-proof-card">
+              <h4>Para quem é indicado</h4>
+              <p>Autônomos, profissionais liberais, empreendedores, prestadores de serviço e quem depende da própria renda para manter a vida financeira em ordem.</p>
+            </div>
+            <div class="mini-proof-card">
+              <h4>O que você recebe</h4>
+              <p>Explicação do estudo, valor mensal, proteção principal, carências e atendimento para avançar com segurança.</p>
+            </div>
+            <div class="mini-proof-card">
+              <h4>Objetivo da página</h4>
+              <p>Transformar curiosidade em lead quente, e lead quente em conversa comercial real com fechamento no WhatsApp.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Por que esse seguro chama tanta atenção?</h2>
+        <p>
+          Porque ele trata um problema real: a maioria das pessoas pensa em proteger a vida,
+          mas esquece de proteger a renda mensal que paga todas as contas.
+        </p>
+      </div>
+      <div class="section-body">
+        <div class="cards-3">
+          <div class="card">
+            <div class="icon-circle"><i class="fa-solid fa-wallet"></i></div>
+            <h3>Proteção da renda</h3>
+            <p>Se houver afastamento por doença ou acidente, a cobertura pode ajudar a manter o fluxo financeiro da família.</p>
+          </div>
+          <div class="card">
+            <div class="icon-circle"><i class="fa-solid fa-user-shield"></i></div>
+            <h3>Segurança patrimonial</h3>
+            <p>Reduz o impacto financeiro de imprevistos que poderiam comprometer reservas, negócio e padrão de vida.</p>
+          </div>
+          <div class="card">
+            <div class="icon-circle"><i class="fa-solid fa-hand-holding-heart"></i></div>
+            <h3>Tranquilidade</h3>
+            <p>Você passa a ter uma estratégia melhor de proteção, em vez de depender apenas da sorte ou da reserva de emergência.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>O que pode estar incluído no seu estudo</h2>
+        <p>
+          A proposta pode combinar proteção para vida, invalidez e renda temporária, conforme o plano analisado.
+        </p>
+      </div>
+      <div class="section-body">
+        <div class="cards-4">
+          <div class="card">
+            <h4>Morte natural</h4>
+            <p>Proteção financeira para os beneficiários em caso de falecimento por causa natural.</p>
+          </div>
+          <div class="card">
+            <h4>Morte por acidente</h4>
+            <p>Em muitos estudos, a indenização para morte acidental é superior ao capital base.</p>
+          </div>
+          <div class="card">
+            <h4>Invalidez</h4>
+            <p>Amparo financeiro em caso de invalidez por acidente ou doença, conforme regra do produto.</p>
+          </div>
+          <div class="card">
+            <h4>SERIT / renda temporária</h4>
+            <p>Possibilidade de renda durante afastamento comprovado por atestado médico, respeitando regras e carências.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Carências explicadas de forma simples</h2>
+        <p>
+          Transparência gera confiança. Por isso, já deixamos esse ponto claro desde o primeiro contato.
+        </p>
+      </div>
+      <div class="strip">
+        <div class="strip-box"><strong>Doenças comuns:</strong> 30 dias de carência.</div>
+        <div class="strip-box"><strong>LER, DORT, LTC, hérnias, doenças progressivas e degenerativas:</strong> 180 dias de carência.</div>
+        <div class="strip-box"><strong>Acidente:</strong> sem carência.</div>
+      </div>
+    </section>
+
+    <section class="section" id="simulador">
+      <div class="section-header">
+        <h2>Faça sua simulação agora</h2>
+        <p>
+          Preencha os dados abaixo e veja um estudo comercial com explicação pronta para atendimento e fechamento.
+        </p>
+      </div>
+
+      <div class="simulador-wrap">
+        <div class="sim-card">
+          <h3>Simulação inteligente</h3>
+          <p>Preencha os dados do lead, gere a explicação e chame o consultor diretamente pelo WhatsApp.</p>
+
+          <div class="form-grid">
+            <div class="field full">
+              <label for="nome">Nome do proponente</label>
+              <input type="text" id="nome" placeholder="Nome completo do cliente">
+            </div>
+
+            <div class="field">
+              <label for="whatsapp">WhatsApp</label>
+              <input type="tel" id="whatsapp" placeholder="Ex: 17991234567" maxlength="11">
+              <div class="hint">Digite apenas números com DDD.</div>
+            </div>
+
+            <div class="field">
+              <label for="idade">Idade</label>
+              <input type="number" id="idade" min="16" max="70" placeholder="Ex: 35">
+            </div>
+
+            <div class="field">
+              <label for="plano">Plano</label>
+              <select id="plano">
+                <option value="ouro">OURO (10k renda / 120k vida)</option>
+                <option value="prata">PRATA (5k renda / 100k vida)</option>
+                <option value="bronze">BRONZE (3k renda / 50k vida)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="cupom">Cupom</label>
+              <input type="text" id="cupom" placeholder="Ex: UNIMED08">
+              <div class="hint">Cupons válidos: UNIMED08 ou CALL08.</div>
+            </div>
+          </div>
+
+          <button class="btn btn-dark" style="width:100%; margin-top:18px;" onclick="gerarSimulacaoV2()">
+            <i class="fa-solid fa-calculator"></i>
+            Gerar estudo técnico
+          </button>
+
+          <div class="resultado-top" id="resultadoTop"></div>
+          <div class="resultado" id="resultado"></div>
+
+          <div class="btn-grid-2" style="margin-top:14px;">
+            <a href="#" id="btnEnviarCliente" class="btn btn-primary" target="_blank">
+              <i class="fab fa-whatsapp"></i>
+              Enviar ao cliente
+            </a>
+            <a href="#" id="btnFalarConsultor" class="btn btn-secondary" target="_blank">
+              <i class="fa-solid fa-headset"></i>
+              Falar com consultor
+            </a>
+          </div>
+        </div>
+
+        <div class="sim-card">
+          <h3>Por que essa página converte melhor?</h3>
+          <p>Ela foi pensada para anúncio, tráfego social e WhatsApp, com estrutura clara e apelo comercial.</p>
+
+          <div class="cards-3" style="grid-template-columns:1fr; gap:12px;">
+            <div class="card" style="padding:16px;">
+              <h4>Capta atenção rápido</h4>
+              <p>Mensagem principal forte, problema claro e CTA visível logo no início da página.</p>
+            </div>
+            <div class="card" style="padding:16px;">
+              <h4>Reduz objeção</h4>
+              <p>Explica benefício, carência e lógica do estudo sem deixar a conversa confusa.</p>
+            </div>
+            <div class="card" style="padding:16px;">
+              <h4>Leva para ação</h4>
+              <p>O lead pode pedir atendimento ou receber a explicação pronta no WhatsApp.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Perguntas frequentes</h2>
+        <p>Estas respostas ajudam a reduzir dúvidas e melhorar a conversão do lead antes do atendimento.</p>
+      </div>
+      <div class="section-body">
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>
+              Esse seguro serve para autônomos?
+              <i class="fa-solid fa-plus"></i>
+            </summary>
+            <div class="faq-content">
+              Sim. Inclusive, ele costuma fazer muito sentido para quem depende diretamente da própria capacidade de trabalho para gerar renda.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              Em caso de acidente existe carência?
+              <i class="fa-solid fa-plus"></i>
+            </summary>
+            <div class="faq-content">
+              Não. Para acidente, a regra apresentada no estudo é sem carência.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              Como funciona a renda por afastamento?
+              <i class="fa-solid fa-plus"></i>
+            </summary>
+            <div class="faq-content">
+              O estudo demonstra uma renda mensal e explica o cálculo diário com base em 30 dias, respeitando a franquia e as regras do produto.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              Posso falar com um consultor antes de decidir?
+              <i class="fa-solid fa-plus"></i>
+            </summary>
+            <div class="faq-content">
+              Sim. A página foi feita justamente para gerar o estudo e abrir a conversa comercial com um consultor da EAS Corretora.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-final">
+      <h2>Não deixe sua renda desprotegida.</h2>
+      <p>
+        Receba agora uma análise comercial clara, entenda sua proteção e fale com um consultor para avançar com segurança.
+      </p>
+      <div class="hero-cta-row" style="margin:0 auto; max-width:560px;">
+        <a href="#simulador" class="btn btn-primary">
+          <i class="fa-solid fa-bolt"></i>
+          Quero simular agora
+        </a>
+        <a href="https://wa.me/5517991123532?text=Olá,%20quero%20falar%20com%20um%20consultor%20sobre%20proteção%20de%20renda." target="_blank" class="btn btn-secondary">
+          <i class="fab fa-whatsapp"></i>
+          Chamar consultor
+        </a>
+      </div>
+    </section>
+
+    <div class="footer">
+      EAS Corretora de Seguros • Página comercial de captação • Recomenda-se conferência da tabela vigente antes da formalização.
+    </div>
+
   </div>
 
   <script>
@@ -581,15 +882,6 @@
       }
     };
 
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
     function moeda(valor) {
       return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
@@ -604,9 +896,7 @@
     }
 
     function gerarTextoEstudo(dados) {
-      const {
-        nome, idade, whatsapp, planoKey, preco, info, diaria, liq, cupom, cupomAplicado
-      } = dados;
+      const { nome, idade, whatsapp, planoKey, preco, info, diaria, liq, cupom, cupomAplicado } = dados;
 
       return `Olá ${nome.toUpperCase()}, seu estudo ficou da seguinte forma:
 
@@ -642,23 +932,22 @@ Dados do estudo:
 ${CONFIG.NOME_CORRETORA}`;
     }
 
-    function gerarSimulacao() {
-      const nomeBruto = document.getElementById('nome').value.trim();
-      const nomeSeguro = escapeHtml(nomeBruto);
+    function gerarSimulacaoV2() {
+      const nome = document.getElementById('nome').value.trim();
       const idade = parseInt(document.getElementById('idade').value, 10);
       const planoKey = document.getElementById('plano').value;
       const cupom = document.getElementById('cupom').value.trim().toUpperCase();
-
       let whats = somenteDigitos(document.getElementById('whatsapp').value);
+
       if (whats.length > 11) whats = whats.substring(0, 11);
 
-      if (!nomeBruto || !idade || whats.length < 10) {
-        alert("Preencha Nome, Idade e um WhatsApp válido (DDD + Número).");
+      if (!nome || !idade || whats.length < 10) {
+        alert('Preencha nome, idade e WhatsApp válido.');
         return;
       }
 
       if (idade < 16 || idade > 70) {
-        alert("O sistema calcula precificação apenas para idades entre 16 e 70 anos.");
+        alert('O sistema calcula apenas para idades entre 16 e 70 anos.');
         return;
       }
 
@@ -667,93 +956,43 @@ ${CONFIG.NOME_CORRETORA}`;
       const tabela = cupomAplicado ? info.call08 : info.a37;
       const preco = tabela[idade];
 
-      if (typeof preco !== "number") {
-        alert("Não foi encontrada precificação para essa idade.");
+      if (typeof preco !== 'number') {
+        alert('Não foi encontrada precificação para essa idade.');
         return;
       }
 
       const diaria = moeda(info.renda / 30);
       const liq = moeda((info.renda / 30) * 53);
 
-      document.getElementById('res-valor').innerText = `R$ ${moeda(preco)}`;
-      document.getElementById('res-meta').innerText = `Plano ${nomePlanoBonito(planoKey)} • ${idade} anos`;
-
-      const badge = document.getElementById('res-cupom-badge');
-      if (cupomAplicado) {
-        badge.style.display = 'inline-flex';
-        badge.innerHTML = `<i class="fa-solid fa-ticket"></i> Cupom aplicado: ${cupom}`;
-      } else {
-        badge.style.display = 'none';
-        badge.innerHTML = '';
-      }
-
-      document.getElementById('res-conteudo').innerHTML = `
-        <div class="info-card title-gold">
-          <h4><i class="fa-solid fa-file-invoice-dollar"></i> Capitais Seguros Unimed</h4>
-          <p>
-            Seu estudo para <b>${nomeSeguro.toUpperCase()}</b> ficou da seguinte forma:<br><br>
-            Se ocorrer <b>morte natural</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${info.cap.toLocaleString('pt-BR')}</b>.<br>
-            Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(info.cap * 2).toLocaleString('pt-BR')}</b>.<br>
-            Se ocorrer uma <b>invalidez por acidente ou doença</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${info.cap.toLocaleString('pt-BR')}</b>.
-          </p>
-        </div>
-
-        <div class="info-card title-green">
-          <h4><i class="fa-solid fa-hand-holding-medical"></i> SERIT (Renda Mensal)</h4>
-          <p>
-            Se você ficar doente ou sofrer um acidente e ficar afastado por mais de 7 dias,
-            a Seguros Unimed pagará uma renda no valor de <b>R$ ${info.renda.toLocaleString('pt-BR')}</b> por mes.
-          </p>
-
-          <div class="calc-box">
-            <strong>Carências do SERIT:</strong><br>
-            • Doenças comuns: <b>30 dias</b> de carência.<br>
-            • LER, DORT, LTC, hérnias, doenças progressivas e degenerativas: <b>180 dias</b> de carência.<br>
-            • Acidente: <b>sem carência</b>.<br><br>
-
-            <strong>A indenização é paga da seguinte forma:</strong><br>
-            R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${diaria} por dia</b>.<br><br>
-
-            Suponhamos que você receba um atestado de 60 dias.<br>
-            A seguradora paga 53 dias, pois os 7 primeiros dias são franquia.<br><br>
-
-            Neste caso, você receberia <b>R$ ${liq} líquido direto em conta</b>.<br><br>
-
-            <strong>Importante:</strong> o seguro cobre afastamentos reais comprovados por atestado médico, garantindo sua renda mesmo sem poder trabalhar.
-          </div>
-        </div>
-      `;
-
-      const dadosEstudo = {
-        nome: nomeBruto,
-        idade,
-        whatsapp: whats,
-        planoKey,
-        preco,
-        info,
-        diaria,
-        liq,
-        cupom,
-        cupomAplicado
+      const dados = {
+        nome, idade, whatsapp: whats, planoKey, preco, info, diaria, liq, cupom, cupomAplicado
       };
 
-      const mensagemCliente = gerarTextoEstudo(dadosEstudo);
+      const texto = gerarTextoEstudo(dados);
 
-      const mensagemContratar = `Olá, quero contratar o plano ${nomePlanoBonito(planoKey)} do estudo gerado para ${nomeBruto.toUpperCase()}.
+      const resultadoTop = document.getElementById('resultadoTop');
+      resultadoTop.style.display = 'block';
+      resultadoTop.innerHTML = `<strong>Estudo gerado com sucesso.</strong><br>Plano ${nomePlanoBonito(planoKey)} • Investimento mensal: <strong>R$ ${moeda(preco)}</strong>`;
 
+      const resultado = document.getElementById('resultado');
+      resultado.style.display = 'block';
+      resultado.textContent = texto;
+
+      document.getElementById('btnEnviarCliente').href =
+        `https://wa.me/55${whats}?text=${encodeURIComponent(texto)}`;
+
+      const msgConsultor = `Olá, quero falar com um consultor sobre este estudo.
+
+Nome: ${nome.toUpperCase()}
 Idade: ${idade}
-Investimento mensal: R$ ${moeda(preco)}
+Plano: ${nomePlanoBonito(planoKey)}
+Investimento: R$ ${moeda(preco)}
 Cupom: ${cupom || "NÃO INFORMADO"}`;
 
-      document.getElementById('btn-enviar-cliente').href =
-        `https://wa.me/55${whats}?text=${encodeURIComponent(mensagemCliente)}`;
+      document.getElementById('btnFalarConsultor').href =
+        `https://wa.me/${CONFIG.WHATSAPP_CORRETORA}?text=${encodeURIComponent(msgConsultor)}`;
 
-      document.getElementById('btn-contratar').href =
-        `https://wa.me/${CONFIG.WHATSAPP_CORRETORA}?text=${encodeURIComponent(mensagemContratar)}`;
-
-      document.getElementById('resultado').style.display = 'block';
-      document.getElementById('actions-area').style.display = 'block';
-      document.getElementById('resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      resultado.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   </script>
 </body>
