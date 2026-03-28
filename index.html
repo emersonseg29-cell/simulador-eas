@@ -7,38 +7,242 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --eas-blue: #0f172a; --eas-gold: #b89b3e; --unimed: #00995d; --bg: #f1f5f9; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: #334155; }
-        header { background: white; padding: 40px 20px; text-align: center; border-bottom: 6px solid var(--eas-gold); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-        .main-logo { max-width: 500px; width: 100%; height: auto; }
-        .card { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 25px 60px rgba(0,0,0,0.15); max-width: 800px; margin: 40px auto; }
-        .input-group { margin-bottom: 20px; }
-        label { display: block; font-size: 0.85rem; font-weight: 800; color: var(--eas-blue); margin-bottom: 8px; text-transform: uppercase; }
-        input, select { width: 100%; padding: 16px; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 1.1rem; box-sizing: border-box; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--unimed); }
-        .btn-calc { width: 100%; padding: 22px; background: var(--eas-blue); color: white; border: none; border-radius: 12px; font-size: 1.2rem; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-calc:hover { background: #1e293b; }
-        #resultado { display: none; margin-top: 40px; border-radius: 25px; border: 1px solid #e2e8f0; background: white; overflow: hidden; }
-        .res-header { background: #f8fafc; padding: 35px; text-align: center; border-bottom: 1px solid #e2e8f0; }
-        .val-total { font-size: 3.2rem; color: var(--unimed); font-weight: 900; margin: 10px 0; }
-        .info-card { background: #f0fdf4; border-radius: 15px; padding: 25px; margin: 20px 30px; border-left: 6px solid var(--unimed); }
-        .calc-box { background: #fffbeb; border: 1px dashed #f59e0b; padding: 20px; border-radius: 12px; margin: 20px 0; font-size: 1rem; color: #92400e; line-height: 1.6; }
-        .whatsapp-area { padding: 0 30px 30px; display: none; }
-        .whatsapp-btn { background: #25d366; color:white; padding: 22px; border-radius: 15px; display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; font-weight: 900; font-size: 1.2rem; }
+        :root {
+            --eas-blue: #0f172a;
+            --eas-gold: #b89b3e;
+            --unimed: #00995d;
+            --bg: #f1f5f9;
+            --muted: #64748b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+            color: #334155;
+        }
+
+        header {
+            background: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 6px solid var(--eas-gold);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .main-logo {
+            max-width: 500px;
+            width: 100%;
+            height: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--eas-blue);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--unimed);
+        }
+
+        .btn-calc,
+        .btn-secondary,
+        .btn-success,
+        .btn-download {
+            width: 100%;
+            padding: 18px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-calc {
+            background: var(--eas-blue);
+            color: white;
+        }
+
+        .btn-calc:hover {
+            background: #1e293b;
+        }
+
+        #resultado {
+            display: none;
+            margin-top: 40px;
+            border-radius: 25px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            overflow: hidden;
+        }
+
+        .res-header {
+            background: #f8fafc;
+            padding: 35px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .val-total {
+            font-size: 3.2rem;
+            color: var(--unimed);
+            font-weight: 900;
+            margin: 10px 0;
+        }
+
+        .sub-info {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+
+        .info-card {
+            background: #f0fdf4;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 30px;
+            border-left: 6px solid var(--unimed);
+        }
+
+        .info-card h4 {
+            margin-top: 0;
+            color: var(--eas-blue);
+        }
+
+        .calc-box {
+            background: #fffbeb;
+            border: 1px dashed #f59e0b;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0 0;
+            font-size: 1rem;
+            color: #92400e;
+            line-height: 1.6;
+        }
+
+        .actions-area {
+            padding: 0 30px 30px;
+            display: none;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .btn-success {
+            background: #25d366;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1fb85a;
+        }
+
+        .btn-secondary {
+            background: #0ea5e9;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #0284c7;
+        }
+
+        .btn-download {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #d97706;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ecfeff;
+            color: #0f766e;
+            border: 1px solid #99f6e4;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-top: 10px;
+        }
+
+        @media (min-width: 700px) {
+            .btn-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .btn-grid .full {
+                grid-column: 1 / -1;
+            }
+        }
     </style>
 </head>
 <body>
 
 <header>
     <img src="logo oficial.jpg.png" alt="EAS CORRETORA" class="main-logo">
-    <div style="color: var(--eas-gold); font-weight: 700; margin-top:10px; letter-spacing: 1px;">CONSULTORIA TÉCNICA DE PROTEÇÃO DE RENDA</div>
+    <div style="color: var(--eas-gold); font-weight: 700; margin-top:10px; letter-spacing: 1px;">
+        CONSULTORIA TÉCNICA DE PROTEÇÃO DE RENDA
+    </div>
 </header>
 
 <main class="main-content">
     <div class="card">
-        <div class="input-group"><label>Nome do Proponente</label><input type="text" id="nome" placeholder="Nome Completo"></div>
-        <div class="input-group"><label>WhatsApp (DDD + Número)</label><input type="tel" id="whatsapp" placeholder="Ex: 17991234567" maxlength="11"></div>
-        <div class="input-group"><label>Idade Atual (16 a 70 anos)</label><input type="number" id="idade" placeholder="Ex: 35"></div>
+        <div class="input-group">
+            <label>Nome do Proponente</label>
+            <input type="text" id="nome" placeholder="Nome Completo">
+        </div>
+
+        <div class="input-group">
+            <label>WhatsApp (DDD + Número)</label>
+            <input type="tel" id="whatsapp" placeholder="Ex: 17991234567" maxlength="11">
+        </div>
+
+        <div class="input-group">
+            <label>Idade Atual (16 a 70 anos)</label>
+            <input type="number" id="idade" placeholder="Ex: 35">
+        </div>
+
         <div class="input-group">
             <label>Plano Escolhido</label>
             <select id="plano">
@@ -47,28 +251,59 @@
                 <option value="bronze">BRONZE (3k Renda / 50k Vida)</option>
             </select>
         </div>
-        <div class="input-group"><label>Código de Consultor</label><input type="text" id="cupom" placeholder="Insira UNIMED08 para desconto"></div>
-        
-        <button class="btn-calc" onclick="gerarSimulacao()">Gerar Estudo Técnico</button>
+
+        <div class="input-group">
+            <label>Cupom</label>
+            <input type="text" id="cupom" placeholder="Insira UNIMED08 para desconto">
+        </div>
+
+        <button class="btn-calc" onclick="gerarSimulacao()">
+            <i class="fas fa-calculator"></i> Gerar Estudo Técnico
+        </button>
 
         <div id="resultado">
             <div class="res-header">
                 <span style="font-weight: 800; color: var(--eas-blue);">INVESTIMENTO MENSAL FINAL</span>
                 <div class="val-total" id="res-valor"></div>
+                <div class="sub-info" id="res-meta"></div>
+                <div class="badge" id="res-cupom-badge" style="display:none;"></div>
             </div>
+
             <div id="res-conteudo"></div>
-            <div class="whatsapp-area" id="wa-area">
-                <a href="#" id="wa-link" class="whatsapp-btn" target="_blank"><i class="fab fa-whatsapp"></i> ENVIAR PELO WHATSAPP</a>
+
+            <div class="actions-area" id="actions-area">
+                <div class="btn-grid">
+                    <a href="#" id="btn-contratar" class="btn-success full" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Contratar
+                    </a>
+
+                    <a href="#" id="btn-enviar-cliente" class="btn-success" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Enviar ao Cliente
+                    </a>
+
+                    <button type="button" id="btn-enviar-equipe" class="btn-secondary" onclick="compartilharEstudo()">
+                        <i class="fas fa-share-alt"></i> Enviar Estudo
+                    </button>
+
+                    <button type="button" id="btn-baixar-estudo" class="btn-download full" onclick="baixarEstudo()">
+                        <i class="fas fa-file-download"></i> Baixar Arquivo do Estudo
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </main>
 
 <script>
+    const CONFIG = {
+        WHATSAPP_CORRETORA: "5517991123532",
+        NOME_CORRETORA: "EAS Corretora"
+    };
+
     /**
      * MATRIZ ATUARIAL EAS CORRETORA
-     * Base: Simulações originais (16 e 35 anos) projetadas com os índices de 
-     * Reenquadramento Etário das Condições Gerais da Seguros Unimed (Págs 21 e 22).
+     * Base: Simulações originais (16 e 35 anos) projetadas com os índices de
+     * Reenquadramento Etário das Condições Gerais da Seguros Unimed.
      */
     const DATA_MAP = {
         ouro: {
@@ -88,39 +323,184 @@
         }
     };
 
+    let ultimoEstudo = null;
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function moeda(valor) {
+        return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function somenteDigitos(valor) {
+        return valor.replace(/\D/g, '');
+    }
+
+    function nomePlanoBonito(planoKey) {
+        const mapa = {
+            ouro: "OURO",
+            prata: "PRATA",
+            bronze: "BRONZE"
+        };
+        return mapa[planoKey] || planoKey.toUpperCase();
+    }
+
+    function gerarTextoEstudo(dados) {
+        const {
+            nome,
+            idade,
+            whatsapp,
+            planoKey,
+            preco,
+            info,
+            diaria,
+            liq,
+            cupom,
+            cupomAplicado
+        } = dados;
+
+        const texto = `Seu estudo para ${nome.toUpperCase()} ficou da seguinte forma:
+
+Se ocorrer morte natural a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
+Se ocorrer morte por acidente, o valor dobra para R$ ${(info.cap * 2).toLocaleString('pt-BR')}.
+Se ocorrer uma invalidez por acidente ou doença a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
+
+SERIT (Renda Mensal)
+Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${info.renda.toLocaleString('pt-BR')} por mes.
+
+Cálculo do Benefício:
+R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${diaria} por dia.
+Atestado de 60 dias (menos 7 dias franquia) = 53 dias pagos.
+Total: R$ ${liq} líquido direto em conta.
+
+Investimento mensal final: R$ ${moeda(preco)}
+
+Dados do estudo:
+- Idade: ${idade} anos
+- Plano: ${nomePlanoBonito(planoKey)}
+- WhatsApp: ${whatsapp}
+- Cupom informado: ${cupom || "NÃO INFORMADO"}
+- Tabela aplicada: ${cupomAplicado ? "PROMOCIONAL" : "PADRÃO"}
+
+${CONFIG.NOME_CORRETORA}`;
+
+        return texto;
+    }
+
+    function gerarArquivoEstudo() {
+        if (!ultimoEstudo) return null;
+
+        const conteudo = gerarTextoEstudo(ultimoEstudo);
+        const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
+        const fileName = `estudo-${ultimoEstudo.nome.toLowerCase().replace(/\s+/g, '-')}.txt`;
+
+        return { blob, fileName, conteudo };
+    }
+
+    function baixarEstudo() {
+        const arquivo = gerarArquivoEstudo();
+        if (!arquivo) {
+            alert("Gere um estudo antes de baixar o arquivo.");
+            return;
+        }
+
+        const url = URL.createObjectURL(arquivo.blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = arquivo.fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    }
+
+    async function compartilharEstudo() {
+        const arquivo = gerarArquivoEstudo();
+        if (!arquivo) {
+            alert("Gere um estudo antes de enviar.");
+            return;
+        }
+
+        try {
+            if (navigator.canShare && navigator.share) {
+                const file = new File([arquivo.blob], arquivo.fileName, { type: "text/plain" });
+
+                if (navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        title: "Estudo Técnico - EAS Corretora",
+                        text: "Segue o estudo técnico gerado no simulador.",
+                        files: [file]
+                    });
+                    return;
+                }
+            }
+
+            baixarEstudo();
+            alert("Seu navegador não permite compartilhar o arquivo diretamente. O estudo foi baixado para envio manual.");
+        } catch (erro) {
+            console.error(erro);
+            alert("Não foi possível compartilhar o arquivo diretamente. O estudo pode ser baixado e enviado manualmente.");
+        }
+    }
+
     function gerarSimulacao() {
-        const nome = document.getElementById('nome').value.trim();
-        const idade = parseInt(document.getElementById('idade').value);
+        const nomeBruto = document.getElementById('nome').value.trim();
+        const nomeSeguro = escapeHtml(nomeBruto);
+        const idade = parseInt(document.getElementById('idade').value, 10);
         const planoKey = document.getElementById('plano').value;
-        const cupom = document.getElementById('cupom').value.toUpperCase();
-        
-        let whats = document.getElementById('whatsapp').value.replace(/\D/g, '');
+        const cupom = document.getElementById('cupom').value.trim().toUpperCase();
+
+        let whats = somenteDigitos(document.getElementById('whatsapp').value);
         if (whats.length > 11) whats = whats.substring(0, 11);
 
-        if (!nome || !idade || whats.length < 10) {
-            alert("Preencha Nome, Idade e um WhatsApp válido (DDD + Número)."); return;
+        if (!nomeBruto || !idade || whats.length < 10) {
+            alert("Preencha Nome, Idade e um WhatsApp válido (DDD + Número).");
+            return;
         }
-        
+
         if (idade < 16 || idade > 70) {
-            alert("O sistema calcula precificação atuarial apenas para idades entre 16 e 70 anos conforme Condições Gerais."); return;
+            alert("O sistema calcula precificação atuarial apenas para idades entre 16 e 70 anos conforme Condições Gerais.");
+            return;
         }
 
         const info = DATA_MAP[planoKey];
-        const tabela = (cupom === "UNIMED08" || cupom === "CALL08") ? info.call08 : info.a37;
-        
-        let preco = tabela[idade];
+        const cupomAplicado = (cupom === "UNIMED08" || cupom === "CALL08");
+        const tabela = cupomAplicado ? info.call08 : info.a37;
 
-        const diaria = (info.renda / 30).toLocaleString('pt-BR', {minimumFractionDigits:2});
-        const liq = ((info.renda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits:2});
+        const preco = tabela[idade];
 
-        document.getElementById('res-valor').innerText = `R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
-        
+        if (typeof preco !== "number") {
+            alert("Não foi encontrada precificação para essa idade.");
+            return;
+        }
+
+        const diaria = moeda(info.renda / 30);
+        const liq = moeda((info.renda / 30) * 53);
+
+        document.getElementById('res-valor').innerText = `R$ ${moeda(preco)}`;
+        document.getElementById('res-meta').innerText = `Plano ${nomePlanoBonito(planoKey)} • ${idade} anos`;
+
+        const badge = document.getElementById('res-cupom-badge');
+        if (cupomAplicado) {
+            badge.style.display = 'inline-block';
+            badge.innerText = `Cupom aplicado: ${cupom}`;
+        } else {
+            badge.style.display = 'none';
+            badge.innerText = '';
+        }
+
         document.getElementById('res-conteudo').innerHTML = `
             <div class="info-card">
                 <h4><i class="fas fa-file-invoice-dollar"></i> Capitais Seguros Unimed</h4>
-                <p>Seu estudo para <b>${nome.toUpperCase()}</b> ficou da seguinte forma:<br>
+                <p>Seu estudo para <b>${nomeSeguro.toUpperCase()}</b> ficou da seguinte forma:<br>
                 Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.<br>
-                Se ocorrer <b>morte por acidente</b>, o valor dobra para <b>R$ ${(info.cap*2).toLocaleString('pt-BR')}</b>.<br>
+                Se ocorrer <b>morte por acidente</b>, o valor dobra para <b>R$ ${(info.cap * 2).toLocaleString('pt-BR')}</b>.<br>
                 Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.</p>
             </div>
             <div class="info-card">
@@ -131,13 +511,55 @@
                     R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${diaria} por dia</b>. <br>
                     Atestado de 60 dias (menos 7 dias franquia) = 53 dias pagos. Total: <b>R$ ${liq} líquido direto em conta</b>.
                 </div>
-            </div>`;
+            </div>
+        `;
 
-        const msg = `Olá ${nome.toUpperCase()}, seu estudo EAS Corretora está pronto!\n💰 Investimento: R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;
-        document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
-        
+        ultimoEstudo = {
+            nome: nomeBruto,
+            idade,
+            whatsapp: whats,
+            planoKey,
+            preco,
+            info,
+            diaria,
+            liq,
+            cupom,
+            cupomAplicado
+        };
+
+        const mensagemCliente = `Olá ${nomeBruto.toUpperCase()}, seu estudo ${CONFIG.NOME_CORRETORA} está pronto!
+
+Plano: ${nomePlanoBonito(planoKey)}
+Investimento mensal final: R$ ${moeda(preco)}
+
+Se ocorrer morte natural a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
+Se ocorrer morte por acidente, o valor dobra para R$ ${(info.cap * 2).toLocaleString('pt-BR')}.
+Se ocorrer uma invalidez por acidente ou doença a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
+
+SERIT:
+Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${info.renda.toLocaleString('pt-BR')} por mes.
+
+Cálculo do Benefício:
+R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${diaria} por dia.
+Atestado de 60 dias (menos 7 dias franquia) = 53 dias pagos.
+Total: R$ ${liq} líquido direto em conta.`;
+
+        const mensagemContratar = `Olá, quero contratar o plano ${nomePlanoBonito(planoKey)} do estudo gerado para ${nomeBruto.toUpperCase()}.
+
+Idade: ${idade}
+Investimento mensal: R$ ${moeda(preco)}
+Cupom: ${cupom || "NÃO INFORMADO"}`;
+
+        document.getElementById('btn-enviar-cliente').href =
+            `https://wa.me/55${whats}?text=${encodeURIComponent(mensagemCliente)}`;
+
+        document.getElementById('btn-contratar').href =
+            `https://wa.me/${CONFIG.WHATSAPP_CORRETORA}?text=${encodeURIComponent(mensagemContratar)}`;
+
         document.getElementById('resultado').style.display = 'block';
-        document.getElementById('wa-area').style.display = 'block';
+        document.getElementById('actions-area').style.display = 'block';
+
+        document.getElementById('resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 </script>
 </body>
