@@ -1,225 +1,200 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Seguros - Unimed</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #006341; /* Verde Unimed */
-            --secondary: #6c757d;
-            --gold: #d4af37;
-            --light: #f8f9fa;
-        }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f3; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h2 { color: var(--primary); text-align: center; margin-bottom: 25px; }
-        
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
-        button { flex: 1; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 16px; }
-        .btn-calc { background: var(--primary); color: white; }
-        .btn-calc:hover { background: #004d32; }
-        .btn-clear { background: var(--secondary); color: white; width: auto; flex: 0.4; }
-
-        /* Resultado */
-        #resultBox { display: none; margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
-        .card { padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary); background: #f0fdf4; }
-        .card.gold { border-left-color: var(--gold); background: #fffdf0; }
-        .price-tag { font-size: 24px; color: var(--primary); font-weight: bold; text-align: center; margin: 10px 0; }
-        
-        .whatsapp-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-        .btn-wa { display: block; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; color: white; }
-        .bg-green { background: #25d366; }
-        .bg-blue { background: #34b7f1; }
-
-        /* Painel Admin */
-        #adminPanel { display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 15px; box-shadow: 0 0 30px rgba(0,0,0,0.3); z-index: 9999; width: 90%; max-width: 400px; }
-        .overlay { display:none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index: 9998; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h2><i class="fa-solid fa-shield-halved"></i> Simulador de Estudo</h2>
-    
-    <div class="form-group">
-        <label>Nome do Cliente:</label>
-        <input type="text" id="nome" placeholder="Ex: João Silva">
-    </div>
-    
-    <div class="form-group">
-        <label>Idade (16 a 70):</label>
-        <input type="number" id="idade" min="16" max="70">
-    </div>
-
-    <div class="form-group">
-        <label>WhatsApp do Cliente:</label>
-        <input type="tel" id="whatsapp" placeholder="(00) 00000-0000">
-    </div>
-
-    <div class="form-group">
-        <label>Plano:</label>
-        <select id="plano">
-            <option value="bronze">Bronze (Cap. 50k / Renda 3k)</option>
-            <option value="prata">Prata (Cap. 100k / Renda 5k)</option>
-            <option value="ouro">Ouro (Cap. 120k / Renda 10k)</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label>Cupom Promocional:</label>
-        <input type="text" id="cupom" placeholder="Ex: CALL08">
-    </div>
-
-    <div class="btn-group">
-        <button class="btn-calc" onclick="gerarSimulacao()"><i class="fa-solid fa-calculator"></i> Gerar Estudo</button>
-        <button class="btn-clear" onclick="limparSimulacao()"><i class="fa-solid fa-eraser"></i></button>
-    </div>
-
-    <div id="resultBox">
-        <div class="price-tag" id="valorFinal">R$ 0,00</div>
-        <p style="text-align:center; margin-top:-10px; font-size:14px; color:#666;" id="submeta"></p>
-        
-        <div id="badgeCupom" style="display:none; justify-content:center; color: var(--primary); font-weight:bold; margin-bottom:15px;"></div>
-
-        <div class="card gold">
-            <label><i class="fa-solid fa-file-invoice-dollar"></i> Coberturas Unimed</label>
-            <div id="descCoberturas" style="font-size:14px; line-height:1.5;"></div>
-        </div>
-
-        <div class="card">
-            <label><i class="fa-solid fa-hand-holding-medical"></i> SERIT (Renda por Afastamento)</label>
-            <div id="descSerit" style="font-size:14px; line-height:1.5;"></div>
-        </div>
-
-        <div class="whatsapp-buttons">
-            <a id="btnEnviarCliente" href="#" target="_blank" class="btn-wa bg-green"><i class="fa-brands fa-whatsapp"></i> Enviar Estudo ao Cliente</a>
-            <a id="btnContratar" href="#" target="_blank" class="btn-wa bg-blue"><i class="fa-solid fa-check-double"></i> Falar com Consultor / Contratar</a>
-        </div>
-    </div>
-
-    <div style="text-align: center; margin-top: 30px; opacity: 0.5;">
-      <a href="javascript:void(0)" onclick="abrirAdmin()" style="font-size: 12px; color: #666; text-decoration: none;">
-        <i class="fa-solid fa-gear"></i> Configurações da Corretora
-      </a>
-    </div>
-</div>
-
-<div class="overlay" id="overlay" onclick="fecharAdmin()"></div>
-<div id="adminPanel">
-  <h3>⚙️ Ajustes do Sistema</h3>
-  <label>Nome da Corretora:</label>
-  <input type="text" id="cfg_nome_input" style="margin-bottom:15px;">
-  <label>WhatsApp de Atendimento:</label>
-  <input type="tel" id="cfg_whats_input">
-  <div class="btn-group">
-    <button class="btn-calc" onclick="CONFIG.salvar(document.getElementById('cfg_nome_input').value, document.getElementById('cfg_whats_input').value)">Salvar</button>
-    <button class="btn-clear" onclick="fecharAdmin()">Fechar</button>
-  </div>
-</div>
-
 <script>
-  // --- CONFIGURAÇÃO ---
   const CONFIG = {
-    get WHATSAPP_CORRETORA() { return localStorage.getItem('cfg_whats') || "5517991123532"; },
-    get NOME_CORRETORA() { return localStorage.getItem('cfg_nome') || "EAS Corretora"; },
-    salvar(n, w) {
-      if (!n || w.length < 10) return alert("Dados inválidos!");
-      localStorage.setItem('cfg_nome', n);
-      localStorage.setItem('cfg_whats', w.replace(/\D/g, ''));
-      alert("Configurações salvas!");
-      location.reload();
+    WHATSAPP_CORRETORA: "5517991123532",
+    NOME_CORRETORA: "EAS Corretora"
+  };
+
+  const DATA_MAP = {
+    ouro: {
+      cap: 120000, renda: 10000,
+      a37: { 16: 365.30, 17: 365.30, 18: 365.30, 19: 365.30, 20: 365.30, 21: 365.30, 22: 365.30, 23: 365.30, 24: 365.30, 25: 365.30, 26: 365.30, 27: 365.30, 28: 365.30, 29: 365.30, 30: 365.30, 31: 365.30, 32: 365.30, 33: 365.30, 34: 365.30, 35: 400.88, 36: 413.15, 37: 426.68, 38: 442.26, 39: 459.47, 40: 477.93, 41: 499.21, 42: 523.39, 43: 551.51, 44: 581.92, 45: 615.37, 46: 651.13, 47: 690.10, 48: 730.72, 49: 776.67, 50: 825.74, 51: 876.49, 52: 930.00, 53: 986.47, 54: 1045.05, 55: 1107.25, 56: 1174.32, 57: 1246.11, 58: 1324.05, 59: 1416.00, 60: 1527.09, 61: 1660.70, 62: 1823.46, 63: 2027.48, 64: 2261.51, 65: 2534.43, 66: 2846.54, 67: 3198.25, 68: 3594.68, 69: 4041.66, 70: 4545.75 },
+      call08: { 16: 216.19, 17: 216.19, 18: 216.19, 19: 216.19, 20: 216.19, 21: 216.19, 22: 216.19, 23: 216.19, 24: 216.19, 25: 216.19, 26: 216.19, 27: 216.19, 28: 216.19, 29: 216.19, 30: 216.19, 31: 216.19, 32: 216.19, 33: 216.19, 34: 216.19, 35: 237.24, 36: 244.50, 37: 252.51, 38: 261.73, 39: 271.91, 40: 282.83, 41: 295.43, 42: 309.74, 43: 326.38, 44: 344.37, 45: 364.17, 46: 385.33, 47: 408.39, 48: 432.43, 49: 459.62, 50: 488.66, 51: 518.69, 52: 550.35, 53: 583.78, 54: 618.44, 55: 655.25, 56: 694.94, 57: 737.42, 58: 783.55, 59: 837.96, 60: 903.70, 61: 982.77, 62: 1079.09, 63: 1199.82, 64: 1338.32, 65: 1499.83, 66: 1684.53, 67: 1892.67, 68: 2127.27, 69: 2391.79, 70: 2690.10 }
+    },
+    prata: {
+      cap: 100000, renda: 5000,
+      a37: { 16: 211.13, 17: 211.13, 18: 211.13, 19: 211.13, 20: 211.13, 21: 211.13, 22: 211.13, 23: 211.13, 24: 211.13, 25: 211.13, 26: 211.13, 27: 211.13, 28: 211.13, 29: 211.13, 30: 211.13, 31: 211.13, 32: 211.13, 33: 211.13, 34: 211.13, 35: 231.04, 36: 238.50, 37: 246.86, 38: 256.78, 39: 268.31, 40: 280.73, 41: 295.35, 42: 312.23, 43: 332.13, 44: 353.72, 45: 377.62, 46: 403.20, 47: 431.20, 48: 460.28, 49: 492.56, 50: 526.93, 51: 562.13, 52: 598.98, 53: 637.59, 54: 677.24, 55: 718.98, 56: 763.67, 57: 811.00, 58: 861.94, 59: 920.93, 60: 991.37, 61: 1075.17, 62: 1176.74, 63: 1302.41, 64: 1446.81, 65: 1614.91, 66: 1805.12, 67: 2018.54, 68: 2258.08, 69: 2527.03, 70: 2829.08 },
+      call08: { 16: 124.95, 17: 124.95, 18: 124.95, 19: 124.95, 20: 124.95, 21: 124.95, 22: 124.95, 23: 124.95, 24: 124.95, 25: 124.95, 26: 124.95, 27: 124.95, 28: 124.95, 29: 124.95, 30: 124.95, 31: 124.95, 32: 124.95, 33: 124.95, 34: 124.95, 35: 136.74, 36: 141.16, 37: 146.10, 38: 151.98, 39: 158.80, 40: 166.15, 41: 174.81, 42: 184.80, 43: 196.58, 44: 209.36, 45: 223.51, 46: 238.65, 47: 255.22, 48: 272.44, 49: 291.54, 50: 311.89, 51: 332.73, 52: 354.54, 53: 377.40, 54: 400.87, 55: 425.57, 56: 452.03, 57: 480.04, 58: 510.19, 59: 545.11, 60: 586.80, 61: 636.41, 62: 696.53, 63: 770.91, 64: 856.37, 65: 955.87, 66: 1068.45, 67: 1194.77, 68: 1336.55, 69: 1495.74, 70: 1674.52 }
+    },
+    bronze: {
+      cap: 50000, renda: 3000,
+      a37: { 16: 126.00, 17: 126.00, 18: 126.00, 19: 126.00, 20: 126.00, 21: 126.00, 22: 126.00, 23: 126.00, 24: 126.00, 25: 126.00, 26: 126.00, 27: 126.00, 28: 126.00, 29: 126.00, 30: 126.00, 31: 126.00, 32: 126.00, 33: 126.00, 34: 126.00, 35: 137.42, 36: 141.57, 37: 146.18, 38: 151.60, 39: 157.78, 40: 164.44, 41: 172.22, 42: 181.14, 43: 191.62, 44: 202.98, 45: 215.52, 46: 228.95, 47: 243.61, 48: 258.87, 49: 275.91, 50: 294.07, 51: 312.73, 52: 332.31, 53: 352.88, 54: 374.08, 55: 396.46, 56: 420.48, 57: 446.02, 58: 473.58, 59: 505.72, 60: 544.26, 61: 590.28, 62: 646.17, 63: 715.65, 64: 795.43, 65: 888.37, 66: 993.95, 67: 1112.60, 68: 1245.98, 69: 1395.96, 70: 1564.68 },
+      call08: { 16: 75.00, 17: 75.00, 18: 75.00, 19: 75.00, 20: 75.00, 21: 75.00, 22: 75.00, 23: 75.00, 24: 75.00, 25: 75.00, 26: 75.00, 27: 75.00, 28: 75.00, 29: 75.00, 30: 75.00, 31: 75.00, 32: 75.00, 33: 75.00, 34: 75.00, 35: 81.33, 36: 83.78, 37: 86.52, 38: 89.72, 39: 93.38, 40: 97.32, 41: 101.93, 42: 107.21, 43: 113.41, 44: 120.13, 45: 127.56, 46: 135.50, 47: 144.19, 48: 153.21, 49: 163.30, 50: 174.05, 51: 185.09, 52: 196.69, 53: 208.86, 54: 221.41, 55: 234.65, 56: 248.87, 57: 263.99, 58: 280.30, 59: 299.32, 60: 322.13, 61: 349.37, 62: 382.45, 63: 423.57, 64: 470.79, 65: 525.80, 66: 588.29, 67: 658.51, 68: 737.45, 69: 826.22, 70: 926.07 }
     }
   };
 
-  // --- TABELA DE PREÇOS ---
-  const DATA_MAP = {
-    ouro: { cap: 120000, renda: 10000, a37: { base: 365.30, extras: { 35: 400.88, 36: 413.15, 37: 426.68, 38: 442.26, 39: 459.47, 40: 477.93, 41: 499.21, 42: 523.39, 43: 551.51, 44: 581.92, 45: 615.37, 46: 651.13, 47: 690.10, 48: 730.72, 49: 776.67, 50: 825.74, 51: 876.49, 52: 930.00, 53: 986.47, 54: 1045.05, 55: 1107.25, 56: 1174.32, 57: 1246.11, 58: 1324.05, 59: 1416.00, 60: 1527.09, 61: 1660.70, 62: 1823.46, 63: 2027.48, 64: 2261.51, 65: 2534.43, 66: 2846.54, 67: 3198.25, 68: 3594.68, 69: 4041.66, 70: 4545.75 } }, call08: { base: 216.19, extras: { 35: 237.24, 36: 244.50, 37: 252.51, 38: 261.73, 39: 271.91, 40: 282.83, 41: 295.43, 42: 309.74, 43: 326.38, 44: 344.37, 45: 364.17, 46: 385.33, 47: 408.39, 48: 432.43, 49: 459.62, 50: 488.66, 51: 518.69, 52: 550.35, 53: 583.78, 54: 618.44, 55: 655.25, 56: 694.94, 57: 737.42, 58: 783.55, 59: 837.96, 60: 903.70, 61: 982.77, 62: 1079.09, 63: 1199.82, 64: 1338.32, 65: 1499.83, 66: 1684.53, 67: 1892.67, 68: 2127.27, 69: 2391.79, 70: 2690.10 } } },
-    prata: { cap: 100000, renda: 5000, a37: { base: 211.13, extras: { 35: 231.04, 36: 238.50, 37: 246.86, 38: 256.78, 39: 268.31, 40: 280.73, 41: 295.35, 42: 312.23, 43: 332.13, 44: 353.72, 45: 377.62, 46: 403.20, 47: 431.20, 48: 460.28, 49: 492.56, 50: 526.93, 51: 562.13, 52: 598.98, 53: 637.59, 54: 677.24, 55: 718.98, 56: 763.67, 57: 811.00, 58: 861.94, 59: 920.93, 60: 991.37, 61: 1075.17, 62: 1176.74, 63: 1302.41, 64: 1446.81, 65: 1614.91, 66: 1805.12, 67: 2018.54, 68: 2258.08, 69: 2527.03, 70: 2829.08 } }, call08: { base: 124.95, extras: { 35: 136.74, 36: 141.16, 37: 146.10, 38: 151.98, 39: 158.80, 40: 166.15, 41: 174.81, 42: 184.80, 43: 196.58, 44: 209.36, 45: 223.51, 46: 238.65, 47: 255.22, 48: 272.44, 49: 291.54, 50: 311.89, 51: 332.73, 52: 354.54, 53: 377.40, 54: 400.87, 55: 425.57, 56: 452.03, 57: 480.04, 58: 510.19, 59: 545.11, 60: 586.80, 61: 636.41, 62: 696.53, 63: 770.91, 64: 856.37, 65: 955.87, 66: 1068.45, 67: 1194.77, 68: 1336.55, 69: 1495.74, 70: 1674.52 } } },
-    bronze: { cap: 50000, renda: 3000, a37: { base: 126.00, extras: { 35: 137.42, 36: 141.57, 37: 146.18, 38: 151.60, 39: 157.78, 40: 164.44, 41: 172.22, 42: 181.14, 43: 191.62, 44: 202.98, 45: 215.52, 46: 228.95, 47: 243.61, 48: 258.87, 49: 275.91, 50: 294.07, 51: 312.73, 52: 332.31, 53: 352.88, 54: 374.08, 55: 396.46, 56: 420.48, 57: 446.02, 58: 473.58, 59: 505.72, 60: 544.26, 61: 590.28, 62: 646.17, 63: 715.65, 64: 795.43, 65: 888.37, 66: 993.95, 67: 1112.60, 68: 1245.98, 69: 1395.96, 70: 1564.68 } }, call08: { base: 75.00, extras: { 35: 81.33, 36: 83.78, 37: 86.52, 38: 89.72, 39: 93.38, 40: 97.32, 41: 101.93, 42: 107.21, 43: 113.41, 44: 120.13, 45: 127.56, 46: 135.50, 47: 144.19, 48: 153.21, 49: 163.30, 50: 174.05, 51: 185.09, 52: 196.69, 53: 208.86, 54: 221.41, 55: 234.65, 56: 248.87, 57: 263.99, 58: 280.30, 59: 299.32, 60: 322.13, 61: 349.37, 62: 382.45, 63: 423.57, 64: 470.79, 65: 525.80, 66: 588.29, 67: 658.51, 68: 737.45, 69: 826.22, 70: 926.07 } } }
-  };
-
-  // --- MÁSCARA WHATSAPP ---
-  function mascara(e) {
-    let v = e.target.value.replace(/\D/g, "").slice(0, 11);
-    if (v.length > 10) v = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
-    else if (v.length > 6) v = `(${v.slice(0, 2)}) ${v.slice(2, 6)}-${v.slice(6)}`;
-    else if (v.length > 2) v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
-    else if (v.length > 0) v = `(${v.slice(0, 2)}`;
-    e.target.value = v;
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
-  // --- LÓGICA PRINCIPAL ---
+  function validarEntrada(nome, idade, whats) {
+    if (!nome || !idade || whats.length < 10) {
+      alert('Preencha nome, idade e WhatsApp válido.');
+      return false;
+    }
+
+    if (idade < 16 || idade > 70) {
+      alert('O sistema calcula apenas para idades entre 16 e 70 anos.');
+      return false;
+    }
+
+    return true;
+  }
+
+  function obterPreco(planoKey, idade, cupom) {
+    const info = DATA_MAP[planoKey];
+    const cupomAplicado = cupom === "UNIMED08" || cupom === "CALL08";
+    const tabela = cupomAplicado ? info.call08 : info.a37;
+    const preco = tabela[idade];
+
+    return { info, cupomAplicado, preco };
+  }
+
+  function gerarTextoEstudo(dados) {
+    const { nome, idade, whatsapp, planoKey, preco, info, diaria, liq, cupom, cupomAplicado } = dados;
+
+    return `Olá ${nome.toUpperCase()}, seu estudo ficou da seguinte forma:
+
+Se ocorrer morte natural a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
+Se ocorrer morte por acidente, a Seguros Unimed pagará uma indenização no valor de R$ ${(info.cap * 2).toLocaleString('pt-BR')}.
+Se ocorrer uma invalidez por acidente ou doença a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
+
+SERIT:
+Se você ficar doente ou sofrer um acidente e ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de R$ ${info.renda.toLocaleString('pt-BR')} por mes.
+
+Carências do SERIT:
+- Doenças comuns: 30 dias de carência.
+- LER, DORT, LTC, hérnias, doenças progressivas e degenerativas: 180 dias de carência.
+- Acidente: sem carência.
+
+A indenização é paga da seguinte forma:
+R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${diaria} por dia.
+
+Suponhamos que você receba um atestado de 60 dias.
+A seguradora paga 53 dias, pois os 7 primeiros dias são franquia.
+
+Neste caso, você receberia R$ ${liq} líquido direto em conta.
+
+💰 Investimento mensal: R$ ${moeda(preco)}/mês
+
+Dados do estudo:
+- Idade: ${idade} anos
+- Plano: ${nomePlanoBonito(planoKey)}
+- WhatsApp: ${whatsapp}
+- Cupom informado: ${cupom || "NÃO INFORMADO"}
+- Tabela aplicada: ${cupomAplicado ? "PROMOCIONAL" : "PADRÃO"}
+
+${CONFIG.NOME_CORRETORA}`;
+  }
+
+  function renderResultado(nome, idade, planoKey, preco, cupom, cupomAplicado, info, diaria, liq) {
+    const nomeSeguro = escapeHtml(nome);
+
+    document.getElementById('resultHighlight').style.display = 'block';
+    document.getElementById('resultHighlight').innerHTML =
+      `<strong>Estudo gerado com sucesso.</strong><br>Plano ${nomePlanoBonito(planoKey)} • Investimento mensal: <strong>R$ ${moeda(preco)}</strong>`;
+
+    document.getElementById('resultBox').style.display = 'block';
+    document.getElementById('valorFinal').textContent = `R$ ${moeda(preco)}`;
+    document.getElementById('submeta').textContent = `Plano ${nomePlanoBonito(planoKey)} • ${idade} anos`;
+
+    const badgeCupom = document.getElementById('badgeCupom');
+    if (cupomAplicado) {
+      badgeCupom.style.display = 'inline-flex';
+      badgeCupom.innerHTML = `<i class="fa-solid fa-ticket"></i> Cupom aplicado: ${cupom}`;
+    } else {
+      badgeCupom.style.display = 'none';
+      badgeCupom.innerHTML = '';
+    }
+
+    document.getElementById('explicacao').innerHTML = `
+      <div class="info-card gold">
+        <h3><i class="fa-solid fa-file-invoice-dollar"></i> Capitais Seguros Unimed</h3>
+        <p>
+          Seu estudo para <b>${nomeSeguro.toUpperCase()}</b> ficou da seguinte forma:<br><br>
+          Se ocorrer <b>morte natural</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${info.cap.toLocaleString('pt-BR')}</b>.<br>
+          Se ocorrer <b>morte por acidente</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${(info.cap * 2).toLocaleString('pt-BR')}</b>.<br>
+          Se ocorrer uma <b>invalidez por acidente ou doença</b>, a Seguros Unimed pagará uma indenização no valor de <b>R$ ${info.cap.toLocaleString('pt-BR')}</b>.
+        </p>
+      </div>
+
+      <div class="info-card green">
+        <h3><i class="fa-solid fa-hand-holding-medical"></i> SERIT (Renda Mensal)</h3>
+        <p>
+          Se você ficar doente ou sofrer um acidente e ficar afastado por mais de 7 dias,
+          a Seguros Unimed pagará uma renda no valor de <b>R$ ${info.renda.toLocaleString('pt-BR')}</b> por mes.
+        </p>
+
+        <div class="calc-box">
+          <strong>Carências do SERIT:</strong><br>
+          • Doenças comuns: <b>30 dias</b> de carência.<br>
+          • LER, DORT, LTC, hérnias, doenças progressivas e degenerativas: <b>180 dias</b> de carência.<br>
+          • Acidente: <b>sem carência</b>.<br><br>
+
+          <strong>A indenização é paga da seguinte forma:</strong><br>
+          R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${diaria} por dia</b>.<br><br>
+
+          Suponhamos que você receba um atestado de 60 dias.<br>
+          A seguradora paga 53 dias, pois os 7 primeiros dias são franquia.<br><br>
+
+          Neste caso, você receberia <b>R$ ${liq} líquido direto em conta</b>.
+        </div>
+      </div>
+    `;
+  }
+
   function gerarSimulacao() {
     const nome = document.getElementById('nome').value.trim();
-    const idade = parseInt(document.getElementById('idade').value);
+    const idade = parseInt(document.getElementById('idade').value, 10);
     const planoKey = document.getElementById('plano').value;
-    const cupom = document.getElementById('cupom').value.trim().toUpperCase();
-    const whats = document.getElementById('whatsapp').value.replace(/\D/g, '');
+    const cupom = document.getElementById('cupom').value.trim().toUpperCase().replace(/\s+/g, '');
+    let whats = somenteDigitos(document.getElementById('whatsapp').value);
 
-    if (!nome || isNaN(idade) || idade < 16 || idade > 70 || whats.length < 10) {
-      return alert("Por favor, preencha todos os campos corretamente.");
+    if (whats.length > 11) whats = whats.substring(0, 11);
+    if (!validarEntrada(nome, idade, whats)) return;
+
+    const { info, cupomAplicado, preco } = obterPreco(planoKey, idade, cupom);
+    if (typeof preco !== 'number') {
+      alert('Não foi encontrada precificação para essa idade.');
+      return;
     }
 
-    const info = DATA_MAP[planoKey];
-    const cupomAtivo = ["UNIMED08", "CALL08"].includes(cupom);
-    const tabela = cupomAtivo ? info.call08 : info.a37;
-    const preco = tabela.extras[idade] || tabela.base;
+    const diaria = moeda(info.renda / 30);
+    const liq = moeda((info.renda / 30) * 53);
 
-    const fmtMoeda = (val) => val.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    renderResultado(nome, idade, planoKey, preco, cupom, cupomAplicado, info, diaria, liq);
 
-    // Renderiza UI
-    document.getElementById('resultBox').style.display = 'block';
-    document.getElementById('valorFinal').textContent = `R$ ${fmtMoeda(preco)}`;
-    document.getElementById('submeta').textContent = `Plano ${planoKey.toUpperCase()} • ${idade} anos`;
-    
-    document.getElementById('badgeCupom').style.display = cupomAtivo ? 'flex' : 'none';
-    document.getElementById('badgeCupom').innerHTML = `<i class="fa-solid fa-ticket"></i> &nbsp; Cupom Aplicado: ${cupom}`;
+    const dados = {
+      nome, idade, whatsapp: whats, planoKey, preco, info, diaria, liq, cupom, cupomAplicado
+    };
 
-    document.getElementById('descCoberturas').innerHTML = `
-      Morte Natural: <b>R$ ${fmtMoeda(info.cap)}</b><br>
-      Morte Acidental: <b>R$ ${fmtMoeda(info.cap * 2)}</b><br>
-      Invalidez: <b>R$ ${fmtMoeda(info.cap)}</b>`;
+    const texto = gerarTextoEstudo(dados);
 
-    document.getElementById('descSerit').innerHTML = `
-      Renda Mensal: <b>R$ ${fmtMoeda(info.renda)}</b><br>
-      Diária: <b>R$ ${fmtMoeda(info.renda/30)}</b><br>
-      Recebimento (Ex. 60 dias): <b>R$ ${fmtMoeda((info.renda/30)*53)} líquido</b>`;
+    document.getElementById('btnEnviarCliente').href =
+      `https://wa.me/55${whats}?text=${encodeURIComponent(texto)}`;
 
-    // Links WhatsApp
-    const msg = `Olá ${nome.toUpperCase()}, seu estudo ${CONFIG.NOME_CORRETORA}:\n\nPlano: ${planoKey.toUpperCase()}\nInvestimento: R$ ${fmtMoeda(preco)}/mês\n\nIndenizações:\n- Morte: R$ ${fmtMoeda(info.cap)}\n- Renda Mensal: R$ ${fmtMoeda(info.renda)}\n\nInteressado?`;
-    document.getElementById('btnEnviarCliente').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
-    document.getElementById('btnContratar').href = `https://wa.me/${CONFIG.WHATSAPP_CORRETORA}?text=${encodeURIComponent("Olá, vi meu estudo para " + nome + " e quero contratar.")}`;
+    document.getElementById('btnConsultor').href =
+      `https://wa.me/${CONFIG.WHATSAPP_CORRETORA}?text=${encodeURIComponent(`Olá, quero falar com um consultor sobre meu estudo.
 
-    document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth' });
+Nome: ${nome.toUpperCase()}
+Idade: ${idade}
+Plano: ${nomePlanoBonito(planoKey)}
+Investimento: R$ ${moeda(preco)}
+Cupom: ${cupom || "NÃO INFORMADO"}`)}`;
+
+    document.getElementById('btnContratar').href =
+      `https://wa.me/${CONFIG.WHATSAPP_CORRETORA}?text=${encodeURIComponent(`Olá, quero contratar agora com base no estudo gerado.
+
+Nome: ${nome.toUpperCase()}
+Idade: ${idade}
+Plano: ${nomePlanoBonito(planoKey)}
+Investimento: R$ ${moeda(preco)}
+Cupom: ${cupom || "NÃO INFORMADO"}`)}`;
+
+    document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-
-  function limparSimulacao() {
-    ['nome','idade','cupom','whatsapp'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('resultBox').style.display = 'none';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  // Admin
-  function abrirAdmin() { 
-    document.getElementById('overlay').style.display = 'block';
-    document.getElementById('adminPanel').style.display = 'block';
-    document.getElementById('cfg_nome_input').value = CONFIG.NOME_CORRETORA;
-    document.getElementById('cfg_whats_input').value = CONFIG.WHATSAPP_CORRETORA;
-  }
-  function fecharAdmin() { 
-    document.getElementById('overlay').style.display = 'none';
-    document.getElementById('adminPanel').style.display = 'none';
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById('whatsapp').addEventListener('input', mascara);
-  });
 </script>
-</body>
-</html>
