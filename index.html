@@ -72,7 +72,6 @@
 </main>
 
 <script>
-    // MATRIZ ATUARIAL EAS CORRETORA (16 A 70 ANOS - CONFERIDA COM PDFs)
     const DATA_MAP = {
         ouro: {
             cap: 120000, renda: 10000,
@@ -115,23 +114,30 @@
 
         const diaria = (info.renda / 30).toLocaleString('pt-BR', {minimumFractionDigits:2});
         const liq = ((info.renda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits:2});
+        
+        // Formatação em Reais para facilitar o uso no WhatsApp e no HTML
+        const vPreco = preco.toLocaleString('pt-BR', {minimumFractionDigits:2});
+        const vCap = info.cap.toLocaleString('pt-BR');
+        const vDobra = (info.cap * 2).toLocaleString('pt-BR');
+        const vRenda = info.renda.toLocaleString('pt-BR');
 
-        document.getElementById('res-valor').innerText = `R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+        // ==== RENDERIZAÇÃO NA TELA (HTML) ====
+        document.getElementById('res-valor').innerText = `R$ ${vPreco}`;
         
         document.getElementById('res-conteudo').innerHTML = `
             <div class="info-card">
                 <h4><i class="fas fa-file-invoice-dollar"></i> Capitais Seguros Unimed</h4>
                 <p>Seu estudo para <b>${nome.toUpperCase()}</b> ficou da seguinte forma:<br>
-                Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.<br>
-                Se ocorrer <b>morte por acidente</b>, o valor dobra para <b>R$ ${(info.cap*2).toLocaleString('pt-BR')}</b>.<br>
-                Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.</p>
+                Se ocorrer <b>morte natural</b> a Seguros Unimed pagará uma indenização no valor de R$ ${vCap}.<br>
+                Se ocorrer <b>morte por acidente</b>, o valor dobra para <b>R$ ${vDobra}</b>.<br>
+                Se ocorrer uma <b>invalidez por acidente ou doença</b> a Seguros Unimed pagará uma indenização no valor de R$ ${vCap}.</p>
             </div>
             <div class="info-card">
                 <h4><i class="fas fa-hand-holding-medical"></i> SERIT (Renda Mensal)</h4>
-                <p>Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${info.renda.toLocaleString('pt-BR')} por mês.</p>
+                <p>Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda de R$ ${vRenda} por mês.</p>
                 <div class="calc-box">
                     <strong>Cálculo do Benefício:</strong><br>
-                    R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = <b>R$ ${diaria} por dia</b>. <br>
+                    R$ ${vRenda} ÷ 30 dias = <b>R$ ${diaria} por dia</b>. <br>
                     Atestado de 60 dias (menos 7 dias franquia) = 53 dias pagos. Total: <b>R$ ${liq} líquido direto em conta</b>.
                 </div>
                 
@@ -145,8 +151,31 @@
                 </div>
             </div>`;
 
-        const msg = `Olá ${nome.toUpperCase()}, seu estudo EAS Corretora está pronto!\n💰 Investimento: R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits:2})}/mês`;
-        document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msg)}`;
+        // ==== FORMATAÇÃO DA MENSAGEM EXATA PARA O WHATSAPP ====
+        const textoWhatsapp = `Olá *${nome.toUpperCase()}*, o seu estudo técnico EAS Corretora está pronto! 📄
+
+💰 *INVESTIMENTO MENSAL:* R$ ${vPreco}
+
+🛡️ *Capitais Seguros Unimed*
+• Morte Natural: R$ ${vCap}
+• Morte por Acidente *(Valor Dobra)*: R$ ${vDobra}
+• Invalidez (Doença/Acidente): R$ ${vCap}
+
+🏥 *SERIT (Proteção de Renda Mensal)*
+Se você ficar doente ou sofrer um acidente e precisar se afastar por mais de 7 dias, a Seguradora pagará uma renda de *R$ ${vRenda} por mês*.
+
+📊 *Cálculo Transparente do Benefício:*
+R$ ${vRenda} ÷ 30 dias = R$ ${diaria} por dia.
+Exemplo: Atestado de 60 dias (menos 7 dias de franquia) = 53 dias pagos.
+Total: *R$ ${liq} líquido direto em sua conta.*
+
+⚠️ *Regras de Elegibilidade e Segurança:*
+• O benefício é pago exclusivamente por afastamento médico comprovado (doença ou acidente).
+• *NÃO cobre:* Afastamentos voluntários, férias, gravidez (exceto complicações) ou doenças pré-existentes não declaradas.
+• *Carências:* Acidentes (Zero Carência) | Doenças Comuns (30 dias) | LER, DORT e Hérnias (180 dias).`;
+
+        // ENVIA PARA A API DO WHATSAPP
+        document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(textoWhatsapp)}`;
         
         document.getElementById('resultado').style.display = 'block';
         document.getElementById('wa-area').style.display = 'block';
