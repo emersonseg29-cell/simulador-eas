@@ -23,7 +23,7 @@
         .val-total { font-size: 3.2rem; color: var(--unimed); font-weight: 900; margin: 10px 0; }
         .info-card { background: #f0fdf4; border-radius: 15px; padding: 25px; margin: 20px 30px; border-left: 6px solid var(--unimed); }
         .calc-box { background: #fffbeb; border: 1px dashed #f59e0b; padding: 20px; border-radius: 12px; margin: 20px 0; font-size: 1rem; color: #92400e; line-height: 1.6; }
-        
+
         /* Estilo do Bloco de Blindagem Jurídica */
         .blindagem-box { margin-top: 20px; padding: 18px; background-color: #f8fafc; border-radius: 10px; border-left: 5px solid #64748b; font-size: 0.9rem; color: #475569; line-height: 1.6; }
         .blindagem-box strong { color: var(--eas-blue); display: block; margin-bottom: 10px; font-size: 1rem; }
@@ -54,8 +54,7 @@
                 <option value="bronze">BRONZE (3k Renda / 50k Vida)</option>
             </select>
         </div>
-        <div class="input-group"><label>Código de Consultor</label><input type="text" id="cupom" placeholder="Insira UNIMED08 para desconto"></div>
-        
+
         <button class="btn-calc" onclick="gerarSimulacao()">Gerar Estudo Técnico</button>
 
         <div id="resultado">
@@ -92,29 +91,39 @@
 
     function gerarSimulacao() {
         const nome = document.getElementById('nome').value.trim();
-        const idade = parseInt(document.getElementById('idade').value);
+        const idade = parseInt(document.getElementById('idade').value, 10);
         const planoKey = document.getElementById('plano').value;
-        const cupom = document.getElementById('cupom').value.toUpperCase();
-        
+
         let whats = document.getElementById('whatsapp').value.replace(/\D/g, '');
         if (whats.length > 11) whats = whats.substring(0, 11);
 
-        if (!nome || !idade || whats.length < 10) {
-            alert("Preencha Nome, Idade e um WhatsApp válido (DDD + Número)."); return;
+        if (!nome || !Number.isInteger(idade) || whats.length < 10) {
+            alert("Preencha Nome, Idade e um WhatsApp válido (DDD + Número).");
+            return;
         }
-        
+
         if (idade < 16 || idade > 70) {
-            alert("O sistema calcula precificação atuarial apenas para idades entre 16 e 70 anos conforme Condições Gerais."); return;
+            alert("O sistema calcula precificação atuarial apenas para idades entre 16 e 70 anos conforme Condições Gerais.");
+            return;
         }
 
         const info = DATA_MAP[planoKey];
-        const tabela = (cupom === "UNIMED08" || cupom === "CALL08") ? info.call08 : info.a37;
-        
-        let preco = tabela[idade];
+
+        if (!info || !info.call08) {
+            alert("Não foi possível localizar a tabela de cálculo deste plano.");
+            return;
+        }
+
+        const preco = info.call08[idade];
+
+        if (!Number.isFinite(preco)) {
+            alert("Não existe valor cadastrado para esta combinação de plano e idade.");
+            return;
+        }
 
         const diaria = (info.renda / 30).toLocaleString('pt-BR', {minimumFractionDigits:2});
         const liq = ((info.renda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits:2});
-        
+
         // Formatação em Reais para facilitar o uso no WhatsApp e no HTML
         const vPreco = preco.toLocaleString('pt-BR', {minimumFractionDigits:2});
         const vCap = info.cap.toLocaleString('pt-BR');
@@ -123,7 +132,7 @@
 
         // ==== RENDERIZAÇÃO NA TELA (HTML) ====
         document.getElementById('res-valor').innerText = `R$ ${vPreco}`;
-        
+
         document.getElementById('res-conteudo').innerHTML = `
             <div class="info-card">
                 <h4><i class="fas fa-file-invoice-dollar"></i> Capitais Seguros Unimed</h4>
@@ -140,7 +149,7 @@
                     R$ ${vRenda} ÷ 30 dias = <b>R$ ${diaria} por dia</b>. <br>
                     Atestado de 60 dias (menos 7 dias franquia) = 53 dias pagos. Total: <b>R$ ${liq} líquido direto em conta</b>.
                 </div>
-                
+
                 <div class="blindagem-box">
                     <strong><i class="fas fa-shield-alt"></i> Regras de Elegibilidade e Segurança</strong>
                     <ul>
@@ -176,7 +185,7 @@ Total: *R$ ${liq} líquido direto em sua conta.*
 
         // ENVIA PARA A API DO WHATSAPP
         document.getElementById('wa-link').href = `https://wa.me/55${whats}?text=${encodeURIComponent(textoWhatsapp)}`;
-        
+
         document.getElementById('resultado').style.display = 'block';
         document.getElementById('wa-area').style.display = 'block';
     }
