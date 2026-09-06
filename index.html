@@ -369,7 +369,7 @@
         <!-- ==================== VIDA EM GRUPO ==================== -->
         <section id="empresarial" class="form-section">
             <div class="notice">
-                Os valores deste módulo são apresentados como <strong>"a partir de"</strong>, conforme a apresentação empresarial disponível. Não há tabela atuarial empresarial cadastrada neste simulador.
+                Com DIT por Acidente: contratação mínima de <strong>5 vidas</strong>. Sem DIT: contratação a partir de <strong>3 vidas</strong>, com prêmio <strong>R$ 10,00 menor por vida</strong>. O sistema calcula e apresenta o prêmio total mensal conforme a quantidade de vidas.
             </div>
 
             <div class="input-group">
@@ -380,6 +380,26 @@
             <div class="input-group">
                 <label>WhatsApp (DDD + Número)</label>
                 <input type="tel" id="empresa-whatsapp" placeholder="Ex: 17991234567" maxlength="11">
+            </div>
+
+            <div class="info-card" style="margin:0 0 22px;">
+                <h4><i class="fas fa-users"></i> Quem pode entrar no seguro empresarial</h4>
+                <p>
+                    Funcionários CLT, prestadores de serviço com contrato e sócios/administradores.
+                </p>
+            </div>
+
+            <div class="input-group">
+                <label>Quantidade de Vidas</label>
+                <input type="number" id="empresa-vidas" placeholder="Ex: 5" min="3">
+            </div>
+
+            <div class="input-group">
+                <label>Incluir DIT por Acidente?</label>
+                <select id="empresa-dit">
+                    <option value="sim">SIM, COM DIT POR ACIDENTE</option>
+                    <option value="nao">NÃO, SEM DIT</option>
+                </select>
             </div>
 
             <div class="input-group">
@@ -601,10 +621,22 @@ Total: *R$ ${liq} líquido direto em sua conta.*
     function gerarSimulacaoEmpresarial() {
         const nome = document.getElementById('empresa-nome').value.trim();
         const planoKey = document.getElementById('empresa-plano').value;
+        const incluirDIT = document.getElementById('empresa-dit').value === 'sim';
+        const vidas = parseInt(document.getElementById('empresa-vidas').value, 10);
         const whats = formatarTelefone(document.getElementById('empresa-whatsapp').value);
 
-        if (!nome || whats.length < 10) {
-            alert("Preencha Nome da Empresa/Proponente e um WhatsApp válido (DDD + Número).");
+        if (!nome || whats.length < 10 || !Number.isInteger(vidas)) {
+            alert("Preencha Nome da Empresa/Proponente, Quantidade de Vidas e um WhatsApp válido (DDD + Número).");
+            return;
+        }
+
+        if (incluirDIT && vidas < 5) {
+            alert("Para contratação com DIT por Acidente, o mínimo é de 5 vidas.");
+            return;
+        }
+
+        if (!incluirDIT && vidas < 3) {
+            alert("Para contratação sem DIT, o mínimo é de 3 vidas.");
             return;
         }
 
@@ -615,24 +647,17 @@ Total: *R$ ${liq} líquido direto em sua conta.*
             return;
         }
 
+        const premioPorVida = incluirDIT ? info.referencia : (info.referencia - 10);
+        const premioTotal = premioPorVida * vidas;
+
         const vCapital = info.capital.toLocaleString('pt-BR');
         const vDIT = info.dit.toLocaleString('pt-BR');
-        const vReferencia = info.referencia.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+        const vPremioVida = premioPorVida.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+        const vPremioTotal = premioTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 
-        document.getElementById('empresa-res-valor').innerText = `A partir de R$ ${vReferencia}`;
+        document.getElementById('empresa-res-valor').innerText = `R$ ${vPremioTotal}`;
 
-        document.getElementById('empresa-res-conteudo').innerHTML = `
-            <div class="info-card">
-                <h4><i class="fas fa-building-shield"></i> Seguro de Vida em Grupo</h4>
-                <p>Plano <b>${info.nome}</b></p>
-                <p>
-                    <b>Morte Natural:</b> R$ ${vCapital}<br>
-                    <b>Morte Acidental:</b> R$ ${vCapital}<br>
-                    <b>IPA:</b> R$ ${vCapital}<br>
-                    <b>IFPD:</b> R$ ${vCapital}
-                </p>
-            </div>
-
+        const blocoDIT = incluirDIT ? `
             <div class="info-card">
                 <h4><i class="fas fa-hand-holding-medical"></i> DIT por Acidente</h4>
                 <p><b>Até R$ ${vDIT} por mês.</b></p>
@@ -643,14 +668,41 @@ Total: *R$ ${liq} líquido direto em sua conta.*
                     Pagamento a partir do 16º dia de afastamento por acidente.<br>
                     Período máximo de até 12 meses.
                 </div>
-            </div>`;
+            </div>` : '';
+
+        document.getElementById('empresa-res-conteudo').innerHTML = `
+            <div class="info-card">
+                <h4><i class="fas fa-building-shield"></i> Seguro de Vida em Grupo</h4>
+                <p>Plano <b>${info.nome}</b></p>
+                <p>
+                    <b>Quantidade de vidas:</b> ${vidas}<br>
+                    <b>Prêmio por vida:</b> R$ ${vPremioVida}<br>
+                    <b>Prêmio total mensal:</b> R$ ${vPremioTotal}
+                </p>
+                <p>
+                    <b>Morte Natural:</b> R$ ${vCapital}<br>
+                    <b>Morte Acidental:</b> R$ ${vCapital}<br>
+                    <b>IPA:</b> R$ ${vCapital}<br>
+                    <b>IFPD:</b> R$ ${vCapital}
+                </p>
+            </div>
+
+            <div class="info-card">
+                <h4><i class="fas fa-users"></i> Quem pode fazer parte</h4>
+                <p>Funcionários CLT, prestadores de serviço com contrato e sócios/administradores.</p>
+                <p><b>${incluirDIT ? 'Com DIT: mínimo de 5 vidas.' : 'Sem DIT: mínimo de 3 vidas.'}</b></p>
+            </div>
+
+            ${blocoDIT}`;
 
         const textoWhatsapp = `Olá *${nome.toUpperCase()}*, o seu estudo técnico EAS Corretora está pronto! 📄
 
-🏢 *VIDA EM GRUPO + DIT POR ACIDENTE*
+🏢 *VIDA EM GRUPO${incluirDIT ? ' + DIT POR ACIDENTE' : ''}*
 Plano: *${info.nome}*
 
-💰 *REFERÊNCIA MENSAL:* A partir de R$ ${vReferencia}
+👥 *QUANTIDADE DE VIDAS:* ${vidas}
+💰 *PRÊMIO POR VIDA:* R$ ${vPremioVida}
+💰 *PRÊMIO TOTAL MENSAL:* R$ ${vPremioTotal}
 
 🛡️ *Coberturas*
 • Morte Natural: R$ ${vCapital}
@@ -658,11 +710,21 @@ Plano: *${info.nome}*
 • IPA: R$ ${vCapital}
 • IFPD: R$ ${vCapital}
 
+👤 *Podem participar*
+• Funcionários CLT
+• Prestadores de serviço com contrato
+• Sócios/administradores${incluirDIT ? `
+
 🏥 *DIT por Acidente*
 • Até R$ ${vDIT} por mês
 • Franquia de 15 dias
 • Pagamento a partir do 16º dia de afastamento por acidente
-• Período máximo de até 12 meses`;
+• Período máximo de até 12 meses
+• Mínimo de 5 vidas` : `
+
+ℹ️ *Sem DIT*
+• Prêmio R$ 10,00 menor por vida
+• Contratação a partir de 3 vidas`}`;
 
         document.getElementById('empresa-wa-link').href =
             `https://wa.me/55${whats}?text=${encodeURIComponent(textoWhatsapp)}`;
