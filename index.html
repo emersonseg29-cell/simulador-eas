@@ -324,6 +324,27 @@
 
         <!-- ==================== SERIT INDIVIDUAL ==================== -->
         <section id="individual" class="form-section active">
+            <div class="info-card" style="margin:0 0 22px;">
+                <h4><i class="fas fa-hand-holding-medical"></i> Como funciona o SERIT</h4>
+                <p>Se você ficar doente ou sofrer um acidente e precisar ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda mensal, conforme o plano escolhido.</p>
+                <div class="calc-box">
+                    <strong>Exemplo de cálculo:</strong><br>
+                    No plano com renda de R$ 3.000 por mês:<br>
+                    R$ 3.000 ÷ 30 dias = <b>R$ 100,00 por dia</b>.<br>
+                    Atestado de 60 dias, menos 7 dias de franquia = <b>53 dias pagos</b>.<br>
+                    Total do exemplo: <b>R$ 5.300,00</b>.
+                </div>
+                <div class="blindagem-box">
+                    <strong><i class="fas fa-shield-alt"></i> Regras de Elegibilidade e Segurança</strong>
+                    <ul>
+                        <li><b>Fato Gerador:</b> afastamento total e temporário por motivo médico comprovado, doença ou acidente.</li>
+                        <li><b>Acidentes:</b> cobertura imediata.</li>
+                        <li><b>Doenças comuns:</b> carência de 30 dias.</li>
+                        <li><b>LER, DORT e Hérnias:</b> carência de 180 dias.</li>
+                    </ul>
+                </div>
+            </div>
+
             <div class="input-group">
                 <label>Nome do Proponente</label>
                 <input type="text" id="nome" placeholder="Nome Completo">
@@ -370,6 +391,29 @@
         <section id="empresarial" class="form-section">
             <div class="notice">
                 Com DIT por Acidente: contratação mínima de <strong>5 vidas</strong>. Sem DIT: contratação a partir de <strong>3 vidas</strong>, com prêmio <strong>R$ 10,00 menor por vida</strong>. O sistema calcula e apresenta o prêmio total mensal conforme a quantidade de vidas.
+            </div>
+
+            <div class="info-card" style="margin:0 0 22px;">
+                <h4><i class="fas fa-hand-holding-medical"></i> Como funciona o DIT por Acidente</h4>
+                <p>Se o funcionário sofrer um <b>acidente</b> e precisar ficar afastado do trabalho por mais de 15 dias, a Seguros Unimed pagará uma diária por incapacidade temporária, de acordo com o capital contratado, limitada a <b>R$ 3.000 por mês</b>.</p>
+                <div class="calc-box">
+                    <strong>Exemplo de cálculo:</strong><br>
+                    R$ 3.000 ÷ 30 dias = <b>R$ 100,00 por dia</b>.<br>
+                    Afastamento de 60 dias por acidente.<br>
+                    Os primeiros 15 dias são franquia e não são indenizados.<br>
+                    Do 16º ao 60º dia = <b>45 dias pagos</b>.<br>
+                    45 × R$ 100,00 = <b>R$ 4.500,00</b>.
+                </div>
+                <div class="blindagem-box">
+                    <strong><i class="fas fa-shield-alt"></i> Regras do DIT por Acidente</strong>
+                    <ul>
+                        <li>O afastamento deve ser decorrente de <b>acidente</b>.</li>
+                        <li><b>Franquia:</b> 15 dias.</li>
+                        <li>O pagamento começa a partir do <b>16º dia</b>.</li>
+                        <li><b>Limite:</b> até R$ 3.000 por mês.</li>
+                        <li><b>Período máximo:</b> até 12 meses.</li>
+                    </ul>
+                </div>
             </div>
 
             <div class="input-group">
@@ -512,6 +556,8 @@
         document.getElementById('btn-individual').classList.toggle('active', produto === 'individual');
         document.getElementById('btn-empresarial').classList.toggle('active', produto === 'empresarial');
 
+        limparResultadoIndividual();
+        limparResultadoEmpresarial();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -519,6 +565,16 @@
         let whats = valor.replace(/\D/g, '');
         if (whats.length > 11) whats = whats.substring(0, 11);
         return whats;
+    }
+
+    function limparResultadoIndividual() {
+        document.getElementById('resultado-individual').style.display = 'none';
+        document.getElementById('wa-area').style.display = 'none';
+    }
+
+    function limparResultadoEmpresarial() {
+        document.getElementById('resultado-empresarial').style.display = 'none';
+        document.getElementById('empresa-wa-area').style.display = 'none';
     }
 
     function gerarSimulacaoIndividual() {
@@ -657,16 +713,32 @@ Total: *R$ ${liq} líquido direto em sua conta.*
 
         document.getElementById('empresa-res-valor').innerText = `R$ ${vPremioTotal}`;
 
+        const diariaDIT = (info.dit / 30).toLocaleString('pt-BR', {minimumFractionDigits:2});
+        const exemploDIT = ((info.dit / 30) * 45).toLocaleString('pt-BR', {minimumFractionDigits:2});
+
         const blocoDIT = incluirDIT ? `
             <div class="info-card">
                 <h4><i class="fas fa-hand-holding-medical"></i> DIT por Acidente</h4>
-                <p><b>Até R$ ${vDIT} por mês.</b></p>
+                <p>Se o funcionário sofrer um <b>acidente</b> e precisar ficar afastado do trabalho por mais de 15 dias, a Seguros Unimed pagará uma diária por incapacidade temporária, limitada a <b>R$ ${vDIT} por mês</b>.</p>
 
                 <div class="calc-box">
-                    <strong>Regra apresentada:</strong><br>
-                    Franquia de 15 dias.<br>
-                    Pagamento a partir do 16º dia de afastamento por acidente.<br>
-                    Período máximo de até 12 meses.
+                    <strong>Cálculo do Benefício:</strong><br>
+                    R$ ${vDIT} ÷ 30 dias = <b>R$ ${diariaDIT} por dia</b>.<br>
+                    Exemplo: afastamento de 60 dias por acidente.<br>
+                    Os primeiros 15 dias são franquia.<br>
+                    Do 16º ao 60º dia = <b>45 dias pagos</b>.<br>
+                    Total do exemplo: <b>R$ ${exemploDIT}</b>.
+                </div>
+
+                <div class="blindagem-box">
+                    <strong><i class="fas fa-shield-alt"></i> Regras do DIT por Acidente</strong>
+                    <ul>
+                        <li>O afastamento deve ser decorrente de <b>acidente</b>.</li>
+                        <li><b>Franquia:</b> 15 dias.</li>
+                        <li>Pagamento a partir do <b>16º dia</b>.</li>
+                        <li><b>Limite mensal:</b> até R$ ${vDIT}.</li>
+                        <li><b>Período máximo:</b> até 12 meses.</li>
+                    </ul>
                 </div>
             </div>` : '';
 
@@ -732,6 +804,13 @@ Plano: *${info.nome}*
         document.getElementById('resultado-empresarial').style.display = 'block';
         document.getElementById('empresa-wa-area').style.display = 'block';
     }
+    document.getElementById('plano').addEventListener('change', limparResultadoIndividual);
+    document.getElementById('idade').addEventListener('input', limparResultadoIndividual);
+
+    document.getElementById('empresa-plano').addEventListener('change', limparResultadoEmpresarial);
+    document.getElementById('empresa-dit').addEventListener('change', limparResultadoEmpresarial);
+    document.getElementById('empresa-vidas').addEventListener('input', limparResultadoEmpresarial);
+
 </script>
 
 </body>
