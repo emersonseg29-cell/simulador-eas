@@ -12,27 +12,29 @@
 
     <style>
         :root {
-            --eas-navy: #0f172a;
-            --eas-navy-light: #1e293b;
-            --eas-navy-dark: #090d16;
-            --eas-gold: #b89b3e;
-            --eas-gold-light: #d4af37;
-            --eas-gold-subtle: #fcf9ee;
+            --eas-navy: #0b1e3b;
+            --eas-navy-deep: #071326;
+            --eas-navy-light: #142a50;
+            --eas-gold: #c59b27;
+            --eas-gold-light: #dfba52;
+            --eas-gold-gradient: linear-gradient(135deg, #dfba52 0%, #c59b27 100%);
+            --eas-gold-subtle: #fbf7ee;
+            --eas-silver: #e2e8f0;
             --unimed-green: #00995d;
             --unimed-green-light: #e6f7f0;
             --porto-blue: #004b8d;
             --porto-blue-light: #e8f2fa;
-            --bg-body: #f8fafc;
+            --bg-body: #f4f6fa;
             --bg-card: #ffffff;
-            --text-main: #1e293b;
+            --text-main: #0b1e3b;
             --text-muted: #64748b;
             --border-color: #e2e8f0;
             --radius-sm: 8px;
             --radius-md: 14px;
             --radius-lg: 20px;
-            --shadow-sm: 0 2px 4px rgba(15,23,42,0.05);
-            --shadow-md: 0 10px 25px -5px rgba(15,23,42,0.08), 0 8px 10px -6px rgba(15,23,42,0.03);
-            --shadow-lg: 0 20px 30px -10px rgba(15,23,42,0.15);
+            --shadow-sm: 0 2px 5px rgba(11,30,59,0.05);
+            --shadow-md: 0 10px 25px -5px rgba(11,30,59,0.09), 0 8px 10px -6px rgba(11,30,59,0.04);
+            --shadow-lg: 0 20px 35px -10px rgba(11,30,59,0.18);
         }
 
         * {
@@ -1045,11 +1047,37 @@
     <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <div class="brand-badge">
-                <div class="brand-logo-text">
-                    <i class="fas fa-shield-alt" style="color: var(--eas-gold);"></i> EAS <span>CORRETORA</span>
+            <div class="brand-badge" style="background: radial-gradient(circle at center, #142a50 0%, #071326 100%); padding: 16px 12px; border: 1px solid rgba(223,186,82,0.4); text-align: center; border-radius: var(--radius-md);">
+                <svg viewBox="0 0 260 110" xmlns="http://www.w3.org/2000/svg" style="max-height: 60px; width: auto; display: block; margin: 0 auto;">
+                    <defs>
+                        <linearGradient id="metalSilver" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff"/>
+                            <stop offset="50%" stop-color="#e2e8f0"/>
+                            <stop offset="100%" stop-color="#cbd5e1"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- 4 Família / Silhuetas de Proteção -->
+                    <circle cx="65" cy="18" r="7" fill="#ffffff"/>
+                    <rect x="58.5" y="29" width="13" height="24" rx="6.5" fill="#ffffff"/>
+                    
+                    <circle cx="95" cy="11" r="8" fill="#ffffff"/>
+                    <rect x="87.5" y="23" width="15" height="30" rx="7.5" fill="#ffffff"/>
+                    
+                    <circle cx="127" cy="6" r="8.5" fill="#ffffff"/>
+                    <rect x="118.5" y="18" width="17" height="35" rx="8.5" fill="#ffffff"/>
+                    
+                    <circle cx="158" cy="14" r="7.5" fill="#ffffff"/>
+                    <rect x="150.5" y="25" width="15" height="28" rx="7.5" fill="#ffffff"/>
+                    
+                    <!-- EAS -->
+                    <text x="112" y="84" font-family="'Montserrat', 'Inter', sans-serif" font-weight="900" font-size="38" fill="url(#metalSilver)" text-anchor="middle" letter-spacing="2">EAS</text>
+                    
+                    <!-- SUBTITLE -->
+                    <text x="112" y="103" font-family="'Montserrat', 'Inter', sans-serif" font-weight="700" font-size="8.5" fill="#ffffff" text-anchor="middle" letter-spacing="2.5">CORRETORA DE SEGUROS</text>
+                </svg>
+                <div style="font-size: 9px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--eas-gold-light); font-weight: 700; margin-top: 8px;">
+                    Proteção para o que realmente importa
                 </div>
-                <div class="brand-tagline">Consultoria Técnica de Proteção</div>
             </div>
         </div>
 
@@ -1099,6 +1127,9 @@
             </div>
 
             <div class="topbar-right">
+                <a href="https://wa.me/5517991123532" target="_blank" class="btn btn-outline btn-sm" style="color: #25d366; border-color: #25d366; font-weight: 700;">
+                    <i class="fab fa-whatsapp"></i> (17) 99112-3532
+                </a>
                 <button class="btn btn-gold btn-sm" onclick="openNewLeadModal()">
                     <i class="fas fa-plus"></i> Novo Lead
                 </button>
@@ -1252,7 +1283,7 @@
 
                         <div class="form-group">
                             <label class="form-label">WhatsApp (DDD + Número)</label>
-                            <input type="tel" id="ind-whatsapp" class="form-control" placeholder="17991234567" maxlength="11">
+                            <input type="tel" id="ind-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
                         </div>
 
                         <div class="form-group">
@@ -1357,7 +1388,7 @@
 
                         <div class="form-group">
                             <label class="form-label">WhatsApp do Contato</label>
-                            <input type="tel" id="emp-whatsapp" class="form-control" placeholder="17991234567" maxlength="11">
+                            <input type="tel" id="emp-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
                         </div>
 
                         <div class="form-group">
@@ -1479,7 +1510,7 @@
 
                         <div class="form-group">
                             <label class="form-label">WhatsApp do Responsável</label>
-                            <input type="tel" id="cct-whatsapp" class="form-control" placeholder="17991234567" maxlength="11">
+                            <input type="tel" id="cct-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
                         </div>
 
                         <div class="form-group">
@@ -1649,7 +1680,7 @@
 
                 <div class="form-group" style="margin-bottom: 14px;">
                     <label class="form-label">WhatsApp (DDD + Número)</label>
-                    <input type="tel" id="lead-whatsapp" class="form-control" placeholder="17991234567" maxlength="11">
+                    <input type="tel" id="lead-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
                 </div>
 
                 <div class="form-grid" style="margin-bottom: 14px;">
