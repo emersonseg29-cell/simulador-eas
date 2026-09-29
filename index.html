@@ -2,13 +2,15 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EAS Corretora - Plataforma Integrada de Simulações & CRM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EAS Corretora - Simulador Oficial de Vendas & CRM</title>
     <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         :root {
@@ -49,210 +51,449 @@
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             overflow-x: hidden;
         }
 
-        /* SIDEBAR */
-        .sidebar {
-            width: 280px;
-            background: linear-gradient(180deg, var(--eas-navy) 0%, var(--eas-navy-dark) 100%);
+        /* HEADER INSTITUCIONAL EAS */
+        .eas-header {
+            background: linear-gradient(180deg, var(--eas-navy-deep) 0%, var(--eas-navy) 100%);
             color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
+            border-bottom: 4px solid var(--eas-gold);
+            padding: 16px 24px;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
             z-index: 100;
-            transition: all 0.3s ease;
-            box-shadow: 4px 0 20px rgba(0,0,0,0.15);
         }
 
-        .sidebar-header {
-            padding: 26px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
-        .brand-badge {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(184,155,62,0.4);
-            border-radius: var(--radius-md);
-            padding: 14px;
-            display: inline-block;
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* MODO SWITCHER PRINCIPAL (SIMULADOR vs CRM) */
+        .mode-switcher-bar {
+            background: rgba(255,255,255,0.06);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 24px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .mode-pills {
+            display: flex;
+            background: rgba(7,19,38,0.7);
+            border: 1px solid rgba(223,186,82,0.3);
+            border-radius: 40px;
+            padding: 4px;
+            gap: 6px;
+            max-width: 520px;
             width: 100%;
         }
 
-        .brand-logo-text {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            color: #ffffff;
+        .mode-pill-btn {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-        }
-
-        .brand-logo-text span {
-            color: var(--eas-gold);
-        }
-
-        .brand-tagline {
-            font-size: 10px;
+            padding: 12px 18px;
+            border-radius: 30px;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            color: #cbd5e1;
+            background: transparent;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--eas-gold-light);
-            margin-top: 6px;
-            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        .sidebar-nav {
-            padding: 20px 14px;
+        .mode-pill-btn.active {
+            background: var(--eas-gold-gradient);
+            color: var(--eas-navy-deep);
+            box-shadow: 0 4px 15px rgba(223,186,82,0.4);
+        }
+
+        /* BARRAS DE PRODUTOS DO SIMULADOR (INDIVIDUAL, EMPRESARIAL, CCT) */
+        .simulator-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px 16px 0;
+            max-width: 900px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .sim-product-tab {
             flex: 1;
-            overflow-y: auto;
+            min-width: 220px;
+            background: #ffffff;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sim-product-tab:hover {
+            border-color: var(--eas-gold);
+            transform: translateY(-2px);
+        }
+
+        .sim-product-tab.active {
+            border-color: var(--eas-navy);
+            background: #fdfefe;
+            box-shadow: 0 0 0 3px rgba(11,30,59,0.12);
+        }
+
+        .tab-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .sim-product-tab.active .tab-icon.serit { background: var(--unimed-green-light); color: var(--unimed-green); }
+        .sim-product-tab.active .tab-icon.emp { background: rgba(11,30,59,0.1); color: var(--eas-navy); }
+        .sim-product-tab.active .tab-icon.cct { background: var(--porto-blue-light); color: var(--porto-blue); }
+
+        .tab-info h4 {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--eas-navy);
+            margin-bottom: 2px;
+        }
+
+        .tab-info p {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* MAIN CONTAINER */
+        .app-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 20px auto 40px;
+            padding: 0 16px;
+            flex: 1;
+        }
+
+        .view-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .view-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 19px;
+            font-weight: 800;
+            color: var(--eas-navy);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* FORMULÁRIO DE SIMULAÇÃO */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
             display: flex;
             flex-direction: column;
             gap: 6px;
         }
 
-        .nav-category {
-            font-size: 11px;
-            font-weight: 700;
+        .form-label {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--eas-navy);
             text-transform: uppercase;
-            letter-spacing: 1.2px;
-            color: #94a3b8;
-            padding: 14px 12px 6px;
+            letter-spacing: 0.5px;
         }
 
-        .nav-link {
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--text-main);
+            background: #ffffff;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--eas-navy);
+            box-shadow: 0 0 0 3px rgba(11,30,59,0.12);
+        }
+
+        /* COMPARATIVO DE PLANOS LADO A LADO (VISUAL CLIENT-FACING) */
+        .plans-comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .plan-card {
+            background: #ffffff;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .plan-card:hover {
+            border-color: var(--eas-gold);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .plan-card.selected {
+            border-color: var(--eas-navy);
+            background: #fafcfe;
+            box-shadow: 0 0 0 3px rgba(11,30,59,0.12);
+        }
+
+        .plan-card.featured {
+            border-color: var(--eas-gold);
+            background: #fffdf8;
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--eas-navy);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .plan-badge.gold {
+            background: var(--eas-gold-gradient);
+            color: var(--eas-navy-deep);
+        }
+
+        .plan-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--eas-navy);
+            margin-top: 6px;
+            margin-bottom: 8px;
+        }
+
+        .plan-price {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--eas-navy);
+            margin-bottom: 4px;
+        }
+
+        .plan-price span {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin: 16px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 14px;
+        }
+
+        .plan-features li {
+            font-size: 13px;
+            color: #334155;
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 12px 16px;
-            color: #cbd5e1;
-            text-decoration: none;
-            border-radius: var(--radius-sm);
+            gap: 8px;
+        }
+
+        .plan-features li i {
+            color: var(--unimed-green);
             font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
         }
 
-        .nav-link i {
-            font-size: 17px;
-            width: 22px;
-            text-align: center;
-            color: #94a3b8;
-            transition: all 0.2s ease;
+        /* PROPOSTA GERADA / CARD DE APRESENTAÇÃO */
+        .proposal-presentation-card {
+            display: none;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            margin-top: 30px;
+            animation: fadeIn 0.35s ease;
         }
 
-        .nav-link:hover {
-            background: rgba(255,255,255,0.08);
+        .proposal-hero {
+            background: linear-gradient(135deg, var(--eas-navy-deep) 0%, var(--eas-navy) 100%);
+            color: #ffffff;
+            padding: 30px;
+            position: relative;
+            border-bottom: 4px solid var(--eas-gold);
+        }
+
+        .proposal-hero-tag {
+            background: var(--eas-gold-gradient);
+            color: var(--eas-navy-deep);
+            font-weight: 800;
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .proposal-total-val {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 40px;
+            font-weight: 900;
             color: #ffffff;
         }
 
-        .nav-link:hover i {
-            color: var(--eas-gold);
+        .proposal-client-name {
+            font-size: 16px;
+            color: #cbd5e1;
+            margin-top: 4px;
         }
 
-        .nav-link.active {
-            background: linear-gradient(90deg, var(--eas-gold) 0%, var(--eas-gold-light) 100%);
-            color: var(--eas-navy-dark);
-            font-weight: 800;
-            box-shadow: 0 4px 15px rgba(184,155,62,0.35);
+        .proposal-body {
+            padding: 30px;
         }
 
-        .nav-link.active i {
-            color: var(--eas-navy-dark);
-        }
-
-        .sidebar-footer {
-            padding: 18px 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 12px;
-            color: #94a3b8;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        /* MAIN CONTENT WRAPPER */
-        .main-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-y: auto;
-        }
-
-        /* TOPBAR */
-        .topbar {
-            height: 72px;
-            background: #ffffff;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 32px;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-
-        .topbar-left {
-            display: flex;
-            align-items: center;
+        .proposal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 16px;
+            margin-bottom: 24px;
         }
 
-        .btn-toggle-menu {
-            display: none;
-            background: transparent;
-            border: none;
-            font-size: 20px;
-            color: var(--eas-navy);
-            cursor: pointer;
+        .proposal-grid-item {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 16px;
         }
 
-        .page-title {
+        .proposal-grid-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .proposal-grid-value {
             font-family: 'Montserrat', sans-serif;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
             color: var(--eas-navy);
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
-        .topbar-right {
+        .highlight-calc-box {
+            background: #fffbeb;
+            border-left: 5px solid #f59e0b;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #92400e;
+            line-height: 1.6;
+        }
+
+        .action-buttons-group {
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             gap: 14px;
-        }
-
-        .user-tag {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--eas-gold-subtle);
-            border: 1px solid rgba(184,155,62,0.3);
-            padding: 8px 14px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--eas-navy);
-        }
-
-        .user-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: var(--eas-gold);
-            color: var(--eas-navy-dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 13px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
         }
 
         /* BUTTONS */
@@ -261,7 +502,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 12px 20px;
+            padding: 12px 22px;
             border-radius: var(--radius-sm);
             font-size: 14px;
             font-weight: 700;
@@ -273,14 +514,14 @@
         }
 
         .btn-gold {
-            background: linear-gradient(135deg, var(--eas-gold) 0%, var(--eas-gold-light) 100%);
-            color: var(--eas-navy-dark);
-            box-shadow: 0 4px 12px rgba(184,155,62,0.25);
+            background: var(--eas-gold-gradient);
+            color: var(--eas-navy-deep);
+            box-shadow: 0 4px 12px rgba(223,186,82,0.3);
         }
 
         .btn-gold:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(184,155,62,0.4);
+            box-shadow: 0 6px 18px rgba(223,186,82,0.45);
         }
 
         .btn-navy {
@@ -296,7 +537,8 @@
         .btn-whatsapp {
             background: #25d366;
             color: #ffffff;
-            box-shadow: 0 4px 14px rgba(37,211,102,0.3);
+            font-size: 15px;
+            box-shadow: 0 4px 14px rgba(37,211,102,0.35);
         }
 
         .btn-whatsapp:hover {
@@ -323,43 +565,23 @@
             border-radius: 6px;
         }
 
-        /* CONTENT CONTAINER */
-        .content-container {
-            padding: 32px;
-            flex: 1;
-        }
-
-        .view-section {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .view-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* STATS GRID */
+        /* KANBAN CRM ESTILO JS BENEFÍCIOS / EAS */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 20px;
-            margin-bottom: 28px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
         }
 
         .stat-card {
             background: #ffffff;
             border-radius: var(--radius-md);
             border: 1px solid var(--border-color);
-            padding: 22px;
+            padding: 20px;
             box-shadow: var(--shadow-sm);
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 16px;
             position: relative;
             overflow: hidden;
         }
@@ -374,395 +596,38 @@
             background: var(--eas-gold);
         }
 
-        .stat-card.navy::before { background: var(--eas-navy); }
-        .stat-card.green::before { background: var(--unimed-green); }
-        .stat-card.blue::before { background: var(--porto-blue); }
-
         .stat-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: var(--radius-md);
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
             background: var(--eas-gold-subtle);
             color: var(--eas-gold);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 20px;
             flex-shrink: 0;
         }
 
-        .stat-card.navy .stat-icon { background: #f1f5f9; color: var(--eas-navy); }
-        .stat-card.green .stat-icon { background: var(--unimed-green-light); color: var(--unimed-green); }
-        .stat-card.blue .stat-icon { background: var(--porto-blue-light); color: var(--porto-blue); }
-
         .stat-info h4 {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             text-transform: uppercase;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .stat-info .stat-number {
             font-family: 'Montserrat', sans-serif;
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 800;
             color: var(--eas-navy);
-        }
-
-        /* CARD COMPONENT */
-        .card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-md);
-            padding: 32px;
-            margin-bottom: 28px;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .card-header-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--eas-navy);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* PRODUCT SELECTOR GRID */
-        .product-choice-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 28px;
-        }
-
-        .choice-card {
-            background: #ffffff;
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius-md);
-            padding: 24px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            position: relative;
-        }
-
-        .choice-card:hover {
-            border-color: var(--eas-gold);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .choice-card.selected {
-            border-color: var(--eas-navy);
-            background: #fdfefe;
-            box-shadow: 0 0 0 3px rgba(15,23,42,0.1);
-        }
-
-        .choice-card.selected::after {
-            content: '00c';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            color: var(--unimed-green);
-            font-size: 18px;
-        }
-
-        .choice-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-
-        .badge-unimed { background: var(--unimed-green-light); color: var(--unimed-green); }
-        .badge-porto { background: var(--porto-blue-light); color: var(--porto-blue); }
-        .badge-gold { background: var(--eas-gold-subtle); color: var(--eas-gold); }
-
-        .choice-title {
-            font-size: 17px;
-            font-weight: 800;
-            color: var(--eas-navy);
-            margin-bottom: 6px;
-        }
-
-        .choice-desc {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        /* FORM CONTROLS */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-label {
-            font-size: 13px;
-            font-weight: 800;
-            color: var(--eas-navy);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #cbd5e1;
-            border-radius: var(--radius-sm);
-            font-size: 15px;
-            font-family: inherit;
-            color: var(--text-main);
-            background: #ffffff;
-            transition: all 0.2s ease;
-            outline: none;
-        }
-
-        .form-control:focus {
-            border-color: var(--eas-navy);
-            box-shadow: 0 0 0 3px rgba(15,23,42,0.1);
-        }
-
-        /* INFO & EXPLANATION BOXES */
-        .info-box {
-            background: #f8fafc;
-            border-left: 5px solid var(--eas-gold);
-            border-radius: var(--radius-sm);
-            padding: 20px;
-            margin-bottom: 24px;
-            line-height: 1.6;
-            font-size: 14px;
-        }
-
-        .info-box.unimed {
-            background: var(--unimed-green-light);
-            border-left-color: var(--unimed-green);
-        }
-
-        .info-box.porto {
-            background: var(--porto-blue-light);
-            border-left-color: var(--porto-blue);
-        }
-
-        .info-box.alert {
-            background: #fffbeb;
-            border-left-color: #f59e0b;
-            color: #92400e;
-        }
-
-        .info-box-title {
-            font-weight: 800;
-            font-size: 15px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .rule-list {
-            list-style: none;
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .rule-list li {
-            position: relative;
-            padding-left: 24px;
-            font-size: 13px;
-        }
-
-        .rule-list li::before {
-            content: '058';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            left: 0;
-            top: 2px;
-            color: var(--unimed-green);
-            font-size: 14px;
-        }
-
-        /* SIMULATION RESULT DISPLAY */
-        .result-box {
-            display: none;
-            background: #ffffff;
-            border-radius: var(--radius-lg);
-            border: 2px solid var(--border-color);
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-            margin-top: 32px;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .result-header {
-            background: linear-gradient(135deg, var(--eas-navy) 0%, var(--eas-navy-light) 100%);
-            color: #ffffff;
-            padding: 32px;
-            text-align: center;
-            position: relative;
-        }
-
-        .result-header .tag {
-            display: inline-block;
-            background: var(--eas-gold);
-            color: var(--eas-navy-dark);
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-        }
-
-        .result-header .price-display {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 42px;
-            font-weight: 900;
-            color: #ffffff;
-            margin: 8px 0;
-        }
-
-        .result-header .price-sub {
-            font-size: 13px;
-            color: #cbd5e1;
-        }
-
-        .result-body {
-            padding: 32px;
-        }
-
-        .coverage-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .coverage-item {
-            background: #f8fafc;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            padding: 16px;
-        }
-
-        .coverage-label {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .coverage-val {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--eas-navy);
-        }
-
-        .calc-formula-box {
-            background: #fffbeb;
-            border: 1px dashed #f59e0b;
-            border-radius: var(--radius-sm);
-            padding: 18px;
-            margin-bottom: 24px;
-            font-size: 14px;
-            color: #92400e;
-            line-height: 1.6;
-        }
-
-        .result-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        /* CRM KANBAN BOARD */
-        .crm-toolbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            padding: 8px 16px;
-            width: 320px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .search-bar input {
-            border: none;
-            outline: none;
-            padding-left: 10px;
-            width: 100%;
-            font-size: 14px;
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 6px 14px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            color: var(--text-muted);
-            transition: all 0.2s ease;
-        }
-
-        .filter-btn.active, .filter-btn:hover {
-            background: var(--eas-navy);
-            color: #ffffff;
-            border-color: var(--eas-navy);
         }
 
         .kanban-board {
             display: grid;
-            grid-template-columns: repeat(5, minmax(260px, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(5, minmax(250px, 1fr));
+            gap: 16px;
             overflow-x: auto;
             padding-bottom: 16px;
         }
@@ -770,11 +635,11 @@
         .kanban-column {
             background: #f1f5f9;
             border-radius: var(--radius-md);
-            padding: 16px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
             border-top: 4px solid var(--eas-navy);
-            min-height: 480px;
+            min-height: 450px;
         }
 
         .kanban-column.novo { border-top-color: #6366f1; }
@@ -787,13 +652,13 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
-            padding-bottom: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
             border-bottom: 1px solid #cbd5e1;
         }
 
         .column-title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
             color: var(--eas-navy);
             text-transform: uppercase;
@@ -802,9 +667,9 @@
 
         .column-badge {
             background: #ffffff;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 12px;
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-size: 11px;
             font-weight: 800;
             color: var(--text-muted);
         }
@@ -812,19 +677,18 @@
         .card-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             flex: 1;
         }
 
         .lead-card {
             background: #ffffff;
             border-radius: var(--radius-sm);
-            padding: 16px;
+            padding: 14px;
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow-sm);
             cursor: pointer;
             transition: all 0.2s ease;
-            position: relative;
         }
 
         .lead-card:hover {
@@ -833,55 +697,31 @@
             border-color: var(--eas-gold);
         }
 
-        .lead-type-tag {
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            padding: 3px 8px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
-
-        .tag-ind { background: #e0e7ff; color: #4338ca; }
-        .tag-emp { background: #dcfce7; color: #15803d; }
-        .tag-cct { background: #fef3c7; color: #b45309; }
-
         .lead-name {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 800;
             color: var(--eas-navy);
-            margin-bottom: 4px;
+            margin: 4px 0 2px;
         }
 
         .lead-phone {
             font-size: 12px;
             color: var(--text-muted);
             margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .lead-footer {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-top: 10px;
+            padding-top: 8px;
             border-top: 1px dashed var(--border-color);
             margin-top: 6px;
         }
 
-        .lead-price {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--eas-navy);
-        }
-
         .lead-actions-btn {
             display: flex;
-            gap: 6px;
+            gap: 5px;
         }
 
         .btn-mini {
@@ -899,93 +739,16 @@
             transition: all 0.2s ease;
         }
 
-        .btn-mini:hover {
-            background: var(--eas-navy);
-            color: #ffffff;
-        }
-
-        .btn-mini.wa:hover {
-            background: #25d366;
-            color: #ffffff;
-            border-color: #25d366;
-        }
-
-        /* MODAL */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15,23,42,0.65);
-            backdrop-filter: blur(4px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-card {
-            background: #ffffff;
-            border-radius: var(--radius-lg);
-            width: 100%;
-            max-width: 600px;
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-            animation: fadeIn 0.25s ease;
-        }
-
-        .modal-header {
-            background: var(--eas-navy);
-            color: #ffffff;
-            padding: 20px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .modal-header h3 {
-            font-size: 17px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .modal-close {
-            background: transparent;
-            border: none;
-            color: #ffffff;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            padding: 24px;
-            max-height: 75vh;
-            overflow-y: auto;
-        }
-
-        .modal-footer {
-            padding: 16px 24px;
-            border-top: 1px solid var(--border-color);
-            background: #f8fafc;
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-        }
+        .btn-mini:hover { background: var(--eas-navy); color: #ffffff; }
+        .btn-mini.wa:hover { background: #25d366; color: #ffffff; border-color: #25d366; }
+        .btn-mini.sim:hover { background: var(--eas-gold); color: var(--eas-navy-deep); border-color: var(--eas-gold); }
 
         /* TOAST */
         .toast {
             position: fixed;
             bottom: 24px;
             right: 24px;
-            background: var(--eas-navy);
+            background: var(--eas-navy-deep);
             color: #ffffff;
             border-left: 5px solid var(--eas-gold);
             padding: 14px 22px;
@@ -997,747 +760,699 @@
             z-index: 2000;
             font-size: 14px;
             font-weight: 600;
-            animation: toastSlide 0.3s ease;
         }
 
-        @keyframes toastSlide {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7,19,38,0.7);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 900px) {
-            .sidebar {
-                position: fixed;
-                left: -280px;
-                top: 0;
-                bottom: 0;
-            }
+        .modal-overlay.active { display: flex; }
 
-            .sidebar.mobile-open {
-                left: 0;
-            }
+        .modal-card {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 580px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            animation: fadeIn 0.25s ease;
+        }
 
-            .btn-toggle-menu {
-                display: block;
-            }
+        .modal-header {
+            background: var(--eas-navy);
+            color: #ffffff;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-            .content-container {
-                padding: 16px;
-            }
+        .modal-body { padding: 22px; max-height: 75vh; overflow-y: auto; }
+        .modal-footer { padding: 14px 22px; border-top: 1px solid var(--border-color); background: #f8fafc; display: flex; justify-content: flex-end; gap: 10px; }
 
-            .card {
-                padding: 20px;
+        /* PRINT STYLES */
+        @media print {
+            .eas-header, .mode-switcher-bar, .simulator-nav, .action-buttons-group, .btn, .crm-toolbar {
+                display: none !important;
             }
+            body { background: #ffffff !important; color: #000000 !important; }
+            .card { box-shadow: none !important; border: 1px solid #ccc !important; }
+            .proposal-presentation-card { display: block !important; box-shadow: none !important; border: none !important; }
+            .proposal-hero { background: var(--eas-navy) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
 
-            .topbar {
-                padding: 0 16px;
-            }
+        @media (max-width: 768px) {
+            .eas-header { padding: 12px 14px; }
+            .header-top { justify-content: center; }
+            .header-actions { justify-content: center; width: 100%; }
+            .card { padding: 18px; }
+            .proposal-total-val { font-size: 30px; }
+            .action-buttons-group .btn { width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- TOAST -->
+    <!-- TOAST NOTIFICATION -->
     <div id="toast" class="toast">
-        <i class="fas fa-check-circle" style="color: var(--eas-gold);"></i>
-        <span id="toast-text">Operação realizada com sucesso!</span>
+        <i class="fas fa-check-circle" style="color: var(--eas-gold); font-size: 18px;"></i>
+        <span id="toast-text">Ação concluída com sucesso!</span>
     </div>
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="brand-badge" style="background: radial-gradient(circle at center, #142a50 0%, #071326 100%); padding: 16px 12px; border: 1px solid rgba(223,186,82,0.4); text-align: center; border-radius: var(--radius-md);">
-                <svg viewBox="0 0 260 110" xmlns="http://www.w3.org/2000/svg" style="max-height: 60px; width: auto; display: block; margin: 0 auto;">
+    <!-- CABEÇALHO OFICIAL EAS -->
+    <header class="eas-header">
+        <div class="header-top">
+            <a href="#" class="brand-box">
+                <!-- SVG LOGO OFICIAL VETORIAL EAS -->
+                <svg viewBox="0 0 250 100" xmlns="http://www.w3.org/2000/svg" style="height: 48px; width: auto;">
                     <defs>
-                        <linearGradient id="metalSilver" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <linearGradient id="metalEAS" x1="0%" y1="0%" x2="0%" y2="100%">
                             <stop offset="0%" stop-color="#ffffff"/>
-                            <stop offset="50%" stop-color="#e2e8f0"/>
+                            <stop offset="50%" stop-color="#f1f5f9"/>
                             <stop offset="100%" stop-color="#cbd5e1"/>
                         </linearGradient>
                     </defs>
-                    <!-- 4 Família / Silhuetas de Proteção -->
                     <circle cx="65" cy="18" r="7" fill="#ffffff"/>
                     <rect x="58.5" y="29" width="13" height="24" rx="6.5" fill="#ffffff"/>
-                    
                     <circle cx="95" cy="11" r="8" fill="#ffffff"/>
                     <rect x="87.5" y="23" width="15" height="30" rx="7.5" fill="#ffffff"/>
-                    
                     <circle cx="127" cy="6" r="8.5" fill="#ffffff"/>
                     <rect x="118.5" y="18" width="17" height="35" rx="8.5" fill="#ffffff"/>
-                    
                     <circle cx="158" cy="14" r="7.5" fill="#ffffff"/>
                     <rect x="150.5" y="25" width="15" height="28" rx="7.5" fill="#ffffff"/>
-                    
-                    <!-- EAS -->
-                    <text x="112" y="84" font-family="'Montserrat', 'Inter', sans-serif" font-weight="900" font-size="38" fill="url(#metalSilver)" text-anchor="middle" letter-spacing="2">EAS</text>
-                    
-                    <!-- SUBTITLE -->
-                    <text x="112" y="103" font-family="'Montserrat', 'Inter', sans-serif" font-weight="700" font-size="8.5" fill="#ffffff" text-anchor="middle" letter-spacing="2.5">CORRETORA DE SEGUROS</text>
+                    <text x="112" y="80" font-family="'Montserrat', sans-serif" font-weight="900" font-size="34" fill="url(#metalEAS)" text-anchor="middle" letter-spacing="2">EAS</text>
+                    <text x="112" y="97" font-family="'Montserrat', sans-serif" font-weight="700" font-size="8" fill="#ffffff" text-anchor="middle" letter-spacing="2">CORRETORA DE SEGUROS</text>
                 </svg>
-                <div style="font-size: 9px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--eas-gold-light); font-weight: 700; margin-top: 8px;">
-                    Proteção para o que realmente importa
-                </div>
-            </div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <div class="nav-category">Gestão Comercial</div>
-            <a class="nav-link active" onclick="switchTab('crm')">
-                <i class="fas fa-chart-line"></i> CRM & Pipeline
             </a>
 
-            <div class="nav-category">Simuladores Oficiais</div>
-            <a class="nav-link" onclick="switchTab('individual')">
-                <i class="fas fa-user-shield"></i> Individual (SERIT Unimed)
-            </a>
-            <a class="nav-link" onclick="switchTab('empresarial')">
-                <i class="fas fa-building-shield"></i> Empresarial (Vida em Grupo)
-            </a>
-            <a class="nav-link" onclick="switchTab('cct')">
-                <i class="fas fa-file-contract"></i> Convenção Coletiva (CCT)
-            </a>
-
-            <div class="nav-category">Suporte & Conhecimento</div>
-            <a class="nav-link" onclick="switchTab('guia')">
-                <i class="fas fa-book-medical"></i> Guia Técnico & Regras
-            </a>
-            <a class="nav-link" onclick="switchTab('config')">
-                <i class="fas fa-cog"></i> Configurações & Backup
-            </a>
-        </nav>
-
-        <div class="sidebar-footer">
-            <span>EAS Seguros &copy; 2026</span>
-            <span style="color: var(--eas-gold);"><i class="fas fa-check-circle"></i> V 4.0</span>
-        </div>
-    </aside>
-
-    <!-- MAIN WRAPPER -->
-    <div class="main-wrapper">
-        <!-- TOPBAR -->
-        <header class="topbar">
-            <div class="topbar-left">
-                <button class="btn-toggle-menu" onclick="toggleSidebar()">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <h1 class="page-title" id="page-title">
-                    <i class="fas fa-chart-line" style="color: var(--eas-gold);"></i> Painel CRM de Vendas
-                </h1>
-            </div>
-
-            <div class="topbar-right">
-                <a href="https://wa.me/5517991123532" target="_blank" class="btn btn-outline btn-sm" style="color: #25d366; border-color: #25d366; font-weight: 700;">
+            <div class="header-actions">
+                <a href="https://wa.me/5517991123532" target="_blank" class="btn btn-outline btn-sm" style="color: #25d366; border-color: rgba(37,211,102,0.4); background: rgba(37,211,102,0.1);">
                     <i class="fab fa-whatsapp"></i> (17) 99112-3532
                 </a>
-                <button class="btn btn-gold btn-sm" onclick="openNewLeadModal()">
-                    <i class="fas fa-plus"></i> Novo Lead
+                <button id="btn-supabase-status" class="btn btn-outline btn-sm" onclick="abrirModalSupabase()" style="font-size: 11px;">
+                    <i class="fas fa-database" style="color: #3ecf8e;"></i> <span id="txt-supabase-status">Supabase</span>
                 </button>
-                <div class="user-tag">
-                    <div class="user-avatar">EAS</div>
-                    <span>Emerson Santos</span>
-                </div>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- CONTENT AREA -->
-        <main class="content-container">
-
-            <!-- ========================================== -->
-            <!-- 1. ABA CRM & PIPELINE DE VENDAS -->
-            <!-- ========================================== -->
-            <section id="tab-crm" class="view-section active">
-                <!-- STATS -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-users"></i></div>
-                        <div class="stat-info">
-                            <h4>Total de Leads</h4>
-                            <div class="stat-number" id="stat-total-leads">0</div>
-                        </div>
-                    </div>
-                    <div class="stat-card green">
-                        <div class="stat-icon"><i class="fas fa-handshake"></i></div>
-                        <div class="stat-info">
-                            <h4>Fechados / Ativos</h4>
-                            <div class="stat-number" id="stat-ativos">0</div>
-                        </div>
-                    </div>
-                    <div class="stat-card blue">
-                        <div class="stat-icon"><i class="fas fa-funnel-dollar"></i></div>
-                        <div class="stat-info">
-                            <h4>Pipeline Total</h4>
-                            <div class="stat-number" id="stat-pipeline-valor">R$ 0,00</div>
-                        </div>
-                    </div>
-                    <div class="stat-card navy">
-                        <div class="stat-icon"><i class="fas fa-percentage"></i></div>
-                        <div class="stat-info">
-                            <h4>Taxa de Conversão</h4>
-                            <div class="stat-number" id="stat-taxa-conv">0%</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TOOLBAR -->
-                <div class="card">
-                    <div class="crm-toolbar">
-                        <div class="search-bar">
-                            <i class="fas fa-search" style="color: var(--text-muted);"></i>
-                            <input type="text" id="crm-search" placeholder="Buscar por cliente, empresa ou fone..." oninput="filtrarCardsCRM()">
-                        </div>
-
-                        <div class="filter-group">
-                            <button class="filter-btn active" onclick="setFiltroCategoria('todos', this)">Todos</button>
-                            <button class="filter-btn" onclick="setFiltroCategoria('individual', this)">Individual</button>
-                            <button class="filter-btn" onclick="setFiltroCategoria('empresarial', this)">Empresarial</button>
-                            <button class="filter-btn" onclick="setFiltroCategoria('cct', this)">CCT Sindical</button>
-                        </div>
-                    </div>
-
-                    <!-- KANBAN BOARD -->
-                    <div class="kanban-board">
-                        <!-- COLUNA 1: NOVO -->
-                        <div class="kanban-column novo" ondragover="allowDrop(event)" ondrop="dropCard(event, 'novo')">
-                            <div class="column-header">
-                                <span class="column-title">1. Novos Leads</span>
-                                <span class="column-badge" id="badge-count-novo">0</span>
-                            </div>
-                            <div class="card-list" id="col-novo"></div>
-                        </div>
-
-                        <!-- COLUNA 2: CONTATO -->
-                        <div class="kanban-column contato" ondragover="allowDrop(event)" ondrop="dropCard(event, 'contato')">
-                            <div class="column-header">
-                                <span class="column-title">2. Em Contato</span>
-                                <span class="column-badge" id="badge-count-contato">0</span>
-                            </div>
-                            <div class="card-list" id="col-contato"></div>
-                        </div>
-
-                        <!-- COLUNA 3: PROPOSTA -->
-                        <div class="kanban-column proposta" ondragover="allowDrop(event)" ondrop="dropCard(event, 'proposta')">
-                            <div class="column-header">
-                                <span class="column-title">3. Estudo Enviado</span>
-                                <span class="column-badge" id="badge-count-proposta">0</span>
-                            </div>
-                            <div class="card-list" id="col-proposta"></div>
-                        </div>
-
-                        <!-- COLUNA 4: FECHAMENTO -->
-                        <div class="kanban-column fechamento" ondragover="allowDrop(event)" ondrop="dropCard(event, 'fechamento')">
-                            <div class="column-header">
-                                <span class="column-title">4. Negociação</span>
-                                <span class="column-badge" id="badge-count-fechamento">0</span>
-                            </div>
-                            <div class="card-list" id="col-fechamento"></div>
-                        </div>
-
-                        <!-- COLUNA 5: ATIVO -->
-                        <div class="kanban-column ativo" ondragover="allowDrop(event)" ondrop="dropCard(event, 'ativo')">
-                            <div class="column-header">
-                                <span class="column-title">5. Emitido / Fechado</span>
-                                <span class="column-badge" id="badge-count-ativo">0</span>
-                            </div>
-                            <div class="card-list" id="col-ativo"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ========================================== -->
-            <!-- 2. ABA INDIVIDUAL: SERIT SEGUROS UNIMED -->
-            <!-- ========================================== -->
-            <section id="tab-individual" class="view-section">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-header-title">
-                            <i class="fas fa-user-shield" style="color: var(--unimed-green);"></i>
-                            Simulador SERIT Individual &bull; Seguros Unimed
-                        </div>
-                        <span class="choice-badge badge-unimed">Proteção de Renda Profissional</span>
-                    </div>
-
-                    <!-- EXPLICATIVO TECNICO -->
-                    <div class="info-box unimed">
-                        <div class="info-box-title">
-                            <i class="fas fa-hand-holding-medical"></i> Entenda o Funcionamento do SERIT
-                        </div>
-                        <p>
-                            Garante a manutenção da sua renda mensal caso precise ficar temporariamente afastado de suas atividades profissionais por doença ou acidente, a partir do 8º dia de afastamento (franquia de 7 dias).
-                        </p>
-                        <ul class="rule-list">
-                            <li><strong>Acidentes:</strong> Cobertura imediata (sem período de carência).</li>
-                            <li><strong>Doenças Comuns:</strong> Carência de 30 dias após início da vigência.</li>
-                            <li><strong>LER, DORT e Hérnias:</strong> Carência técnica de 180 dias.</li>
-                            <li><strong>Franquia reduzida:</strong> Apenas 7 dias de franquia. O cálculo diário equivale a <code>Renda Mensal ÷ 30</code>.</li>
-                        </ul>
-                    </div>
-
-                    <!-- FORMULARIO -->
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">Nome do Proponente</label>
-                            <input type="text" id="ind-nome" class="form-control" placeholder="Nome Completo do Cliente">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">WhatsApp (DDD + Número)</label>
-                            <input type="tel" id="ind-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Idade Atual (16 a 70 anos)</label>
-                            <input type="number" id="ind-idade" class="form-control" placeholder="Ex: 38" min="16" max="70">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Plano Pretendido</label>
-                            <select id="ind-plano" class="form-control">
-                                <option value="ouro">Plano OURO (R$ 10.000 Renda / R$ 120.000 Vida)</option>
-                                <option value="prata" selected>Plano PRATA (R$ 5.000 Renda / R$ 100.000 Vida)</option>
-                                <option value="bronze">Plano BRONZE (R$ 3.000 Renda / R$ 50.000 Vida)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-navy" style="width: 100%; padding: 16px;" onclick="calcularIndividual()">
-                        <i class="fas fa-calculator"></i> Calcular Estudo Técnico Individual
-                    </button>
-
-                    <!-- RESULTADO INDIVIDUAL -->
-                    <div id="resultado-ind" class="result-box">
-                        <div class="result-header">
-                            <span class="tag">Seguros Unimed &bull; Estudo Aprovado</span>
-                            <div class="price-display" id="ind-res-valor">R$ 0,00</div>
-                            <div class="price-sub">Investimento Mensal Final com Tabela Atuarial Vigente</div>
-                        </div>
-
-                        <div class="result-body">
-                            <div class="coverage-grid">
-                                <div class="coverage-item">
-                                    <div class="coverage-label">Renda Mensal SERIT</div>
-                                    <div class="coverage-val" id="ind-res-renda" style="color: var(--unimed-green);">R$ 0,00</div>
-                                </div>
-                                <div class="coverage-item">
-                                    <div class="coverage-label">Diária de Afastamento</div>
-                                    <div class="coverage-val" id="ind-res-diaria">R$ 0,00/dia</div>
-                                </div>
-                                <div class="coverage-item">
-                                    <div class="coverage-label">Morte Natural / Invalidez</div>
-                                    <div class="coverage-val" id="ind-res-morte">R$ 0,00</div>
-                                </div>
-                                <div class="coverage-item">
-                                    <div class="coverage-label">Morte Acidental (Dobra)</div>
-                                    <div class="coverage-val" id="ind-res-dobra">R$ 0,00</div>
-                                </div>
-                            </div>
-
-                            <div class="calc-formula-box" id="ind-res-formula"></div>
-
-                            <div class="result-actions">
-                                <a href="#" id="ind-btn-wa" class="btn btn-whatsapp" target="_blank">
-                                    <i class="fab fa-whatsapp"></i> Enviar Estudo no WhatsApp
-                                </a>
-                                <button class="btn btn-gold" onclick="salvarSimulacaoComoLead('individual')">
-                                    <i class="fas fa-user-plus"></i> Salvar Lead no CRM
-                                </button>
-                                <button class="btn btn-outline" onclick="window.print()">
-                                    <i class="fas fa-print"></i> Imprimir Proposta
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ========================================== -->
-            <!-- 3. ABA EMPRESARIAL: VIDA EM GRUPO + DIT -->
-            <!-- ========================================== -->
-            <section id="tab-empresarial" class="view-section">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-header-title">
-                            <i class="fas fa-building-shield" style="color: var(--eas-navy);"></i>
-                            Simulador Vida em Grupo PME &bull; Seguros Unimed / Porto
-                        </div>
-                        <span class="choice-badge badge-gold">Proteção Coletiva para Empresas</span>
-                    </div>
-
-                    <!-- EXPLICATIVO TECNICO EMPRESARIAL -->
-                    <div class="info-box">
-                        <div class="info-box-title">
-                            <i class="fas fa-shield-alt"></i> Regras de Elegibilidade & Parâmetros PME
-                        </div>
-                        <p>
-                            O Seguro de Vida em Grupo Empresarial atende empresas a partir de pequenas equipes, com coberturas para funcionários CLT, estagiários, sócios e prestadores de serviços regulares.
-                        </p>
-                        <ul class="rule-list">
-                            <li><strong>Com DIT por Acidente:</strong> Mínimo operacional de <strong>5 vidas</strong>. Diária de R$ 100,00 (franquia de 15 dias, paga do 16º ao 60º dia ou até 12 meses).</li>
-                            <li><strong>Sem DIT por Acidente:</strong> Contratação a partir de <strong>3 vidas</strong>, com desconto direto de <strong>R$ 10,00 por vida/mês</strong>.</li>
-                            <li><strong>Coberturas Inclusas:</strong> Morte Qualquer Causa, Morte Acidental, Invalidez Permanente por Acidente (IPA) e Invalidez Funcional Permanente Total por Doença (IFPD).</li>
-                        </ul>
-                    </div>
-
-                    <!-- FORMULARIO EMPRESARIAL -->
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">Razão Social / Nome da Empresa</label>
-                            <input type="text" id="emp-nome" class="form-control" placeholder="Ex: Metalúrgica Silva Ltda">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">WhatsApp do Contato</label>
-                            <input type="tel" id="emp-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Quantidade de Vidas (Colaboradores)</label>
-                            <input type="number" id="emp-vidas" class="form-control" placeholder="Ex: 8" min="3" value="5">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Plano de Cobertura</label>
-                            <select id="emp-plano" class="form-control">
-                                <option value="bronze">BRONZE &bull; Capital R$ 50.000 (Ref R$ 49,90/vida)</option>
-                                <option value="prata" selected>PRATA &bull; Capital R$ 100.000 (Ref R$ 59,90/vida)</option>
-                                <option value="ouro">OURO &bull; Capital R$ 150.000 (Ref R$ 69,90/vida)</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Incluir DIT por Acidente?</label>
-                            <select id="emp-dit" class="form-control">
-                                <option value="sim" selected>SIM &bull; Com DIT Acidente (Mínimo 5 vidas)</option>
-                                <option value="nao">NÃO &bull; Sem DIT (Mínimo 3 vidas, -R$ 10,00/vida)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-navy" style="width: 100%; padding: 16px;" onclick="calcularEmpresarial()">
-                        <i class="fas fa-calculator"></i> Calcular Cotação Empresarial
-                    </button>
-
-                    <!-- RESULTADO EMPRESARIAL -->
-                    <div id="resultado-emp" class="result-box">
-                        <div class="result-header">
-                            <span class="tag">Proposta PME Corporativa</span>
-                            <div class="price-display" id="emp-res-total">R$ 0,00</div>
-                            <div class="price-sub" id="emp-res-sub">Investimento Total Mensal para a Empresa</div>
-                        </div>
-
-                        <div class="result-body">
-                            <div class="coverage-grid">
-                                <div class="coverage-item">
-                                    <div class="coverage-label">Prêmio por Vida</div>
-                                    <div class="coverage-val" id="emp-res-por-vida" style="color: var(--eas-gold-light);">R$ 0,00</div>
-                                </div>
-                                <div class="coverage-item">
-                                    <div class="coverage-label">Vidas Cobertas</div>
-                                    <div class="coverage-val" id="emp-res-qtd-vidas">0 colaboradores</div>
-                                </div>
-                                <div class="coverage-item">
-                                    <div class="coverage-label">Capital Segurado Básico</div>
-                                    <div class="coverage-val" id="emp-res-capital">R$ 0,00</div>
-                                </div>
-                                <div class="coverage-item">
-                                    <div class="coverage-label">DIT por Acidente</div>
-                                    <div class="coverage-val" id="emp-res-dit-status">Incluso (R$ 3.000/mês)</div>
-                                </div>
-                            </div>
-
-                            <div class="calc-formula-box" id="emp-res-detalhe"></div>
-
-                            <div class="result-actions">
-                                <a href="#" id="emp-btn-wa" class="btn btn-whatsapp" target="_blank">
-                                    <i class="fab fa-whatsapp"></i> Enviar Proposta Empresarial no WhatsApp
-                                </a>
-                                <button class="btn btn-gold" onclick="salvarSimulacaoComoLead('empresarial')">
-                                    <i class="fas fa-building"></i> Salvar Lead PME no CRM
-                                </button>
-                                <button class="btn btn-outline" onclick="window.print()">
-                                    <i class="fas fa-print"></i> Imprimir Proposta
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ========================================== -->
-            <!-- 4. ABA CCT: CONVENÇÕES COLETIVAS -->
-            <!-- ========================================== -->
-            <section id="tab-cct" class="view-section">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-header-title">
-                            <i class="fas fa-file-contract" style="color: var(--porto-blue);"></i>
-                            Simulador Técnico de Convenções Coletivas (CCT Porto)
-                        </div>
-                        <span class="choice-badge badge-porto">Conformidade Jurídica & Sindical</span>
-                    </div>
-
-                    <!-- EXPLICATIVO TECNICO CCT -->
-                    <div class="info-box porto">
-                        <div class="info-box-title">
-                            <i class="fas fa-balance-scale"></i> Obrigatoriedade Securitária e Cláusula de Convenção
-                        </div>
-                        <p>
-                            As Convenções Coletivas de Trabalho (CCT) obrigam as empresas a contratar seguro de vida e assistência para proteger os trabalhadores de sua categoria. A não contratação sujeita o empregador a multas sindicais severas e à obrigação de indenizar a família com recursos próprios da empresa em caso de sinistro.
-                        </p>
-                        <ul class="rule-list">
-                            <li><strong>Catálogo Porto Seguro Vida CCT:</strong> Produtos homologados que atendem 100% às exigências securitárias e assistenciais das respectivas categorias.</li>
-                            <li><strong>Trava Técnica de Segurança:</strong> A tabela Porto reflete o custo do produto que atende à norma sindical, devendo a corretora confirmar o enquadramento territorial e instrumento no Mediador/MTE.</li>
-                        </ul>
-                    </div>
-
-                    <!-- SELECAO DO NICHO SINDICAL -->
-                    <div class="form-grid">
-                        <div class="form-group" style="grid-column: span 2;">
-                            <label class="form-label">Selecione o Ramo / Convenção Sindical</label>
-                            <select id="cct-ramo" class="form-control" onchange="atualizarInfoRamoCCT()">
-                                <option value="construcao" selected>Construção Civil &bull; Porto 3-431 (SITICOM / SINDUSCON-SP)</option>
-                                <option value="bares">Bares, Restaurantes e Similares &bull; Catanduva e Região (SINTEHBAR)</option>
-                                <option value="comercio">Comércio Varejista &bull; Sincomércio Catanduva</option>
-                                <option value="transportes">Transporte de Cargas &bull; CCT Sindicato dos Condutores</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Razão Social / Empresa</label>
-                            <input type="text" id="cct-empresa" class="form-control" placeholder="Nome da Construtora / Empresa">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">WhatsApp do Responsável</label>
-                            <input type="tel" id="cct-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Quantidade de Colaboradores (Vidas)</label>
-                            <input type="number" id="cct-vidas" class="form-control" placeholder="Mínimo 3 vidas" min="3" value="6">
-                        </div>
-                    </div>
-
-                    <!-- TABELA DE FAIXAS DE PREÇO DO RAMO SELECIONADO -->
-                    <div id="cct-info-ramo" class="info-box alert" style="margin-top: 10px;">
-                        <!-- Inserido dinamicamente via JS -->
-                    </div>
-
-                    <button class="btn btn-navy" style="width: 100%; padding: 16px;" onclick="calcularCCT()">
-                        <i class="fas fa-calculator"></i> Simular CCT com Regras Vigentes
-                    </button>
-
-                    <!-- RESULTADO CCT -->
-                    <div id="resultado-cct" class="result-box">
-                        <div class="result-header" style="background: linear-gradient(135deg, var(--porto-blue) 0%, var(--eas-navy) 100%);">
-                            <span class="tag" style="background: #ffffff; color: var(--porto-blue);">CCT Homologada Porto Seguro</span>
-                            <div class="price-display" id="cct-res-total">R$ 0,00</div>
-                            <div class="price-sub" id="cct-res-sub">Investimento Mensal Obrigatório Total</div>
-                        </div>
-
-                        <div class="result-body">
-                            <div class="coverage-grid">
-                                <div class="coverage-item">
-                                    <div class="coverage-label">Custo por Colaborador</div>
-                                    <div class="coverage-val" id="cct-res-por-vida" style="color: var(--porto-blue);">R$ 0,00/vida</div>
-                                </div>
-                                <div class="coverage-item">
-                                    <div class="coverage-label">Faixa Aplicada</div>
-                                    <div class="coverage-val" id="cct-res-faixa">-</div>
-                                </div>
-                                <div class="coverage-item">
-                                    <div class="coverage-label">Garantia Sinistro</div>
-                                    <div class="coverage-val" style="color: var(--unimed-green);">100% Homologado</div>
-                                </div>
-                                <div class="coverage-item">
-                                    <div class="coverage-label">Certificado para Sindicato</div>
-                                    <div class="coverage-val">Emissão Instantânea</div>
-                                </div>
-                            </div>
-
-                            <div class="calc-formula-box" id="cct-res-detalhe"></div>
-
-                            <div class="result-actions">
-                                <a href="#" id="cct-btn-wa" class="btn btn-whatsapp" target="_blank">
-                                    <i class="fab fa-whatsapp"></i> Enviar Apresentação CCT no WhatsApp
-                                </a>
-                                <button class="btn btn-gold" onclick="salvarSimulacaoComoLead('cct')">
-                                    <i class="fas fa-file-invoice"></i> Salvar Lead CCT no CRM
-                                </button>
-                                <button class="btn btn-outline" onclick="window.print()">
-                                    <i class="fas fa-print"></i> Imprimir Estudo Sindical
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ========================================== -->
-            <!-- 5. ABA GUIA TÉCNICO & EXPLICAÇÕES -->
-            <!-- ========================================== -->
-            <section id="tab-guia" class="view-section">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-header-title">
-                            <i class="fas fa-book-medical" style="color: var(--eas-gold);"></i>
-                            Guia Técnico de Vendas & Dicíonario de Coberturas EAS
-                        </div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
-                        <div class="info-box unimed">
-                            <h3 style="color: var(--unimed-green); margin-bottom: 12px;"><i class="fas fa-stethoscope"></i> Regras Técnicas SERIT (Unimed)</h3>
-                            <p style="font-size: 13px; line-height: 1.6;">
-                                <strong>O que é o Fato Gerador?</strong> Afastamento total e temporário da profissão do segurado por determinação médica inequívoca decorrente de acidente ou doença.<br><br>
-                                <strong>Franquia de 7 dias:</strong> Os 7 primeiros dias do atestado médico são de responsabilidade do segurado (franquia). A indenização é contada a partir do 8º dia.<br><br>
-                                <strong>Carências:</strong><br>
-                                &bull; Acidentes: Zero Carência.<br>
-                                &bull; Doenças Comuns: 30 dias.<br>
-                                &bull; LER, DORT e Hérnias: 180 dias.<br><br>
-                                <strong>Não Coberto:</strong> Afastamentos voluntários, procedimentos estéticos, check-ups de rotina ou doenças pré-existentes omitidas na DPS.
-                            </p>
-                        </div>
-
-                        <div class="info-box">
-                            <h3 style="color: var(--eas-navy); margin-bottom: 12px;"><i class="fas fa-briefcase"></i> Regras Técnicas Vida em Grupo PME</h3>
-                            <p style="font-size: 13px; line-height: 1.6;">
-                                <strong>Vidas Mínimas:</strong><br>
-                                &bull; Sem DIT: A partir de 3 vidas.<br>
-                                &bull; Com DIT Acidente: A partir de 5 vidas.<br><br>
-                                <strong>Franquia do DIT Empresarial:</strong> 15 dias de franquia. O colaborador começa a receber a diária a partir do 16º dia de afastamento por acidente.<br><br>
-                                <strong>Quem pode participar:</strong> Funcionários registrados na CLT, estagiários com termo legal, sócios administradores declarados no contrato social e prestadores PJ com contrato contínuo.<br><br>
-                                <strong>Vantagem Tributária:</strong> Empresas no regime de Lucro Real podem deduzir os pagamentos do seguro como despesa operacional.
-                            </p>
-                        </div>
-
-                        <div class="info-box porto">
-                            <h3 style="color: var(--porto-blue); margin-bottom: 12px;"><i class="fas fa-gavel"></i> Regras e Riscos de Convenção Coletiva (CCT)</h3>
-                            <p style="font-size: 13px; line-height: 1.6;">
-                                <strong>Responsabilidade Objetiva da Empresa:</strong> Se a CCT prescreve seguro de vida e a empresa não contratou, a Justiça do Trabalho condena a empresa a pagar o valor integral do capital segurado do próprio bolso em caso de morte ou invalidez.<br><br>
-                                <strong>Vantagem do Produto Homologado:</strong> A apólice da Porto Seguro traz cláusulas sob medida com certificado específico exigido na homologação do sindicato.<br><br>
-                                <strong>Trava de Conformidade:</strong> O simulador calcula com base nas tabelas confirmadas de cada categoria sindical. Sempre conferir a vigência do instrumento junto ao Mediador MTE.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ========================================== -->
-            <!-- 6. ABA CONFIGURAÇÕES & BACKUP -->
-            <!-- ========================================== -->
-            <section id="tab-config" class="view-section">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-header-title">
-                            <i class="fas fa-database" style="color: var(--eas-navy);"></i>
-                            Gestão de Dados do CRM & Integrações
-                        </div>
-                    </div>
-
-                    <div style="max-width: 680px; display: flex; flex-direction: column; gap: 20px;">
-                        <div class="info-box">
-                            <div class="info-box-title"><i class="fas fa-save"></i> Armazenamento Local Seguro</div>
-                            <p style="font-size: 13px;">
-                                Todos os leads e movimentações no Kanban são salvos automaticamente no armazenamento local do seu navegador (LocalStorage). Você pode exportar um backup em formato JSON a qualquer momento ou carregar seus dados em outro computador.
-                            </p>
-                        </div>
-
-                        <div style="display: flex; gap: 14px; flex-wrap: wrap;">
-                            <button class="btn btn-navy" onclick="exportarBackupJSON()">
-                                <i class="fas fa-download"></i> Exportar Dados do CRM (JSON)
-                            </button>
-
-                            <button class="btn btn-outline" onclick="document.getElementById('import-file').click()">
-                                <i class="fas fa-upload"></i> Restaurar / Importar Backup
-                            </button>
-                            <input type="file" id="import-file" style="display: none;" accept=".json" onchange="importarBackupJSON(event)">
-
-                            <button class="btn btn-outline" style="color: #ef4444; border-color: #fca5a5;" onclick="limparTodosDadosCRM()">
-                                <i class="fas fa-trash-alt"></i> Redefinir Banco de Dados
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        </main>
+    <!-- SELETOR CENTRAL DE MODO (SIMULADOR vs CRM) -->
+    <div class="mode-switcher-bar">
+        <div class="mode-pills">
+            <button class="mode-pill-btn active" id="btn-mode-sim" onclick="setMainMode('simulador')">
+                <i class="fas fa-calculator"></i> Simulador de Vendas
+            </button>
+            <button class="mode-pill-btn" id="btn-mode-crm" onclick="setMainMode('crm')">
+                <i class="fas fa-chart-line"></i> CRM & Leads
+            </button>
+        </div>
     </div>
 
-    <!-- MODAL DE NOVO LEAD / DETALHES -->
+    <!-- SUB-BARRA DE PRODUTOS DO SIMULADOR -->
+    <div id="sim-product-nav" class="simulator-nav">
+        <div class="sim-product-tab active" id="tab-btn-serit" onclick="switchSimulatorTab('serit')">
+            <div class="tab-icon serit"><i class="fas fa-user-shield"></i></div>
+            <div class="tab-info">
+                <h4>SERIT Individual</h4>
+                <p>Proteção de Renda Unimed</p>
+            </div>
+        </div>
+
+        <div class="sim-product-tab" id="tab-btn-emp" onclick="switchSimulatorTab('emp')">
+            <div class="tab-icon emp"><i class="fas fa-building-shield"></i></div>
+            <div class="tab-info">
+                <h4>Vida em Grupo</h4>
+                <p>Empresarial PME + DIT</p>
+            </div>
+        </div>
+
+        <div class="sim-product-tab" id="tab-btn-cct" onclick="switchSimulatorTab('cct')">
+            <div class="tab-icon cct"><i class="fas fa-file-contract"></i></div>
+            <div class="tab-info">
+                <h4>Convenção Coletiva</h4>
+                <p>CCT Sindical Porto Seguro</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ÁREA PRINCIPAL -->
+    <main class="app-container">
+
+        <!-- ============================================================== -->
+        <!-- 1. SIMULADOR SERIT INDIVIDUAL (UNIMED)                         -->
+        <!-- ============================================================== -->
+        <section id="panel-sim-serit" class="view-panel active">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-user-shield" style="color: var(--unimed-green);"></i>
+                        Simulador SERIT Individual &bull; Seguros Unimed
+                    </div>
+                    <span style="font-size: 12px; font-weight: 700; color: var(--unimed-green); background: var(--unimed-green-light); padding: 4px 10px; border-radius: 20px;">
+                        Proteção de Renda Diária
+                    </span>
+                </div>
+
+                <!-- FORMULÁRIO -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Nome do Cliente</label>
+                        <input type="text" id="serit-nome" class="form-control" placeholder="Ex: Roberto Silveira">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">WhatsApp do Cliente</label>
+                        <input type="tel" id="serit-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Idade Atual (16 a 70 anos)</label>
+                        <input type="number" id="serit-idade" class="form-control" placeholder="Digite a idade (ex: 38)" min="16" max="70" oninput="calcularSERITAuto()">
+                    </div>
+                </div>
+
+                <!-- CARDS COMPARATIVOS DOS 3 PLANOS LADO A LADO -->
+                <div style="font-size: 13px; font-weight: 800; text-transform: uppercase; color: var(--eas-navy); margin-top: 10px;">
+                    <i class="fas fa-layer-group"></i> Selecione o Plano para Apresentar ao Cliente:
+                </div>
+                <div class="plans-comparison-grid">
+                    <!-- PLANO BRONZE -->
+                    <div class="plan-card" id="card-serit-bronze" onclick="selecionarPlanoSERIT('bronze')">
+                        <span class="plan-badge">Econômico</span>
+                        <div>
+                            <div class="plan-name">Plano Bronze</div>
+                            <div class="plan-price" id="price-serit-bronze">R$ --<span>/mês</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check-circle"></i> Renda: <strong>R$ 3.000/mês</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Diária: <strong>R$ 100,00/dia</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 50.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Franquia: <strong>7 dias</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- PLANO PRATA (DESTAQUE) -->
+                    <div class="plan-card featured selected" id="card-serit-prata" onclick="selecionarPlanoSERIT('prata')">
+                        <span class="plan-badge gold">Mais Escolhido</span>
+                        <div>
+                            <div class="plan-name" style="color: var(--eas-gold);">Plano Prata</div>
+                            <div class="plan-price" id="price-serit-prata">R$ --<span>/mês</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check-circle"></i> Renda: <strong>R$ 5.000/mês</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Diária: <strong>R$ 166,67/dia</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 100.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte Acidente: <strong>R$ 200.000</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- PLANO OURO -->
+                    <div class="plan-card" id="card-serit-ouro" onclick="selecionarPlanoSERIT('ouro')">
+                        <span class="plan-badge">Executivo</span>
+                        <div>
+                            <div class="plan-name">Plano Ouro</div>
+                            <div class="plan-price" id="price-serit-ouro">R$ --<span>/mês</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check-circle"></i> Renda: <strong>R$ 10.000/mês</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Diária: <strong>R$ 333,33/dia</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 120.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte Acidente: <strong>R$ 240.000</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD DE APRESENTAÇÃO E DISPARO DA PROPOSTA -->
+                <div id="proposal-serit-box" class="proposal-presentation-card">
+                    <div class="proposal-hero">
+                        <span class="proposal-hero-tag">Estudo Técnico Homologado &bull; Seguros Unimed</span>
+                        <div class="proposal-total-val" id="serit-hero-val">R$ 0,00/mês</div>
+                        <div class="proposal-client-name" id="serit-hero-client">Proposta para Cliente</div>
+                    </div>
+
+                    <div class="proposal-body">
+                        <div class="proposal-grid">
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Renda Mensal Garantida</div>
+                                <div class="proposal-grid-value" id="serit-grid-renda" style="color: var(--unimed-green);">R$ 0,00</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Valor da Diária de Afastamento</div>
+                                <div class="proposal-grid-value" id="serit-grid-diaria">R$ 0,00/dia</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Morte Natural / Invalidez</div>
+                                <div class="proposal-grid-value" id="serit-grid-morte">R$ 0,00</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Morte Acidental (Dobra)</div>
+                                <div class="proposal-grid-value" id="serit-grid-dobra">R$ 0,00</div>
+                            </div>
+                        </div>
+
+                        <div class="highlight-calc-box" id="serit-calc-explica"></div>
+
+                        <!-- GRUPO DE BOTÕES DE AÇÃO IMEDIATA (WHATSAPP, COPIAR, IMPRIMIR, CRM) -->
+                        <div class="action-buttons-group">
+                            <button class="btn btn-whatsapp" onclick="enviarWhatsAppSERIT()">
+                                <i class="fab fa-whatsapp"></i> Enviar no WhatsApp do Cliente
+                            </button>
+                            <button class="btn btn-navy" onclick="copiarTextoPropostaSERIT()">
+                                <i class="fas fa-copy"></i> Copiar Texto da Proposta
+                            </button>
+                            <button class="btn btn-outline" onclick="window.print()">
+                                <i class="fas fa-print"></i> Imprimir / Salvar PDF
+                            </button>
+                            <button class="btn btn-gold" onclick="salvarSimulacaoNoCRM('individual')">
+                                <i class="fas fa-user-plus"></i> Salvar Lead no CRM
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 2. SIMULADOR EMPRESARIAL VIDA EM GRUPO + DIT                   -->
+        <!-- ============================================================== -->
+        <section id="panel-sim-emp" class="view-panel">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-building-shield" style="color: var(--eas-navy);"></i>
+                        Simulador Vida em Grupo PME &bull; Seguros Unimed / Porto
+                    </div>
+                    <span style="font-size: 12px; font-weight: 700; color: var(--eas-gold); background: var(--eas-gold-subtle); padding: 4px 10px; border-radius: 20px;">
+                        Proteção para Equipes e Sócios
+                    </span>
+                </div>
+
+                <!-- FORMULÁRIO -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Nome da Empresa</label>
+                        <input type="text" id="emp-nome" class="form-control" placeholder="Ex: Auto Peças Modelo Ltda">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">WhatsApp do Contato</label>
+                        <input type="tel" id="emp-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantidade de Colaboradores (Vidas)</label>
+                        <input type="number" id="emp-vidas" class="form-control" placeholder="Ex: 5" min="3" value="5" oninput="calcularEmpresarialAuto()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">DIT por Acidente para a Equipe?</label>
+                        <select id="emp-dit" class="form-control" onchange="calcularEmpresarialAuto()">
+                            <option value="sim" selected>SIM &bull; Com DIT Acidente (Mín. 5 vidas)</option>
+                            <option value="nao">NÃO &bull; Sem DIT (Mín. 3 vidas, -R$ 10/vida)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- CARDS DOS PLANOS EMPRESARIAIS -->
+                <div style="font-size: 13px; font-weight: 800; text-transform: uppercase; color: var(--eas-navy); margin-top: 10px;">
+                    <i class="fas fa-layer-group"></i> Selecione o Plano Empresarial:
+                </div>
+                <div class="plans-comparison-grid">
+                    <!-- EMP BRONZE -->
+                    <div class="plan-card" id="card-emp-bronze" onclick="selecionarPlanoEMP('bronze')">
+                        <span class="plan-badge">Bronze</span>
+                        <div>
+                            <div class="plan-name">Capital R$ 50.000</div>
+                            <div class="plan-price" id="price-emp-bronze">R$ 49,90<span>/vida</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check-circle"></i> Morte Natural: <strong>R$ 50.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte Acidental: <strong>R$ 50.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Invalidez IPA/IFPD: <strong>R$ 50.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> DIT Acidente: <strong>R$ 3.000/mês</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- EMP PRATA -->
+                    <div class="plan-card featured selected" id="card-emp-prata" onclick="selecionarPlanoEMP('prata')">
+                        <span class="plan-badge gold">Recomendado</span>
+                        <div>
+                            <div class="plan-name" style="color: var(--eas-gold);">Capital R$ 100.000</div>
+                            <div class="plan-price" id="price-emp-prata">R$ 59,90<span>/vida</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check-circle"></i> Morte Natural: <strong>R$ 100.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte Acidental: <strong>R$ 100.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Invalidez IPA/IFPD: <strong>R$ 100.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> DIT Acidente: <strong>R$ 3.000/mês</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- EMP OURO -->
+                    <div class="plan-card" id="card-emp-ouro" onclick="selecionarPlanoEMP('ouro')">
+                        <span class="plan-badge">Ouro</span>
+                        <div>
+                            <div class="plan-name">Capital R$ 150.000</div>
+                            <div class="plan-price" id="price-emp-ouro">R$ 69,90<span>/vida</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check-circle"></i> Morte Natural: <strong>R$ 150.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte Acidental: <strong>R$ 150.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Invalidez IPA/IFPD: <strong>R$ 150.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> DIT Acidente: <strong>R$ 3.000/mês</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD DE APRESENTAÇÃO EMPRESARIAL -->
+                <div id="proposal-emp-box" class="proposal-presentation-card">
+                    <div class="proposal-hero">
+                        <span class="proposal-hero-tag">Cotação Corporativa PME &bull; EAS Corretora</span>
+                        <div class="proposal-total-val" id="emp-hero-total">R$ 0,00/mês</div>
+                        <div class="proposal-client-name" id="emp-hero-sub">Total para a Empresa</div>
+                    </div>
+
+                    <div class="proposal-body">
+                        <div class="proposal-grid">
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Valor por Colaborador</div>
+                                <div class="proposal-grid-value" id="emp-grid-por-vida" style="color: var(--eas-gold);">R$ 0,00</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Vidas Seguradas</div>
+                                <div class="proposal-grid-value" id="emp-grid-vidas">0 colaboradores</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Capital Básico de Morte</div>
+                                <div class="proposal-grid-value" id="emp-grid-capital">R$ 0,00</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">DIT por Acidente</div>
+                                <div class="proposal-grid-value" id="emp-grid-dit-status">Incluso</div>
+                            </div>
+                        </div>
+
+                        <div class="highlight-calc-box" id="emp-calc-explica"></div>
+
+                        <div class="action-buttons-group">
+                            <button class="btn btn-whatsapp" onclick="enviarWhatsAppEMP()">
+                                <i class="fab fa-whatsapp"></i> Enviar Proposta no WhatsApp
+                            </button>
+                            <button class="btn btn-navy" onclick="copiarTextoPropostaEMP()">
+                                <i class="fas fa-copy"></i> Copiar Texto da Proposta
+                            </button>
+                            <button class="btn btn-outline" onclick="window.print()">
+                                <i class="fas fa-print"></i> Imprimir / Salvar PDF
+                            </button>
+                            <button class="btn btn-gold" onclick="salvarSimulacaoNoCRM('empresarial')">
+                                <i class="fas fa-building"></i> Salvar Lead no CRM
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 3. SIMULADOR CONVENÇÕES COLETIVAS (CCT PORTO)                  -->
+        <!-- ============================================================== -->
+        <section id="panel-sim-cct" class="view-panel">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-file-contract" style="color: var(--porto-blue);"></i>
+                        Simulador Técnico de Convenções Coletivas (CCT Porto)
+                    </div>
+                    <span style="font-size: 12px; font-weight: 700; color: var(--porto-blue); background: var(--porto-blue-light); padding: 4px 10px; border-radius: 20px;">
+                        Homologação Sindical Obrigatória
+                    </span>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label class="form-label">Selecione o Ramo Sindical</label>
+                        <select id="cct-ramo-select" class="form-control" onchange="calcularCCTAuto()">
+                            <option value="construcao" selected>Construção Civil &bull; Porto 3-431 (SITICOM / SINDUSCON-SP)</option>
+                            <option value="bares">Bares, Restaurantes e Similares &bull; Catanduva e Região (SINTEHBAR)</option>
+                            <option value="comercio">Comércio Varejista &bull; Sincomércio Catanduva</option>
+                            <option value="transportes">Transporte de Cargas &bull; CCT Condutores</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Razão Social / Construtora</label>
+                        <input type="text" id="cct-nome" class="form-control" placeholder="Nome da Empresa">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">WhatsApp do Responsável</label>
+                        <input type="tel" id="cct-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantidade de Colaboradores</label>
+                        <input type="number" id="cct-vidas" class="form-control" placeholder="Mínimo 3 vidas" min="3" value="6" oninput="calcularCCTAuto()">
+                    </div>
+                </div>
+
+                <!-- CARD DE APRESENTAÇÃO CCT -->
+                <div id="proposal-cct-box" class="proposal-presentation-card" style="display: block;">
+                    <div class="proposal-hero" style="background: linear-gradient(135deg, #003666 0%, var(--eas-navy) 100%);">
+                        <span class="proposal-hero-tag" style="background: #ffffff; color: var(--porto-blue);">CCT Homologada Porto Seguro</span>
+                        <div class="proposal-total-val" id="cct-hero-total">R$ 98,94/mês</div>
+                        <div class="proposal-client-name" id="cct-hero-sub">Investimento Total para 6 colaboradores</div>
+                    </div>
+
+                    <div class="proposal-body">
+                        <div class="proposal-grid">
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Preço Homologado por Vida</div>
+                                <div class="proposal-grid-value" id="cct-grid-por-vida" style="color: var(--porto-blue);">R$ 16,49/vida</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Faixa Aplicada</div>
+                                <div class="proposal-grid-value" id="cct-grid-faixa">6 ou mais vidas</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Coberturas Exigidas</div>
+                                <div class="proposal-grid-value" style="color: var(--unimed-green);">100% Homologado</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Certificado de Quitação</div>
+                                <div class="proposal-grid-value">Emissão Rápida</div>
+                            </div>
+                        </div>
+
+                        <div class="highlight-calc-box" id="cct-calc-explica"></div>
+
+                        <div class="action-buttons-group">
+                            <button class="btn btn-whatsapp" onclick="enviarWhatsAppCCT()">
+                                <i class="fab fa-whatsapp"></i> Enviar Proposta no WhatsApp
+                            </button>
+                            <button class="btn btn-navy" onclick="copiarTextoPropostaCCT()">
+                                <i class="fas fa-copy"></i> Copiar Texto da Proposta
+                            </button>
+                            <button class="btn btn-outline" onclick="window.print()">
+                                <i class="fas fa-print"></i> Imprimir / Salvar PDF
+                            </button>
+                            <button class="btn btn-gold" onclick="salvarSimulacaoNoCRM('cct')">
+                                <i class="fas fa-file-invoice"></i> Salvar Lead no CRM
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 4. PAINEL CRM DE VENDAS & PIPELINE                             -->
+        <!-- ============================================================== -->
+        <section id="panel-crm" class="view-panel">
+            <!-- STATS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-info">
+                        <h4>Total de Leads</h4>
+                        <div class="stat-number" id="stat-total-leads">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--unimed-green); background: var(--unimed-green-light);"><i class="fas fa-handshake"></i></div>
+                    <div class="stat-info">
+                        <h4>Fechados / Ativos</h4>
+                        <div class="stat-number" id="stat-ativos">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--porto-blue); background: var(--porto-blue-light);"><i class="fas fa-funnel-dollar"></i></div>
+                    <div class="stat-info">
+                        <h4>Pipeline em Negociação</h4>
+                        <div class="stat-number" id="stat-pipeline-valor">R$ 0,00</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-percentage"></i></div>
+                    <div class="stat-info">
+                        <h4>Taxa de Conversão</h4>
+                        <div class="stat-number" id="stat-taxa-conv">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOOLBAR CRM -->
+            <div class="card" style="padding: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+                    <div style="display: flex; gap: 10px; align-items: center; flex: 1; max-width: 400px;">
+                        <input type="text" id="crm-search-input" class="form-control" placeholder="Buscar por cliente, fone ou empresa..." oninput="renderizarKanban()">
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn btn-gold btn-sm" onclick="sincronizarSupabase()">
+                            <i class="fas fa-cloud-download-alt"></i> Puxar Leads do Supabase
+                        </button>
+                        <button class="btn btn-navy btn-sm" onclick="openNewLeadModal()">
+                            <i class="fas fa-plus"></i> Novo Lead Manual
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KANBAN BOARD -->
+                <div class="kanban-board">
+                    <div class="kanban-column novo" ondragover="allowDrop(event)" ondrop="dropCard(event, 'novo')">
+                        <div class="column-header">
+                            <span class="column-title">1. Novos Leads</span>
+                            <span class="column-badge" id="badge-novo">0</span>
+                        </div>
+                        <div class="card-list" id="col-novo"></div>
+                    </div>
+
+                    <div class="kanban-column contato" ondragover="allowDrop(event)" ondrop="dropCard(event, 'contato')">
+                        <div class="column-header">
+                            <span class="column-title">2. Em Contato</span>
+                            <span class="column-badge" id="badge-contato">0</span>
+                        </div>
+                        <div class="card-list" id="col-contato"></div>
+                    </div>
+
+                    <div class="kanban-column proposta" ondragover="allowDrop(event)" ondrop="dropCard(event, 'proposta')">
+                        <div class="column-header">
+                            <span class="column-title">3. Estudo Enviado</span>
+                            <span class="column-badge" id="badge-proposta">0</span>
+                        </div>
+                        <div class="card-list" id="col-proposta"></div>
+                    </div>
+
+                    <div class="kanban-column fechamento" ondragover="allowDrop(event)" ondrop="dropCard(event, 'fechamento')">
+                        <div class="column-header">
+                            <span class="column-title">4. Negociação</span>
+                            <span class="column-badge" id="badge-fechamento">0</span>
+                        </div>
+                        <div class="card-list" id="col-fechamento"></div>
+                    </div>
+
+                    <div class="kanban-column ativo" ondragover="allowDrop(event)" ondrop="dropCard(event, 'ativo')">
+                        <div class="column-header">
+                            <span class="column-title">5. Fechado / Emitido</span>
+                            <span class="column-badge" id="badge-ativo">0</span>
+                        </div>
+                        <div class="card-list" id="col-ativo"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL CONFIGURAÇÃO SUPABASE -->
+    <div id="modal-supabase" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 style="font-size: 16px;"><i class="fas fa-database" style="color: #3ecf8e;"></i> Conectar Supabase</h3>
+                <button onclick="fecharModalSupabase()" style="background:transparent; border:none; color:#fff; font-size:20px; cursor:pointer;">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label">Project URL</label>
+                    <input type="text" id="supa-url" class="form-control" placeholder="https://xyz.supabase.co">
+                </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label">Anon / Public Key</label>
+                    <input type="password" id="supa-key" class="form-control" placeholder="eyJhbGci...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tabela de Leads</label>
+                    <input type="text" id="supa-tabela" class="form-control" value="gestao_de_leads">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="fecharModalSupabase()">Cancelar</button>
+                <button class="btn btn-navy" onclick="salvarConfigSupabase()">Salvar & Conectar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NOVO LEAD MANUAL -->
     <div id="modal-lead" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
-                <h3 id="modal-lead-title"><i class="fas fa-user-plus"></i> Novo Lead no CRM EAS</h3>
-                <button class="modal-close" onclick="fecharModalLead()">&times;</button>
+                <h3 id="modal-lead-title" style="font-size: 16px;"><i class="fas fa-user-plus"></i> Novo Lead</h3>
+                <button onclick="fecharModalLead()" style="background:transparent; border:none; color:#fff; font-size:20px; cursor:pointer;">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="form-group" style="margin-bottom: 14px;">
-                    <label class="form-label">Nome do Cliente ou Razão Social</label>
-                    <input type="text" id="lead-nome" class="form-control" placeholder="Nome Completo / Empresa">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label">Nome / Razão Social</label>
+                    <input type="text" id="lead-nome-in" class="form-control" placeholder="Nome Completo">
                 </div>
-
-                <div class="form-group" style="margin-bottom: 14px;">
-                    <label class="form-label">WhatsApp (DDD + Número)</label>
-                    <input type="tel" id="lead-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label">WhatsApp</label>
+                    <input type="tel" id="lead-phone-in" class="form-control" placeholder="17991123532" maxlength="11">
                 </div>
-
-                <div class="form-grid" style="margin-bottom: 14px;">
+                <div class="form-grid" style="margin-bottom: 12px;">
                     <div class="form-group">
                         <label class="form-label">Tipo de Seguro</label>
-                        <select id="lead-tipo" class="form-control">
-                            <option value="individual">Individual (SERIT Unimed)</option>
-                            <option value="empresarial">Empresarial (Vida PME)</option>
-                            <option value="cct">Convenção Coletiva (CCT)</option>
+                        <select id="lead-type-in" class="form-control">
+                            <option value="individual">Individual (SERIT)</option>
+                            <option value="empresarial">Vida em Grupo PME</option>
+                            <option value="cct">CCT Sindical</option>
                         </select>
                     </div>
-
                     <div class="form-group">
-                        <label class="form-label">Etapa no Pipeline</label>
-                        <select id="lead-etapa" class="form-control">
-                            <option value="novo">1. Novo Lead</option>
+                        <label class="form-label">Etapa</label>
+                        <select id="lead-etapa-in" class="form-control">
+                            <option value="novo">1. Novo</option>
                             <option value="contato">2. Em Contato</option>
                             <option value="proposta">3. Estudo Enviado</option>
                             <option value="fechamento">4. Negociação</option>
-                            <option value="ativo">5. Emitido / Fechado</option>
+                            <option value="ativo">5. Fechado</option>
                         </select>
                     </div>
                 </div>
-
-                <div class="form-grid" style="margin-bottom: 14px;">
-                    <div class="form-group">
-                        <label class="form-label">Valor Estimado Mensal (R$)</label>
-                        <input type="number" id="lead-valor" class="form-control" placeholder="Ex: 245.50" step="0.01">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Vidas / Proponente</label>
-                        <input type="text" id="lead-vidas" class="form-control" placeholder="Ex: 1 vida ou 8 vidas">
-                    </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label">Valor Estimado Mensal (R$)</label>
+                    <input type="number" id="lead-val-in" class="form-control" placeholder="250.00">
                 </div>
-
                 <div class="form-group">
-                    <label class="form-label">Observações / Histórico de Negociação</label>
-                    <textarea id="lead-obs" class="form-control" style="height: 90px; resize: vertical;" placeholder="Informações de saúde, idade, ramo sindical, propostas de concorrentes..."></textarea>
+                    <label class="form-label">Observações</label>
+                    <textarea id="lead-obs-in" class="form-control" style="height: 70px;"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline" onclick="fecharModalLead()">Cancelar</button>
-                <button class="btn btn-navy" onclick="salvarLeadModal()">Salvar no Pipeline</button>
+                <button class="btn btn-navy" onclick="salvarModalLeadManual()">Salvar no Pipeline</button>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT ENGINE -->
+    <!-- SCRIPT ENGINE -->
     <script>
-        /* ========================================================
-           TABELAS ATUARIAIS E DADOS TÉCNICOS OFICIAIS EAS
-           ======================================================== */
+        /* TABELAS ATUARIAIS E REGRAS TÉCNICAS */
         const TABELA_SERIT = {
             ouro: {
-                cap: 120000,
-                renda: 10000,
+                cap: 120000, renda: 10000,
                 precos: {
                     16: 216.19, 17: 216.19, 18: 216.19, 19: 216.19, 20: 216.19, 21: 216.19,
                     22: 216.19, 23: 216.19, 24: 216.19, 25: 216.19, 26: 216.19, 27: 216.19,
@@ -1752,8 +1467,7 @@
                 }
             },
             prata: {
-                cap: 100000,
-                renda: 5000,
+                cap: 100000, renda: 5000,
                 precos: {
                     16: 124.95, 17: 124.95, 18: 124.95, 19: 124.95, 20: 124.95, 21: 124.95,
                     22: 124.95, 23: 124.95, 24: 124.95, 25: 124.95, 26: 124.95, 27: 124.95,
@@ -1768,8 +1482,7 @@
                 }
             },
             bronze: {
-                cap: 50000,
-                renda: 3000,
+                cap: 50000, renda: 3000,
                 precos: {
                     16: 75.00, 17: 75.00, 18: 75.00, 19: 75.00, 20: 75.00, 21: 75.00,
                     22: 75.00, 23: 75.00, 24: 75.00, 25: 75.00, 26: 75.00, 27: 75.00,
@@ -1785,7 +1498,7 @@
             }
         };
 
-        const TABELA_EMPRESARIAL = {
+        const TABELA_EMP = {
             bronze: { nome: 'BRONZE', capital: 50000, dit: 3000, ref: 49.90 },
             prata:  { nome: 'PRATA',  capital: 100000, dit: 3000, ref: 59.90 },
             ouro:   { nome: 'OURO',   capital: 150000, dit: 3000, ref: 69.90 }
@@ -1796,87 +1509,48 @@
                 nome: 'Construção Civil &bull; Porto 3-431 (SITICOM / SINDUSCON)',
                 minimo: 3,
                 faixas: [
-                    { min: 3, max: 5, preco: 20.42, desc: '3 a 5 vidas: R$ 20,42 por vida/mês' },
-                    { min: 6, max: 9999, preco: 16.49, desc: '6 ou mais vidas: R$ 16,49 por vida/mês' }
+                    { min: 3, max: 5, preco: 20.42, desc: '3 a 5 vidas: R$ 20,42/vida' },
+                    { min: 6, max: 9999, preco: 16.49, desc: '6 ou mais vidas: R$ 16,49/vida' }
                 ],
-                detalhes: 'Atende 100% às coberturas de Morte Acidental, Invalidez, Rescisão Trabalhista, Auxílio Funeral e Cesta Básica da CCT 2025/2026.'
+                detalhe: 'Atende às exigências de Morte Acidental (R$ 44.891), Invalidez IPA (R$ 71.826), Rescisão e Funeral da CCT 2025/2026.'
             },
             bares: {
-                nome: 'Bares, Restaurantes e Similares (SINTEHBAR / Catanduva e Região)',
+                nome: 'Bares e Restaurantes (SINTEHBAR Catanduva)',
                 minimo: 2,
-                faixas: [
-                    { min: 2, max: 9999, preco: 18.50, desc: 'Preço unitário padrão confirmado: R$ 18,50 por vida/mês' }
-                ],
-                detalhes: 'Garante o cumprimento das cláusulas securitárias para atendentes, garçons, cozinheiros e sócios da categoria.'
+                faixas: [{ min: 2, max: 9999, preco: 18.50, desc: 'R$ 18,50 por colaborador/mês' }],
+                detalhe: 'Garante o cumprimento das cláusulas sindicais obrigatórias para atendentes, garçons e sócios.'
             },
             comercio: {
                 nome: 'Comércio Varejista (Sincomércio Catanduva)',
                 minimo: 2,
-                faixas: [
-                    { min: 2, max: 9999, preco: 15.90, desc: 'Preço unitário de referência: R$ 15,90 por vida/mês' }
-                ],
-                detalhes: 'Homologação sindical para colaboradores do comércio varejista e lojistas.'
+                faixas: [{ min: 2, max: 9999, preco: 15.90, desc: 'R$ 15,90 por colaborador/mês' }],
+                detalhe: 'Homologação sindical para comerciários e lojistas.'
             },
             transportes: {
-                nome: 'Transporte de Cargas & Logística (Condutores de Veículos)',
+                nome: 'Transporte de Cargas (Condutores)',
                 minimo: 2,
-                faixas: [
-                    { min: 2, max: 9999, preco: 24.80, desc: 'Preço com cláusula especial de motorista: R$ 24,80 por vida/mês' }
-                ],
-                detalhes: 'Inclui assistência funeral extensiva e cobertura de morte em trânsito para motoristas e ajudantes.'
+                faixas: [{ min: 2, max: 9999, preco: 24.80, desc: 'R$ 24,80 por colaborador/mês' }],
+                detalhe: 'Inclui cláusula especial de condutor e assistência funeral estendida.'
             }
         };
 
-        /* ========================================================
-           STATE & CRM LEADS (PERSISTÊNCIA LOCALSTORAGE)
-           ======================================================== */
+        /* STATE GLOBAL */
+        let currentMode = 'simulador';
+        let currentSimTab = 'serit';
+        let planoSelecionadoSERIT = 'prata';
+        let planoSelecionadoEMP = 'prata';
         let leadsData = [];
-        let filtroCategoria = 'todos';
-        let dragSourceId = null;
+        let supaClient = null;
 
-        // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
-            carregarLeadsStorage();
-            atualizarInfoRamoCCT();
-            renderizarKanban();
-            atualizarStatsCRM();
+            carregarLeads();
+            initSupabase();
+            // Preenche com idade 35 por padrão para já mostrar na tela
+            document.getElementById('serit-idade').value = 35;
+            calcularSERITAuto();
+            calcularEmpresarialAuto();
+            calcularCCTAuto();
         });
-
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('mobile-open');
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-
-            const targetSection = document.getElementById(`tab-${tabId}`);
-            if (targetSection) targetSection.classList.add('active');
-
-            // Atualiza active nav
-            const links = document.querySelectorAll('.sidebar-nav .nav-link');
-            const titulos = {
-                crm: '<i class="fas fa-chart-line" style="color: var(--eas-gold);"></i> Painel CRM de Vendas & Pipeline',
-                individual: '<i class="fas fa-user-shield" style="color: var(--unimed-green);"></i> Simulador SERIT Individual &bull; Unimed',
-                empresarial: '<i class="fas fa-building-shield" style="color: var(--eas-navy);"></i> Simulador Vida em Grupo Empresarial',
-                cct: '<i class="fas fa-file-contract" style="color: var(--porto-blue);"></i> Simulador de Convenções Coletivas (CCT)',
-                guia: '<i class="fas fa-book-medical" style="color: var(--eas-gold);"></i> Guia Técnico & Explicações Operacionais',
-                config: '<i class="fas fa-cog" style="color: var(--eas-navy);"></i> Configurações & Backup do Sistema'
-            };
-
-            document.getElementById('page-title').innerHTML = titulos[tabId] || 'EAS Corretora';
-
-            // Marca o link ativo
-            links.forEach(l => {
-                if (l.getAttribute('onclick')?.includes(tabId)) {
-                    l.classList.add('active');
-                }
-            });
-
-            // Fecha sidebar no mobile
-            document.getElementById('sidebar').classList.remove('mobile-open');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
 
         function showToast(msg) {
             const toast = document.getElementById('toast');
@@ -1886,422 +1560,475 @@
         }
 
         function formatarTelefone(num) {
-            let clean = num.replace(/\D/g, '');
+            let clean = String(num || '').replace(/\D/g, '');
             if (clean.length > 11) clean = clean.substring(0, 11);
             return clean;
         }
 
+        /* NAVEGAÇÃO DE MODOS: SIMULADOR vs CRM */
+        function setMainMode(mode) {
+            currentMode = mode;
+            document.getElementById('btn-mode-sim').classList.toggle('active', mode === 'simulador');
+            document.getElementById('btn-mode-crm').classList.toggle('active', mode === 'crm');
+            document.getElementById('sim-product-nav').style.display = (mode === 'simulador') ? 'flex' : 'none';
+
+            if (mode === 'simulador') {
+                document.getElementById('panel-crm').classList.remove('active');
+                switchSimulatorTab(currentSimTab);
+            } else {
+                document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+                document.getElementById('panel-crm').classList.add('active');
+                renderizarKanban();
+                atualizarStatsCRM();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function switchSimulatorTab(tab) {
+            currentSimTab = tab;
+            document.querySelectorAll('#sim-product-nav .sim-product-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+
+            if (tab === 'serit') {
+                document.getElementById('tab-btn-serit').classList.add('active');
+                document.getElementById('panel-sim-serit').classList.add('active');
+                calcularSERITAuto();
+            } else if (tab === 'emp') {
+                document.getElementById('tab-btn-emp').classList.add('active');
+                document.getElementById('panel-sim-emp').classList.add('active');
+                calcularEmpresarialAuto();
+            } else if (tab === 'cct') {
+                document.getElementById('tab-btn-cct').classList.add('active');
+                document.getElementById('panel-sim-cct').classList.add('active');
+                calcularCCTAuto();
+            }
+        }
+
         /* ========================================================
-           1. CÁLCULO SIMULADOR INDIVIDUAL (SERIT)
+           1. CÁLCULOS DO SERIT INDIVIDUAL
            ======================================================== */
-        let ultimaSimulacaoIndividual = null;
+        function selecionarPlanoSERIT(plano) {
+            planoSelecionadoSERIT = plano;
+            document.querySelectorAll('.plans-comparison-grid .plan-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById(`card-serit-${plano}`).classList.add('selected');
+            calcularSERITAuto();
+        }
 
-        function calcularIndividual() {
-            const nome = document.getElementById('ind-nome').value.trim();
-            const rawWhats = document.getElementById('ind-whatsapp').value.trim();
-            const whats = formatarTelefone(rawWhats);
-            const idade = parseInt(document.getElementById('ind-idade').value, 10);
-            const planoKey = document.getElementById('ind-plano').value;
+        function calcularSERITAuto() {
+            const idade = parseInt(document.getElementById('serit-idade').value, 10);
+            const nome = document.getElementById('serit-nome').value.trim() || 'Cliente';
 
-            if (!nome || whats.length < 10 || isNaN(idade)) {
-                alert("Por favor, preencha o Nome Completo, Idade e WhatsApp com DDD (10 ou 11 dígitos).");
+            if (isNaN(idade) || idade < 16 || idade > 70) {
+                document.getElementById('price-serit-bronze').innerHTML = 'R$ --<span>/mês</span>';
+                document.getElementById('price-serit-prata').innerHTML = 'R$ --<span>/mês</span>';
+                document.getElementById('price-serit-ouro').innerHTML = 'R$ --<span>/mês</span>';
+                document.getElementById('proposal-serit-box').style.display = 'none';
                 return;
             }
 
-            if (idade < 16 || idade > 70) {
-                alert("O produto aceita idade atuarial entre 16 e 70 anos completos conforme Condições Gerais.");
-                return;
-            }
+            // Atualiza os preços dos 3 planos lado a lado
+            const pBronze = TABELA_SERIT.bronze.precos[idade] || 0;
+            const pPrata = TABELA_SERIT.prata.precos[idade] || 0;
+            const pOuro = TABELA_SERIT.ouro.precos[idade] || 0;
 
-            const dadosPlano = TABELA_SERIT[planoKey];
-            const preco = dadosPlano.precos[idade];
+            document.getElementById('price-serit-bronze').innerHTML = `R$ ${pBronze.toLocaleString('pt-BR', {minimumFractionDigits: 2})}<span>/mês</span>`;
+            document.getElementById('price-serit-prata').innerHTML = `R$ ${pPrata.toLocaleString('pt-BR', {minimumFractionDigits: 2})}<span>/mês</span>`;
+            document.getElementById('price-serit-ouro').innerHTML = `R$ ${pOuro.toLocaleString('pt-BR', {minimumFractionDigits: 2})}<span>/mês</span>`;
 
-            if (!preco) {
-                alert("Valor atuarial não cadastrado para esta combinação de plano e idade.");
-                return;
-            }
+            // Atualiza proposta do plano selecionado
+            const dados = TABELA_SERIT[planoSelecionadoSERIT];
+            const precoSel = dados.precos[idade];
+            const diaria = dados.renda / 30;
+            const atestado60 = diaria * 53;
 
-            const diaria = (dadosPlano.renda / 30);
-            const exemploAtestado60dias = diaria * 53; // 60 dias - 7 franquia = 53 dias
+            document.getElementById('serit-hero-val').innerText = `R$ ${precoSel.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês`;
+            document.getElementById('serit-hero-client').innerText = `Estudo Personalizado para ${nome} (${idade} anos) &bull; Plano ${planoSelecionadoSERIT.toUpperCase()}`;
+            document.getElementById('serit-grid-renda').innerText = `R$ ${dados.renda.toLocaleString('pt-BR')}/mês`;
+            document.getElementById('serit-grid-diaria').innerText = `R$ ${diaria.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/dia`;
+            document.getElementById('serit-grid-morte').innerText = `R$ ${dados.cap.toLocaleString('pt-BR')}`;
+            document.getElementById('serit-grid-dobra').innerText = `R$ ${(dados.cap * 2).toLocaleString('pt-BR')}`;
 
-            // Exibição na tela
-            document.getElementById('ind-res-valor').innerText = `R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            document.getElementById('ind-res-renda').innerText = `R$ ${dadosPlano.renda.toLocaleString('pt-BR')}/mês`;
-            document.getElementById('ind-res-diaria').innerText = `R$ ${diaria.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/dia`;
-            document.getElementById('ind-res-morte').innerText = `R$ ${dadosPlano.cap.toLocaleString('pt-BR')}`;
-            document.getElementById('ind-res-dobra').innerText = `R$ ${(dadosPlano.cap * 2).toLocaleString('pt-BR')}`;
-
-            document.getElementById('ind-res-formula').innerHTML = `
-                <strong><i class="fas fa-calculator"></i> Exemplo Prático de Indenização (Transparência EAS):</strong><br>
-                Renda contratada de R$ ${dadosPlano.renda.toLocaleString('pt-BR')} &divide; 30 dias = <strong>R$ ${diaria.toLocaleString('pt-BR', {minimumFractionDigits:2})} por dia de afastamento</strong>.<br>
-                Em um atestado de 60 dias (deduzindo os 7 dias de franquia inicial) = <strong>53 dias pagos diretamente em conta</strong>.<br>
-                Total líquido a ser recebido pelo segurado: <strong style="color: var(--unimed-green); font-size: 16px;">R$ ${exemploAtestado60dias.toLocaleString('pt-BR', {minimumFractionDigits:2})}</strong>.
+            document.getElementById('serit-calc-explica').innerHTML = `
+                <strong><i class="fas fa-hand-holding-medical"></i> Como Funciona o Pagamento na Prática:</strong><br>
+                Diária Contratada: <strong>R$ ${diaria.toLocaleString('pt-BR', {minimumFractionDigits: 2})} por dia de afastamento</strong>.<br>
+                Em um atestado de 60 dias (deduzindo a franquia de 7 dias) = <strong>53 dias pagos</strong> = <strong style="color: var(--unimed-green); font-size: 16px;">R$ ${atestado60.toLocaleString('pt-BR', {minimumFractionDigits: 2})} líquido direto em sua conta</strong>.<br>
+                <em>Carência Zero para Acidentes | 30 dias para doenças comuns | 180 dias para LER/DORT/Hérnias.</em>
             `;
 
-            // Mensagem de WhatsApp
-            const msgWA = `Olá *${nome.toUpperCase()}*, o seu estudo técnico da *EAS Corretora de Seguros* está pronto! 📄
+            document.getElementById('proposal-serit-box').style.display = 'block';
+        }
+
+        function getTextoPropostaSERIT() {
+            const nome = document.getElementById('serit-nome').value.trim() || 'Cliente';
+            const idade = parseInt(document.getElementById('serit-idade').value, 10) || 35;
+            const dados = TABELA_SERIT[planoSelecionadoSERIT];
+            const preco = dados.precos[idade] || 0;
+            const diaria = (dados.renda / 30).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            const liq = ((dados.renda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+
+            return `Olá, *${nome.toUpperCase()}*! Segue o seu estudo técnico da *EAS Corretora de Seguros* 📄
 
 ` +
                 `🛡️ *SERIT INDIVIDUAL & VIDA - SEGUROS UNIMED*
 ` +
+                `Plano: *${planoSelecionadoSERIT.toUpperCase()}* (${idade} anos)
+` +
                 `💰 *Investimento Mensal:* R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
 
 ` +
-                `📋 *Capitais e Coberturas:*
+                `📋 *Coberturas Inclusas:*
 ` +
-                `• Morte Qualquer Causa: R$ ${dadosPlano.cap.toLocaleString('pt-BR')}
+                `• Renda Mensal SERIT: *R$ ${dados.renda.toLocaleString('pt-BR')} por mês*
 ` +
-                `• Morte Acidental (Dobra): R$ ${(dadosPlano.cap * 2).toLocaleString('pt-BR')}
+                `• Morte Qualquer Causa: R$ ${dados.cap.toLocaleString('pt-BR')}
 ` +
-                `• Invalidez Permanente (Doença/Acidente): R$ ${dadosPlano.cap.toLocaleString('pt-BR')}
+                `• Morte Acidental (Dobra): R$ ${(dados.cap * 2).toLocaleString('pt-BR')}
 ` +
-                `• Renda Mensal SERIT: *R$ ${dadosPlano.renda.toLocaleString('pt-BR')} por mês*
+                `• Invalidez Permanente: R$ ${dados.cap.toLocaleString('pt-BR')}
 
 ` +
                 `📊 *Cálculo Transparente de Afastamento:*
 ` +
-                `R$ ${dadosPlano.renda.toLocaleString('pt-BR')} ÷ 30 = R$ ${diaria.toLocaleString('pt-BR', {minimumFractionDigits: 2})} por dia.
+                `Renda de R$ ${dados.renda.toLocaleString('pt-BR')} ÷ 30 = R$ ${diaria}/dia.
 ` +
-                `Exemplo de 60 dias de atestado (-7 dias franquia) = 53 dias pagos = *R$ ${exemploAtestado60dias.toLocaleString('pt-BR', {minimumFractionDigits: 2})} direto na sua conta.*
-
-` +
-                `⚠️ *Carências:* Acidentes (Imediato) | Doenças Comuns (30 dias) | LER, DORT e Hérnias (180 dias).
+                `Exemplo de 60 dias de afastamento (-7 dias franquia) = 53 dias pagos = *R$ ${liq} direto na sua conta.*
 
 ` +
-                `Ficou com alguma dúvida ou gostaria de emitir a proposta agora?`;
+                `⚠️ *Carências:* Acidentes (Imediato / Zero Carência) | Doenças Comuns (30 dias) | LER/DORT (180 dias).
 
-            document.getElementById('ind-btn-wa').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msgWA)}`;
-            document.getElementById('resultado-ind').style.display = 'block';
+` +
+                `Podemos emitir a sua proposta oficial hoje?`;
+        }
 
-            ultimaSimulacaoIndividual = {
-                tipo: 'individual',
-                nome: nome,
-                whatsapp: whats,
-                plano: `SERIT ${planoKey.toUpperCase()}`,
-                valor: preco,
-                vidas: '1 vida',
-                obs: `Idade: ${idade} anos | Renda: R$ ${dadosPlano.renda.toLocaleString('pt-BR')} | Morte: R$ ${dadosPlano.cap.toLocaleString('pt-BR')}`
-            };
+        function enviarWhatsAppSERIT() {
+            const rawFone = document.getElementById('serit-whatsapp').value.trim();
+            const fone = formatarTelefone(rawFone);
+            const msg = getTextoPropostaSERIT();
+            if (fone.length >= 10) {
+                window.open(`https://wa.me/55${fone}?text=${encodeURIComponent(msg)}`, '_blank');
+            } else {
+                window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+            }
+            showToast("WhatsApp aberto com a proposta!");
+        }
 
-            showToast("Estudo Técnico Individual calculado com sucesso!");
+        function copiarTextoPropostaSERIT() {
+            const msg = getTextoPropostaSERIT();
+            navigator.clipboard.writeText(msg).then(() => {
+                showToast("Texto da proposta copiado para a área de transferência!");
+            });
         }
 
         /* ========================================================
-           2. CÁLCULO SIMULADOR EMPRESARIAL
+           2. CÁLCULOS DO EMPRESARIAL PME
            ======================================================== */
-        let ultimaSimulacaoEmpresarial = null;
+        function selecionarPlanoEMP(plano) {
+            planoSelecionadoEMP = plano;
+            document.querySelectorAll('#panel-sim-emp .plan-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById(`card-emp-${plano}`).classList.add('selected');
+            calcularEmpresarialAuto();
+        }
 
-        function calcularEmpresarial() {
-            const nome = document.getElementById('emp-nome').value.trim();
-            const rawWhats = document.getElementById('emp-whatsapp').value.trim();
-            const whats = formatarTelefone(rawWhats);
-            const vidas = parseInt(document.getElementById('emp-vidas').value, 10);
-            const planoKey = document.getElementById('emp-plano').value;
+        function calcularEmpresarialAuto() {
+            const vidas = parseInt(document.getElementById('emp-vidas').value, 10) || 5;
             const comDIT = document.getElementById('emp-dit').value === 'sim';
+            const nome = document.getElementById('emp-nome').value.trim() || 'Empresa';
 
-            if (!nome || whats.length < 10 || isNaN(vidas)) {
-                alert("Por favor, preencha o Nome da Empresa, WhatsApp com DDD e a Quantidade de Vidas.");
-                return;
-            }
+            // Atualiza preços unitários dos 3 planos
+            ['bronze', 'prata', 'ouro'].forEach(p => {
+                const info = TABELA_EMP[p];
+                const unit = comDIT ? info.ref : (info.ref - 10.00);
+                document.getElementById(`price-emp-${p}`).innerHTML = `R$ ${unit.toLocaleString('pt-BR', {minimumFractionDigits: 2})}<span>/vida</span>`;
+            });
 
-            if (comDIT && vidas < 5) {
-                alert("Para a contratação COM DIT por Acidente, o mínimo obrigatório é de 5 vidas.");
-                return;
-            }
+            const sel = TABELA_EMP[planoSelecionadoEMP];
+            const precoUnit = comDIT ? sel.ref : (sel.ref - 10.00);
+            const total = precoUnit * vidas;
 
-            if (!comDIT && vidas < 3) {
-                alert("Para a contratação SEM DIT, o mínimo obrigatório é de 3 vidas.");
-                return;
-            }
+            document.getElementById('emp-hero-total').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês`;
+            document.getElementById('emp-hero-sub').innerText = `Cotação para ${nome} &bull; ${vidas} colaboradores (Plano ${sel.nome})`;
+            document.getElementById('emp-grid-por-vida').innerText = `R$ ${precoUnit.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/vida`;
+            document.getElementById('emp-grid-vidas').innerText = `${vidas} vidas cobertas`;
+            document.getElementById('emp-grid-capital').innerText = `R$ ${sel.capital.toLocaleString('pt-BR')}`;
+            document.getElementById('emp-grid-dit-status').innerText = comDIT ? 'Incluso (R$ 3.000/mês)' : 'Sem DIT (-R$ 10)';
 
-            const info = TABELA_EMPRESARIAL[planoKey];
-            const precoPorVida = comDIT ? info.ref : (info.ref - 10.00);
-            const totalMensal = precoPorVida * vidas;
-
-            document.getElementById('emp-res-total').innerText = `R$ ${totalMensal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            document.getElementById('emp-res-sub').innerText = `Investimento Total para ${vidas} colaboradores (R$ ${precoPorVida.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/vida)`;
-            document.getElementById('emp-res-por-vida').innerText = `R$ ${precoPorVida.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            document.getElementById('emp-res-qtd-vidas').innerText = `${vidas} vidas ativas`;
-            document.getElementById('emp-res-capital').innerText = `R$ ${info.capital.toLocaleString('pt-BR')}`;
-            document.getElementById('emp-res-dit-status').innerText = comDIT ? `Incluso (Até R$ ${info.dit.toLocaleString('pt-BR')}/mês)` : 'Não Contratado';
-
-            let blocoExplicativo = `<strong>Resumo das Coberturas para os Colaboradores (Plano ${info.nome}):</strong><br>` +
-                `• Morte Qualquer Causa: R$ ${info.capital.toLocaleString('pt-BR')}<br>` +
-                `• Morte por Acidente: R$ ${info.capital.toLocaleString('pt-BR')}<br>` +
-                `• Invalidez Permanente por Acidente (IPA): R$ ${info.capital.toLocaleString('pt-BR')}<br>` +
-                `• Invalidez Funcional por Doença (IFPD): R$ ${info.capital.toLocaleString('pt-BR')}<br>`;
-
+            let explica = `<strong>Proteção Completa para os Colaboradores (Plano ${sel.nome}):</strong><br>` +
+                `• Morte Qualquer Causa: R$ ${sel.capital.toLocaleString('pt-BR')} | Morte Acidental: R$ ${sel.capital.toLocaleString('pt-BR')}<br>` +
+                `• Invalidez Permanente por Acidente (IPA) e Invalidez por Doença (IFPD): R$ ${sel.capital.toLocaleString('pt-BR')}.<br>`;
             if (comDIT) {
-                blocoExplicativo += `<br><strong>DIT por Acidente Incluso:</strong> Se o colaborador se acidentar e ficar incapacitado, recebe R$ 100,00 por dia (franquia de 15 dias, pago do 16º ao 60º dia ou até 12 meses).`;
+                explica += `• <strong>DIT por Acidente Incluso:</strong> R$ 100,00 por dia (franquia de 15 dias, pago do 16º ao 60º dia ou até 12 meses).`;
             } else {
-                blocoExplicativo += `<br><strong>Sem DIT:</strong> Desconto de R$ 10,00 aplicado por colaborador.`;
+                explica += `• <strong>Plano Sem DIT:</strong> Desconto de R$ 10,00 por vida aplicado. Mínimo 3 vidas.`;
             }
+            document.getElementById('emp-calc-explica').innerHTML = explica;
+            document.getElementById('proposal-emp-box').style.display = 'block';
+        }
 
-            document.getElementById('emp-res-detalhe').innerHTML = blocoExplicativo;
+        function getTextoPropostaEMP() {
+            const nome = document.getElementById('emp-nome').value.trim() || 'Empresa';
+            const vidas = parseInt(document.getElementById('emp-vidas').value, 10) || 5;
+            const comDIT = document.getElementById('emp-dit').value === 'sim';
+            const sel = TABELA_EMP[planoSelecionadoEMP];
+            const unit = comDIT ? sel.ref : (sel.ref - 10.00);
+            const total = unit * vidas;
 
-            // WhatsApp Message
-            const msgWA = `Olá *${nome.toUpperCase()}*, o estudo corporativo da *EAS Corretora* para sua empresa está pronto! 🏢
+            return `Olá! Segue a cotação corporativa da *EAS Corretora de Seguros* para a *${nome.toUpperCase()}* 🏢
 
 ` +
-                `🛡️ *SEGURO DE VIDA EM GRUPO${comDIT ? ' + DIT ACIDENTE' : ''}*
+                `🛡️ *VIDA EM GRUPO EMPRESARIAL PME${comDIT ? ' + DIT ACIDENTE' : ''}*
 ` +
-                `Plano: *${info.nome}*
+                `Plano: *${sel.nome}*
 ` +
                 `👥 *Vidas Cotadas:* ${vidas} colaboradores
 ` +
-                `💰 *Valor por Vida:* R$ ${precoPorVida.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
+                `💰 *Investimento por Vida:* R$ ${unit.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
 ` +
-                `💵 *INVESTIMENTO TOTAL EMPRESARIAL:* R$ ${totalMensal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
+                `💵 *INVESTIMENTO TOTAL EMPRESA:* R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
 
 ` +
-                `📋 *Coberturas Garantidas por Colaborador:*
+                `📋 *Garantias por Colaborador:*
 ` +
-                `• Morte Qualquer Causa: R$ ${info.capital.toLocaleString('pt-BR')}
+                `• Morte Qualquer Causa: R$ ${sel.capital.toLocaleString('pt-BR')}
 ` +
-                `• Morte Acidental: R$ ${info.capital.toLocaleString('pt-BR')}
+                `• Morte Acidental: R$ ${sel.capital.toLocaleString('pt-BR')}
 ` +
-                `• Invalidez por Acidente / Doença: R$ ${info.capital.toLocaleString('pt-BR')}
+                `• Invalidez por Acidente ou Doença: R$ ${sel.capital.toLocaleString('pt-BR')}
 ` +
-                (comDIT ? `• DIT por Acidente: Até R$ 3.000/mês (a partir do 16º dia)
-` : `• Plano sem DIT com redução de custo
-`) +
+                (comDIT ? `• DIT por Acidente: Até R$ 3.000/mês (diária a partir do 16º dia)
+` : '') +
                 `
-Podemos formatar a proposta oficial de adesão?`;
+Podemos formalizar a proposta para a sua equipe?`;
+        }
 
-            document.getElementById('emp-btn-wa').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msgWA)}`;
-            document.getElementById('resultado-emp').style.display = 'block';
+        function enviarWhatsAppEMP() {
+            const rawFone = document.getElementById('emp-whatsapp').value.trim();
+            const fone = formatarTelefone(rawFone);
+            const msg = getTextoPropostaEMP();
+            if (fone.length >= 10) {
+                window.open(`https://wa.me/55${fone}?text=${encodeURIComponent(msg)}`, '_blank');
+            } else {
+                window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+            }
+            showToast("WhatsApp aberto com a proposta PME!");
+        }
 
-            ultimaSimulacaoEmpresarial = {
-                tipo: 'empresarial',
-                nome: nome,
-                whatsapp: whats,
-                plano: `Vida Grupo ${info.nome} ${comDIT ? '(com DIT)' : '(sem DIT)'}`,
-                valor: totalMensal,
-                vidas: `${vidas} vidas`,
-                obs: `Capital R$ ${info.capital.toLocaleString('pt-BR')} | Unitário R$ ${precoPorVida.toLocaleString('pt-BR', {minimumFractionDigits:2})}`
-            };
-
-            showToast("Cotação Empresarial PME gerada com sucesso!");
+        function copiarTextoPropostaEMP() {
+            const msg = getTextoPropostaEMP();
+            navigator.clipboard.writeText(msg).then(() => {
+                showToast("Texto da proposta empresarial copiado!");
+            });
         }
 
         /* ========================================================
-           3. CÁLCULO SIMULADOR CCT CONVENÇÕES COLETIVAS
+           3. CÁLCULOS DE CCT CONVENÇÕES COLETIVAS
            ======================================================== */
-        let ultimaSimulacaoCCT = null;
-
-        function atualizarInfoRamoCCT() {
-            const ramoKey = document.getElementById('cct-ramo').value;
+        function calcularCCTAuto() {
+            const ramoKey = document.getElementById('cct-ramo-select').value;
             const ramo = TABELA_CCT[ramoKey];
-            if (!ramo) return;
+            const vidas = parseInt(document.getElementById('cct-vidas').value, 10) || 6;
+            const nome = document.getElementById('cct-nome').value.trim() || 'Empresa';
 
-            let html = `<strong><i class="fas fa-info-circle"></i> Regras Técnicas de Precificação:</strong><br>${ramo.detalhes}<br><br><strong>Faixas de Preço Homologadas:</strong><br>`;
-            ramo.faixas.forEach(f => {
-                html += `&bull; ${f.desc}<br>`;
-            });
-            html += `<br><em>Mínimo operacional exigido: ${ramo.minimo} vidas.</em>`;
-
-            document.getElementById('cct-info-ramo').innerHTML = html;
-        }
-
-        function calcularCCT() {
-            const ramoKey = document.getElementById('cct-ramo').value;
-            const ramo = TABELA_CCT[ramoKey];
-            const empresa = document.getElementById('cct-empresa').value.trim();
-            const rawWhats = document.getElementById('cct-whatsapp').value.trim();
-            const whats = formatarTelefone(rawWhats);
-            const vidas = parseInt(document.getElementById('cct-vidas').value, 10);
-
-            if (!empresa || whats.length < 10 || isNaN(vidas)) {
-                alert("Por favor, preencha o Nome da Empresa, WhatsApp com DDD e a Quantidade de Colaboradores.");
-                return;
-            }
-
-            if (vidas < ramo.minimo) {
-                alert(`Para esta convenção sindical, o mínimo operacional é de ${ramo.minimo} colaboradores.`);
-                return;
-            }
-
-            // Identifica faixa de preço
-            let precoUnitario = 0;
-            let faixaAplicadaDesc = "";
-
+            let unit = 0;
+            let faixaDesc = '';
             for (const f of ramo.faixas) {
                 if (vidas >= f.min && vidas <= f.max) {
-                    precoUnitario = f.preco;
-                    faixaAplicadaDesc = f.desc;
+                    unit = f.preco;
+                    faixaDesc = f.desc;
                     break;
                 }
             }
-
-            if (precoUnitario === 0) {
-                precoUnitario = ramo.faixas[ramo.faixas.length - 1].preco;
-                faixaAplicadaDesc = ramo.faixas[ramo.faixas.length - 1].desc;
+            if (!unit) {
+                unit = ramo.faixas[ramo.faixas.length - 1].preco;
+                faixaDesc = ramo.faixas[ramo.faixas.length - 1].desc;
             }
 
-            const totalMensal = precoUnitario * vidas;
+            const total = unit * vidas;
 
-            document.getElementById('cct-res-total').innerText = `R$ ${totalMensal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            document.getElementById('cct-res-sub').innerText = `Investimento Mensal Total (${vidas} colaboradores a R$ ${precoUnitario.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/vida)`;
-            document.getElementById('cct-res-por-vida').innerText = `R$ ${precoUnitario.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            document.getElementById('cct-res-faixa').innerText = `${vidas} vidas (${faixaAplicadaDesc.split(':')[0]})`;
+            document.getElementById('cct-hero-total').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês`;
+            document.getElementById('cct-hero-sub').innerText = `Investimento Total para ${nome} (${vidas} vidas &bull; ${ramo.nome.split('&bull;')[0]})`;
+            document.getElementById('cct-grid-por-vida').innerText = `R$ ${unit.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/vida`;
+            document.getElementById('cct-grid-faixa').innerText = `${vidas} vidas (${faixaDesc.split(':')[0]})`;
 
-            document.getElementById('cct-res-detalhe').innerHTML = `
-                <strong><i class="fas fa-check-shield"></i> Conformidade Jurídica Garantida:</strong><br>
-                Este cálculo atende aos requisitos exatos estabelecidos pela convenção coletiva vigente para a categoria de <strong>${ramo.nome}</strong>.<br>
-                A contratação via apólice coletiva da Porto Seguro fornece à sua empresa o <strong>Certificado de Quitação Securitária</strong> para fins de fiscalização e homologação sindical, eliminando riscos de passivo trabalhista.
+            document.getElementById('cct-calc-explica').innerHTML = `
+                <strong><i class="fas fa-balance-scale"></i> Conformidade Jurídica Homologada (Porto Seguro):</strong><br>
+                ${ramo.detalhe}<br>
+                A apólice emite o <strong>Certificado Oficial de Quitação Securitária</strong> para homologação sindical no sindicato patronal e laboral, blindando a empresa de passivos trabalhistas.
             `;
+        }
 
-            // WhatsApp
-            const msgWA = `Olá *${empresa.toUpperCase()}*, aqui é da *EAS Corretora de Seguros*!
+        function getTextoPropostaCCT() {
+            const ramoKey = document.getElementById('cct-ramo-select').value;
+            const ramo = TABELA_CCT[ramoKey];
+            const vidas = parseInt(document.getElementById('cct-vidas').value, 10) || 6;
+            const nome = document.getElementById('cct-nome').value.trim() || 'Empresa';
+            let unit = 0;
+            for (const f of ramo.faixas) {
+                if (vidas >= f.min && vidas <= f.max) { unit = f.preco; break; }
+            }
+            if (!unit) unit = ramo.faixas[ramo.faixas.length - 1].preco;
+            const total = unit * vidas;
+
+            return `Olá! Aqui é da *EAS Corretora de Seguros* com o estudo técnico de Convenção Coletiva para a *${nome.toUpperCase()}* 📜
 
 ` +
-                `📜 *ESTUDO TÉCNICO - CONVENÇÃO COLETIVA SINDICAL (CCT)*
+                `🏢 *SEGURO DE VIDA CCT HOMOLOGADO PORTO SEGURO*
 ` +
-                `Categoria: *${ramo.nome}*
+                `Categoria: *${ramo.nome.replace('&bull;', '-')}*
 ` +
                 `👥 *Quadro da Empresa:* ${vidas} colaboradores
 ` +
-                `💰 *Valor Homologado por Vida:* R$ ${precoUnitario.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
+                `💰 *Valor Unitário:* R$ ${unit.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
 ` +
-                `💵 *INVESTIMENTO TOTAL OBRIGATÓRIO:* R$ ${totalMensal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
+                `💵 *INVESTIMENTO TOTAL:* R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
 
 ` +
-                `✅ *Benefícios do Produto Porto Seguro Vida CCT:*
+                `✅ *Garantias Homologadas:*
 ` +
-                `• Atende 100% às exigências securitárias e assistenciais do sindicato.
+                `• Atende 100% às exigências da Convenção Coletiva de Trabalho.
 ` +
-                `• Emissão do Certificado Oficial de Regularidade para homologações.
+                `• Emissão de Certificado Oficial para homologações sindicais.
 ` +
-                `• Protege a empresa contra ações indenizatórias de sinistros da equipe.
+                `• Protege a empresa contra passivos de indenização própria.
 
 ` +
-                `Podemos emitir a apólice para regularizar a empresa perante o sindicato?`;
+                `Podemos emitir a apólice para regularizar a sua empresa?`;
+        }
 
-            document.getElementById('cct-btn-wa').href = `https://wa.me/55${whats}?text=${encodeURIComponent(msgWA)}`;
-            document.getElementById('resultado-cct').style.display = 'block';
+        function enviarWhatsAppCCT() {
+            const rawFone = document.getElementById('cct-whatsapp').value.trim();
+            const fone = formatarTelefone(rawFone);
+            const msg = getTextoPropostaCCT();
+            if (fone.length >= 10) {
+                window.open(`https://wa.me/55${fone}?text=${encodeURIComponent(msg)}`, '_blank');
+            } else {
+                window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+            }
+            showToast("WhatsApp aberto com o estudo CCT!");
+        }
 
-            ultimaSimulacaoCCT = {
-                tipo: 'cct',
-                nome: empresa,
-                whatsapp: whats,
-                plano: `CCT: ${ramoKey.toUpperCase()}`,
-                valor: totalMensal,
-                vidas: `${vidas} vidas`,
-                obs: `Convenção: ${ramo.nome} | Unitário: R$ ${precoUnitario.toLocaleString('pt-BR', {minimumFractionDigits:2})}`
-            };
-
-            showToast("Simulação de CCT calculada com sucesso!");
+        function copiarTextoPropostaCCT() {
+            const msg = getTextoPropostaCCT();
+            navigator.clipboard.writeText(msg).then(() => {
+                showToast("Texto da proposta CCT copiado!");
+            });
         }
 
         /* ========================================================
-           4. INTEGRAÇÃO SIMULADOR -> CRM & KANBAN
+           4. SALVAR SIMULAÇÃO DIRETO NO CRM
            ======================================================== */
-        function salvarSimulacaoComoLead(origem) {
-            let dados = null;
-            if (origem === 'individual') dados = ultimaSimulacaoIndividual;
-            else if (origem === 'empresarial') dados = ultimaSimulacaoEmpresarial;
-            else if (origem === 'cct') dados = ultimaSimulacaoCCT;
+        function salvarSimulacaoNoCRM(tipo) {
+            let nome = '', fone = '', plano = '', valor = 0, vidas = '1 vida', obs = '';
 
-            if (!dados) {
-                alert("Realize a simulação primeiro antes de salvar como Lead.");
-                return;
+            if (tipo === 'individual') {
+                nome = document.getElementById('serit-nome').value.trim() || 'Cliente SERIT';
+                fone = formatarTelefone(document.getElementById('serit-whatsapp').value);
+                const idade = parseInt(document.getElementById('serit-idade').value, 10) || 35;
+                const dados = TABELA_SERIT[planoSelecionadoSERIT];
+                valor = dados.precos[idade] || 0;
+                plano = `SERIT ${planoSelecionadoSERIT.toUpperCase()}`;
+                obs = `Idade: ${idade} anos | Renda: R$ ${dados.renda.toLocaleString('pt-BR')} | Diária: R$ ${(dados.renda/30).toFixed(2)}`;
+            } else if (tipo === 'empresarial') {
+                nome = document.getElementById('emp-nome').value.trim() || 'Empresa PME';
+                fone = formatarTelefone(document.getElementById('emp-whatsapp').value);
+                const v = parseInt(document.getElementById('emp-vidas').value, 10) || 5;
+                const comDIT = document.getElementById('emp-dit').value === 'sim';
+                const sel = TABELA_EMP[planoSelecionadoEMP];
+                const unit = comDIT ? sel.ref : (sel.ref - 10.00);
+                valor = unit * v;
+                vidas = `${v} vidas`;
+                plano = `Vida Grupo ${sel.nome} ${comDIT ? '(com DIT)' : '(sem DIT)'}`;
+                obs = `Capital: R$ ${sel.capital.toLocaleString('pt-BR')} | Unitário: R$ ${unit.toFixed(2)}`;
+            } else if (tipo === 'cct') {
+                const ramoKey = document.getElementById('cct-ramo-select').value;
+                const ramo = TABELA_CCT[ramoKey];
+                nome = document.getElementById('cct-nome').value.trim() || 'Empresa CCT';
+                fone = formatarTelefone(document.getElementById('cct-whatsapp').value);
+                const v = parseInt(document.getElementById('cct-vidas').value, 10) || 6;
+                let unit = ramo.faixas[0].preco;
+                for (const f of ramo.faixas) {
+                    if (v >= f.min && v <= f.max) { unit = f.preco; break; }
+                }
+                valor = unit * v;
+                vidas = `${v} colaboradores`;
+                plano = `CCT ${ramoKey.toUpperCase()}`;
+                obs = `Convenção: ${ramo.nome.split('&bull;')[0]} | R$ ${unit.toFixed(2)}/vida`;
             }
 
             const novoLead = {
                 id: 'lead_' + Date.now(),
-                nome: dados.nome,
-                whatsapp: dados.whatsapp,
-                tipo: dados.tipo,
-                plano: dados.plano,
-                vidas: dados.vidas,
-                valor: parseFloat(dados.valor),
-                etapa: 'proposta', // Já entra como estudo pronto
-                obs: dados.obs,
+                nome: nome,
+                whatsapp: fone || '17991123532',
+                tipo: tipo,
+                plano: plano,
+                vidas: vidas,
+                valor: valor,
+                etapa: 'proposta',
+                obs: obs,
                 criadoEm: new Date().toLocaleDateString('pt-BR')
             };
 
             leadsData.push(novoLead);
-            salvarLeadsStorage();
-            renderizarKanban();
-            atualizarStatsCRM();
-
-            showToast(`Lead "${dados.nome}" adicionado com sucesso ao CRM na etapa "Estudo Enviado"!`);
-            switchTab('crm');
+            salvarLeads();
+            showToast(`Lead "${nome}" adicionado com sucesso ao CRM em "Estudo Enviado"!`);
+            setMainMode('crm');
         }
 
         /* ========================================================
-           5. CRM ENGINE & PERSISTÊNCIA
+           5. CRM ENGINE & FUNÇÃO "SIMULAR PARA ESTE LEAD"
            ======================================================== */
-        function carregarLeadsStorage() {
+        function carregarLeads() {
             const raw = localStorage.getItem('eas_crm_leads_v4');
             if (raw) {
-                try {
-                    leadsData = JSON.parse(raw);
-                } catch(e) {
-                    leadsData = [];
-                }
+                try { leadsData = JSON.parse(raw); } catch(e) { leadsData = []; }
             } else {
-                // Mock inicial qualificado para o corretor começar com dados
                 leadsData = [
                     {
                         id: 'lead_1',
                         nome: 'Dr. Roberto Silveira (Médico)',
-                        whatsapp: '17991112233',
+                        whatsapp: '17991123532',
                         tipo: 'individual',
-                        plano: 'SERIT OURO',
+                        plano: 'SERIT PRATA',
                         vidas: '1 vida',
-                        valor: 282.83,
+                        valor: 136.74,
                         etapa: 'contato',
-                        obs: 'Idade 40 anos. Cirurgião. Foco em proteção de renda contra fraturas e afastamentos.',
-                        criadoEm: '24/09/2026'
+                        obs: 'Idade 35 anos. Quer proteção de renda contra fraturas e afastamentos.',
+                        criadoEm: '28/09/2026'
                     },
                     {
                         id: 'lead_2',
                         nome: 'Construtora Catanduva Engenharia',
                         whatsapp: '17992223344',
                         tipo: 'cct',
-                        plano: 'CCT: CONSTRUCAO',
-                        vidas: '12 vidas',
-                        valor: 197.88,
+                        plano: 'CCT CONSTRUCAO',
+                        vidas: '6 colaboradores',
+                        valor: 98.94,
                         etapa: 'proposta',
-                        obs: 'SITICOM/SINDUSCON 2025-2026. Fechamento urgente para início de obra na próxima semana.',
-                        criadoEm: '25/09/2026'
+                        obs: 'SITICOM/SINDUSCON. Início de obras urgente.',
+                        criadoEm: '28/09/2026'
                     },
                     {
                         id: 'lead_3',
                         nome: 'Auto Peças e Mecânica Central',
                         whatsapp: '17993334455',
                         tipo: 'empresarial',
-                        plano: 'Vida Grupo PRATA (com DIT)',
-                        vidas: '6 vidas',
-                        valor: 359.40,
+                        plano: 'Vida Grupo PRATA',
+                        vidas: '5 vidas',
+                        valor: 299.50,
                         etapa: 'fechamento',
-                        obs: 'Gostou da cobertura de DIT por acidente com diária de R$ 100/dia. Coletando documentos.',
-                        criadoEm: '26/09/2026'
+                        obs: 'Com DIT por acidente. Enviada documentação.',
+                        criadoEm: '28/09/2026'
                     }
                 ];
-                salvarLeadsStorage();
+                salvarLeads();
             }
         }
 
-        function salvarLeadsStorage() {
+        function salvarLeads() {
             localStorage.setItem('eas_crm_leads_v4', JSON.stringify(leadsData));
         }
 
-        function setFiltroCategoria(cat, btn) {
-            filtroCategoria = cat;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderizarKanban();
-        }
-
-        function filtrarCardsCRM() {
-            renderizarKanban();
-        }
-
         function renderizarKanban() {
-            const termoBusca = (document.getElementById('crm-search')?.value || '').toLowerCase();
-
+            const termo = (document.getElementById('crm-search-input')?.value || '').toLowerCase();
             const colunas = {
                 novo: document.getElementById('col-novo'),
                 contato: document.getElementById('col-contato'),
@@ -2310,74 +2037,98 @@ Podemos formatar a proposta oficial de adesão?`;
                 ativo: document.getElementById('col-ativo')
             };
 
-            // Limpa colunas
-            Object.values(colunas).forEach(col => { if(col) col.innerHTML = ''; });
-
+            Object.values(colunas).forEach(c => { if(c) c.innerHTML = ''; });
             const counts = { novo: 0, contato: 0, proposta: 0, fechamento: 0, ativo: 0 };
 
             leadsData.forEach(lead => {
-                // Filtro por categoria
-                if (filtroCategoria !== 'todos' && lead.tipo !== filtroCategoria) return;
-
-                // Filtro por busca
-                if (termoBusca) {
-                    const matchNome = (lead.nome || '').toLowerCase().includes(termoBusca);
-                    const matchObs = (lead.obs || '').toLowerCase().includes(termoBusca);
-                    const matchWhats = (lead.whatsapp || '').includes(termoBusca);
-                    if (!matchNome && !matchObs && !matchWhats) return;
+                if (termo) {
+                    const matchNome = (lead.nome || '').toLowerCase().includes(termo);
+                    const matchObs = (lead.obs || '').toLowerCase().includes(termo);
+                    const matchFone = (lead.whatsapp || '').includes(termo);
+                    if (!matchNome && !matchObs && !matchFone) return;
                 }
 
                 if (!counts.hasOwnProperty(lead.etapa)) lead.etapa = 'novo';
                 counts[lead.etapa]++;
 
-                const cardEl = document.createElement('div');
-                cardEl.className = 'lead-card';
-                cardEl.draggable = true;
-                cardEl.id = lead.id;
-                cardEl.ondragstart = (e) => dragCard(e, lead.id);
+                const card = document.createElement('div');
+                card.className = 'lead-card';
+                card.draggable = true;
+                card.id = lead.id;
+                card.ondragstart = (e) => { e.dataTransfer.setData('text/plain', lead.id); };
 
-                let tagClass = 'tag-ind';
-                let tagLabel = 'Individual';
-                if (lead.tipo === 'empresarial') { tagClass = 'tag-emp'; tagLabel = 'Empresarial'; }
-                else if (lead.tipo === 'cct') { tagClass = 'tag-cct'; tagLabel = 'CCT Sindical'; }
+                let tagBg = '#e0e7ff', tagColor = '#4338ca', tagText = 'Individual';
+                if (lead.tipo === 'empresarial') { tagBg = '#dcfce7'; tagColor = '#15803d'; tagText = 'Empresarial'; }
+                else if (lead.tipo === 'cct') { tagBg = '#fef3c7'; tagColor = '#b45309'; tagText = 'CCT Sindical'; }
 
-                cardEl.innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <span class="lead-type-tag ${tagClass}">${tagLabel}</span>
-                        <span style="font-size: 11px; color: var(--text-muted);">${lead.criadoEm || ''}</span>
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="background:${tagBg}; color:${tagColor}; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; text-transform:uppercase;">${tagText}</span>
+                        <span style="font-size:11px; color:var(--text-muted);">${lead.criadoEm || ''}</span>
                     </div>
                     <div class="lead-name">${lead.nome}</div>
-                    <div class="lead-phone"><i class="fab fa-whatsapp" style="color: #25d366;"></i> ${lead.whatsapp}</div>
-                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">
+                    <div class="lead-phone"><i class="fab fa-whatsapp" style="color:#25d366;"></i> ${lead.whatsapp}</div>
+                    <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">
                         <strong>Plano:</strong> ${lead.plano || '-'} (${lead.vidas || '1 vida'})
                     </div>
-                    ${lead.obs ? `<div style="font-size: 11px; color: #475569; background: #f8fafc; padding: 6px 8px; border-radius: 4px; margin-bottom: 8px;">${lead.obs}</div>` : ''}
+                    ${lead.obs ? `<div style="font-size:11px; color:#475569; background:#f8fafc; padding:4px 6px; border-radius:4px; margin-bottom:6px;">${lead.obs}</div>` : ''}
                     <div class="lead-footer">
-                        <div class="lead-price">R$ ${(lead.valor || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                        <div style="font-family:'Montserrat',sans-serif; font-size:14px; font-weight:800; color:var(--eas-navy);">R$ ${(lead.valor || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
                         <div class="lead-actions-btn">
+                            <button class="btn-mini sim" onclick="simularParaEsteLead('${lead.id}')" title="Simular para este Cliente">
+                                <i class="fas fa-calculator"></i>
+                            </button>
                             <a href="https://wa.me/55${lead.whatsapp}" target="_blank" class="btn-mini wa" title="Abrir WhatsApp">
                                 <i class="fab fa-whatsapp"></i>
                             </a>
-                            <button class="btn-mini" onclick="editarLead('${lead.id}')" title="Editar">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-mini" onclick="excluirLead('${lead.id}')" title="Excluir" style="color: #ef4444;">
+                            <button class="btn-mini" onclick="excluirLead('${lead.id}')" title="Excluir" style="color:#ef4444;">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     </div>
                 `;
 
-                if (colunas[lead.etapa]) {
-                    colunas[lead.etapa].appendChild(cardEl);
-                }
+                if (colunas[lead.etapa]) colunas[lead.etapa].appendChild(card);
             });
 
-            // Atualiza badges das colunas
             Object.keys(counts).forEach(k => {
-                const el = document.getElementById(`badge-count-${k}`);
+                const el = document.getElementById(`badge-${k}`);
                 if (el) el.innerText = counts[k];
             });
+        }
+
+        /* FUNÇÃO DIRETA: SIMULAR PARA ESTE LEAD DO CRM */
+        function simularParaEsteLead(leadId) {
+            const lead = leadsData.find(l => l.id === leadId);
+            if (!lead) return;
+
+            setMainMode('simulador');
+
+            if (lead.tipo === 'individual') {
+                switchSimulatorTab('serit');
+                document.getElementById('serit-nome').value = lead.nome;
+                document.getElementById('serit-whatsapp').value = lead.whatsapp;
+                // Extrai idade das observações se houver
+                const mIdade = (lead.obs || '').match(/(\d{2})\s*anos/i);
+                if (mIdade) document.getElementById('serit-idade').value = parseInt(mIdade[1], 10);
+                calcularSERITAuto();
+            } else if (lead.tipo === 'empresarial') {
+                switchSimulatorTab('emp');
+                document.getElementById('emp-nome').value = lead.nome;
+                document.getElementById('emp-whatsapp').value = lead.whatsapp;
+                const mVidas = (lead.vidas || '').match(/(\d+)/);
+                if (mVidas) document.getElementById('emp-vidas').value = parseInt(mVidas[1], 10);
+                calcularEmpresarialAuto();
+            } else if (lead.tipo === 'cct') {
+                switchSimulatorTab('cct');
+                document.getElementById('cct-nome').value = lead.nome;
+                document.getElementById('cct-whatsapp').value = lead.whatsapp;
+                const mVidas = (lead.vidas || '').match(/(\d+)/);
+                if (mVidas) document.getElementById('cct-vidas').value = parseInt(mVidas[1], 10);
+                calcularCCTAuto();
+            }
+
+            showToast(`Simulador carregado com os dados de ${lead.nome}!`);
         }
 
         function atualizarStatsCRM() {
@@ -2392,172 +2143,135 @@ Podemos formatar a proposta oficial de adesão?`;
             document.getElementById('stat-taxa-conv').innerText = `${taxa}%`;
         }
 
-        /* DRAG AND DROP KANBAN */
-        function dragCard(event, cardId) {
-            dragSourceId = cardId;
-            event.dataTransfer.setData('text/plain', cardId);
-        }
-
-        function allowDrop(event) {
-            event.preventDefault();
-        }
-
+        function allowDrop(event) { event.preventDefault(); }
         function dropCard(event, novaEtapa) {
             event.preventDefault();
-            const cardId = dragSourceId || event.dataTransfer.getData('text/plain');
-            if (!cardId) return;
-
-            const lead = leadsData.find(l => l.id === cardId);
+            const id = event.dataTransfer.getData('text/plain');
+            const lead = leadsData.find(l => l.id === id);
             if (lead && lead.etapa !== novaEtapa) {
                 lead.etapa = novaEtapa;
-                salvarLeadsStorage();
+                salvarLeads();
                 renderizarKanban();
                 atualizarStatsCRM();
                 showToast(`Lead "${lead.nome}" movido para "${novaEtapa.toUpperCase()}".`);
             }
         }
 
-        /* MODAL DE CADASTRO/EDIÇÃO DE LEAD */
-        let leadEmEdicaoId = null;
-
-        function openNewLeadModal() {
-            leadEmEdicaoId = null;
-            document.getElementById('modal-lead-title').innerHTML = '<i class="fas fa-user-plus"></i> Novo Lead no CRM EAS';
-            document.getElementById('lead-nome').value = '';
-            document.getElementById('lead-whatsapp').value = '';
-            document.getElementById('lead-tipo').value = 'individual';
-            document.getElementById('lead-etapa').value = 'novo';
-            document.getElementById('lead-valor').value = '';
-            document.getElementById('lead-vidas').value = '1 vida';
-            document.getElementById('lead-obs').value = '';
-            document.getElementById('modal-lead').classList.add('active');
-        }
-
-        function fecharModalLead() {
-            document.getElementById('modal-lead').classList.remove('active');
-        }
-
-        function editarLead(id) {
-            const lead = leadsData.find(l => l.id === id);
-            if (!lead) return;
-
-            leadEmEdicaoId = id;
-            document.getElementById('modal-lead-title').innerHTML = '<i class="fas fa-edit"></i> Editar Lead';
-            document.getElementById('lead-nome').value = lead.nome;
-            document.getElementById('lead-whatsapp').value = lead.whatsapp;
-            document.getElementById('lead-tipo').value = lead.tipo;
-            document.getElementById('lead-etapa').value = lead.etapa;
-            document.getElementById('lead-valor').value = lead.valor;
-            document.getElementById('lead-vidas').value = lead.vidas;
-            document.getElementById('lead-obs').value = lead.obs || '';
-            document.getElementById('modal-lead').classList.add('active');
-        }
-
-        function salvarLeadModal() {
-            const nome = document.getElementById('lead-nome').value.trim();
-            const whats = formatarTelefone(document.getElementById('lead-whatsapp').value);
-            const tipo = document.getElementById('lead-tipo').value;
-            const etapa = document.getElementById('lead-etapa').value;
-            const valor = parseFloat(document.getElementById('lead-valor').value) || 0;
-            const vidas = document.getElementById('lead-vidas').value.trim() || '1 vida';
-            const obs = document.getElementById('lead-obs').value.trim();
-
-            if (!nome || whats.length < 10) {
-                alert("Preencha Nome e WhatsApp com DDD.");
-                return;
-            }
-
-            if (leadEmEdicaoId) {
-                // Atualiza existente
-                const lead = leadsData.find(l => l.id === leadEmEdicaoId);
-                if (lead) {
-                    lead.nome = nome;
-                    lead.whatsapp = whats;
-                    lead.tipo = tipo;
-                    lead.etapa = etapa;
-                    lead.valor = valor;
-                    lead.vidas = vidas;
-                    lead.obs = obs;
-                }
-                showToast("Lead atualizado com sucesso!");
-            } else {
-                // Novo Lead
-                const novo = {
-                    id: 'lead_' + Date.now(),
-                    nome: nome,
-                    whatsapp: whats,
-                    tipo: tipo,
-                    plano: tipo.toUpperCase(),
-                    vidas: vidas,
-                    valor: valor,
-                    etapa: etapa,
-                    obs: obs,
-                    criadoEm: new Date().toLocaleDateString('pt-BR')
-                };
-                leadsData.push(novo);
-                showToast("Novo lead adicionado ao CRM!");
-            }
-
-            salvarLeadsStorage();
-            renderizarKanban();
-            atualizarStatsCRM();
-            fecharModalLead();
-        }
-
         function excluirLead(id) {
-            if (confirm("Tem certeza que deseja excluir este Lead do CRM?")) {
+            if (confirm("Deseja remover este lead do CRM?")) {
                 leadsData = leadsData.filter(l => l.id !== id);
-                salvarLeadsStorage();
+                salvarLeads();
                 renderizarKanban();
                 atualizarStatsCRM();
                 showToast("Lead removido com sucesso.");
             }
         }
 
-        /* ========================================================
-           6. BACKUP & RESTAURAÇÃO (JSON)
-           ======================================================== */
-        function exportarBackupJSON() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(leadsData, null, 2));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", `backup_crm_eas_${new Date().toISOString().slice(0,10)}.json`);
-            dlAnchor.click();
-            showToast("Backup baixado com sucesso!");
+        /* MODAIS */
+        function openNewLeadModal() { document.getElementById('modal-lead').classList.add('active'); }
+        function fecharModalLead() { document.getElementById('modal-lead').classList.remove('active'); }
+
+        function salvarModalLeadManual() {
+            const nome = document.getElementById('lead-nome-in').value.trim();
+            const fone = formatarTelefone(document.getElementById('lead-phone-in').value);
+            const tipo = document.getElementById('lead-type-in').value;
+            const etapa = document.getElementById('lead-etapa-in').value;
+            const val = parseFloat(document.getElementById('lead-val-in').value) || 0;
+            const obs = document.getElementById('lead-obs-in').value.trim();
+
+            if (!nome || fone.length < 10) {
+                alert("Preencha Nome e WhatsApp com DDD.");
+                return;
+            }
+
+            leadsData.push({
+                id: 'lead_' + Date.now(),
+                nome: nome,
+                whatsapp: fone,
+                tipo: tipo,
+                plano: tipo.toUpperCase(),
+                vidas: '1 vida',
+                valor: val,
+                etapa: etapa,
+                obs: obs,
+                criadoEm: new Date().toLocaleDateString('pt-BR')
+            });
+
+            salvarLeads();
+            renderizarKanban();
+            atualizarStatsCRM();
+            fecharModalLead();
+            showToast("Novo lead adicionado!");
         }
 
-        function importarBackupJSON(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
+        /* SUPABASE INTEGRATION */
+        function initSupabase() {
+            const cfg = JSON.parse(localStorage.getItem('eas_supabase_cfg') || '{}');
+            const st = document.getElementById('txt-supabase-status');
+            if (cfg.url && cfg.key && window.supabase) {
                 try {
-                    const parsed = JSON.parse(e.target.result);
-                    if (Array.isArray(parsed)) {
-                        leadsData = parsed;
-                        salvarLeadsStorage();
-                        renderizarKanban();
-                        atualizarStatsCRM();
-                        showToast("Dados do CRM restaurados com sucesso!");
-                    } else {
-                        alert("Arquivo de backup inválido.");
-                    }
-                } catch(err) {
-                    alert("Erro ao ler o arquivo JSON.");
-                }
-            };
-            reader.readAsText(file);
+                    supaClient = window.supabase.createClient(cfg.url, cfg.key);
+                    if (st) st.innerHTML = '<span style="color:#10b981; font-weight:700;"><i class="fas fa-check-circle"></i> Supabase Conectado</span>';
+                } catch(e) { if (st) st.innerText = 'Supabase'; }
+            }
         }
 
-        function limparTodosDadosCRM() {
-            if (confirm("ATENÇÃO: Deseja realmente zerar todos os Leads do seu CRM?")) {
-                leadsData = [];
-                salvarLeadsStorage();
+        function abrirModalSupabase() {
+            const cfg = JSON.parse(localStorage.getItem('eas_supabase_cfg') || '{}');
+            document.getElementById('supa-url').value = cfg.url || '';
+            document.getElementById('supa-key').value = cfg.key || '';
+            document.getElementById('supa-tabela').value = cfg.tabela || 'gestao_de_leads';
+            document.getElementById('modal-supabase').classList.add('active');
+        }
+        function fecharModalSupabase() { document.getElementById('modal-supabase').classList.remove('active'); }
+
+        function salvarConfigSupabase() {
+            const url = document.getElementById('supa-url').value.trim();
+            const key = document.getElementById('supa-key').value.trim();
+            const tabela = document.getElementById('supa-tabela').value.trim() || 'gestao_de_leads';
+            if (!url || !key) { alert("Preencha URL e Chave Anon."); return; }
+            localStorage.setItem('eas_supabase_cfg', JSON.stringify({ url, key, tabela }));
+            initSupabase();
+            fecharModalSupabase();
+            showToast("Configurações do Supabase salvas!");
+        }
+
+        async function sincronizarSupabase() {
+            const cfg = JSON.parse(localStorage.getItem('eas_supabase_cfg') || '{}');
+            if (!supaClient || !cfg.tabela) { abrirModalSupabase(); return; }
+
+            showToast("Buscando leads no Supabase...");
+            try {
+                const { data, error } = await supaClient.from(cfg.tabela).select('*').order('created_at', { ascending: false }).limit(100);
+                if (error) { alert("Erro Supabase: " + error.message); return; }
+                if (!data || data.length === 0) { showToast("Nenhum lead novo encontrado."); return; }
+
+                let count = 0;
+                data.forEach(item => {
+                    const fone = formatarTelefone(item.telefone_e164 || item.telefone || item.whatsapp || '');
+                    if (!fone) return;
+                    const exists = leadsData.some(l => l.whatsapp === fone || l.id === ('supa_' + item.id));
+                    if (!exists) {
+                        leadsData.unshift({
+                            id: 'supa_' + (item.id || Date.now() + Math.random()),
+                            nome: item.nome || item.razao_social || 'Lead Supabase',
+                            whatsapp: fone,
+                            tipo: (item.nicho || '').includes('cct') ? 'cct' : 'empresarial',
+                            plano: item.nicho || 'Prospecção B2B',
+                            vidas: item.vidas || '1 vida',
+                            valor: parseFloat(item.valor || 0) || 0,
+                            etapa: 'novo',
+                            obs: item.cidade ? `Cidade: ${item.cidade}` : '',
+                            criadoEm: new Date().toLocaleDateString('pt-BR')
+                        });
+                        count++;
+                    }
+                });
+                salvarLeads();
                 renderizarKanban();
                 atualizarStatsCRM();
-                showToast("Base de dados redefinida.");
-            }
+                showToast(`${count} novos leads importados do Supabase!`);
+            } catch(e) { alert("Erro de conexão: " + e.message); }
         }
     </script>
 </body>
