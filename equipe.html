@@ -1,293 +1,2234 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EAS Corretora | Área da Equipe</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    :root {
-      --navy:#0f172a;
-      --navy2:#162338;
-      --gold:#b89b3e;
-      --green:#00995d;
-      --green2:#16a34a;
-      --bg:#eef3f8;
-      --white:#ffffff;
-      --text:#1e293b;
-      --muted:#64748b;
-      --line:#e2e8f0;
-      --shadow1:0 12px 32px rgba(15,23,42,.08);
-      --shadow2:0 24px 60px rgba(15,23,42,.14);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;font-family:'Inter',sans-serif;color:var(--text);
-      background:linear-gradient(180deg,#f8fbff 0%,var(--bg) 100%);
-    }
-    .page{max-width:1100px;margin:0 auto;padding:18px 14px 50px}
-    .top{
-      background:linear-gradient(135deg,var(--navy2) 0%,var(--navy) 100%);
-      color:#fff;border-radius:30px;padding:24px 20px;box-shadow:var(--shadow2)
-    }
-    .logo-box{
-      width:100%;max-width:460px;min-height:118px;margin:0 auto 18px;padding:18px 22px;
-      border-radius:24px;display:flex;align-items:center;justify-content:center;
-      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10)
-    }
-    .logo-box img{max-width:100%;max-height:92px;object-fit:contain;display:block}
-    .top h1{margin:0 0 10px;text-align:center;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:-.04em}
-    .top p{margin:0;text-align:center;color:rgba(255,255,255,.84);line-height:1.75}
-    .panel{margin-top:20px;background:#fff;border-radius:28px;box-shadow:var(--shadow1);overflow:hidden}
-    .panel-header{padding:26px 22px 14px;border-bottom:1px solid var(--line)}
-    .panel-header h2{margin:0 0 8px;font-size:2rem;letter-spacing:-.03em;color:var(--navy)}
-    .panel-header p{margin:0;color:var(--muted);line-height:1.7}
-    .panel-body{padding:22px}
-    .layout{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
-    .card{
-      background:linear-gradient(180deg,#fff 0%,#fbfdff 100%);
-      border:1px solid #e8edf3;border-radius:22px;padding:20px
-    }
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .field{display:flex;flex-direction:column;gap:8px}
-    .field.full{grid-column:1/-1}
-    label{font-size:.82rem;font-weight:900;text-transform:uppercase;letter-spacing:.05em;color:var(--navy)}
-    input,select{
-      width:100%;padding:15px 15px;border-radius:16px;border:2px solid #d7dee8;
-      background:#fff;font-size:1rem;color:var(--text);outline:none
-    }
-    input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(0,153,93,.10)}
-    .hint{font-size:.8rem;color:var(--muted);line-height:1.5}
-    .btn{
-      text-decoration:none;border:none;border-radius:18px;padding:18px 22px;font-size:.96rem;
-      font-weight:900;text-transform:uppercase;letter-spacing:.04em;display:inline-flex;
-      align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:.18s ease
-    }
-    .btn:hover{transform:translateY(-1px);opacity:.98}
-    .btn-dark{width:100%;margin-top:18px;background:linear-gradient(135deg,var(--navy) 0%,#1e293b 100%);color:#fff}
-    .btn-primary{background:linear-gradient(135deg,#25d366 0%,#16a34a 100%);color:#fff}
-    .btn-secondary{background:linear-gradient(135deg,#b89b3e 0%,#8f7320 100%);color:#fff}
-    .resultado-top{display:none;margin-bottom:12px;padding:14px 16px;border-radius:16px;background:#f0fdf4;border:1px solid #b7efcf;color:#106b43;font-weight:700;line-height:1.6}
-    .resultado{display:none;margin-top:16px;background:#f8fafc;border:1px solid var(--line);border-radius:18px;padding:18px;line-height:1.75;white-space:pre-line}
-    .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-    .info-box{display:grid;gap:12px}
-    .mini{
-      border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff
-    }
-    .mini h4{margin:0 0 8px;color:var(--navy)}
-    .mini p{margin:0;color:var(--text);line-height:1.7}
-    .footer{text-align:center;margin-top:16px;color:var(--muted);font-size:.82rem}
-    @media (max-width: 979px){
-      .layout{grid-template-columns:1fr}
-      .form-grid{grid-template-columns:1fr}
-      .btn-row{grid-template-columns:1fr}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EAS Corretora - Simulador Oficial de Vendas & CRM</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root {
+            --eas-navy: #0b1e3b;
+            --eas-navy-deep: #071326;
+            --eas-navy-light: #142a50;
+            --eas-gold: #c59b27;
+            --eas-gold-light: #dfba52;
+            --eas-gold-gradient: linear-gradient(135deg, #dfba52 0%, #c59b27 100%);
+            --eas-gold-subtle: #fbf7ee;
+            --eas-silver: #e2e8f0;
+            --unimed-green: #00995d;
+            --unimed-green-light: #e6f7f0;
+            --porto-blue: #004b8d;
+            --porto-blue-light: #e8f2fa;
+            --bg-body: #f4f6fa;
+            --bg-card: #ffffff;
+            --text-main: #0b1e3b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 2px 5px rgba(11,30,59,0.05);
+            --shadow-md: 0 10px 25px -5px rgba(11,30,59,0.09), 0 8px 10px -6px rgba(11,30,59,0.04);
+            --shadow-lg: 0 20px 35px -10px rgba(11,30,59,0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* HEADER INSTITUCIONAL EAS */
+        .eas-header {
+            background: linear-gradient(180deg, var(--eas-navy-deep) 0%, var(--eas-navy) 100%);
+            color: #ffffff;
+            border-bottom: 4px solid var(--eas-gold);
+            padding: 16px 24px;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* MODO SWITCHER PRINCIPAL (SIMULADOR vs CRM) */
+        .mode-switcher-bar {
+            background: rgba(255,255,255,0.06);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 24px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .mode-pills {
+            display: flex;
+            background: rgba(7,19,38,0.7);
+            border: 1px solid rgba(223,186,82,0.3);
+            border-radius: 40px;
+            padding: 4px;
+            gap: 6px;
+            max-width: 520px;
+            width: 100%;
+        }
+
+        .mode-pill-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 18px;
+            border-radius: 30px;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            color: #cbd5e1;
+            background: transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mode-pill-btn.active {
+            background: var(--eas-gold-gradient);
+            color: var(--eas-navy-deep);
+            box-shadow: 0 4px 15px rgba(223,186,82,0.4);
+        }
+
+        /* BARRAS DE PRODUTOS DO SIMULADOR (INDIVIDUAL, EMPRESARIAL, CCT) */
+        .simulator-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px 16px 0;
+            max-width: 900px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .sim-product-tab {
+            flex: 1;
+            min-width: 220px;
+            background: #ffffff;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sim-product-tab:hover {
+            border-color: var(--eas-gold);
+            transform: translateY(-2px);
+        }
+
+        .sim-product-tab.active {
+            border-color: var(--eas-navy);
+            background: #fdfefe;
+            box-shadow: 0 0 0 3px rgba(11,30,59,0.12);
+        }
+
+        .tab-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .sim-product-tab.active .tab-icon.serit { background: var(--unimed-green-light); color: var(--unimed-green); }
+        .sim-product-tab.active .tab-icon.emp { background: rgba(11,30,59,0.1); color: var(--eas-navy); }
+        .sim-product-tab.active .tab-icon.cct { background: var(--porto-blue-light); color: var(--porto-blue); }
+
+        .tab-info h4 {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--eas-navy);
+            margin-bottom: 2px;
+        }
+
+        .tab-info p {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* MAIN CONTAINER */
+        .app-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 20px auto 40px;
+            padding: 0 16px;
+            flex: 1;
+        }
+
+        .view-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .view-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 19px;
+            font-weight: 800;
+            color: var(--eas-navy);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* FORMULÁRIO DE SIMULAÇÃO */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--eas-navy);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--text-main);
+            background: #ffffff;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--eas-navy);
+            box-shadow: 0 0 0 3px rgba(11,30,59,0.12);
+        }
+
+        /* COMPARATIVO DE PLANOS LADO A LADO (VISUAL CLIENT-FACING) */
+        .plans-comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .plan-card {
+            background: #ffffff;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .plan-card:hover {
+            border-color: var(--eas-gold);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .plan-card.selected {
+            border-color: var(--eas-navy);
+            background: #fafcfe;
+            box-shadow: 0 0 0 3px rgba(11,30,59,0.12);
+        }
+
+        .plan-card.featured {
+            border-color: var(--eas-gold);
+            background: #fffdf8;
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--eas-navy);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .plan-badge.gold {
+            background: var(--eas-gold-gradient);
+            color: var(--eas-navy-deep);
+        }
+
+        .plan-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--eas-navy);
+            margin-top: 6px;
+            margin-bottom: 8px;
+        }
+
+        .plan-price {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--eas-navy);
+            margin-bottom: 4px;
+        }
+
+        .plan-price span {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin: 16px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 14px;
+        }
+
+        .plan-features li {
+            font-size: 13px;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .plan-features li i {
+            color: var(--unimed-green);
+            font-size: 14px;
+        }
+
+        /* PROPOSTA GERADA / CARD DE APRESENTAÇÃO */
+        .proposal-presentation-card {
+            display: none;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            margin-top: 30px;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .proposal-hero {
+            background: linear-gradient(135deg, var(--eas-navy-deep) 0%, var(--eas-navy) 100%);
+            color: #ffffff;
+            padding: 30px;
+            position: relative;
+            border-bottom: 4px solid var(--eas-gold);
+        }
+
+        .proposal-hero-tag {
+            background: var(--eas-gold-gradient);
+            color: var(--eas-navy-deep);
+            font-weight: 800;
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .proposal-total-val {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 40px;
+            font-weight: 900;
+            color: #ffffff;
+        }
+
+        .proposal-client-name {
+            font-size: 16px;
+            color: #cbd5e1;
+            margin-top: 4px;
+        }
+
+        .proposal-body {
+            padding: 30px;
+        }
+
+        .proposal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .proposal-grid-item {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+        }
+
+        .proposal-grid-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .proposal-grid-value {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--eas-navy);
+        }
+
+        .highlight-calc-box {
+            background: #fffbeb;
+            border-left: 5px solid #f59e0b;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #92400e;
+            line-height: 1.6;
+        }
+
+        .action-buttons-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 22px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-gold {
+            background: var(--eas-gold-gradient);
+            color: var(--eas-navy-deep);
+            box-shadow: 0 4px 12px rgba(223,186,82,0.3);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(223,186,82,0.45);
+        }
+
+        .btn-navy {
+            background: var(--eas-navy);
+            color: #ffffff;
+        }
+
+        .btn-navy:hover {
+            background: var(--eas-navy-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: #ffffff;
+            font-size: 15px;
+            box-shadow: 0 4px 14px rgba(37,211,102,0.35);
+        }
+
+        .btn-whatsapp:hover {
+            background: #1eb855;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37,211,102,0.45);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+        .btn-outline:hover {
+            background: #f1f5f9;
+            color: var(--eas-navy);
+            border-color: var(--eas-navy);
+        }
+
+        .btn-sm {
+            padding: 8px 14px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+
+        /* KANBAN CRM ESTILO JS BENEFÍCIOS / EAS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background: var(--eas-gold);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
+            background: var(--eas-gold-subtle);
+            color: var(--eas-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .stat-info h4 {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .stat-info .stat-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--eas-navy);
+        }
+
+        .kanban-board {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(250px, 1fr));
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 16px;
+        }
+
+        .kanban-column {
+            background: #f1f5f9;
+            border-radius: var(--radius-md);
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            border-top: 4px solid var(--eas-navy);
+            min-height: 450px;
+        }
+
+        .kanban-column.novo { border-top-color: #6366f1; }
+        .kanban-column.contato { border-top-color: #f59e0b; }
+        .kanban-column.proposta { border-top-color: var(--eas-gold); }
+        .kanban-column.fechamento { border-top-color: #00995d; }
+        .kanban-column.ativo { border-top-color: var(--eas-navy); }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #cbd5e1;
+        }
+
+        .column-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--eas-navy);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .column-badge {
+            background: #ffffff;
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--text-muted);
+        }
+
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .lead-card {
+            background: #ffffff;
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lead-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--eas-gold);
+        }
+
+        .lead-name {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--eas-navy);
+            margin: 4px 0 2px;
+        }
+
+        .lead-phone {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .lead-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 8px;
+            border-top: 1px dashed var(--border-color);
+            margin-top: 6px;
+        }
+
+        .lead-actions-btn {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-mini {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-mini:hover { background: var(--eas-navy); color: #ffffff; }
+        .btn-mini.wa:hover { background: #25d366; color: #ffffff; border-color: #25d366; }
+        .btn-mini.sim:hover { background: var(--eas-gold); color: var(--eas-navy-deep); border-color: var(--eas-gold); }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--eas-navy-deep);
+            color: #ffffff;
+            border-left: 5px solid var(--eas-gold);
+            padding: 14px 22px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 2000;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7,19,38,0.7);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 580px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .modal-header {
+            background: var(--eas-navy);
+            color: #ffffff;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-body { padding: 22px; max-height: 75vh; overflow-y: auto; }
+        .modal-footer { padding: 14px 22px; border-top: 1px solid var(--border-color); background: #f8fafc; display: flex; justify-content: flex-end; gap: 10px; }
+
+        /* PRINT STYLES */
+        @media print {
+            .eas-header, .mode-switcher-bar, .simulator-nav, .action-buttons-group, .btn, .crm-toolbar {
+                display: none !important;
+            }
+            body { background: #ffffff !important; color: #000000 !important; }
+            .card { box-shadow: none !important; border: 1px solid #ccc !important; }
+            .proposal-presentation-card { display: block !important; box-shadow: none !important; border: none !important; }
+            .proposal-hero { background: var(--eas-navy) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        @media (max-width: 768px) {
+            .eas-header { padding: 12px 14px; }
+            .header-top { justify-content: center; }
+            .header-actions { justify-content: center; width: 100%; }
+            .card { padding: 18px; }
+            .proposal-total-val { font-size: 30px; }
+            .action-buttons-group .btn { width: 100%; }
+        }
+    </style>
 </head>
 <body>
-  <div class="page">
-    <section class="top">
-      <div class="logo-box">
-        <img src="logo oficial.jpg.png" alt="EAS Corretora">
-      </div>
-      <h1>Área da Equipe</h1>
-      <p>Ferramenta interna para simulação, geração de estudo e envio comercial ao cliente.</p>
-    </section>
 
-    <section class="panel">
-      <div class="panel-header">
-        <h2>Simulador comercial</h2>
-        <p>Preencha os dados do proponente, gere o estudo e envie o texto pronto pelo WhatsApp.</p>
-      </div>
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle" style="color: var(--eas-gold); font-size: 18px;"></i>
+        <span id="toast-text">Ação concluída com sucesso!</span>
+    </div>
 
-      <div class="panel-body">
-        <div class="layout">
-          <div class="card">
-            <div class="form-grid">
-              <div class="field full">
-                <label for="nome">Nome do proponente</label>
-                <input type="text" id="nome" placeholder="Nome completo do cliente">
-              </div>
-              <div class="field">
-                <label for="whatsapp">WhatsApp</label>
-                <input type="tel" id="whatsapp" placeholder="Ex: 17991234567" maxlength="11">
-                <div class="hint">Digite apenas números com DDD.</div>
-              </div>
-              <div class="field">
-                <label for="idade">Idade</label>
-                <input type="number" id="idade" min="16" max="70" placeholder="Ex: 35">
-              </div>
-              <div class="field">
-                <label for="plano">Plano</label>
-                <select id="plano">
-                  <option value="ouro">OURO (10k renda / 120k vida)</option>
-                  <option value="prata">PRATA (5k renda / 100k vida)</option>
-                  <option value="bronze">BRONZE (3k renda / 50k vida)</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="cupom">Cupom</label>
-                <input type="text" id="cupom" placeholder="Ex: UNIMED08">
-                <div class="hint">Cupons válidos: UNIMED08 ou CALL08.</div>
-              </div>
+    <!-- CABEÇALHO OFICIAL EAS -->
+    <header class="eas-header">
+        <div class="header-top">
+            <a href="#" class="brand-box">
+                <!-- SVG LOGO OFICIAL VETORIAL EAS -->
+                <svg viewBox="0 0 250 100" xmlns="http://www.w3.org/2000/svg" style="height: 48px; width: auto;">
+                    <defs>
+                        <linearGradient id="metalEAS" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff"/>
+                            <stop offset="50%" stop-color="#f1f5f9"/>
+                            <stop offset="100%" stop-color="#cbd5e1"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="65" cy="18" r="7" fill="#ffffff"/>
+                    <rect x="58.5" y="29" width="13" height="24" rx="6.5" fill="#ffffff"/>
+                    <circle cx="95" cy="11" r="8" fill="#ffffff"/>
+                    <rect x="87.5" y="23" width="15" height="30" rx="7.5" fill="#ffffff"/>
+                    <circle cx="127" cy="6" r="8.5" fill="#ffffff"/>
+                    <rect x="118.5" y="18" width="17" height="35" rx="8.5" fill="#ffffff"/>
+                    <circle cx="158" cy="14" r="7.5" fill="#ffffff"/>
+                    <rect x="150.5" y="25" width="15" height="28" rx="7.5" fill="#ffffff"/>
+                    <text x="112" y="80" font-family="'Montserrat', sans-serif" font-weight="900" font-size="34" fill="url(#metalEAS)" text-anchor="middle" letter-spacing="2">EAS</text>
+                    <text x="112" y="97" font-family="'Montserrat', sans-serif" font-weight="700" font-size="8" fill="#ffffff" text-anchor="middle" letter-spacing="2">CORRETORA DE SEGUROS</text>
+                </svg>
+            </a>
+
+            <div class="header-actions">
+                <a href="https://wa.me/5517991123532" target="_blank" class="btn btn-outline btn-sm" style="color: #25d366; border-color: rgba(37,211,102,0.4); background: rgba(37,211,102,0.1);">
+                    <i class="fab fa-whatsapp"></i> (17) 99112-3532
+                </a>
+                <button id="btn-supabase-status" class="btn btn-outline btn-sm" onclick="abrirModalSupabase()" style="font-size: 11px;">
+                    <i class="fas fa-database" style="color: #3ecf8e;"></i> <span id="txt-supabase-status">Supabase</span>
+                </button>
             </div>
-
-            <button class="btn btn-dark" onclick="gerarSimulacao()">
-              <i class="fa-solid fa-calculator"></i> Gerar estudo técnico
-            </button>
-
-            <div class="resultado-top" id="resultadoTop"></div>
-            <div class="resultado" id="resultado"></div>
-
-            <div class="btn-row">
-              <a href="#" id="btnEnviarCliente" class="btn btn-primary" target="_blank">
-                <i class="fab fa-whatsapp"></i> Enviar ao cliente
-              </a>
-              <a href="#" id="btnFalarConsultor" class="btn btn-secondary" target="_blank">
-                <i class="fa-solid fa-headset"></i> Falar com consultor
-              </a>
-            </div>
-          </div>
-
-          <div class="info-box">
-            <div class="mini">
-              <h4>Objetivo</h4>
-              <p>Gerar o estudo com rapidez, manter o padrão comercial e acelerar o fechamento.</p>
-            </div>
-            <div class="mini">
-              <h4>Carências</h4>
-              <p>Doenças comuns: 30 dias. LER, DORT, LTC, hérnias, doenças progressivas e degenerativas: 180 dias. Acidente: sem carência.</p>
-            </div>
-            <div class="mini">
-              <h4>Melhor uso</h4>
-              <p>Use esta página apenas para a equipe. A página pública do cliente deve ser mais limpa e voltada à captação.</p>
-            </div>
-          </div>
         </div>
-      </div>
-    </section>
+    </header>
 
-    <div class="footer">EAS Corretora • Página interna da equipe</div>
-  </div>
+    <!-- SELETOR CENTRAL DE MODO (SIMULADOR vs CRM) -->
+    <div class="mode-switcher-bar">
+        <div class="mode-pills">
+            <button class="mode-pill-btn active" id="btn-mode-sim" onclick="setMainMode('simulador')">
+                <i class="fas fa-calculator"></i> Simulador de Vendas
+            </button>
+            <button class="mode-pill-btn" id="btn-mode-crm" onclick="setMainMode('crm')">
+                <i class="fas fa-chart-line"></i> CRM & Leads
+            </button>
+        </div>
+    </div>
 
-  <script>
-    const CONFIG = {
-      WHATSAPP_CORRETORA: "5517991123532",
-      NOME_CORRETORA: "EAS Corretora"
-    };
+    <!-- SUB-BARRA DE PRODUTOS DO SIMULADOR -->
+    <div id="sim-product-nav" class="simulator-nav">
+        <div class="sim-product-tab active" id="tab-btn-serit" onclick="switchSimulatorTab('serit')">
+            <div class="tab-icon serit"><i class="fas fa-user-shield"></i></div>
+            <div class="tab-info">
+                <h4>SERIT Individual</h4>
+                <p>Proteção de Renda Unimed</p>
+            </div>
+        </div>
 
-    const DATA_MAP = {
-      ouro: {
-        cap: 120000, renda: 10000,
-        a37: { 16: 365.30, 17: 365.30, 18: 365.30, 19: 365.30, 20: 365.30, 21: 365.30, 22: 365.30, 23: 365.30, 24: 365.30, 25: 365.30, 26: 365.30, 27: 365.30, 28: 365.30, 29: 365.30, 30: 365.30, 31: 365.30, 32: 365.30, 33: 365.30, 34: 365.30, 35: 400.88, 36: 413.15, 37: 426.68, 38: 442.26, 39: 459.47, 40: 477.93, 41: 499.21, 42: 523.39, 43: 551.51, 44: 581.92, 45: 615.37, 46: 651.13, 47: 690.10, 48: 730.72, 49: 776.67, 50: 825.74, 51: 876.49, 52: 930.00, 53: 986.47, 54: 1045.05, 55: 1107.25, 56: 1174.32, 57: 1246.11, 58: 1324.05, 59: 1416.00, 60: 1527.09, 61: 1660.70, 62: 1823.46, 63: 2027.48, 64: 2261.51, 65: 2534.43, 66: 2846.54, 67: 3198.25, 68: 3594.68, 69: 4041.66, 70: 4545.75 },
-        call08: { 16: 216.19, 17: 216.19, 18: 216.19, 19: 216.19, 20: 216.19, 21: 216.19, 22: 216.19, 23: 216.19, 24: 216.19, 25: 216.19, 26: 216.19, 27: 216.19, 28: 216.19, 29: 216.19, 30: 216.19, 31: 216.19, 32: 216.19, 33: 216.19, 34: 216.19, 35: 237.24, 36: 244.50, 37: 252.51, 38: 261.73, 39: 271.91, 40: 282.83, 41: 295.43, 42: 309.74, 43: 326.38, 44: 344.37, 45: 364.17, 46: 385.33, 47: 408.39, 48: 432.43, 49: 459.62, 50: 488.66, 51: 518.69, 52: 550.35, 53: 583.78, 54: 618.44, 55: 655.25, 56: 694.94, 57: 737.42, 58: 783.55, 59: 837.96, 60: 903.70, 61: 982.77, 62: 1079.09, 63: 1199.82, 64: 1338.32, 65: 1499.83, 66: 1684.53, 67: 1892.67, 68: 2127.27, 69: 2391.79, 70: 2690.10 }
-      },
-      prata: {
-        cap: 100000, renda: 5000,
-        a37: { 16: 211.13, 17: 211.13, 18: 211.13, 19: 211.13, 20: 211.13, 21: 211.13, 22: 211.13, 23: 211.13, 24: 211.13, 25: 211.13, 26: 211.13, 27: 211.13, 28: 211.13, 29: 211.13, 30: 211.13, 31: 211.13, 32: 211.13, 33: 211.13, 34: 211.13, 35: 231.04, 36: 238.50, 37: 246.86, 38: 256.78, 39: 268.31, 40: 280.73, 41: 295.35, 42: 312.23, 43: 332.13, 44: 353.72, 45: 377.62, 46: 403.20, 47: 431.20, 48: 460.28, 49: 492.56, 50: 526.93, 51: 562.13, 52: 598.98, 53: 637.59, 54: 677.24, 55: 718.98, 56: 763.67, 57: 811.00, 58: 861.94, 59: 920.93, 60: 991.37, 61: 1075.17, 62: 1176.74, 63: 1302.41, 64: 1446.81, 65: 1614.91, 66: 1805.12, 67: 2018.54, 68: 2258.08, 69: 2527.03, 70: 2829.08 },
-        call08: { 16: 124.95, 17: 124.95, 18: 124.95, 19: 124.95, 20: 124.95, 21: 124.95, 22: 124.95, 23: 124.95, 24: 124.95, 25: 124.95, 26: 124.95, 27: 124.95, 28: 124.95, 29: 124.95, 30: 124.95, 31: 124.95, 32: 124.95, 33: 124.95, 34: 124.95, 35: 136.74, 36: 141.16, 37: 146.10, 38: 151.98, 39: 158.80, 40: 166.15, 41: 174.81, 42: 184.80, 43: 196.58, 44: 209.36, 45: 223.51, 46: 238.65, 47: 255.22, 48: 272.44, 49: 291.54, 50: 311.89, 51: 332.73, 52: 354.54, 53: 377.40, 54: 400.87, 55: 425.57, 56: 452.03, 57: 480.04, 58: 510.19, 59: 545.11, 60: 586.80, 61: 636.41, 62: 696.53, 63: 770.91, 64: 856.37, 65: 955.87, 66: 1068.45, 67: 1194.77, 68: 1336.55, 69: 1495.74, 70: 1674.52 }
-      },
-      bronze: {
-        cap: 50000, renda: 3000,
-        a37: { 16: 126.00, 17: 126.00, 18: 126.00, 19: 126.00, 20: 126.00, 21: 126.00, 22: 126.00, 23: 126.00, 24: 126.00, 25: 126.00, 26: 126.00, 27: 126.00, 28: 126.00, 29: 126.00, 30: 126.00, 31: 126.00, 32: 126.00, 33: 126.00, 34: 126.00, 35: 137.42, 36: 141.57, 37: 146.18, 38: 151.60, 39: 157.78, 40: 164.44, 41: 172.22, 42: 181.14, 43: 191.62, 44: 202.98, 45: 215.52, 46: 228.95, 47: 243.61, 48: 258.87, 49: 275.91, 50: 294.07, 51: 312.73, 52: 332.31, 53: 352.88, 54: 374.08, 55: 396.46, 56: 420.48, 57: 446.02, 58: 473.58, 59: 505.72, 60: 544.26, 61: 590.28, 62: 646.17, 63: 715.65, 64: 795.43, 65: 888.37, 66: 993.95, 67: 1112.60, 68: 1245.98, 69: 1395.96, 70: 1564.68 },
-        call08: { 16: 75.00, 17: 75.00, 18: 75.00, 19: 75.00, 20: 75.00, 21: 75.00, 22: 75.00, 23: 75.00, 24: 75.00, 25: 75.00, 26: 75.00, 27: 75.00, 28: 75.00, 29: 75.00, 30: 75.00, 31: 75.00, 32: 75.00, 33: 75.00, 34: 75.00, 35: 81.33, 36: 83.78, 37: 86.52, 38: 89.72, 39: 93.38, 40: 97.32, 41: 101.93, 42: 107.21, 43: 113.41, 44: 120.13, 45: 127.56, 46: 135.50, 47: 144.19, 48: 153.21, 49: 163.30, 50: 174.05, 51: 185.09, 52: 196.69, 53: 208.86, 54: 221.41, 55: 234.65, 56: 248.87, 57: 263.99, 58: 280.30, 59: 299.32, 60: 322.13, 61: 349.37, 62: 382.45, 63: 423.57, 64: 470.79, 65: 525.80, 66: 588.29, 67: 658.51, 68: 737.45, 69: 826.22, 70: 926.07 }
-      }
-    };
+        <div class="sim-product-tab" id="tab-btn-emp" onclick="switchSimulatorTab('emp')">
+            <div class="tab-icon emp"><i class="fas fa-building-shield"></i></div>
+            <div class="tab-info">
+                <h4>Vida em Grupo</h4>
+                <p>Empresarial PME + DIT</p>
+            </div>
+        </div>
 
-    function moeda(valor) {
-      return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-    function somenteDigitos(valor) {
-      return valor.replace(/\D/g, '');
-    }
-    function nomePlanoBonito(planoKey) {
-      const mapa = { ouro: "OURO", prata: "PRATA", bronze: "BRONZE" };
-      return mapa[planoKey] || planoKey.toUpperCase();
-    }
-    function gerarTextoEstudo(dados) {
-      const { nome, idade, whatsapp, planoKey, preco, info, diaria, liq, cupom, cupomAplicado } = dados;
-      return `Olá ${nome.toUpperCase()}, seu estudo ficou da seguinte forma:
+        <div class="sim-product-tab" id="tab-btn-cct" onclick="switchSimulatorTab('cct')">
+            <div class="tab-icon cct"><i class="fas fa-file-contract"></i></div>
+            <div class="tab-info">
+                <h4>Convenção Coletiva</h4>
+                <p>CCT Sindical Porto Seguro</p>
+            </div>
+        </div>
+    </div>
 
-Se ocorrer morte natural a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
-Se ocorrer morte por acidente, a Seguros Unimed pagará uma indenização no valor de R$ ${(info.cap * 2).toLocaleString('pt-BR')}.
-Se ocorrer uma invalidez por acidente ou doença a Seguros Unimed pagará uma indenização no valor de R$ ${info.cap.toLocaleString('pt-BR')}.
+    <!-- ÁREA PRINCIPAL -->
+    <main class="app-container">
 
-SERIT:
-Se você ficar doente ou sofrer um acidente e ficar afastado por mais de 7 dias a Seguros Unimed pagará uma renda no valor de R$ ${info.renda.toLocaleString('pt-BR')} por mes.
+        <!-- ============================================================== -->
+        <!-- 1. SIMULADOR SERIT INDIVIDUAL (UNIMED)                         -->
+        <!-- ============================================================== -->
+        <section id="panel-sim-serit" class="view-panel active">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-user-shield" style="color: var(--unimed-green);"></i>
+                        Simulador SERIT Individual &bull; Seguros Unimed
+                    </div>
+                    <span style="font-size: 12px; font-weight: 700; color: var(--unimed-green); background: var(--unimed-green-light); padding: 4px 10px; border-radius: 20px;">
+                        Proteção de Renda Diária
+                    </span>
+                </div>
 
-Carências do SERIT:
-- Doenças comuns: 30 dias de carência.
-- LER, DORT, LTC, hérnias, doenças progressivas e degenerativas: 180 dias de carência.
-- Acidente: sem carência.
+                <!-- FORMULÁRIO -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Nome do Cliente</label>
+                        <input type="text" id="serit-nome" class="form-control" placeholder="Ex: Roberto Silveira">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">WhatsApp do Cliente</label>
+                        <input type="tel" id="serit-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Idade Atual (16 a 70 anos)</label>
+                        <input type="number" id="serit-idade" class="form-control" placeholder="Digite a idade (ex: 38)" min="16" max="70" oninput="calcularSERITAuto()">
+                    </div>
+                </div>
 
-A indenização é paga da seguinte forma:
-R$ ${info.renda.toLocaleString('pt-BR')} ÷ 30 dias = R$ ${diaria} por dia.
+                <!-- CARDS COMPARATIVOS DOS 3 PLANOS LADO A LADO -->
+                <div style="font-size: 13px; font-weight: 800; text-transform: uppercase; color: var(--eas-navy); margin-top: 10px;">
+                    <i class="fas fa-layer-group"></i> Selecione o Plano para Apresentar ao Cliente:
+                </div>
+                <div class="plans-comparison-grid">
+                    <!-- PLANO BRONZE -->
+                    <div class="plan-card" id="card-serit-bronze" onclick="selecionarPlanoSERIT('bronze')">
+                        <span class="plan-badge">Econômico</span>
+                        <div>
+                            <div class="plan-name">Plano Bronze</div>
+                            <div class="plan-price" id="price-serit-bronze">R$ --<span>/mês</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check-circle"></i> Renda: <strong>R$ 3.000/mês</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Diária: <strong>R$ 100,00/dia</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 50.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Franquia: <strong>7 dias</strong></li>
+                            </ul>
+                        </div>
+                    </div>
 
-Suponhamos que você receba um atestado de 60 dias.
-A seguradora paga 53 dias, pois os 7 primeiros dias são franquia.
+                    <!-- PLANO PRATA (DESTAQUE) -->
+                    <div class="plan-card featured selected" id="card-serit-prata" onclick="selecionarPlanoSERIT('prata')">
+                        <span class="plan-badge gold">Mais Escolhido</span>
+                        <div>
+                            <div class="plan-name" style="color: var(--eas-gold);">Plano Prata</div>
+                            <div class="plan-price" id="price-serit-prata">R$ --<span>/mês</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check-circle"></i> Renda: <strong>R$ 5.000/mês</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Diária: <strong>R$ 166,67/dia</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 100.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte Acidente: <strong>R$ 200.000</strong></li>
+                            </ul>
+                        </div>
+                    </div>
 
-Neste caso, você receberia R$ ${liq} líquido direto em conta.
+                    <!-- PLANO OURO -->
+                    <div class="plan-card" id="card-serit-ouro" onclick="selecionarPlanoSERIT('ouro')">
+                        <span class="plan-badge">Executivo</span>
+                        <div>
+                            <div class="plan-name">Plano Ouro</div>
+                            <div class="plan-price" id="price-serit-ouro">R$ --<span>/mês</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check-circle"></i> Renda: <strong>R$ 10.000/mês</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Diária: <strong>R$ 333,33/dia</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 120.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte Acidente: <strong>R$ 240.000</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-💰 Investimento mensal: R$ ${moeda(preco)}/mês
+                <!-- CARD DE APRESENTAÇÃO E DISPARO DA PROPOSTA -->
+                <div id="proposal-serit-box" class="proposal-presentation-card">
+                    <div class="proposal-hero">
+                        <span class="proposal-hero-tag">Estudo Técnico Homologado &bull; Seguros Unimed</span>
+                        <div class="proposal-total-val" id="serit-hero-val">R$ 0,00/mês</div>
+                        <div class="proposal-client-name" id="serit-hero-client">Proposta para Cliente</div>
+                    </div>
 
-Dados do estudo:
-- Idade: ${idade} anos
-- Plano: ${nomePlanoBonito(planoKey)}
-- WhatsApp: ${whatsapp}
-- Cupom informado: ${cupom || "NÃO INFORMADO"}
-- Tabela aplicada: ${cupomAplicado ? "PROMOCIONAL" : "PADRÃO"}
+                    <div class="proposal-body">
+                        <div class="proposal-grid">
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Renda Mensal Garantida</div>
+                                <div class="proposal-grid-value" id="serit-grid-renda" style="color: var(--unimed-green);">R$ 0,00</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Valor da Diária de Afastamento</div>
+                                <div class="proposal-grid-value" id="serit-grid-diaria">R$ 0,00/dia</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Morte Natural / Invalidez</div>
+                                <div class="proposal-grid-value" id="serit-grid-morte">R$ 0,00</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Morte Acidental (Dobra)</div>
+                                <div class="proposal-grid-value" id="serit-grid-dobra">R$ 0,00</div>
+                            </div>
+                        </div>
 
-${CONFIG.NOME_CORRETORA}`;
-    }
+                        <div class="highlight-calc-box" id="serit-calc-explica"></div>
 
-    function gerarSimulacao() {
-      const nome = document.getElementById('nome').value.trim();
-      const idade = parseInt(document.getElementById('idade').value, 10);
-      const planoKey = document.getElementById('plano').value;
-      const cupom = document.getElementById('cupom').value.trim().toUpperCase();
-      let whats = somenteDigitos(document.getElementById('whatsapp').value);
+                        <!-- GRUPO DE BOTÕES DE AÇÃO IMEDIATA (WHATSAPP, COPIAR, IMPRIMIR, CRM) -->
+                        <div class="action-buttons-group">
+                            <button class="btn btn-whatsapp" onclick="enviarWhatsAppSERIT()">
+                                <i class="fab fa-whatsapp"></i> Enviar no WhatsApp do Cliente
+                            </button>
+                            <button class="btn btn-navy" onclick="copiarTextoPropostaSERIT()">
+                                <i class="fas fa-copy"></i> Copiar Texto da Proposta
+                            </button>
+                            <button class="btn btn-outline" onclick="window.print()">
+                                <i class="fas fa-print"></i> Imprimir / Salvar PDF
+                            </button>
+                            <button class="btn btn-gold" onclick="salvarSimulacaoNoCRM('individual')">
+                                <i class="fas fa-user-plus"></i> Salvar Lead no CRM
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      if (whats.length > 11) whats = whats.substring(0, 11);
-      if (!nome || !idade || whats.length < 10) { alert('Preencha nome, idade e WhatsApp válido.'); return; }
-      if (idade < 16 || idade > 70) { alert('O sistema calcula apenas para idades entre 16 e 70 anos.'); return; }
+        <!-- ============================================================== -->
+        <!-- 2. SIMULADOR EMPRESARIAL VIDA EM GRUPO + DIT                   -->
+        <!-- ============================================================== -->
+        <section id="panel-sim-emp" class="view-panel">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-building-shield" style="color: var(--eas-navy);"></i>
+                        Simulador Vida em Grupo PME &bull; Seguros Unimed / Porto
+                    </div>
+                    <span style="font-size: 12px; font-weight: 700; color: var(--eas-gold); background: var(--eas-gold-subtle); padding: 4px 10px; border-radius: 20px;">
+                        Proteção para Equipes e Sócios
+                    </span>
+                </div>
 
-      const info = DATA_MAP[planoKey];
-      const cupomAplicado = (cupom === "UNIMED08" || cupom === "CALL08");
-      const tabela = cupomAplicado ? info.call08 : info.a37;
-      const preco = tabela[idade];
-      if (typeof preco !== 'number') { alert('Não foi encontrada precificação para essa idade.'); return; }
+                <!-- FORMULÁRIO -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Nome da Empresa</label>
+                        <input type="text" id="emp-nome" class="form-control" placeholder="Ex: Auto Peças Modelo Ltda">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">WhatsApp do Contato</label>
+                        <input type="tel" id="emp-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantidade de Colaboradores (Vidas)</label>
+                        <input type="number" id="emp-vidas" class="form-control" placeholder="Ex: 5" min="3" value="5" oninput="calcularEmpresarialAuto()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">DIT por Acidente para a Equipe?</label>
+                        <select id="emp-dit" class="form-control" onchange="calcularEmpresarialAuto()">
+                            <option value="sim" selected>SIM &bull; Com DIT Acidente (Mín. 5 vidas)</option>
+                            <option value="nao">NÃO &bull; Sem DIT (Mín. 3 vidas, -R$ 10/vida)</option>
+                        </select>
+                    </div>
+                </div>
 
-      const diaria = moeda(info.renda / 30);
-      const liq = moeda((info.renda / 30) * 53);
+                <!-- CARDS DOS PLANOS EMPRESARIAIS -->
+                <div style="font-size: 13px; font-weight: 800; text-transform: uppercase; color: var(--eas-navy); margin-top: 10px;">
+                    <i class="fas fa-layer-group"></i> Selecione o Plano Empresarial:
+                </div>
+                <div class="plans-comparison-grid">
+                    <!-- EMP BRONZE -->
+                    <div class="plan-card" id="card-emp-bronze" onclick="selecionarPlanoEMP('bronze')">
+                        <span class="plan-badge">Bronze</span>
+                        <div>
+                            <div class="plan-name">Capital R$ 50.000</div>
+                            <div class="plan-price" id="price-emp-bronze">R$ 49,90<span>/vida</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check-circle"></i> Morte Natural: <strong>R$ 50.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte Acidental: <strong>R$ 50.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Invalidez IPA/IFPD: <strong>R$ 50.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> DIT Acidente: <strong>R$ 3.000/mês</strong></li>
+                            </ul>
+                        </div>
+                    </div>
 
-      const dados = { nome, idade, whatsapp: whats, planoKey, preco, info, diaria, liq, cupom, cupomAplicado };
-      const texto = gerarTextoEstudo(dados);
+                    <!-- EMP PRATA -->
+                    <div class="plan-card featured selected" id="card-emp-prata" onclick="selecionarPlanoEMP('prata')">
+                        <span class="plan-badge gold">Recomendado</span>
+                        <div>
+                            <div class="plan-name" style="color: var(--eas-gold);">Capital R$ 100.000</div>
+                            <div class="plan-price" id="price-emp-prata">R$ 59,90<span>/vida</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check-circle"></i> Morte Natural: <strong>R$ 100.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte Acidental: <strong>R$ 100.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Invalidez IPA/IFPD: <strong>R$ 100.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> DIT Acidente: <strong>R$ 3.000/mês</strong></li>
+                            </ul>
+                        </div>
+                    </div>
 
-      document.getElementById('resultadoTop').style.display = 'block';
-      document.getElementById('resultadoTop').innerHTML = `<strong>Estudo gerado com sucesso.</strong><br>Plano ${nomePlanoBonito(planoKey)} • Investimento mensal: <strong>R$ ${moeda(preco)}</strong>`;
+                    <!-- EMP OURO -->
+                    <div class="plan-card" id="card-emp-ouro" onclick="selecionarPlanoEMP('ouro')">
+                        <span class="plan-badge">Ouro</span>
+                        <div>
+                            <div class="plan-name">Capital R$ 150.000</div>
+                            <div class="plan-price" id="price-emp-ouro">R$ 69,90<span>/vida</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check-circle"></i> Morte Natural: <strong>R$ 150.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte Acidental: <strong>R$ 150.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Invalidez IPA/IFPD: <strong>R$ 150.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> DIT Acidente: <strong>R$ 3.000/mês</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-      document.getElementById('resultado').style.display = 'block';
-      document.getElementById('resultado').textContent = texto;
+                <!-- CARD DE APRESENTAÇÃO EMPRESARIAL -->
+                <div id="proposal-emp-box" class="proposal-presentation-card">
+                    <div class="proposal-hero">
+                        <span class="proposal-hero-tag">Cotação Corporativa PME &bull; EAS Corretora</span>
+                        <div class="proposal-total-val" id="emp-hero-total">R$ 0,00/mês</div>
+                        <div class="proposal-client-name" id="emp-hero-sub">Total para a Empresa</div>
+                    </div>
 
-      document.getElementById('btnEnviarCliente').href =
-        `https://wa.me/55${whats}?text=${encodeURIComponent(texto)}`;
+                    <div class="proposal-body">
+                        <div class="proposal-grid">
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Valor por Colaborador</div>
+                                <div class="proposal-grid-value" id="emp-grid-por-vida" style="color: var(--eas-gold);">R$ 0,00</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Vidas Seguradas</div>
+                                <div class="proposal-grid-value" id="emp-grid-vidas">0 colaboradores</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Capital Básico de Morte</div>
+                                <div class="proposal-grid-value" id="emp-grid-capital">R$ 0,00</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">DIT por Acidente</div>
+                                <div class="proposal-grid-value" id="emp-grid-dit-status">Incluso</div>
+                            </div>
+                        </div>
 
-      const msgConsultor = `Olá, quero falar com um consultor sobre este estudo.
+                        <div class="highlight-calc-box" id="emp-calc-explica"></div>
 
-Nome: ${nome.toUpperCase()}
-Idade: ${idade}
-Plano: ${nomePlanoBonito(planoKey)}
-Investimento: R$ ${moeda(preco)}
-Cupom: ${cupom || "NÃO INFORMADO"}`;
+                        <div class="action-buttons-group">
+                            <button class="btn btn-whatsapp" onclick="enviarWhatsAppEMP()">
+                                <i class="fab fa-whatsapp"></i> Enviar Proposta no WhatsApp
+                            </button>
+                            <button class="btn btn-navy" onclick="copiarTextoPropostaEMP()">
+                                <i class="fas fa-copy"></i> Copiar Texto da Proposta
+                            </button>
+                            <button class="btn btn-outline" onclick="window.print()">
+                                <i class="fas fa-print"></i> Imprimir / Salvar PDF
+                            </button>
+                            <button class="btn btn-gold" onclick="salvarSimulacaoNoCRM('empresarial')">
+                                <i class="fas fa-building"></i> Salvar Lead no CRM
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      document.getElementById('btnFalarConsultor').href =
-        `https://wa.me/${CONFIG.WHATSAPP_CORRETORA}?text=${encodeURIComponent(msgConsultor)}`;
+        <!-- ============================================================== -->
+        <!-- 3. SIMULADOR CONVENÇÕES COLETIVAS (CCT PORTO)                  -->
+        <!-- ============================================================== -->
+        <section id="panel-sim-cct" class="view-panel">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-file-contract" style="color: var(--porto-blue);"></i>
+                        Simulador Técnico de Convenções Coletivas (CCT Porto)
+                    </div>
+                    <span style="font-size: 12px; font-weight: 700; color: var(--porto-blue); background: var(--porto-blue-light); padding: 4px 10px; border-radius: 20px;">
+                        Homologação Sindical Obrigatória
+                    </span>
+                </div>
 
-      document.getElementById('resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  </script>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Estado</label>
+                        <select id="cct-uf-select" class="form-control" onchange="montarSelectCCT()"><option value="">Todos os estados</option><option value="SP" selected>SP</option><option value="MG">MG</option><option value="GO">GO</option><option value="AL">AL</option><option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="MT">MT</option><option value="PR">PR</option><option value="RJ">RJ</option><option value="RS">RS</option><option value="SC">SC</option><option value="SE">SE</option><option value="TO">TO</option><option value="—">—</option></select>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label class="form-label">Convenção / Sindicato (código Porto)</label>
+                        <select id="cct-ramo-select" class="form-control" onchange="document.getElementById('cct-preco-manual').value='';calcularCCTAuto()"></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Valor por vida Porto (R$) <span id="cct-preco-origem" style="text-transform:none;font-weight:600;color:var(--text-muted);"></span></label>
+                        <input type="number" step="0.01" min="0" id="cct-preco-manual" class="form-control" placeholder="Cotar por CNPJ no site Porto" oninput="calcularCCTAuto()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Razão Social da Empresa</label>
+                        <input type="text" id="cct-nome" class="form-control" placeholder="Nome da Empresa">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">WhatsApp do Responsável</label>
+                        <input type="tel" id="cct-whatsapp" class="form-control" placeholder="17991123532" maxlength="11">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantidade de Colaboradores</label>
+                        <input type="number" id="cct-vidas" class="form-control" placeholder="Nº de vidas" min="1" value="6" oninput="calcularCCTAuto()">
+                    </div>
+                </div>
+
+                <!-- CARD DE APRESENTAÇÃO CCT -->
+                <div id="proposal-cct-box" class="proposal-presentation-card" style="display: block;">
+                    <div class="proposal-hero" style="background: linear-gradient(135deg, #003666 0%, var(--eas-navy) 100%);">
+                        <span class="proposal-hero-tag" style="background: #ffffff; color: var(--porto-blue);">CCT Homologada Porto Seguro</span>
+                        <div class="proposal-total-val" id="cct-hero-total">--</div>
+                        <div class="proposal-client-name" id="cct-hero-sub">Investimento Total para 6 colaboradores</div>
+                    </div>
+
+                    <div class="proposal-body">
+                        <div class="proposal-grid">
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Preço Homologado por Vida</div>
+                                <div class="proposal-grid-value" id="cct-grid-por-vida" style="color: var(--porto-blue);">R$ 16,49/vida</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Faixa Aplicada</div>
+                                <div class="proposal-grid-value" id="cct-grid-faixa">6 ou mais vidas</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Coberturas Exigidas</div>
+                                <div class="proposal-grid-value" style="color: var(--unimed-green);">100% Homologado</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Certificado de Quitação</div>
+                                <div class="proposal-grid-value">Emissão Rápida</div>
+                            </div>
+                        </div>
+
+                        <div class="highlight-calc-box" id="cct-calc-explica"></div>
+
+                        <div class="action-buttons-group">
+                            <button class="btn btn-whatsapp" onclick="enviarWhatsAppCCT()">
+                                <i class="fab fa-whatsapp"></i> Enviar Proposta no WhatsApp
+                            </button>
+                            <button class="btn btn-navy" onclick="copiarTextoPropostaCCT()">
+                                <i class="fas fa-copy"></i> Copiar Texto da Proposta
+                            </button>
+                            <button class="btn btn-outline" onclick="window.print()">
+                                <i class="fas fa-print"></i> Imprimir / Salvar PDF
+                            </button>
+                            <button class="btn btn-gold" onclick="salvarSimulacaoNoCRM('cct')">
+                                <i class="fas fa-file-invoice"></i> Salvar Lead no CRM
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 4. PAINEL CRM DE VENDAS & PIPELINE                             -->
+        <!-- ============================================================== -->
+        <section id="panel-crm" class="view-panel">
+            <!-- STATS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-info">
+                        <h4>Total de Leads</h4>
+                        <div class="stat-number" id="stat-total-leads">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--unimed-green); background: var(--unimed-green-light);"><i class="fas fa-handshake"></i></div>
+                    <div class="stat-info">
+                        <h4>Fechados / Ativos</h4>
+                        <div class="stat-number" id="stat-ativos">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--porto-blue); background: var(--porto-blue-light);"><i class="fas fa-funnel-dollar"></i></div>
+                    <div class="stat-info">
+                        <h4>Pipeline em Negociação</h4>
+                        <div class="stat-number" id="stat-pipeline-valor">R$ 0,00</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-percentage"></i></div>
+                    <div class="stat-info">
+                        <h4>Taxa de Conversão</h4>
+                        <div class="stat-number" id="stat-taxa-conv">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOOLBAR CRM -->
+            <div class="card" style="padding: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+                    <div style="display: flex; gap: 10px; align-items: center; flex: 1; max-width: 400px;">
+                        <input type="text" id="crm-search-input" class="form-control" placeholder="Buscar por cliente, fone ou empresa..." oninput="renderizarKanban()">
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn btn-gold btn-sm" onclick="sincronizarSupabase()">
+                            <i class="fas fa-cloud-download-alt"></i> Puxar Leads do Supabase
+                        </button>
+                        <button class="btn btn-navy btn-sm" onclick="openNewLeadModal()">
+                            <i class="fas fa-plus"></i> Novo Lead Manual
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KANBAN BOARD -->
+                <div class="kanban-board">
+                    <div class="kanban-column novo" ondragover="allowDrop(event)" ondrop="dropCard(event, 'novo')">
+                        <div class="column-header">
+                            <span class="column-title">1. Novos Leads</span>
+                            <span class="column-badge" id="badge-novo">0</span>
+                        </div>
+                        <div class="card-list" id="col-novo"></div>
+                    </div>
+
+                    <div class="kanban-column contato" ondragover="allowDrop(event)" ondrop="dropCard(event, 'contato')">
+                        <div class="column-header">
+                            <span class="column-title">2. Em Contato</span>
+                            <span class="column-badge" id="badge-contato">0</span>
+                        </div>
+                        <div class="card-list" id="col-contato"></div>
+                    </div>
+
+                    <div class="kanban-column proposta" ondragover="allowDrop(event)" ondrop="dropCard(event, 'proposta')">
+                        <div class="column-header">
+                            <span class="column-title">3. Estudo Enviado</span>
+                            <span class="column-badge" id="badge-proposta">0</span>
+                        </div>
+                        <div class="card-list" id="col-proposta"></div>
+                    </div>
+
+                    <div class="kanban-column fechamento" ondragover="allowDrop(event)" ondrop="dropCard(event, 'fechamento')">
+                        <div class="column-header">
+                            <span class="column-title">4. Negociação</span>
+                            <span class="column-badge" id="badge-fechamento">0</span>
+                        </div>
+                        <div class="card-list" id="col-fechamento"></div>
+                    </div>
+
+                    <div class="kanban-column ativo" ondragover="allowDrop(event)" ondrop="dropCard(event, 'ativo')">
+                        <div class="column-header">
+                            <span class="column-title">5. Fechado / Emitido</span>
+                            <span class="column-badge" id="badge-ativo">0</span>
+                        </div>
+                        <div class="card-list" id="col-ativo"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL CONFIGURAÇÃO SUPABASE -->
+    <div id="modal-supabase" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 style="font-size: 16px;"><i class="fas fa-database" style="color: #3ecf8e;"></i> Conectar Supabase</h3>
+                <button onclick="fecharModalSupabase()" style="background:transparent; border:none; color:#fff; font-size:20px; cursor:pointer;">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label">Project URL</label>
+                    <input type="text" id="supa-url" class="form-control" placeholder="https://xyz.supabase.co">
+                </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label">Anon / Public Key</label>
+                    <input type="password" id="supa-key" class="form-control" placeholder="eyJhbGci...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tabela de Leads</label>
+                    <input type="text" id="supa-tabela" class="form-control" value="gestao_de_leads">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="fecharModalSupabase()">Cancelar</button>
+                <button class="btn btn-navy" onclick="salvarConfigSupabase()">Salvar & Conectar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NOVO LEAD MANUAL -->
+    <div id="modal-lead" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-lead-title" style="font-size: 16px;"><i class="fas fa-user-plus"></i> Novo Lead</h3>
+                <button onclick="fecharModalLead()" style="background:transparent; border:none; color:#fff; font-size:20px; cursor:pointer;">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label">Nome / Razão Social</label>
+                    <input type="text" id="lead-nome-in" class="form-control" placeholder="Nome Completo">
+                </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label">WhatsApp</label>
+                    <input type="tel" id="lead-phone-in" class="form-control" placeholder="17991123532" maxlength="11">
+                </div>
+                <div class="form-grid" style="margin-bottom: 12px;">
+                    <div class="form-group">
+                        <label class="form-label">Tipo de Seguro</label>
+                        <select id="lead-type-in" class="form-control">
+                            <option value="individual">Individual (SERIT)</option>
+                            <option value="empresarial">Vida em Grupo PME</option>
+                            <option value="cct">CCT Sindical</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Etapa</label>
+                        <select id="lead-etapa-in" class="form-control">
+                            <option value="novo">1. Novo</option>
+                            <option value="contato">2. Em Contato</option>
+                            <option value="proposta">3. Estudo Enviado</option>
+                            <option value="fechamento">4. Negociação</option>
+                            <option value="ativo">5. Fechado</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label class="form-label">Valor Estimado Mensal (R$)</label>
+                    <input type="number" id="lead-val-in" class="form-control" placeholder="250.00">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Observações</label>
+                    <textarea id="lead-obs-in" class="form-control" style="height: 70px;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="fecharModalLead()">Cancelar</button>
+                <button class="btn btn-navy" onclick="salvarModalLeadManual()">Salvar no Pipeline</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT ENGINE -->
+    <script>
+        /* TABELAS ATUARIAIS E REGRAS TÉCNICAS */
+        const TABELA_SERIT = {
+            ouro: {
+                cap: 120000, renda: 10000,
+                precos: {
+                    16: 216.19, 17: 216.19, 18: 216.19, 19: 216.19, 20: 216.19, 21: 216.19,
+                    22: 216.19, 23: 216.19, 24: 216.19, 25: 216.19, 26: 216.19, 27: 216.19,
+                    28: 216.19, 29: 216.19, 30: 216.19, 31: 216.19, 32: 216.19, 33: 216.19,
+                    34: 216.19, 35: 237.24, 36: 244.50, 37: 252.51, 38: 261.73, 39: 271.91,
+                    40: 282.83, 41: 295.43, 42: 309.74, 43: 326.38, 44: 344.37, 45: 364.17,
+                    46: 385.33, 47: 408.39, 48: 432.43, 49: 459.62, 50: 488.66, 51: 518.69,
+                    52: 550.35, 53: 583.78, 54: 618.44, 55: 655.25, 56: 694.94, 57: 737.42,
+                    58: 783.55, 59: 837.96, 60: 903.70, 61: 982.77, 62: 1079.09, 63: 1199.82,
+                    64: 1338.32, 65: 1499.83, 66: 1684.53, 67: 1892.67, 68: 2127.27,
+                    69: 2391.79, 70: 2690.10
+                }
+            },
+            prata: {
+                cap: 100000, renda: 5000,
+                precos: {
+                    16: 124.95, 17: 124.95, 18: 124.95, 19: 124.95, 20: 124.95, 21: 124.95,
+                    22: 124.95, 23: 124.95, 24: 124.95, 25: 124.95, 26: 124.95, 27: 124.95,
+                    28: 124.95, 29: 124.95, 30: 124.95, 31: 124.95, 32: 124.95, 33: 124.95,
+                    34: 124.95, 35: 136.74, 36: 141.16, 37: 146.10, 38: 151.98, 39: 158.80,
+                    40: 166.15, 41: 174.81, 42: 184.80, 43: 196.58, 44: 209.36, 45: 223.51,
+                    46: 238.65, 47: 255.22, 48: 272.44, 49: 291.54, 50: 311.89, 51: 332.73,
+                    52: 354.54, 53: 377.40, 54: 400.87, 55: 425.57, 56: 452.03, 57: 480.04,
+                    58: 510.19, 59: 545.11, 60: 586.80, 61: 636.41, 62: 696.53, 63: 770.91,
+                    64: 856.37, 65: 955.87, 66: 1068.45, 67: 1194.77, 68: 1336.55,
+                    69: 1495.74, 70: 1674.52
+                }
+            },
+            bronze: {
+                cap: 50000, renda: 3000,
+                precos: {
+                    16: 75.00, 17: 75.00, 18: 75.00, 19: 75.00, 20: 75.00, 21: 75.00,
+                    22: 75.00, 23: 75.00, 24: 75.00, 25: 75.00, 26: 75.00, 27: 75.00,
+                    28: 75.00, 29: 75.00, 30: 75.00, 31: 75.00, 32: 75.00, 33: 75.00,
+                    34: 75.00, 35: 81.33, 36: 83.78, 37: 86.52, 38: 89.72, 39: 93.38,
+                    40: 97.32, 41: 101.93, 42: 107.21, 43: 113.41, 44: 120.13, 45: 127.56,
+                    46: 135.50, 47: 144.19, 48: 153.21, 49: 163.30, 50: 174.05, 51: 185.09,
+                    52: 196.69, 53: 208.86, 54: 221.41, 55: 234.65, 56: 248.87, 57: 263.99,
+                    58: 280.30, 59: 299.32, 60: 322.13, 61: 349.37, 62: 382.45, 63: 423.57,
+                    64: 470.79, 65: 525.80, 66: 588.29, 67: 658.51, 68: 737.45,
+                    69: 826.22, 70: 926.07
+                }
+            }
+        };
+
+        const TABELA_EMP = {
+            bronze: { nome: 'BRONZE', capital: 50000, dit: 3000, ref: 49.90 },
+            prata:  { nome: 'PRATA',  capital: 100000, dit: 3000, ref: 59.90 },
+            ouro:   { nome: 'OURO',   capital: 150000, dit: 3000, ref: 69.90 }
+        };
+
+        /* Convenções Porto (fonte: eas_cct_nichos, status ATIVA). Preço só onde confirmado em proposta Porto;
+           nas demais o valor é digitado pelo corretor (cotação por CNPJ no site Porto). */
+        const CONVENCOES = [{"uf": "AL", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON AL", "cod": "3758"}, {"uf": "BA", "nicho": "CONDOMÍNIO", "sind": "SINDSEG BA", "cod": "3375"}, {"uf": "BA", "nicho": "CONDOMÍNIO", "sind": "SECOVI BA - MOVISEG", "cod": "3710"}, {"uf": "CE", "nicho": "CONDOMÍNIO", "sind": "SECOVI CE", "cod": "3567"}, {"uf": "DF", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON DF", "cod": "3738"}, {"uf": "ES", "nicho": "CONDOMÍNIO", "sind": "SIPCES - SINDICONVIVE Vila Velha", "cod": "3551"}, {"uf": "ES", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDICOPES ES", "cod": "3361"}, {"uf": "GO", "nicho": "CONDOMÍNIO", "sind": "SEEG GO", "cod": "3485"}, {"uf": "GO", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON GO", "cod": "3186"}, {"uf": "MG", "nicho": "CONDOMÍNIO", "sind": "SINDEDIF Juiz de Fora", "cod": "3936"}, {"uf": "MG", "nicho": "CONDOMÍNIO", "sind": "SINDEAC BH", "cod": "3248"}, {"uf": "MG", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINTRACOM Curvelo e Região", "cod": "3808"}, {"uf": "MG", "nicho": "CONSTRUÇÃO CIVIL", "sind": "Trab. Construção e Mobiliário Norte de Minas", "cod": "3570"}, {"uf": "MG", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SENGE MG", "cod": "3802"}, {"uf": "MG", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON MG", "cod": "322"}, {"uf": "MT", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON Mato Grosso", "cod": "3755"}, {"uf": "PR", "nicho": "CONDOMÍNIO", "sind": "SECOVI PR/SECOVIMED", "cod": "3175"}, {"uf": "PR", "nicho": "CONDOMÍNIO", "sind": "SECOVI Paraná", "cod": "3703"}, {"uf": "PR", "nicho": "CONDOMÍNIO", "sind": "SECOVI PR/Curitiba e Região", "cod": "3178"}, {"uf": "PR", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDIMONT PR", "cod": "3772"}, {"uf": "PR", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINTRACOM PR", "cod": "3918"}, {"uf": "PR", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SITRACOCIFOZ PR", "cod": "3805"}, {"uf": "PR", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINTRACON PR", "cod": "3716"}, {"uf": "RJ", "nicho": "CONDOMÍNIO", "sind": "SECOVI Petrópolis", "cod": "3246"}, {"uf": "RJ", "nicho": "CONDOMÍNIO", "sind": "SECOVIRIO (Rio de Janeiro)", "cod": "334"}, {"uf": "RJ", "nicho": "CONDOMÍNIO", "sind": "SECOVI Nova Friburgo", "cod": "3304"}, {"uf": "RJ", "nicho": "CONSTRUÇÃO CIVIL", "sind": "STICC Centro Norte Fluminense", "cod": "3450"}, {"uf": "RJ", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCONRIO RJ", "cod": "3961"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON RS (2)", "cod": "3518"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SICEPOT RS", "cod": "3965"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SENGE RS", "cod": "3778"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON Carazinho", "cod": "3517"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON Passo Fundo", "cod": "3165"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON RS (3)", "cod": "3596"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON RS", "cod": "320"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON RS (4)", "cod": "3930"}, {"uf": "SC", "nicho": "CONDOMÍNIO", "sind": "SECOVI Santa Catarina", "cod": "3739"}, {"uf": "SC", "nicho": "CONDOMÍNIO", "sind": "SECOVI Norte/SC", "cod": "3700"}, {"uf": "SC", "nicho": "CONDOMÍNIO", "sind": "SECOVI Florianópolis", "cod": "3424"}, {"uf": "SC", "nicho": "CONDOMÍNIO", "sind": "SECOVI SC - Sind. Empr.", "cod": "3416"}, {"uf": "SE", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON SE", "cod": "3821"}, {"uf": "SP", "nicho": "ACADEMIAS DE GINÁSTICA", "sind": "SINDICLUBE-SP", "cod": "3800"}, {"uf": "SP", "nicho": "ALIMENTAÇÃO", "sind": "SINDIFAST SP (Fast Food)", "cod": "3217"}, {"uf": "SP", "nicho": "ARQUITETURA E ENGENHARIA", "sind": "Sind. Nac. Empresas Arquitetura e Eng. Consultiva", "cod": "3225"}, {"uf": "SP", "nicho": "ARQUITETURA E ENGENHARIA", "sind": "SEESP (Engenheiros)", "cod": "3257"}, {"uf": "SP", "nicho": "BARES, HOTÉIS, RESTAURANTES E SIMILARES", "sind": "SHS Ribeirão Preto e Região", "cod": "381"}, {"uf": "SP", "nicho": "BARES, HOTÉIS, RESTAURANTES E SIMILARES", "sind": "SINTHORECAT", "cod": "3949"}, {"uf": "SP", "nicho": "BARES, HOTÉIS, RESTAURANTES E SIMILARES", "sind": "SINDRESBAR + SINDHOTÉIS-SP (capital)", "cod": ""}, {"uf": "SP", "nicho": "BARES, HOTÉIS, RESTAURANTES E SIMILARES", "sind": "SINDHOTELEIROS S. J. Rio Preto", "cod": "3100"}, {"uf": "SP", "nicho": "BENEFICENTES E RELIGIOSOS", "sind": "SINDBENEFICENTE", "cod": "3270"}, {"uf": "SP", "nicho": "COMERCIÁRIOS", "sind": "FECOMERCIO/SP", "cod": "3795"}, {"uf": "SP", "nicho": "COMERCIÁRIOS", "sind": "Comércio de Barretos, Olímpia e Região", "cod": "3543"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SECOVI Litoral", "cod": "3624"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SECERP (Ribeirão Preto)", "cod": "3173"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SECOVI - CAPITAL", "cod": "3623"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SECOVI SP - Condomínios", "cod": "38"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SETHBR Bauru - Resid. e Cond.", "cod": "3324"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SICON Litoral Paulista (São Sebastião, Ilhabela, Caraguá, Ubatuba)", "cod": "351"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SICON Litoral Paulista (São Vicente)", "cod": "3218"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SINTECON Bragança Paulista", "cod": "3411"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SEEC ABCD - Resid./Comerciais/Mistos", "cod": "3421"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SEEC ABCD - Flats/Shopping", "cod": "3462"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SETHBR Bauru - Flat/Shop", "cod": "3471"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "Sind. Trab. Ind. Construção e Mobiliário de Campinas", "cod": "3478"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SINDIFIOS SP", "cod": "3514"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SIENESP SP", "cod": "3509"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SECOVI Taubaté", "cod": "3815"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SECOVI SP / Lagus", "cod": "3662"}, {"uf": "SP", "nicho": "CONSERVAÇÃO E ASSISTÊNCIA TÉCNICA", "sind": "SECAESP", "cod": "3362"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SITICOM São José do Rio Preto / SINDUSCON SP", "cod": "3431"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON SP - Grandes Estruturas", "cod": "3523"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "CONSTRUMOB ABC", "cod": "3601"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "STICMA Araçatuba", "cod": "3371"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SEAAC Assessoria P.I.P. Empresarial", "cod": "3443"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINTRACON-SP + SINDUSCON-SP (capital/ABC)", "cod": "3-32"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SELEMAT São Paulo", "cod": "3748"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINTRACON SP", "cod": "332"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "Construção Civil de Salto", "cod": "3663"}, {"uf": "SP", "nicho": "CONTABILIDADE", "sind": "SESCON SP", "cod": "3177"}, {"uf": "SP", "nicho": "CONTABILIDADE", "sind": "SEAAC Bauru", "cod": "3737"}, {"uf": "SP", "nicho": "FARMACÊUTICOS", "sind": "SINFAR-SP", "cod": "3289"}, {"uf": "SP", "nicho": "GRÁFICA", "sind": "SEDIJORE", "cod": "3584"}, {"uf": "SP", "nicho": "IMOBILIÁRIA", "sind": "SECOVI ABC", "cod": "3245"}, {"uf": "SP", "nicho": "INDÚSTRIA DE CALÇADOS", "sind": "SINDIFRANCA (Franca)", "cod": "3131"}, {"uf": "SP", "nicho": "INDÚSTRIA DE MÓVEIS", "sind": "SIMM Associados (Mirassol e Região)", "cod": "3167"}, {"uf": "SP", "nicho": "INDÚSTRIA DE MÓVEIS", "sind": "SINDIMOB (Votuporanga)", "cod": "3301"}, {"uf": "SP", "nicho": "INDÚSTRIA DE MÓVEIS", "sind": "SIMM Filiados (Mirassol e Região)", "cod": "3168"}, {"uf": "SP", "nicho": "INDÚSTRIA TÊXTIL", "sind": "SIETEX SP - Filiados", "cod": "3108"}, {"uf": "SP", "nicho": "INDÚSTRIA TÊXTIL", "sind": "SIETEX SP - Associados", "cod": "3107"}, {"uf": "SP", "nicho": "INFORMÁTICA", "sind": "SINDPD", "cod": "3386"}, {"uf": "SP", "nicho": "INSTALAÇÕES ELÉTRICAS, GÁS, HIDRÁULICAS E SANITÁRIAS", "sind": "SINDINSTALAÇÃO SP - Filiados", "cod": "3142"}, {"uf": "SP", "nicho": "INSTALAÇÕES ELÉTRICAS, GÁS, HIDRÁULICAS E SANITÁRIAS", "sind": "SINDINSTALAÇÃO SP - Associados", "cod": "3143"}, {"uf": "SP", "nicho": "INSTRUTORES DE AUTO-ESCOLA, DESPACHANTES E TRANSPORTE ESCOLAR", "sind": "SINTRAED Bauru e Região", "cod": "3408"}, {"uf": "SP", "nicho": "INSTRUTORES DE AUTO-ESCOLA, DESPACHANTES E TRANSPORTE ESCOLAR", "sind": "SETEISP", "cod": "3502"}, {"uf": "SP", "nicho": "LOTERIAS", "sind": "SINCOESP", "cod": "3780"}, {"uf": "SP", "nicho": "MOTOBOYS", "sind": "SINDIMOTO São José do Rio Preto e Região", "cod": "3720"}, {"uf": "SP", "nicho": "MOTOBOYS", "sind": "SINDIMOTO/SP - Autônomos", "cod": "384"}, {"uf": "SP", "nicho": "MOTOBOYS", "sind": "Entregadores de Ribeirão Preto e Região", "cod": "3-158"}, {"uf": "SP", "nicho": "MOTOBOYS", "sind": "SINDIMOTO/SP - CLT", "cod": "382"}, {"uf": "SP", "nicho": "MOTOBOYS", "sind": "SIMPI + SINDIMOTO-SP (indústria artesanal)", "cod": "3-810"}, {"uf": "SP", "nicho": "MOTOBOYS", "sind": "SEDERSP + SINDIMOTO-SP (apps de entrega)", "cod": ""}, {"uf": "SP", "nicho": "PANIFICADORAS", "sind": "Trab. Ind. Alimentação de São José do Rio Preto", "cod": "3311"}, {"uf": "SP", "nicho": "PANIFICADORAS", "sind": "SINDIPÃO Ribeirão Preto e Região", "cod": "3181"}, {"uf": "SP", "nicho": "PET SHOPS", "sind": "SINDPET SHOP", "cod": "3265"}, {"uf": "SP", "nicho": "PET SHOPS", "sind": "SINDHOSVET", "cod": "3903"}, {"uf": "SP", "nicho": "PINTURA, GESSO E DECORAÇÕES", "sind": "SIPIGEDESP - Associados", "cod": "3116"}, {"uf": "SP", "nicho": "PINTURA, GESSO E DECORAÇÕES", "sind": "SIPIGEDESP - Filiados", "cod": "3117"}, {"uf": "SP", "nicho": "POSTOS DE GASOLINA", "sind": "SINCOPETRO SP", "cod": "3200"}, {"uf": "SP", "nicho": "PRESTAÇÃO DE SERVIÇOS", "sind": "SINDEPRESTEM SP", "cod": "333"}, {"uf": "SP", "nicho": "PROFESSORES", "sind": "SINPRO SP", "cod": "310"}, {"uf": "SP", "nicho": "RURAIS", "sind": "Sindicato Rural de Aguaí", "cod": "3-923"}, {"uf": "SP", "nicho": "RURAIS", "sind": "Sindicato Rural Piracicaba", "cod": "3733"}, {"uf": "SP", "nicho": "RURAIS", "sind": "Trab. Rurais de Itaí", "cod": "3-927"}, {"uf": "SP", "nicho": "SISTEMAS ELETRÔNICOS DE SEGURANÇA PRIVADA", "sind": "SINTRASESP", "cod": "3201"}, {"uf": "SP", "nicho": "TURISMO", "sind": "SINDISIAN", "cod": "3818"}, {"uf": "SP", "nicho": "TURISMO", "sind": "SETRANS ABC", "cod": "3819"}, {"uf": "SP", "nicho": "VESTUÁRIO", "sind": "SINDIVEST SP", "cod": "3159"}, {"uf": "SP", "nicho": "VESTUÁRIO", "sind": "SINDIROUPAS SP - Associados", "cod": "3160"}, {"uf": "SP", "nicho": "VESTUÁRIO", "sind": "SINDIROUPAS SP - Filiados", "cod": "3236"}, {"uf": "SP", "nicho": "VESTUÁRIO", "sind": "SINDIVEST SP - Filiados", "cod": "3235"}, {"uf": "TO", "nicho": "CONDOMÍNIO", "sind": "SINDICON TO", "cod": "3492"}, {"uf": "TO", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON TO", "cod": "3470"}, {"uf": "—", "nicho": "CONDOMÍNIO", "sind": "SINDETURH", "cod": "3480"}, {"uf": "—", "nicho": "CONDOMÍNIO", "sind": "SINTTHOCON - MOVISEG", "cod": "3711"}, {"uf": "—", "nicho": "CONDOMÍNIO", "sind": "SECOVI - SINDICONFIS - MOVISEG", "cod": "3713"}, {"uf": "—", "nicho": "CONDOMÍNIO", "sind": "SINDEMCON", "cod": "3972"}, {"uf": "—", "nicho": "CONDOMÍNIO", "sind": "SECOVI FETTHABASA 2", "cod": "3659"}, {"uf": "—", "nicho": "CONDOMÍNIO", "sind": "SINTRATUHL", "cod": "3921"}, {"uf": "—", "nicho": "CONSTRUÇÃO CIVIL", "sind": "Trab. Construção, Estradas, Pavimentação e Montagem", "cod": "3653"}, {"uf": "—", "nicho": "CONSTRUÇÃO CIVIL", "sind": "FETICOM Construção Civil", "cod": "3723"}];
+        const PRECOS_CCT = {"3431": {"faixas": [[3, 5, 20.42], [6, 9999, 16.49]], "min": 3, "det": "Morte Acidental R$ 44.891, Invalidez IPA R$ 71.826, Rescisão e Funeral conforme CCT 2025/2026 (confirmar na proposta Porto vigente)."}};
+        function convDados(cod, nicho) {
+            const p = PRECOS_CCT[cod];
+            return p ? { minimo: p.min, faixas: p.faixas.map(f => ({min:f[0], max:f[1], preco:f[2]})), detalhe: p.det, confirmado: true }
+                     : { minimo: 3, faixas: [], detalhe: 'Coberturas e capitais conforme a Convenção Coletiva vigente do sindicato — confirmar na proposta/tabela Porto antes de enviar ao cliente.', confirmado: false };
+        }
+
+        /* STATE GLOBAL */
+        let currentMode = 'simulador';
+        let currentSimTab = 'serit';
+        let planoSelecionadoSERIT = 'prata';
+        let planoSelecionadoEMP = 'prata';
+        let leadsData = [];
+        let supaClient = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarLeads();
+            initSupabase();
+            montarSelectCCT();
+            // Preenche com idade 35 por padrão para já mostrar na tela
+            document.getElementById('serit-idade').value = 35;
+            calcularSERITAuto();
+            calcularEmpresarialAuto();
+            calcularCCTAuto();
+        });
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').innerText = msg;
+            toast.style.display = 'flex';
+            setTimeout(() => { toast.style.display = 'none'; }, 3500);
+        }
+
+        function formatarTelefone(num) {
+            let clean = String(num || '').replace(/\D/g, '');
+            if (clean.length > 11) clean = clean.substring(0, 11);
+            return clean;
+        }
+
+        /* NAVEGAÇÃO DE MODOS: SIMULADOR vs CRM */
+        function setMainMode(mode) {
+            currentMode = mode;
+            document.getElementById('btn-mode-sim').classList.toggle('active', mode === 'simulador');
+            document.getElementById('btn-mode-crm').classList.toggle('active', mode === 'crm');
+            document.getElementById('sim-product-nav').style.display = (mode === 'simulador') ? 'flex' : 'none';
+
+            if (mode === 'simulador') {
+                document.getElementById('panel-crm').classList.remove('active');
+                switchSimulatorTab(currentSimTab);
+            } else {
+                document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+                document.getElementById('panel-crm').classList.add('active');
+                renderizarKanban();
+                atualizarStatsCRM();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function switchSimulatorTab(tab) {
+            currentSimTab = tab;
+            document.querySelectorAll('#sim-product-nav .sim-product-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+
+            if (tab === 'serit') {
+                document.getElementById('tab-btn-serit').classList.add('active');
+                document.getElementById('panel-sim-serit').classList.add('active');
+                calcularSERITAuto();
+            } else if (tab === 'emp') {
+                document.getElementById('tab-btn-emp').classList.add('active');
+                document.getElementById('panel-sim-emp').classList.add('active');
+                calcularEmpresarialAuto();
+            } else if (tab === 'cct') {
+                document.getElementById('tab-btn-cct').classList.add('active');
+                document.getElementById('panel-sim-cct').classList.add('active');
+                calcularCCTAuto();
+            }
+        }
+
+        /* ========================================================
+           1. CÁLCULOS DO SERIT INDIVIDUAL
+           ======================================================== */
+        function selecionarPlanoSERIT(plano) {
+            planoSelecionadoSERIT = plano;
+            document.querySelectorAll('#panel-sim-serit .plan-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById(`card-serit-${plano}`).classList.add('selected');
+            calcularSERITAuto();
+        }
+
+        function calcularSERITAuto() {
+            const idade = parseInt(document.getElementById('serit-idade').value, 10);
+            const nome = document.getElementById('serit-nome').value.trim() || 'Cliente';
+
+            if (isNaN(idade) || idade < 16 || idade > 70) {
+                document.getElementById('price-serit-bronze').innerHTML = 'R$ --<span>/mês</span>';
+                document.getElementById('price-serit-prata').innerHTML = 'R$ --<span>/mês</span>';
+                document.getElementById('price-serit-ouro').innerHTML = 'R$ --<span>/mês</span>';
+                document.getElementById('proposal-serit-box').style.display = 'none';
+                return;
+            }
+
+            // Atualiza os preços dos 3 planos lado a lado
+            const pBronze = TABELA_SERIT.bronze.precos[idade] || 0;
+            const pPrata = TABELA_SERIT.prata.precos[idade] || 0;
+            const pOuro = TABELA_SERIT.ouro.precos[idade] || 0;
+
+            document.getElementById('price-serit-bronze').innerHTML = `R$ ${pBronze.toLocaleString('pt-BR', {minimumFractionDigits: 2})}<span>/mês</span>`;
+            document.getElementById('price-serit-prata').innerHTML = `R$ ${pPrata.toLocaleString('pt-BR', {minimumFractionDigits: 2})}<span>/mês</span>`;
+            document.getElementById('price-serit-ouro').innerHTML = `R$ ${pOuro.toLocaleString('pt-BR', {minimumFractionDigits: 2})}<span>/mês</span>`;
+
+            // Atualiza proposta do plano selecionado
+            const dados = TABELA_SERIT[planoSelecionadoSERIT];
+            const precoSel = dados.precos[idade];
+            const diaria = dados.renda / 30;
+            const atestado60 = diaria * 53;
+
+            document.getElementById('serit-hero-val').innerText = `R$ ${precoSel.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês`;
+            document.getElementById('serit-hero-client').innerText = `Estudo Personalizado para ${nome} (${idade} anos) &bull; Plano ${planoSelecionadoSERIT.toUpperCase()}`;
+            document.getElementById('serit-grid-renda').innerText = `R$ ${dados.renda.toLocaleString('pt-BR')}/mês`;
+            document.getElementById('serit-grid-diaria').innerText = `R$ ${diaria.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/dia`;
+            document.getElementById('serit-grid-morte').innerText = `R$ ${dados.cap.toLocaleString('pt-BR')}`;
+            document.getElementById('serit-grid-dobra').innerText = `R$ ${(dados.cap * 2).toLocaleString('pt-BR')}`;
+
+            document.getElementById('serit-calc-explica').innerHTML = `
+                <strong><i class="fas fa-hand-holding-medical"></i> Como Funciona o Pagamento na Prática:</strong><br>
+                Diária Contratada: <strong>R$ ${diaria.toLocaleString('pt-BR', {minimumFractionDigits: 2})} por dia de afastamento</strong>.<br>
+                Em um atestado de 60 dias (deduzindo a franquia de 7 dias) = <strong>53 dias pagos</strong> = <strong style="color: var(--unimed-green); font-size: 16px;">R$ ${atestado60.toLocaleString('pt-BR', {minimumFractionDigits: 2})} líquido direto em sua conta</strong>.<br>
+                <em>Carência Zero para Acidentes | 30 dias para doenças comuns | 180 dias para LER/DORT/Hérnias.</em>
+            `;
+
+            document.getElementById('proposal-serit-box').style.display = 'block';
+        }
+
+        function getTextoPropostaSERIT() {
+            const nome = document.getElementById('serit-nome').value.trim() || 'Cliente';
+            const idade = parseInt(document.getElementById('serit-idade').value, 10) || 35;
+            const dados = TABELA_SERIT[planoSelecionadoSERIT];
+            const preco = dados.precos[idade] || 0;
+            const diaria = (dados.renda / 30).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            const liq = ((dados.renda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+
+            return `Olá, *${nome.toUpperCase()}*! Segue o seu estudo técnico da *EAS Corretora de Seguros* 📄
+
+` +
+                `🛡️ *SERIT INDIVIDUAL & VIDA - SEGUROS UNIMED*
+` +
+                `Plano: *${planoSelecionadoSERIT.toUpperCase()}* (${idade} anos)
+` +
+                `💰 *Investimento Mensal:* R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+
+` +
+                `📋 *Coberturas Inclusas:*
+` +
+                `• Renda Mensal SERIT: *R$ ${dados.renda.toLocaleString('pt-BR')} por mês*
+` +
+                `• Morte Qualquer Causa: R$ ${dados.cap.toLocaleString('pt-BR')}
+` +
+                `• Morte Acidental (Dobra): R$ ${(dados.cap * 2).toLocaleString('pt-BR')}
+` +
+                `• Invalidez Permanente: R$ ${dados.cap.toLocaleString('pt-BR')}
+
+` +
+                `📊 *Cálculo Transparente de Afastamento:*
+` +
+                `Renda de R$ ${dados.renda.toLocaleString('pt-BR')} ÷ 30 = R$ ${diaria}/dia.
+` +
+                `Exemplo de 60 dias de afastamento (-7 dias franquia) = 53 dias pagos = *R$ ${liq} direto na sua conta.*
+
+` +
+                `⚠️ *Carências:* Acidentes (Imediato / Zero Carência) | Doenças Comuns (30 dias) | LER/DORT (180 dias).
+
+` +
+                `Podemos emitir a sua proposta oficial hoje?`;
+        }
+
+        function enviarWhatsAppSERIT() {
+            const rawFone = document.getElementById('serit-whatsapp').value.trim();
+            const fone = formatarTelefone(rawFone);
+            const msg = getTextoPropostaSERIT();
+            if (fone.length >= 10) {
+                window.open(`https://wa.me/55${fone}?text=${encodeURIComponent(msg)}`, '_blank');
+            } else {
+                window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+            }
+            showToast("WhatsApp aberto com a proposta!");
+        }
+
+        function copiarTextoPropostaSERIT() {
+            const msg = getTextoPropostaSERIT();
+            navigator.clipboard.writeText(msg).then(() => {
+                showToast("Texto da proposta copiado para a área de transferência!");
+            });
+        }
+
+        /* ========================================================
+           2. CÁLCULOS DO EMPRESARIAL PME
+           ======================================================== */
+        function selecionarPlanoEMP(plano) {
+            planoSelecionadoEMP = plano;
+            document.querySelectorAll('#panel-sim-emp .plan-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById(`card-emp-${plano}`).classList.add('selected');
+            calcularEmpresarialAuto();
+        }
+
+        function calcularEmpresarialAuto() {
+            const vidas = parseInt(document.getElementById('emp-vidas').value, 10) || 5;
+            const comDIT = document.getElementById('emp-dit').value === 'sim';
+            const nome = document.getElementById('emp-nome').value.trim() || 'Empresa';
+
+            // Atualiza preços unitários dos 3 planos
+            ['bronze', 'prata', 'ouro'].forEach(p => {
+                const info = TABELA_EMP[p];
+                const unit = comDIT ? info.ref : (info.ref - 10.00);
+                document.getElementById(`price-emp-${p}`).innerHTML = `R$ ${unit.toLocaleString('pt-BR', {minimumFractionDigits: 2})}<span>/vida</span>`;
+            });
+
+            const sel = TABELA_EMP[planoSelecionadoEMP];
+            const precoUnit = comDIT ? sel.ref : (sel.ref - 10.00);
+            const total = precoUnit * vidas;
+
+            document.getElementById('emp-hero-total').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês`;
+            document.getElementById('emp-hero-sub').innerText = `Cotação para ${nome} &bull; ${vidas} colaboradores (Plano ${sel.nome})`;
+            document.getElementById('emp-grid-por-vida').innerText = `R$ ${precoUnit.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/vida`;
+            document.getElementById('emp-grid-vidas').innerText = `${vidas} vidas cobertas`;
+            document.getElementById('emp-grid-capital').innerText = `R$ ${sel.capital.toLocaleString('pt-BR')}`;
+            document.getElementById('emp-grid-dit-status').innerText = comDIT ? 'Incluso (R$ 3.000/mês)' : 'Sem DIT (-R$ 10)';
+
+            let explica = `<strong>Proteção Completa para os Colaboradores (Plano ${sel.nome}):</strong><br>` +
+                `• Morte Qualquer Causa: R$ ${sel.capital.toLocaleString('pt-BR')} | Morte Acidental: R$ ${sel.capital.toLocaleString('pt-BR')}<br>` +
+                `• Invalidez Permanente por Acidente (IPA) e Invalidez por Doença (IFPD): R$ ${sel.capital.toLocaleString('pt-BR')}.<br>`;
+            if (comDIT) {
+                explica += `• <strong>DIT por Acidente Incluso:</strong> R$ 100,00 por dia (franquia de 15 dias, pago do 16º ao 60º dia ou até 12 meses).`;
+            } else {
+                explica += `• <strong>Plano Sem DIT:</strong> Desconto de R$ 10,00 por vida aplicado. Mínimo 3 vidas.`;
+            }
+            document.getElementById('emp-calc-explica').innerHTML = explica;
+            document.getElementById('proposal-emp-box').style.display = 'block';
+        }
+
+        function getTextoPropostaEMP() {
+            const nome = document.getElementById('emp-nome').value.trim() || 'Empresa';
+            const vidas = parseInt(document.getElementById('emp-vidas').value, 10) || 5;
+            const comDIT = document.getElementById('emp-dit').value === 'sim';
+            const sel = TABELA_EMP[planoSelecionadoEMP];
+            const unit = comDIT ? sel.ref : (sel.ref - 10.00);
+            const total = unit * vidas;
+
+            return `Olá! Segue a cotação corporativa da *EAS Corretora de Seguros* para a *${nome.toUpperCase()}* 🏢
+
+` +
+                `🛡️ *VIDA EM GRUPO EMPRESARIAL PME${comDIT ? ' + DIT ACIDENTE' : ''}*
+` +
+                `Plano: *${sel.nome}*
+` +
+                `👥 *Vidas Cotadas:* ${vidas} colaboradores
+` +
+                `💰 *Investimento por Vida:* R$ ${unit.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
+` +
+                `💵 *INVESTIMENTO TOTAL EMPRESA:* R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
+
+` +
+                `📋 *Garantias por Colaborador:*
+` +
+                `• Morte Qualquer Causa: R$ ${sel.capital.toLocaleString('pt-BR')}
+` +
+                `• Morte Acidental: R$ ${sel.capital.toLocaleString('pt-BR')}
+` +
+                `• Invalidez por Acidente ou Doença: R$ ${sel.capital.toLocaleString('pt-BR')}
+` +
+                (comDIT ? `• DIT por Acidente: Até R$ 3.000/mês (diária a partir do 16º dia)
+` : '') +
+                `
+Podemos formalizar a proposta para a sua equipe?`;
+        }
+
+        function enviarWhatsAppEMP() {
+            const rawFone = document.getElementById('emp-whatsapp').value.trim();
+            const fone = formatarTelefone(rawFone);
+            const msg = getTextoPropostaEMP();
+            if (fone.length >= 10) {
+                window.open(`https://wa.me/55${fone}?text=${encodeURIComponent(msg)}`, '_blank');
+            } else {
+                window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+            }
+            showToast("WhatsApp aberto com a proposta PME!");
+        }
+
+        function copiarTextoPropostaEMP() {
+            const msg = getTextoPropostaEMP();
+            navigator.clipboard.writeText(msg).then(() => {
+                showToast("Texto da proposta empresarial copiado!");
+            });
+        }
+
+        /* ========================================================
+           3. CÁLCULOS DE CCT CONVENÇÕES COLETIVAS
+           ======================================================== */
+        function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+        const brl = n => 'R$ ' + n.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+        function montarSelectCCT() {
+            const uf = document.getElementById('cct-uf-select').value;
+            const sel = document.getElementById('cct-ramo-select');
+            const atual = sel.value;
+            const grupos = {};
+            CONVENCOES.forEach((c, i) => {
+                if (uf && c.uf !== uf) return;
+                (grupos[c.nicho] = grupos[c.nicho] || []).push([i, c]);
+            });
+            sel.innerHTML = '';
+            Object.keys(grupos).sort((a,b) => a.localeCompare(b,'pt-BR')).forEach(n => {
+                const og = document.createElement('optgroup'); og.label = n;
+                grupos[n].forEach(([i, c]) => {
+                    const o = document.createElement('option'); o.value = i;
+                    o.textContent = `${c.sind} • ${c.cod ? 'Porto ' + c.cod : 'código a confirmar'}${uf ? '' : ' • ' + c.uf}`;
+                    og.appendChild(o);
+                });
+                sel.appendChild(og);
+            });
+            if (atual && [...sel.options].some(o => o.value === atual)) sel.value = atual;
+            else {
+                const pref = [...sel.options].find(o => CONVENCOES[o.value].cod === '3431');
+                if (pref) sel.value = pref.value;
+            }
+            calcularCCTAuto();
+        }
+
+        function ctxCCT() {
+            const sel = document.getElementById('cct-ramo-select');
+            const conv = CONVENCOES[parseInt(sel.value, 10)];
+            if (!conv) return null;
+            const d = convDados(conv.cod, conv.nicho);
+            const vidas = parseInt(document.getElementById('cct-vidas').value, 10) || 0;
+            const nome = document.getElementById('cct-nome').value.trim() || 'Empresa';
+            const manual = parseFloat(document.getElementById('cct-preco-manual').value);
+            let unit = 0, faixaDesc = '', origem = '';
+            if (!isNaN(manual) && manual > 0) { unit = manual; faixaDesc = 'valor informado pelo corretor'; origem = '(informado)'; }
+            else {
+                const f = d.faixas.find(f => vidas >= f.min && vidas <= f.max);
+                if (f) { unit = f.preco; faixaDesc = f.max >= 9999 ? `${f.min}+ vidas` : `${f.min} a ${f.max} vidas`; origem = '(tabela Porto)'; }
+            }
+            return { conv, d, vidas, nome, unit, faixaDesc, origem, total: unit * vidas, abaixoMin: vidas < d.minimo };
+        }
+
+        function calcularCCTAuto() {
+            const c = ctxCCT(); if (!c) return;
+            document.getElementById('cct-preco-origem').innerText = c.origem;
+            const sub = `${c.nome} • ${c.vidas} vidas • ${c.conv.nicho} — ${c.conv.sind}`;
+            if (!c.unit) {
+                document.getElementById('cct-hero-total').innerText = 'Cotar no site Porto';
+                document.getElementById('cct-grid-por-vida').innerText = 'a cotar';
+                document.getElementById('cct-grid-faixa').innerText = 'informe o valor/vida acima';
+            } else {
+                document.getElementById('cct-hero-total').innerText = brl(c.total) + '/mês';
+                document.getElementById('cct-grid-por-vida').innerText = brl(c.unit) + '/vida';
+                document.getElementById('cct-grid-faixa').innerText = `${c.vidas} vidas (${c.faixaDesc})`;
+            }
+            document.getElementById('cct-hero-sub').innerText = sub;
+            document.getElementById('cct-calc-explica').innerHTML = `
+                <strong><i class="fas fa-balance-scale"></i> ${esc(c.conv.nicho)} — ${esc(c.conv.sind)} (${c.conv.cod ? 'Porto ' + esc(c.conv.cod) : 'código a confirmar'})</strong><br>
+                ${esc(c.d.detalhe)}<br>
+                ${c.abaixoMin ? `<strong>Atenção:</strong> mínimo de ${c.d.minimo} vidas para esta convenção.<br>` : ''}
+                ${c.unit ? '' : 'Informe o valor por vida obtido no site da Porto (cotação por CNPJ) para calcular o total.<br>'}
+                Confirmar vigência da convenção e do certificado/homologação junto à Porto e ao sindicato.`;
+        }
+
+        function getTextoPropostaCCT() {
+            const c = ctxCCT();
+            const valores = c.unit
+                ? `💰 *Valor por vida:* ${brl(c.unit)}/mês\n💵 *INVESTIMENTO TOTAL:* ${brl(c.total)}/mês\n\n`
+                : `💰 *Valor:* será enviado após cotação pelo CNPJ\n\n`;
+            return `Olá! Aqui é da *EAS Corretora de Seguros* com o estudo de Seguro de Vida da Convenção Coletiva para a *${c.nome.toUpperCase()}* 📜\n\n` +
+                `🏢 *SEGURO DE VIDA CCT • PORTO*\n` +
+                `Categoria: *${c.conv.nicho}*\n` +
+                `Sindicato: *${c.conv.sind}*${c.conv.cod ? ' (Porto ' + c.conv.cod + ')' : ''}\n` +
+                `👥 *Quadro da empresa:* ${c.vidas} colaboradores\n` +
+                valores +
+                `✅ Seguro de vida em grupo conforme a Convenção Coletiva da categoria\n` +
+                `✅ Ajuda a empresa a cumprir a obrigação e evitar indenização direta ao empregado/família\n\n` +
+                `Podemos emitir a apólice para regularizar a sua empresa?`;
+        }
+
+        function enviarWhatsAppCCT() {
+            const rawFone = document.getElementById('cct-whatsapp').value.trim();
+            const fone = formatarTelefone(rawFone);
+            const msg = getTextoPropostaCCT();
+            if (fone.length >= 10) {
+                window.open(`https://wa.me/55${fone}?text=${encodeURIComponent(msg)}`, '_blank');
+            } else {
+                window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+            }
+            showToast("WhatsApp aberto com o estudo CCT!");
+        }
+
+        function copiarTextoPropostaCCT() {
+            const msg = getTextoPropostaCCT();
+            navigator.clipboard.writeText(msg).then(() => {
+                showToast("Texto da proposta CCT copiado!");
+            });
+        }
+
+        /* ========================================================
+           4. SALVAR SIMULAÇÃO DIRETO NO CRM
+           ======================================================== */
+        function salvarSimulacaoNoCRM(tipo) {
+            let nome = '', fone = '', plano = '', valor = 0, vidas = '1 vida', obs = '';
+
+            if (tipo === 'individual') {
+                nome = document.getElementById('serit-nome').value.trim() || 'Cliente SERIT';
+                fone = formatarTelefone(document.getElementById('serit-whatsapp').value);
+                const idade = parseInt(document.getElementById('serit-idade').value, 10) || 35;
+                const dados = TABELA_SERIT[planoSelecionadoSERIT];
+                valor = dados.precos[idade] || 0;
+                plano = `SERIT ${planoSelecionadoSERIT.toUpperCase()}`;
+                obs = `Idade: ${idade} anos | Renda: R$ ${dados.renda.toLocaleString('pt-BR')} | Diária: R$ ${(dados.renda/30).toFixed(2)}`;
+            } else if (tipo === 'empresarial') {
+                nome = document.getElementById('emp-nome').value.trim() || 'Empresa PME';
+                fone = formatarTelefone(document.getElementById('emp-whatsapp').value);
+                const v = parseInt(document.getElementById('emp-vidas').value, 10) || 5;
+                const comDIT = document.getElementById('emp-dit').value === 'sim';
+                const sel = TABELA_EMP[planoSelecionadoEMP];
+                const unit = comDIT ? sel.ref : (sel.ref - 10.00);
+                valor = unit * v;
+                vidas = `${v} vidas`;
+                plano = `Vida Grupo ${sel.nome} ${comDIT ? '(com DIT)' : '(sem DIT)'}`;
+                obs = `Capital: R$ ${sel.capital.toLocaleString('pt-BR')} | Unitário: R$ ${unit.toFixed(2)}`;
+            } else if (tipo === 'cct') {
+                const c = ctxCCT();
+                nome = c.nome === 'Empresa' ? 'Empresa CCT' : c.nome;
+                fone = formatarTelefone(document.getElementById('cct-whatsapp').value);
+                valor = c.total || 0;
+                vidas = `${c.vidas} colaboradores`;
+                plano = `CCT ${c.conv.nicho}${c.conv.cod ? ' • Porto ' + c.conv.cod : ''}`;
+                obs = `Convenção: ${c.conv.sind} | ${c.unit ? brl(c.unit) + '/vida' : 'valor a cotar'} | idx:${document.getElementById('cct-ramo-select').value}`;
+            }
+
+            const novoLead = {
+                id: 'lead_' + Date.now(),
+                nome: nome,
+                whatsapp: fone || '',
+                tipo: tipo,
+                plano: plano,
+                vidas: vidas,
+                valor: valor,
+                etapa: 'proposta',
+                obs: obs,
+                criadoEm: new Date().toLocaleDateString('pt-BR')
+            };
+
+            leadsData.push(novoLead);
+            salvarLeads();
+            showToast(`Lead "${nome}" adicionado com sucesso ao CRM em "Estudo Enviado"!`);
+            setMainMode('crm');
+        }
+
+        /* ========================================================
+           5. CRM ENGINE & FUNÇÃO "SIMULAR PARA ESTE LEAD"
+           ======================================================== */
+        function carregarLeads() {
+            const raw = localStorage.getItem('eas_crm_leads_v4');
+            if (raw) {
+                try { leadsData = JSON.parse(raw); } catch(e) { leadsData = []; }
+            } else {
+                leadsData = [];
+                salvarLeads();
+            }
+        }
+
+        function salvarLeads() {
+            localStorage.setItem('eas_crm_leads_v4', JSON.stringify(leadsData));
+        }
+
+        function renderizarKanban() {
+            const termo = (document.getElementById('crm-search-input')?.value || '').toLowerCase();
+            const colunas = {
+                novo: document.getElementById('col-novo'),
+                contato: document.getElementById('col-contato'),
+                proposta: document.getElementById('col-proposta'),
+                fechamento: document.getElementById('col-fechamento'),
+                ativo: document.getElementById('col-ativo')
+            };
+
+            Object.values(colunas).forEach(c => { if(c) c.innerHTML = ''; });
+            const counts = { novo: 0, contato: 0, proposta: 0, fechamento: 0, ativo: 0 };
+
+            leadsData.forEach(lead => {
+                if (termo) {
+                    const matchNome = (lead.nome || '').toLowerCase().includes(termo);
+                    const matchObs = (lead.obs || '').toLowerCase().includes(termo);
+                    const matchFone = (lead.whatsapp || '').includes(termo);
+                    if (!matchNome && !matchObs && !matchFone) return;
+                }
+
+                if (!counts.hasOwnProperty(lead.etapa)) lead.etapa = 'novo';
+                counts[lead.etapa]++;
+
+                const card = document.createElement('div');
+                card.className = 'lead-card';
+                card.draggable = true;
+                card.id = lead.id;
+                card.ondragstart = (e) => { e.dataTransfer.setData('text/plain', lead.id); };
+
+                let tagBg = '#e0e7ff', tagColor = '#4338ca', tagText = 'Individual';
+                if (lead.tipo === 'empresarial') { tagBg = '#dcfce7'; tagColor = '#15803d'; tagText = 'Empresarial'; }
+                else if (lead.tipo === 'cct') { tagBg = '#fef3c7'; tagColor = '#b45309'; tagText = 'CCT Sindical'; }
+
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="background:${tagBg}; color:${tagColor}; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; text-transform:uppercase;">${tagText}</span>
+                        <span style="font-size:11px; color:var(--text-muted);">${lead.criadoEm || ''}</span>
+                    </div>
+                    <div class="lead-name">${esc(lead.nome)}</div>
+                    <div class="lead-phone"><i class="fab fa-whatsapp" style="color:#25d366;"></i> ${esc(lead.whatsapp)}</div>
+                    <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">
+                        <strong>Plano:</strong> ${esc(lead.plano || '-')} (${esc(lead.vidas || '1 vida')})
+                    </div>
+                    ${lead.obs ? `<div style="font-size:11px; color:#475569; background:#f8fafc; padding:4px 6px; border-radius:4px; margin-bottom:6px;">${esc((lead.obs||'').replace(/\s*\|?\s*idx:\d+/,''))}</div>` : ''}
+                    <div class="lead-footer">
+                        <div style="font-family:'Montserrat',sans-serif; font-size:14px; font-weight:800; color:var(--eas-navy);">R$ ${(lead.valor || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                        <div class="lead-actions-btn">
+                            <button class="btn-mini sim" onclick="simularParaEsteLead('${lead.id}')" title="Simular para este Cliente">
+                                <i class="fas fa-calculator"></i>
+                            </button>
+                            <a href="https://wa.me/55${lead.whatsapp}" target="_blank" class="btn-mini wa" title="Abrir WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <button class="btn-mini" onclick="excluirLead('${lead.id}')" title="Excluir" style="color:#ef4444;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                if (colunas[lead.etapa]) colunas[lead.etapa].appendChild(card);
+            });
+
+            Object.keys(counts).forEach(k => {
+                const el = document.getElementById(`badge-${k}`);
+                if (el) el.innerText = counts[k];
+            });
+        }
+
+        /* FUNÇÃO DIRETA: SIMULAR PARA ESTE LEAD DO CRM */
+        function simularParaEsteLead(leadId) {
+            const lead = leadsData.find(l => l.id === leadId);
+            if (!lead) return;
+
+            setMainMode('simulador');
+
+            if (lead.tipo === 'individual') {
+                switchSimulatorTab('serit');
+                document.getElementById('serit-nome').value = lead.nome;
+                document.getElementById('serit-whatsapp').value = lead.whatsapp;
+                // Extrai idade das observações se houver
+                const mIdade = (lead.obs || '').match(/(\d{2})\s*anos/i);
+                if (mIdade) document.getElementById('serit-idade').value = parseInt(mIdade[1], 10);
+                calcularSERITAuto();
+            } else if (lead.tipo === 'empresarial') {
+                switchSimulatorTab('emp');
+                document.getElementById('emp-nome').value = lead.nome;
+                document.getElementById('emp-whatsapp').value = lead.whatsapp;
+                const mVidas = (lead.vidas || '').match(/(\d+)/);
+                if (mVidas) document.getElementById('emp-vidas').value = parseInt(mVidas[1], 10);
+                calcularEmpresarialAuto();
+            } else if (lead.tipo === 'cct') {
+                switchSimulatorTab('cct');
+                document.getElementById('cct-nome').value = lead.nome;
+                document.getElementById('cct-whatsapp').value = lead.whatsapp;
+                const mVidas = (lead.vidas || '').match(/(\d+)/);
+                if (mVidas) document.getElementById('cct-vidas').value = parseInt(mVidas[1], 10);
+                const mIdx = (lead.obs || '').match(/idx:(\d+)/);
+                if (mIdx && CONVENCOES[+mIdx[1]]) { document.getElementById('cct-uf-select').value = CONVENCOES[+mIdx[1]].uf; montarSelectCCT(); document.getElementById('cct-ramo-select').value = mIdx[1]; }
+                calcularCCTAuto();
+            }
+
+            showToast(`Simulador carregado com os dados de ${lead.nome}!`);
+        }
+
+        function atualizarStatsCRM() {
+            const total = leadsData.length;
+            const ativos = leadsData.filter(l => l.etapa === 'ativo').length;
+            const valorTotal = leadsData.reduce((acc, cur) => acc + (parseFloat(cur.valor) || 0), 0);
+            const taxa = total > 0 ? Math.round((ativos / total) * 100) : 0;
+
+            document.getElementById('stat-total-leads').innerText = total;
+            document.getElementById('stat-ativos').innerText = ativos;
+            document.getElementById('stat-pipeline-valor').innerText = `R$ ${valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('stat-taxa-conv').innerText = `${taxa}%`;
+        }
+
+        function allowDrop(event) { event.preventDefault(); }
+        function dropCard(event, novaEtapa) {
+            event.preventDefault();
+            const id = event.dataTransfer.getData('text/plain');
+            const lead = leadsData.find(l => l.id === id);
+            if (lead && lead.etapa !== novaEtapa) {
+                lead.etapa = novaEtapa;
+                salvarLeads();
+                renderizarKanban();
+                atualizarStatsCRM();
+                showToast(`Lead "${lead.nome}" movido para "${novaEtapa.toUpperCase()}".`);
+            }
+        }
+
+        function excluirLead(id) {
+            if (confirm("Deseja remover este lead do CRM?")) {
+                leadsData = leadsData.filter(l => l.id !== id);
+                salvarLeads();
+                renderizarKanban();
+                atualizarStatsCRM();
+                showToast("Lead removido com sucesso.");
+            }
+        }
+
+        /* MODAIS */
+        function openNewLeadModal() { document.getElementById('modal-lead').classList.add('active'); }
+        function fecharModalLead() { document.getElementById('modal-lead').classList.remove('active'); }
+
+        function salvarModalLeadManual() {
+            const nome = document.getElementById('lead-nome-in').value.trim();
+            const fone = formatarTelefone(document.getElementById('lead-phone-in').value);
+            const tipo = document.getElementById('lead-type-in').value;
+            const etapa = document.getElementById('lead-etapa-in').value;
+            const val = parseFloat(document.getElementById('lead-val-in').value) || 0;
+            const obs = document.getElementById('lead-obs-in').value.trim();
+
+            if (!nome || fone.length < 10) {
+                alert("Preencha Nome e WhatsApp com DDD.");
+                return;
+            }
+
+            leadsData.push({
+                id: 'lead_' + Date.now(),
+                nome: nome,
+                whatsapp: fone,
+                tipo: tipo,
+                plano: tipo.toUpperCase(),
+                vidas: '1 vida',
+                valor: val,
+                etapa: etapa,
+                obs: obs,
+                criadoEm: new Date().toLocaleDateString('pt-BR')
+            });
+
+            salvarLeads();
+            renderizarKanban();
+            atualizarStatsCRM();
+            fecharModalLead();
+            showToast("Novo lead adicionado!");
+        }
+
+        /* SUPABASE INTEGRATION */
+        function initSupabase() {
+            const cfg = JSON.parse(localStorage.getItem('eas_supabase_cfg') || '{}');
+            const st = document.getElementById('txt-supabase-status');
+            if (cfg.url && cfg.key && window.supabase) {
+                try {
+                    supaClient = window.supabase.createClient(cfg.url, cfg.key);
+                    if (st) st.innerHTML = '<span style="color:#10b981; font-weight:700;"><i class="fas fa-check-circle"></i> Supabase Conectado</span>';
+                } catch(e) { if (st) st.innerText = 'Supabase'; }
+            }
+        }
+
+        function abrirModalSupabase() {
+            const cfg = JSON.parse(localStorage.getItem('eas_supabase_cfg') || '{}');
+            document.getElementById('supa-url').value = cfg.url || '';
+            document.getElementById('supa-key').value = cfg.key || '';
+            document.getElementById('supa-tabela').value = cfg.tabela || 'gestao_de_leads';
+            document.getElementById('modal-supabase').classList.add('active');
+        }
+        function fecharModalSupabase() { document.getElementById('modal-supabase').classList.remove('active'); }
+
+        function salvarConfigSupabase() {
+            const url = document.getElementById('supa-url').value.trim();
+            const key = document.getElementById('supa-key').value.trim();
+            const tabela = document.getElementById('supa-tabela').value.trim() || 'gestao_de_leads';
+            if (!url || !key) { alert("Preencha URL e Chave Anon."); return; }
+            localStorage.setItem('eas_supabase_cfg', JSON.stringify({ url, key, tabela }));
+            initSupabase();
+            fecharModalSupabase();
+            showToast("Configurações do Supabase salvas!");
+        }
+
+        async function sincronizarSupabase() {
+            const cfg = JSON.parse(localStorage.getItem('eas_supabase_cfg') || '{}');
+            if (!supaClient || !cfg.tabela) { abrirModalSupabase(); return; }
+
+            showToast("Buscando leads no Supabase...");
+            try {
+                const { data, error } = await supaClient.from(cfg.tabela).select('*').order('created_at', { ascending: false }).limit(100);
+                if (error) { alert("Erro Supabase: " + error.message); return; }
+                if (!data || data.length === 0) { showToast("Nenhum lead novo encontrado."); return; }
+
+                let count = 0;
+                data.forEach(item => {
+                    const fone = formatarTelefone(item.telefone_e164 || item.telefone || item.whatsapp || '');
+                    if (!fone) return;
+                    const exists = leadsData.some(l => l.whatsapp === fone || l.id === ('supa_' + item.id));
+                    if (!exists) {
+                        leadsData.unshift({
+                            id: 'supa_' + (item.id || Date.now() + Math.random()),
+                            nome: item.nome || item.razao_social || 'Lead Supabase',
+                            whatsapp: fone,
+                            tipo: /cct|conven/i.test(item.nicho || '') ? 'cct' : 'empresarial',
+                            plano: item.nicho || 'Prospecção B2B',
+                            vidas: item.vidas || '1 vida',
+                            valor: parseFloat(item.valor || 0) || 0,
+                            etapa: 'novo',
+                            obs: item.cidade ? `Cidade: ${item.cidade}` : '',
+                            criadoEm: new Date().toLocaleDateString('pt-BR')
+                        });
+                        count++;
+                    }
+                });
+                salvarLeads();
+                renderizarKanban();
+                atualizarStatsCRM();
+                showToast(`${count} novos leads importados do Supabase!`);
+            } catch(e) { alert("Erro de conexão: " + e.message); }
+        }
+    </script>
 </body>
 </html>
