@@ -1196,17 +1196,20 @@
                 </div>
 
                 <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Estado</label>
+                        <select id="cct-uf-select" class="form-control" onchange="montarSelectCCT()"><option value="">Todos os estados</option><option value="SP" selected>SP</option><option value="MG">MG</option><option value="GO">GO</option><option value="AL">AL</option><option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="MT">MT</option><option value="PR">PR</option><option value="RJ">RJ</option><option value="RS">RS</option><option value="SC">SC</option><option value="SE">SE</option><option value="TO">TO</option><option value="—">—</option></select>
+                    </div>
                     <div class="form-group" style="grid-column: span 2;">
-                        <label class="form-label">Selecione o Ramo Sindical</label>
-                        <select id="cct-ramo-select" class="form-control" onchange="calcularCCTAuto()">
-                            <option value="construcao" selected>Construção Civil &bull; Porto 3-431 (SITICOM / SINDUSCON-SP)</option>
-                            <option value="bares">Bares, Restaurantes e Similares &bull; Catanduva e Região (SINTEHBAR)</option>
-                            <option value="comercio">Comércio Varejista &bull; Sincomércio Catanduva</option>
-                            <option value="transportes">Transporte de Cargas &bull; CCT Condutores</option>
-                        </select>
+                        <label class="form-label">Convenção / Sindicato (código Porto)</label>
+                        <select id="cct-ramo-select" class="form-control" onchange="document.getElementById('cct-preco-manual').value='';calcularCCTAuto()"></select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Razão Social / Construtora</label>
+                        <label class="form-label">Valor por vida Porto (R$) <span id="cct-preco-origem" style="text-transform:none;font-weight:600;color:var(--text-muted);"></span></label>
+                        <input type="number" step="0.01" min="0" id="cct-preco-manual" class="form-control" placeholder="Cotar por CNPJ no site Porto" oninput="calcularCCTAuto()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Razão Social da Empresa</label>
                         <input type="text" id="cct-nome" class="form-control" placeholder="Nome da Empresa">
                     </div>
                     <div class="form-group">
@@ -1215,7 +1218,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Quantidade de Colaboradores</label>
-                        <input type="number" id="cct-vidas" class="form-control" placeholder="Mínimo 3 vidas" min="3" value="6" oninput="calcularCCTAuto()">
+                        <input type="number" id="cct-vidas" class="form-control" placeholder="Nº de vidas" min="1" value="6" oninput="calcularCCTAuto()">
                     </div>
                 </div>
 
@@ -1223,7 +1226,7 @@
                 <div id="proposal-cct-box" class="proposal-presentation-card" style="display: block;">
                     <div class="proposal-hero" style="background: linear-gradient(135deg, #003666 0%, var(--eas-navy) 100%);">
                         <span class="proposal-hero-tag" style="background: #ffffff; color: var(--porto-blue);">CCT Homologada Porto Seguro</span>
-                        <div class="proposal-total-val" id="cct-hero-total">R$ 98,94/mês</div>
+                        <div class="proposal-total-val" id="cct-hero-total">--</div>
                         <div class="proposal-client-name" id="cct-hero-sub">Investimento Total para 6 colaboradores</div>
                     </div>
 
@@ -1504,35 +1507,15 @@
             ouro:   { nome: 'OURO',   capital: 150000, dit: 3000, ref: 69.90 }
         };
 
-        const TABELA_CCT = {
-            construcao: {
-                nome: 'Construção Civil &bull; Porto 3-431 (SITICOM / SINDUSCON)',
-                minimo: 3,
-                faixas: [
-                    { min: 3, max: 5, preco: 20.42, desc: '3 a 5 vidas: R$ 20,42/vida' },
-                    { min: 6, max: 9999, preco: 16.49, desc: '6 ou mais vidas: R$ 16,49/vida' }
-                ],
-                detalhe: 'Atende às exigências de Morte Acidental (R$ 44.891), Invalidez IPA (R$ 71.826), Rescisão e Funeral da CCT 2025/2026.'
-            },
-            bares: {
-                nome: 'Bares e Restaurantes (SINTEHBAR Catanduva)',
-                minimo: 2,
-                faixas: [{ min: 2, max: 9999, preco: 18.50, desc: 'R$ 18,50 por colaborador/mês' }],
-                detalhe: 'Garante o cumprimento das cláusulas sindicais obrigatórias para atendentes, garçons e sócios.'
-            },
-            comercio: {
-                nome: 'Comércio Varejista (Sincomércio Catanduva)',
-                minimo: 2,
-                faixas: [{ min: 2, max: 9999, preco: 15.90, desc: 'R$ 15,90 por colaborador/mês' }],
-                detalhe: 'Homologação sindical para comerciários e lojistas.'
-            },
-            transportes: {
-                nome: 'Transporte de Cargas (Condutores)',
-                minimo: 2,
-                faixas: [{ min: 2, max: 9999, preco: 24.80, desc: 'R$ 24,80 por colaborador/mês' }],
-                detalhe: 'Inclui cláusula especial de condutor e assistência funeral estendida.'
-            }
-        };
+        /* Convenções Porto (fonte: eas_cct_nichos, status ATIVA). Preço só onde confirmado em proposta Porto;
+           nas demais o valor é digitado pelo corretor (cotação por CNPJ no site Porto). */
+        const CONVENCOES = [{"uf": "AL", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON AL", "cod": "3758"}, {"uf": "BA", "nicho": "CONDOMÍNIO", "sind": "SINDSEG BA", "cod": "3375"}, {"uf": "BA", "nicho": "CONDOMÍNIO", "sind": "SECOVI BA - MOVISEG", "cod": "3710"}, {"uf": "CE", "nicho": "CONDOMÍNIO", "sind": "SECOVI CE", "cod": "3567"}, {"uf": "DF", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON DF", "cod": "3738"}, {"uf": "ES", "nicho": "CONDOMÍNIO", "sind": "SIPCES - SINDICONVIVE Vila Velha", "cod": "3551"}, {"uf": "ES", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDICOPES ES", "cod": "3361"}, {"uf": "GO", "nicho": "CONDOMÍNIO", "sind": "SEEG GO", "cod": "3485"}, {"uf": "GO", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON GO", "cod": "3186"}, {"uf": "MG", "nicho": "CONDOMÍNIO", "sind": "SINDEDIF Juiz de Fora", "cod": "3936"}, {"uf": "MG", "nicho": "CONDOMÍNIO", "sind": "SINDEAC BH", "cod": "3248"}, {"uf": "MG", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINTRACOM Curvelo e Região", "cod": "3808"}, {"uf": "MG", "nicho": "CONSTRUÇÃO CIVIL", "sind": "Trab. Construção e Mobiliário Norte de Minas", "cod": "3570"}, {"uf": "MG", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SENGE MG", "cod": "3802"}, {"uf": "MG", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON MG", "cod": "322"}, {"uf": "MT", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON Mato Grosso", "cod": "3755"}, {"uf": "PR", "nicho": "CONDOMÍNIO", "sind": "SECOVI PR/SECOVIMED", "cod": "3175"}, {"uf": "PR", "nicho": "CONDOMÍNIO", "sind": "SECOVI Paraná", "cod": "3703"}, {"uf": "PR", "nicho": "CONDOMÍNIO", "sind": "SECOVI PR/Curitiba e Região", "cod": "3178"}, {"uf": "PR", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDIMONT PR", "cod": "3772"}, {"uf": "PR", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINTRACOM PR", "cod": "3918"}, {"uf": "PR", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SITRACOCIFOZ PR", "cod": "3805"}, {"uf": "PR", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINTRACON PR", "cod": "3716"}, {"uf": "RJ", "nicho": "CONDOMÍNIO", "sind": "SECOVI Petrópolis", "cod": "3246"}, {"uf": "RJ", "nicho": "CONDOMÍNIO", "sind": "SECOVIRIO (Rio de Janeiro)", "cod": "334"}, {"uf": "RJ", "nicho": "CONDOMÍNIO", "sind": "SECOVI Nova Friburgo", "cod": "3304"}, {"uf": "RJ", "nicho": "CONSTRUÇÃO CIVIL", "sind": "STICC Centro Norte Fluminense", "cod": "3450"}, {"uf": "RJ", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCONRIO RJ", "cod": "3961"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON RS (2)", "cod": "3518"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SICEPOT RS", "cod": "3965"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SENGE RS", "cod": "3778"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON Carazinho", "cod": "3517"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON Passo Fundo", "cod": "3165"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON RS (3)", "cod": "3596"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON RS", "cod": "320"}, {"uf": "RS", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON RS (4)", "cod": "3930"}, {"uf": "SC", "nicho": "CONDOMÍNIO", "sind": "SECOVI Santa Catarina", "cod": "3739"}, {"uf": "SC", "nicho": "CONDOMÍNIO", "sind": "SECOVI Norte/SC", "cod": "3700"}, {"uf": "SC", "nicho": "CONDOMÍNIO", "sind": "SECOVI Florianópolis", "cod": "3424"}, {"uf": "SC", "nicho": "CONDOMÍNIO", "sind": "SECOVI SC - Sind. Empr.", "cod": "3416"}, {"uf": "SE", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON SE", "cod": "3821"}, {"uf": "SP", "nicho": "ACADEMIAS DE GINÁSTICA", "sind": "SINDICLUBE-SP", "cod": "3800"}, {"uf": "SP", "nicho": "ALIMENTAÇÃO", "sind": "SINDIFAST SP (Fast Food)", "cod": "3217"}, {"uf": "SP", "nicho": "ARQUITETURA E ENGENHARIA", "sind": "Sind. Nac. Empresas Arquitetura e Eng. Consultiva", "cod": "3225"}, {"uf": "SP", "nicho": "ARQUITETURA E ENGENHARIA", "sind": "SEESP (Engenheiros)", "cod": "3257"}, {"uf": "SP", "nicho": "BARES, HOTÉIS, RESTAURANTES E SIMILARES", "sind": "SHS Ribeirão Preto e Região", "cod": "381"}, {"uf": "SP", "nicho": "BARES, HOTÉIS, RESTAURANTES E SIMILARES", "sind": "SINTHORECAT", "cod": "3949"}, {"uf": "SP", "nicho": "BARES, HOTÉIS, RESTAURANTES E SIMILARES", "sind": "SINDRESBAR + SINDHOTÉIS-SP (capital)", "cod": ""}, {"uf": "SP", "nicho": "BARES, HOTÉIS, RESTAURANTES E SIMILARES", "sind": "SINDHOTELEIROS S. J. Rio Preto", "cod": "3100"}, {"uf": "SP", "nicho": "BENEFICENTES E RELIGIOSOS", "sind": "SINDBENEFICENTE", "cod": "3270"}, {"uf": "SP", "nicho": "COMERCIÁRIOS", "sind": "FECOMERCIO/SP", "cod": "3795"}, {"uf": "SP", "nicho": "COMERCIÁRIOS", "sind": "Comércio de Barretos, Olímpia e Região", "cod": "3543"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SECOVI Litoral", "cod": "3624"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SECERP (Ribeirão Preto)", "cod": "3173"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SECOVI - CAPITAL", "cod": "3623"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SECOVI SP - Condomínios", "cod": "38"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SETHBR Bauru - Resid. e Cond.", "cod": "3324"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SICON Litoral Paulista (São Sebastião, Ilhabela, Caraguá, Ubatuba)", "cod": "351"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SICON Litoral Paulista (São Vicente)", "cod": "3218"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SINTECON Bragança Paulista", "cod": "3411"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SEEC ABCD - Resid./Comerciais/Mistos", "cod": "3421"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SEEC ABCD - Flats/Shopping", "cod": "3462"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SETHBR Bauru - Flat/Shop", "cod": "3471"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "Sind. Trab. Ind. Construção e Mobiliário de Campinas", "cod": "3478"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SINDIFIOS SP", "cod": "3514"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SIENESP SP", "cod": "3509"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SECOVI Taubaté", "cod": "3815"}, {"uf": "SP", "nicho": "CONDOMÍNIO", "sind": "SECOVI SP / Lagus", "cod": "3662"}, {"uf": "SP", "nicho": "CONSERVAÇÃO E ASSISTÊNCIA TÉCNICA", "sind": "SECAESP", "cod": "3362"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SITICOM São José do Rio Preto / SINDUSCON SP", "cod": "3431"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON SP - Grandes Estruturas", "cod": "3523"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "CONSTRUMOB ABC", "cod": "3601"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "STICMA Araçatuba", "cod": "3371"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SEAAC Assessoria P.I.P. Empresarial", "cod": "3443"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINTRACON-SP + SINDUSCON-SP (capital/ABC)", "cod": "3-32"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SELEMAT São Paulo", "cod": "3748"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINTRACON SP", "cod": "332"}, {"uf": "SP", "nicho": "CONSTRUÇÃO CIVIL", "sind": "Construção Civil de Salto", "cod": "3663"}, {"uf": "SP", "nicho": "CONTABILIDADE", "sind": "SESCON SP", "cod": "3177"}, {"uf": "SP", "nicho": "CONTABILIDADE", "sind": "SEAAC Bauru", "cod": "3737"}, {"uf": "SP", "nicho": "FARMACÊUTICOS", "sind": "SINFAR-SP", "cod": "3289"}, {"uf": "SP", "nicho": "GRÁFICA", "sind": "SEDIJORE", "cod": "3584"}, {"uf": "SP", "nicho": "IMOBILIÁRIA", "sind": "SECOVI ABC", "cod": "3245"}, {"uf": "SP", "nicho": "INDÚSTRIA DE CALÇADOS", "sind": "SINDIFRANCA (Franca)", "cod": "3131"}, {"uf": "SP", "nicho": "INDÚSTRIA DE MÓVEIS", "sind": "SIMM Associados (Mirassol e Região)", "cod": "3167"}, {"uf": "SP", "nicho": "INDÚSTRIA DE MÓVEIS", "sind": "SINDIMOB (Votuporanga)", "cod": "3301"}, {"uf": "SP", "nicho": "INDÚSTRIA DE MÓVEIS", "sind": "SIMM Filiados (Mirassol e Região)", "cod": "3168"}, {"uf": "SP", "nicho": "INDÚSTRIA TÊXTIL", "sind": "SIETEX SP - Filiados", "cod": "3108"}, {"uf": "SP", "nicho": "INDÚSTRIA TÊXTIL", "sind": "SIETEX SP - Associados", "cod": "3107"}, {"uf": "SP", "nicho": "INFORMÁTICA", "sind": "SINDPD", "cod": "3386"}, {"uf": "SP", "nicho": "INSTALAÇÕES ELÉTRICAS, GÁS, HIDRÁULICAS E SANITÁRIAS", "sind": "SINDINSTALAÇÃO SP - Filiados", "cod": "3142"}, {"uf": "SP", "nicho": "INSTALAÇÕES ELÉTRICAS, GÁS, HIDRÁULICAS E SANITÁRIAS", "sind": "SINDINSTALAÇÃO SP - Associados", "cod": "3143"}, {"uf": "SP", "nicho": "INSTRUTORES DE AUTO-ESCOLA, DESPACHANTES E TRANSPORTE ESCOLAR", "sind": "SINTRAED Bauru e Região", "cod": "3408"}, {"uf": "SP", "nicho": "INSTRUTORES DE AUTO-ESCOLA, DESPACHANTES E TRANSPORTE ESCOLAR", "sind": "SETEISP", "cod": "3502"}, {"uf": "SP", "nicho": "LOTERIAS", "sind": "SINCOESP", "cod": "3780"}, {"uf": "SP", "nicho": "MOTOBOYS", "sind": "SINDIMOTO São José do Rio Preto e Região", "cod": "3720"}, {"uf": "SP", "nicho": "MOTOBOYS", "sind": "SINDIMOTO/SP - Autônomos", "cod": "384"}, {"uf": "SP", "nicho": "MOTOBOYS", "sind": "Entregadores de Ribeirão Preto e Região", "cod": "3-158"}, {"uf": "SP", "nicho": "MOTOBOYS", "sind": "SINDIMOTO/SP - CLT", "cod": "382"}, {"uf": "SP", "nicho": "MOTOBOYS", "sind": "SIMPI + SINDIMOTO-SP (indústria artesanal)", "cod": "3-810"}, {"uf": "SP", "nicho": "MOTOBOYS", "sind": "SEDERSP + SINDIMOTO-SP (apps de entrega)", "cod": ""}, {"uf": "SP", "nicho": "PANIFICADORAS", "sind": "Trab. Ind. Alimentação de São José do Rio Preto", "cod": "3311"}, {"uf": "SP", "nicho": "PANIFICADORAS", "sind": "SINDIPÃO Ribeirão Preto e Região", "cod": "3181"}, {"uf": "SP", "nicho": "PET SHOPS", "sind": "SINDPET SHOP", "cod": "3265"}, {"uf": "SP", "nicho": "PET SHOPS", "sind": "SINDHOSVET", "cod": "3903"}, {"uf": "SP", "nicho": "PINTURA, GESSO E DECORAÇÕES", "sind": "SIPIGEDESP - Associados", "cod": "3116"}, {"uf": "SP", "nicho": "PINTURA, GESSO E DECORAÇÕES", "sind": "SIPIGEDESP - Filiados", "cod": "3117"}, {"uf": "SP", "nicho": "POSTOS DE GASOLINA", "sind": "SINCOPETRO SP", "cod": "3200"}, {"uf": "SP", "nicho": "PRESTAÇÃO DE SERVIÇOS", "sind": "SINDEPRESTEM SP", "cod": "333"}, {"uf": "SP", "nicho": "PROFESSORES", "sind": "SINPRO SP", "cod": "310"}, {"uf": "SP", "nicho": "RURAIS", "sind": "Sindicato Rural de Aguaí", "cod": "3-923"}, {"uf": "SP", "nicho": "RURAIS", "sind": "Sindicato Rural Piracicaba", "cod": "3733"}, {"uf": "SP", "nicho": "RURAIS", "sind": "Trab. Rurais de Itaí", "cod": "3-927"}, {"uf": "SP", "nicho": "SISTEMAS ELETRÔNICOS DE SEGURANÇA PRIVADA", "sind": "SINTRASESP", "cod": "3201"}, {"uf": "SP", "nicho": "TURISMO", "sind": "SINDISIAN", "cod": "3818"}, {"uf": "SP", "nicho": "TURISMO", "sind": "SETRANS ABC", "cod": "3819"}, {"uf": "SP", "nicho": "VESTUÁRIO", "sind": "SINDIVEST SP", "cod": "3159"}, {"uf": "SP", "nicho": "VESTUÁRIO", "sind": "SINDIROUPAS SP - Associados", "cod": "3160"}, {"uf": "SP", "nicho": "VESTUÁRIO", "sind": "SINDIROUPAS SP - Filiados", "cod": "3236"}, {"uf": "SP", "nicho": "VESTUÁRIO", "sind": "SINDIVEST SP - Filiados", "cod": "3235"}, {"uf": "TO", "nicho": "CONDOMÍNIO", "sind": "SINDICON TO", "cod": "3492"}, {"uf": "TO", "nicho": "CONSTRUÇÃO CIVIL", "sind": "SINDUSCON TO", "cod": "3470"}, {"uf": "—", "nicho": "CONDOMÍNIO", "sind": "SINDETURH", "cod": "3480"}, {"uf": "—", "nicho": "CONDOMÍNIO", "sind": "SINTTHOCON - MOVISEG", "cod": "3711"}, {"uf": "—", "nicho": "CONDOMÍNIO", "sind": "SECOVI - SINDICONFIS - MOVISEG", "cod": "3713"}, {"uf": "—", "nicho": "CONDOMÍNIO", "sind": "SINDEMCON", "cod": "3972"}, {"uf": "—", "nicho": "CONDOMÍNIO", "sind": "SECOVI FETTHABASA 2", "cod": "3659"}, {"uf": "—", "nicho": "CONDOMÍNIO", "sind": "SINTRATUHL", "cod": "3921"}, {"uf": "—", "nicho": "CONSTRUÇÃO CIVIL", "sind": "Trab. Construção, Estradas, Pavimentação e Montagem", "cod": "3653"}, {"uf": "—", "nicho": "CONSTRUÇÃO CIVIL", "sind": "FETICOM Construção Civil", "cod": "3723"}];
+        const PRECOS_CCT = {"3431": {"faixas": [[3, 5, 20.42], [6, 9999, 16.49]], "min": 3, "det": "Morte Acidental R$ 44.891, Invalidez IPA R$ 71.826, Rescisão e Funeral conforme CCT 2025/2026 (confirmar na proposta Porto vigente)."}};
+        function convDados(cod, nicho) {
+            const p = PRECOS_CCT[cod];
+            return p ? { minimo: p.min, faixas: p.faixas.map(f => ({min:f[0], max:f[1], preco:f[2]})), detalhe: p.det, confirmado: true }
+                     : { minimo: 3, faixas: [], detalhe: 'Coberturas e capitais conforme a Convenção Coletiva vigente do sindicato — confirmar na proposta/tabela Porto antes de enviar ao cliente.', confirmado: false };
+        }
 
         /* STATE GLOBAL */
         let currentMode = 'simulador';
@@ -1545,6 +1528,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             carregarLeads();
             initSupabase();
+            montarSelectCCT();
             // Preenche com idade 35 por padrão para já mostrar na tela
             document.getElementById('serit-idade').value = 35;
             calcularSERITAuto();
@@ -1609,7 +1593,7 @@
            ======================================================== */
         function selecionarPlanoSERIT(plano) {
             planoSelecionadoSERIT = plano;
-            document.querySelectorAll('.plans-comparison-grid .plan-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('#panel-sim-serit .plan-card').forEach(c => c.classList.remove('selected'));
             document.getElementById(`card-serit-${plano}`).classList.add('selected');
             calcularSERITAuto();
         }
@@ -1822,75 +1806,88 @@ Podemos formalizar a proposta para a sua equipe?`;
         /* ========================================================
            3. CÁLCULOS DE CCT CONVENÇÕES COLETIVAS
            ======================================================== */
-        function calcularCCTAuto() {
-            const ramoKey = document.getElementById('cct-ramo-select').value;
-            const ramo = TABELA_CCT[ramoKey];
-            const vidas = parseInt(document.getElementById('cct-vidas').value, 10) || 6;
+        function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+        const brl = n => 'R$ ' + n.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+        function montarSelectCCT() {
+            const uf = document.getElementById('cct-uf-select').value;
+            const sel = document.getElementById('cct-ramo-select');
+            const atual = sel.value;
+            const grupos = {};
+            CONVENCOES.forEach((c, i) => {
+                if (uf && c.uf !== uf) return;
+                (grupos[c.nicho] = grupos[c.nicho] || []).push([i, c]);
+            });
+            sel.innerHTML = '';
+            Object.keys(grupos).sort((a,b) => a.localeCompare(b,'pt-BR')).forEach(n => {
+                const og = document.createElement('optgroup'); og.label = n;
+                grupos[n].forEach(([i, c]) => {
+                    const o = document.createElement('option'); o.value = i;
+                    o.textContent = `${c.sind} • ${c.cod ? 'Porto ' + c.cod : 'código a confirmar'}${uf ? '' : ' • ' + c.uf}`;
+                    og.appendChild(o);
+                });
+                sel.appendChild(og);
+            });
+            if (atual && [...sel.options].some(o => o.value === atual)) sel.value = atual;
+            else {
+                const pref = [...sel.options].find(o => CONVENCOES[o.value].cod === '3431');
+                if (pref) sel.value = pref.value;
+            }
+            calcularCCTAuto();
+        }
+
+        function ctxCCT() {
+            const sel = document.getElementById('cct-ramo-select');
+            const conv = CONVENCOES[parseInt(sel.value, 10)];
+            if (!conv) return null;
+            const d = convDados(conv.cod, conv.nicho);
+            const vidas = parseInt(document.getElementById('cct-vidas').value, 10) || 0;
             const nome = document.getElementById('cct-nome').value.trim() || 'Empresa';
-
-            let unit = 0;
-            let faixaDesc = '';
-            for (const f of ramo.faixas) {
-                if (vidas >= f.min && vidas <= f.max) {
-                    unit = f.preco;
-                    faixaDesc = f.desc;
-                    break;
-                }
+            const manual = parseFloat(document.getElementById('cct-preco-manual').value);
+            let unit = 0, faixaDesc = '', origem = '';
+            if (!isNaN(manual) && manual > 0) { unit = manual; faixaDesc = 'valor informado pelo corretor'; origem = '(informado)'; }
+            else {
+                const f = d.faixas.find(f => vidas >= f.min && vidas <= f.max);
+                if (f) { unit = f.preco; faixaDesc = f.max >= 9999 ? `${f.min}+ vidas` : `${f.min} a ${f.max} vidas`; origem = '(tabela Porto)'; }
             }
-            if (!unit) {
-                unit = ramo.faixas[ramo.faixas.length - 1].preco;
-                faixaDesc = ramo.faixas[ramo.faixas.length - 1].desc;
+            return { conv, d, vidas, nome, unit, faixaDesc, origem, total: unit * vidas, abaixoMin: vidas < d.minimo };
+        }
+
+        function calcularCCTAuto() {
+            const c = ctxCCT(); if (!c) return;
+            document.getElementById('cct-preco-origem').innerText = c.origem;
+            const sub = `${c.nome} • ${c.vidas} vidas • ${c.conv.nicho} — ${c.conv.sind}`;
+            if (!c.unit) {
+                document.getElementById('cct-hero-total').innerText = 'Cotar no site Porto';
+                document.getElementById('cct-grid-por-vida').innerText = 'a cotar';
+                document.getElementById('cct-grid-faixa').innerText = 'informe o valor/vida acima';
+            } else {
+                document.getElementById('cct-hero-total').innerText = brl(c.total) + '/mês';
+                document.getElementById('cct-grid-por-vida').innerText = brl(c.unit) + '/vida';
+                document.getElementById('cct-grid-faixa').innerText = `${c.vidas} vidas (${c.faixaDesc})`;
             }
-
-            const total = unit * vidas;
-
-            document.getElementById('cct-hero-total').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês`;
-            document.getElementById('cct-hero-sub').innerText = `Investimento Total para ${nome} (${vidas} vidas &bull; ${ramo.nome.split('&bull;')[0]})`;
-            document.getElementById('cct-grid-por-vida').innerText = `R$ ${unit.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/vida`;
-            document.getElementById('cct-grid-faixa').innerText = `${vidas} vidas (${faixaDesc.split(':')[0]})`;
-
+            document.getElementById('cct-hero-sub').innerText = sub;
             document.getElementById('cct-calc-explica').innerHTML = `
-                <strong><i class="fas fa-balance-scale"></i> Conformidade Jurídica Homologada (Porto Seguro):</strong><br>
-                ${ramo.detalhe}<br>
-                A apólice emite o <strong>Certificado Oficial de Quitação Securitária</strong> para homologação sindical no sindicato patronal e laboral, blindando a empresa de passivos trabalhistas.
-            `;
+                <strong><i class="fas fa-balance-scale"></i> ${esc(c.conv.nicho)} — ${esc(c.conv.sind)} (${c.conv.cod ? 'Porto ' + esc(c.conv.cod) : 'código a confirmar'})</strong><br>
+                ${esc(c.d.detalhe)}<br>
+                ${c.abaixoMin ? `<strong>Atenção:</strong> mínimo de ${c.d.minimo} vidas para esta convenção.<br>` : ''}
+                ${c.unit ? '' : 'Informe o valor por vida obtido no site da Porto (cotação por CNPJ) para calcular o total.<br>'}
+                Confirmar vigência da convenção e do certificado/homologação junto à Porto e ao sindicato.`;
         }
 
         function getTextoPropostaCCT() {
-            const ramoKey = document.getElementById('cct-ramo-select').value;
-            const ramo = TABELA_CCT[ramoKey];
-            const vidas = parseInt(document.getElementById('cct-vidas').value, 10) || 6;
-            const nome = document.getElementById('cct-nome').value.trim() || 'Empresa';
-            let unit = 0;
-            for (const f of ramo.faixas) {
-                if (vidas >= f.min && vidas <= f.max) { unit = f.preco; break; }
-            }
-            if (!unit) unit = ramo.faixas[ramo.faixas.length - 1].preco;
-            const total = unit * vidas;
-
-            return `Olá! Aqui é da *EAS Corretora de Seguros* com o estudo técnico de Convenção Coletiva para a *${nome.toUpperCase()}* 📜
-
-` +
-                `🏢 *SEGURO DE VIDA CCT HOMOLOGADO PORTO SEGURO*
-` +
-                `Categoria: *${ramo.nome.replace('&bull;', '-')}*
-` +
-                `👥 *Quadro da Empresa:* ${vidas} colaboradores
-` +
-                `💰 *Valor Unitário:* R$ ${unit.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
-` +
-                `💵 *INVESTIMENTO TOTAL:* R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês
-
-` +
-                `✅ *Garantias Homologadas:*
-` +
-                `• Atende 100% às exigências da Convenção Coletiva de Trabalho.
-` +
-                `• Emissão de Certificado Oficial para homologações sindicais.
-` +
-                `• Protege a empresa contra passivos de indenização própria.
-
-` +
+            const c = ctxCCT();
+            const valores = c.unit
+                ? `💰 *Valor por vida:* ${brl(c.unit)}/mês\n💵 *INVESTIMENTO TOTAL:* ${brl(c.total)}/mês\n\n`
+                : `💰 *Valor:* será enviado após cotação pelo CNPJ\n\n`;
+            return `Olá! Aqui é da *EAS Corretora de Seguros* com o estudo de Seguro de Vida da Convenção Coletiva para a *${c.nome.toUpperCase()}* 📜\n\n` +
+                `🏢 *SEGURO DE VIDA CCT • PORTO*\n` +
+                `Categoria: *${c.conv.nicho}*\n` +
+                `Sindicato: *${c.conv.sind}*${c.conv.cod ? ' (Porto ' + c.conv.cod + ')' : ''}\n` +
+                `👥 *Quadro da empresa:* ${c.vidas} colaboradores\n` +
+                valores +
+                `✅ Seguro de vida em grupo conforme a Convenção Coletiva da categoria\n` +
+                `✅ Ajuda a empresa a cumprir a obrigação e evitar indenização direta ao empregado/família\n\n` +
                 `Podemos emitir a apólice para regularizar a sua empresa?`;
         }
 
@@ -1939,25 +1936,19 @@ Podemos formalizar a proposta para a sua equipe?`;
                 plano = `Vida Grupo ${sel.nome} ${comDIT ? '(com DIT)' : '(sem DIT)'}`;
                 obs = `Capital: R$ ${sel.capital.toLocaleString('pt-BR')} | Unitário: R$ ${unit.toFixed(2)}`;
             } else if (tipo === 'cct') {
-                const ramoKey = document.getElementById('cct-ramo-select').value;
-                const ramo = TABELA_CCT[ramoKey];
-                nome = document.getElementById('cct-nome').value.trim() || 'Empresa CCT';
+                const c = ctxCCT();
+                nome = c.nome === 'Empresa' ? 'Empresa CCT' : c.nome;
                 fone = formatarTelefone(document.getElementById('cct-whatsapp').value);
-                const v = parseInt(document.getElementById('cct-vidas').value, 10) || 6;
-                let unit = ramo.faixas[0].preco;
-                for (const f of ramo.faixas) {
-                    if (v >= f.min && v <= f.max) { unit = f.preco; break; }
-                }
-                valor = unit * v;
-                vidas = `${v} colaboradores`;
-                plano = `CCT ${ramoKey.toUpperCase()}`;
-                obs = `Convenção: ${ramo.nome.split('&bull;')[0]} | R$ ${unit.toFixed(2)}/vida`;
+                valor = c.total || 0;
+                vidas = `${c.vidas} colaboradores`;
+                plano = `CCT ${c.conv.nicho}${c.conv.cod ? ' • Porto ' + c.conv.cod : ''}`;
+                obs = `Convenção: ${c.conv.sind} | ${c.unit ? brl(c.unit) + '/vida' : 'valor a cotar'} | idx:${document.getElementById('cct-ramo-select').value}`;
             }
 
             const novoLead = {
                 id: 'lead_' + Date.now(),
                 nome: nome,
-                whatsapp: fone || '17991123532',
+                whatsapp: fone || '',
                 tipo: tipo,
                 plano: plano,
                 vidas: vidas,
@@ -1981,44 +1972,7 @@ Podemos formalizar a proposta para a sua equipe?`;
             if (raw) {
                 try { leadsData = JSON.parse(raw); } catch(e) { leadsData = []; }
             } else {
-                leadsData = [
-                    {
-                        id: 'lead_1',
-                        nome: 'Dr. Roberto Silveira (Médico)',
-                        whatsapp: '17991123532',
-                        tipo: 'individual',
-                        plano: 'SERIT PRATA',
-                        vidas: '1 vida',
-                        valor: 136.74,
-                        etapa: 'contato',
-                        obs: 'Idade 35 anos. Quer proteção de renda contra fraturas e afastamentos.',
-                        criadoEm: '28/09/2026'
-                    },
-                    {
-                        id: 'lead_2',
-                        nome: 'Construtora Catanduva Engenharia',
-                        whatsapp: '17992223344',
-                        tipo: 'cct',
-                        plano: 'CCT CONSTRUCAO',
-                        vidas: '6 colaboradores',
-                        valor: 98.94,
-                        etapa: 'proposta',
-                        obs: 'SITICOM/SINDUSCON. Início de obras urgente.',
-                        criadoEm: '28/09/2026'
-                    },
-                    {
-                        id: 'lead_3',
-                        nome: 'Auto Peças e Mecânica Central',
-                        whatsapp: '17993334455',
-                        tipo: 'empresarial',
-                        plano: 'Vida Grupo PRATA',
-                        vidas: '5 vidas',
-                        valor: 299.50,
-                        etapa: 'fechamento',
-                        obs: 'Com DIT por acidente. Enviada documentação.',
-                        criadoEm: '28/09/2026'
-                    }
-                ];
+                leadsData = [];
                 salvarLeads();
             }
         }
@@ -2066,12 +2020,12 @@ Podemos formalizar a proposta para a sua equipe?`;
                         <span style="background:${tagBg}; color:${tagColor}; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; text-transform:uppercase;">${tagText}</span>
                         <span style="font-size:11px; color:var(--text-muted);">${lead.criadoEm || ''}</span>
                     </div>
-                    <div class="lead-name">${lead.nome}</div>
-                    <div class="lead-phone"><i class="fab fa-whatsapp" style="color:#25d366;"></i> ${lead.whatsapp}</div>
+                    <div class="lead-name">${esc(lead.nome)}</div>
+                    <div class="lead-phone"><i class="fab fa-whatsapp" style="color:#25d366;"></i> ${esc(lead.whatsapp)}</div>
                     <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">
-                        <strong>Plano:</strong> ${lead.plano || '-'} (${lead.vidas || '1 vida'})
+                        <strong>Plano:</strong> ${esc(lead.plano || '-')} (${esc(lead.vidas || '1 vida')})
                     </div>
-                    ${lead.obs ? `<div style="font-size:11px; color:#475569; background:#f8fafc; padding:4px 6px; border-radius:4px; margin-bottom:6px;">${lead.obs}</div>` : ''}
+                    ${lead.obs ? `<div style="font-size:11px; color:#475569; background:#f8fafc; padding:4px 6px; border-radius:4px; margin-bottom:6px;">${esc((lead.obs||'').replace(/\s*\|?\s*idx:\d+/,''))}</div>` : ''}
                     <div class="lead-footer">
                         <div style="font-family:'Montserrat',sans-serif; font-size:14px; font-weight:800; color:var(--eas-navy);">R$ ${(lead.valor || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
                         <div class="lead-actions-btn">
@@ -2125,6 +2079,8 @@ Podemos formalizar a proposta para a sua equipe?`;
                 document.getElementById('cct-whatsapp').value = lead.whatsapp;
                 const mVidas = (lead.vidas || '').match(/(\d+)/);
                 if (mVidas) document.getElementById('cct-vidas').value = parseInt(mVidas[1], 10);
+                const mIdx = (lead.obs || '').match(/idx:(\d+)/);
+                if (mIdx && CONVENCOES[+mIdx[1]]) { document.getElementById('cct-uf-select').value = CONVENCOES[+mIdx[1]].uf; montarSelectCCT(); document.getElementById('cct-ramo-select').value = mIdx[1]; }
                 calcularCCTAuto();
             }
 
@@ -2256,7 +2212,7 @@ Podemos formalizar a proposta para a sua equipe?`;
                             id: 'supa_' + (item.id || Date.now() + Math.random()),
                             nome: item.nome || item.razao_social || 'Lead Supabase',
                             whatsapp: fone,
-                            tipo: (item.nicho || '').includes('cct') ? 'cct' : 'empresarial',
+                            tipo: /cct|conven/i.test(item.nicho || '') ? 'cct' : 'empresarial',
                             plano: item.nicho || 'Prospecção B2B',
                             vidas: item.vidas || '1 vida',
                             valor: parseFloat(item.valor || 0) || 0,
