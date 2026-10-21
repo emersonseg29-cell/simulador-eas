@@ -138,6 +138,36 @@
             box-shadow: 0 4px 15px rgba(223,186,82,0.4);
         }
 
+        /* Navegação por seguradora. Não altera preços, coberturas nem explicações dos planos. */
+        .insurer-switcher {
+            display: flex;
+            gap: 12px;
+            max-width: 900px;
+            margin: 20px auto 0;
+            padding: 0 16px;
+        }
+        .insurer-choice {
+            flex: 1;
+            min-width: 0;
+            padding: 14px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: white;
+            color: var(--eas-navy);
+            font: 800 14px 'Montserrat', sans-serif;
+            text-align: left;
+            cursor: pointer;
+        }
+        .insurer-choice span { display: block; margin-top: 4px; font: 500 11px 'Inter', sans-serif; color: var(--text-muted); }
+        .insurer-choice.active[data-insurer="unimed"] { border-color: var(--unimed-green); background: var(--unimed-green-light); }
+        .insurer-choice.active[data-insurer="porto"] { border-color: var(--porto-blue); background: var(--porto-blue-light); }
+        .insurer-choice:focus-visible { outline: 3px solid var(--eas-gold); outline-offset: 3px; }
+        #sim-product-nav .sim-product-tab[hidden] { display: none !important; }
+        @media (max-width: 560px) {
+            .insurer-switcher { flex-direction: column; }
+            .insurer-choice { width: 100%; }
+        }
+
         /* BARRAS DE PRODUTOS DO SIMULADOR (INDIVIDUAL, EMPRESARIAL, CCT) */
         .simulator-nav {
             display: flex;
@@ -861,6 +891,11 @@
         </div>
     </div>
 
+    <!-- Seleção por seguradora; preserva os simuladores e seus textos originais -->
+    <div id="insurer-switcher" class="insurer-switcher" role="group" aria-label="Selecionar seguradora">
+        <button type="button" class="insurer-choice active" id="insurer-btn-unimed" data-insurer="unimed" aria-pressed="true" onclick="switchInsurer('unimed')">Seguros Unimed<span>SERIT Individual e Vida em Grupo</span></button>
+        <button type="button" class="insurer-choice" id="insurer-btn-porto" data-insurer="porto" aria-pressed="false" onclick="switchInsurer('porto')">Porto Seguro<span>Convenções Coletivas — CCT</span></button>
+    </div>
     <!-- SUB-BARRA DE PRODUTOS DO SIMULADOR -->
     <div id="sim-product-nav" class="simulator-nav">
         <div class="sim-product-tab active" id="tab-btn-serit" onclick="switchSimulatorTab('serit')">
@@ -879,7 +914,7 @@
             </div>
         </div>
 
-        <div class="sim-product-tab" id="tab-btn-cct" onclick="switchSimulatorTab('cct')">
+        <div class="sim-product-tab" id="tab-btn-cct" onclick="switchSimulatorTab('cct')" hidden>
             <div class="tab-icon cct"><i class="fas fa-file-contract"></i></div>
             <div class="tab-info">
                 <h4>Convenção Coletiva</h4>
@@ -1031,7 +1066,7 @@
                 <div class="card-header">
                     <div class="card-title">
                         <i class="fas fa-building-shield" style="color: var(--eas-navy);"></i>
-                        Simulador Vida em Grupo PME &bull; Seguros Unimed / Porto
+                        Simulador Vida em Grupo PME &bull; Seguros Unimed
                     </div>
                     <span style="font-size: 12px; font-weight: 700; color: var(--eas-gold); background: var(--eas-gold-subtle); padding: 4px 10px; border-radius: 20px;">
                         Proteção para Equipes e Sócios
@@ -2035,6 +2070,7 @@
             document.getElementById('btn-mode-sim').classList.toggle('active', mode === 'simulador');
             document.getElementById('btn-mode-crm').classList.toggle('active', mode === 'crm');
             document.getElementById('sim-product-nav').style.display = (mode === 'simulador') ? 'flex' : 'none';
+            document.getElementById('insurer-switcher').style.display = (mode === 'simulador') ? 'flex' : 'none';
 
             if (mode === 'simulador') {
                 document.getElementById('panel-crm').classList.remove('active');
@@ -2048,7 +2084,21 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        function switchInsurer(insurer) {
+            switchSimulatorTab(insurer === 'porto' ? 'cct' : 'serit');
+        }
+
         function switchSimulatorTab(tab) {
+            const porto = tab === 'cct';
+            document.getElementById('tab-btn-serit').hidden = porto;
+            document.getElementById('tab-btn-emp').hidden = porto;
+            document.getElementById('tab-btn-cct').hidden = !porto;
+            for (const insurer of ['unimed', 'porto']) {
+                const btn = document.getElementById('insurer-btn-' + insurer);
+                const selected = (insurer === 'porto') === porto;
+                btn.classList.toggle('active', selected);
+                btn.setAttribute('aria-pressed', String(selected));
+            }
             currentSimTab = tab;
             document.querySelectorAll('#sim-product-nav .sim-product-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
