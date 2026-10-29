@@ -936,7 +936,8 @@
                             <ul class="plan-features">
                                 <li><i class="fas fa-check-circle"></i> Renda: <strong>R$ 3.000/mês</strong></li>
                                 <li><i class="fas fa-check-circle"></i> Diária: <strong>R$ 100,00/dia</strong></li>
-                                <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 50.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 100.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte Acidente: <strong>R$ 200.000</strong></li>
                                 <li><i class="fas fa-check-circle"></i> Franquia: <strong>7 dias</strong></li>
                             </ul>
                         </div>
@@ -951,8 +952,8 @@
                             <ul class="plan-features">
                                 <li><i class="fas fa-check-circle"></i> Renda: <strong>R$ 5.000/mês</strong></li>
                                 <li><i class="fas fa-check-circle"></i> Diária: <strong>R$ 166,67/dia</strong></li>
-                                <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 100.000</strong></li>
-                                <li><i class="fas fa-check-circle"></i> Morte Acidente: <strong>R$ 200.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 200.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte Acidente: <strong>R$ 400.000</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -966,8 +967,8 @@
                             <ul class="plan-features">
                                 <li><i class="fas fa-check-circle"></i> Renda: <strong>R$ 10.000/mês</strong></li>
                                 <li><i class="fas fa-check-circle"></i> Diária: <strong>R$ 333,33/dia</strong></li>
-                                <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 120.000</strong></li>
-                                <li><i class="fas fa-check-circle"></i> Morte Acidente: <strong>R$ 240.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 400.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Franquia: <strong>7 dias</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -1445,16 +1446,16 @@
         /* SERIT = TABELA CALL 08 (Unimed, Mod. Especial, franquia 7d) + Garantia Funeral Familiar R$ 7.000 (R$ 7,28) INCLUSA. Conferida com simulações oficiais Unimed (16 e 35 anos, 06/03/2026). Acima de 35 anos: valor pela curva de reenquadramento das Condições Gerais, a confirmar na Unimed. Teto SERIT: R$ 40.000/mês. Idade 66-70 conferida em simulação oficial (67 e 68 interpoladas). */
         const TABELA_SERIT = {
             ouro: {
-                cap: 120000, renda: 10000,
-                precos: {16: 216.19, 17: 216.19, 18: 216.19, 19: 216.19, 20: 216.19, 21: 216.19, 22: 216.19, 23: 216.19, 24: 216.19, 25: 216.19, 26: 216.19, 27: 216.19, 28: 216.19, 29: 216.19, 30: 216.19, 31: 219.61, 32: 222.90, 33: 226.53, 34: 231.77, 35: 237.24, 36: 243.17, 37: 249.56, 38: 256.68, 39: 264.41, 40: 272.67, 41: 281.90, 42: 292.17, 43: 303.73, 44: 316.04, 45: 329.47, 46: 343.79, 47: 359.30, 48: 375.55, 49: 394.49, 50: 414.79, 51: 436.10, 52: 458.78, 53: 483.00, 54: 508.48, 55: 535.85, 56: 565.63, 57: 597.97, 58: 633.04, 59: 671.55, 60: 714.52, 61: 762.45, 62: 816.69, 63: 877.69, 64: 946.61, 65: 1024.01, 66: 1152.72, 67: 1299.22, 68: 1465.09, 69: 1652.91, 70: 1865.37}
+                cap: 400000, renda: 10000, iea: false,
+                precos: {16: 264.78, 17: 264.78, 18: 264.78, 19: 264.78, 20: 264.78, 21: 264.78, 22: 264.78, 23: 264.78, 24: 264.78, 25: 264.78, 26: 264.78, 27: 264.78, 28: 264.78, 29: 264.78, 30: 264.78, 31: 269.83, 32: 274.22, 33: 279.51, 34: 286.94, 35: 294.62, 36: 303.29, 37: 312.98, 38: 324.50, 39: 338.28, 40: 353.14, 41: 370.64, 42: 390.79, 43: 414.45, 44: 439.92, 45: 468.22, 46: 498.47, 47: 531.56, 48: 565.96, 49: 604.13, 50: 644.79, 51: 686.42, 52: 730.00, 53: 775.67, 54: 822.56, 55: 871.94, 56: 924.79, 57: 980.80, 58: 1040.59, 59: 1106.04, 60: 1179.80, 61: 1262.90, 62: 1358.91, 63: 1468.53, 64: 1594.37, 65: 1737.18, 66: 1940.09, 67: 2170.67, 68: 2429.64, 69: 2720.64, 70: 3046.90}
             },
             prata: {
-                cap: 100000, renda: 5000,
-                precos: {16: 124.95, 17: 124.95, 18: 124.95, 19: 124.95, 20: 124.95, 21: 124.95, 22: 124.95, 23: 124.95, 24: 124.95, 25: 124.95, 26: 124.95, 27: 124.95, 28: 124.95, 29: 124.95, 30: 124.95, 31: 126.91, 32: 128.71, 33: 130.77, 34: 133.69, 35: 136.74, 36: 140.08, 37: 143.75, 38: 147.94, 39: 152.67, 40: 157.74, 41: 163.54, 42: 170.08, 43: 177.59, 44: 185.63, 45: 194.47, 46: 203.90, 47: 214.17, 48: 224.89, 49: 237.10, 50: 250.17, 51: 263.72, 52: 278.05, 53: 293.23, 54: 309.02, 55: 325.85, 56: 344.03, 57: 363.59, 58: 384.65, 59: 407.76, 60: 433.64, 61: 462.63, 62: 496.31, 63: 533.17, 64: 575.76, 65: 623.81, 66: 698.75, 67: 784.02, 68: 880.25, 69: 988.90, 70: 1111.39}
+                cap: 200000, renda: 5000, iea: true,
+                precos: {16: 157.99, 17: 157.99, 18: 157.99, 19: 157.99, 20: 157.99, 21: 157.99, 22: 157.99, 23: 157.99, 24: 157.99, 25: 157.99, 26: 157.99, 27: 157.99, 28: 157.99, 29: 157.99, 30: 157.99, 31: 160.52, 32: 162.71, 33: 165.35, 34: 169.07, 35: 172.92, 36: 177.24, 37: 182.09, 38: 187.85, 39: 194.74, 40: 202.17, 41: 210.92, 42: 220.99, 43: 232.83, 44: 245.56, 45: 259.71, 46: 274.83, 47: 291.38, 48: 308.58, 49: 327.66, 50: 348.00, 51: 368.81, 52: 390.60, 53: 413.44, 54: 436.88, 55: 461.57, 56: 487.99, 57: 516.00, 58: 545.90, 59: 578.62, 60: 615.50, 61: 657.05, 62: 705.05, 63: 759.87, 64: 822.78, 65: 894.18, 66: 995.64, 67: 1110.94, 68: 1240.42, 69: 1385.92, 70: 1549.05}
             },
             bronze: {
-                cap: 50000, renda: 3000,
-                precos: {16: 74.58, 17: 74.58, 18: 74.58, 19: 74.58, 20: 74.58, 21: 74.58, 22: 74.58, 23: 74.58, 24: 74.58, 25: 74.58, 26: 74.58, 27: 74.58, 28: 74.58, 29: 74.58, 30: 74.58, 31: 75.69, 32: 76.73, 33: 77.91, 34: 79.59, 35: 81.33, 36: 83.25, 37: 85.33, 38: 87.68, 39: 90.30, 40: 93.12, 41: 96.30, 42: 99.87, 43: 103.94, 44: 108.30, 45: 113.07, 46: 118.16, 47: 123.69, 48: 129.48, 49: 136.12, 50: 143.22, 51: 150.63, 52: 158.49, 53: 166.83, 54: 175.54, 55: 184.85, 56: 194.94, 57: 205.82, 58: 217.58, 59: 230.48, 60: 244.91, 61: 261.05, 62: 279.40, 63: 300.19, 64: 323.67, 65: 350.15, 66: 392.48, 67: 440.63, 68: 495.05, 69: 556.55, 70: 625.98}
+                cap: 100000, renda: 3000, iea: true,
+                precos: {16: 91.10, 17: 91.10, 18: 91.10, 19: 91.10, 20: 91.10, 21: 91.10, 22: 91.10, 23: 91.10, 24: 91.10, 25: 91.10, 26: 91.10, 27: 91.10, 28: 91.10, 29: 91.10, 30: 91.10, 31: 92.50, 32: 93.74, 33: 95.20, 34: 97.28, 35: 99.43, 36: 101.83, 37: 104.50, 38: 107.64, 39: 111.34, 40: 115.33, 41: 119.99, 42: 125.33, 43: 131.56, 44: 138.26, 45: 145.69, 46: 153.63, 47: 162.30, 48: 171.32, 49: 181.40, 50: 192.14, 51: 203.18, 52: 214.76, 53: 226.93, 54: 239.47, 55: 252.71, 56: 266.92, 57: 282.03, 58: 298.20, 59: 315.91, 60: 335.84, 61: 358.26, 62: 384.08, 63: 413.49, 64: 447.18, 65: 485.35, 66: 540.92, 67: 604.09, 68: 675.13, 69: 755.06, 70: 844.81}
             }
         };
 
@@ -2111,6 +2112,7 @@
             document.getElementById('serit-grid-diaria').innerText = `R$ ${diaria.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/dia`;
             document.getElementById('serit-grid-morte').innerText = `R$ ${dados.cap.toLocaleString('pt-BR')}`;
             document.getElementById('serit-grid-dobra').innerText = `R$ ${(dados.cap * 2).toLocaleString('pt-BR')}`;
+            document.getElementById('serit-grid-dobra').parentElement.style.display = dados.iea ? '' : 'none';
 
             document.getElementById('serit-calc-explica').innerHTML = `
                 <strong><i class="fas fa-hand-holding-medical"></i> Como Funciona o Pagamento na Prática:</strong><br>
@@ -2146,8 +2148,8 @@
 ` +
                 `• Morte Qualquer Causa: R$ ${dados.cap.toLocaleString('pt-BR')}
 ` +
-                `• Morte Acidental (Dobra): R$ ${(dados.cap * 2).toLocaleString('pt-BR')}
-` +
+                (dados.iea ? `• Morte Acidental (Dobra): R$ ${(dados.cap * 2).toLocaleString('pt-BR')}
+` : '') +
                 `• Invalidez Permanente: R$ ${dados.cap.toLocaleString('pt-BR')}
 
 ` +
