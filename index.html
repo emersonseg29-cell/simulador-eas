@@ -2136,43 +2136,62 @@
             const idade = parseInt(document.getElementById('serit-idade').value, 10) || 35;
             const dados = TABELA_SERIT[planoSelecionadoSERIT];
             const preco = dados.precos[idade] || 0;
-            const diaria = (dados.renda / 30).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            const liq = ((dados.renda / 30) * 53).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            const brl = (v) => 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            const diariaVal = Math.floor((dados.renda / 30) * 100) / 100; // diária truncada (conservador), igual ao exemplo
+            const pagos = Math.round(diariaVal * 53 * 100) / 100;
 
-            return `Olá, *${nome.toUpperCase()}*! Segue o seu estudo técnico da *EAS Corretora de Seguros* 📄
-
-` +
-                `🛡️ *SERIT INDIVIDUAL & VIDA - SEGUROS UNIMED*
-` +
-                `Plano: *${planoSelecionadoSERIT.toUpperCase()}* (${idade} anos)
-` +
-                `💰 *Investimento Mensal:* R$ ${preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+            return `Prezado(a) *${nome}*, fiz o seu estudo e ficou da seguinte forma:
 
 ` +
-                `📋 *Coberturas Inclusas:*
+                `• *Morte:* Se ocorrer morte natural, a Seguros Unimed pagará uma indenização no valor de ${brl(dados.cap)}.
 ` +
-                `• Renda Mensal SERIT: *R$ ${dados.renda.toLocaleString('pt-BR')} por mês*
+                `• *Morte por Acidente (IEA):* Se ocorrer morte por acidente, a Seguros Unimed pagará uma indenização no valor de ${brl(dados.cap * 2)}.
 ` +
-                `• Morte Qualquer Causa: R$ ${dados.cap.toLocaleString('pt-BR')}
+                `• *Invalidez (IPA/IFPD):* Se ocorrer uma invalidez permanente por acidente ou por doença, a Seguros Unimed pagará uma indenização no valor de ${brl(dados.cap)}.
 ` +
-                (dados.iea ? `• Morte Acidental (Dobra): R$ ${(dados.cap * 2).toLocaleString('pt-BR')}
-` : '') +
-                `• Invalidez Permanente: R$ ${dados.cap.toLocaleString('pt-BR')}
+                `• *Garantia Funeral Familiar:* ${brl(7000)}.
 ` +
-                `• Garantia Funeral Familiar: R$ 7.000
+                `• *SERIT (Renda por Afastamento):* Se você ficar doente ou sofrer um acidente e precisar ficar afastado do trabalho por mais de 7 dias, a Seguros Unimed pagará uma renda mensal no valor de ${brl(dados.renda)}.
 
 ` +
-                `📊 *Cálculo Transparente de Afastamento:*
+                `*A indenização do SERIT é calculada da seguinte forma:* a seguradora paga por dia de afastamento. Pegamos o valor do benefício mensal (${brl(dados.renda)}) e dividimos por 30 dias, o que dá uma diária de ${brl(diariaVal)}.
 ` +
-                `Renda de R$ ${dados.renda.toLocaleString('pt-BR')} ÷ 30 = R$ ${diaria}/dia.
-` +
-                `Exemplo de 60 dias de afastamento (-7 dias franquia) = 53 dias pagos = *R$ ${liq} direto na sua conta.*
+                `Suponhamos que você sofra um acidente ou fique doente e o médico lhe dê um atestado de 60 dias: como existe uma franquia contratual de 7 dias, a seguradora desconta esses 7 dias e paga 53 dias de afastamento.
 
 ` +
-                `⚠️ *Carências:* Acidentes (Imediato / Zero Carência) | Doenças Comuns (30 dias) | LER/DORT (180 dias).
+                `• *Cálculo:* 53 dias x ${brl(diariaVal)} = ${brl(pagos)} creditados na sua conta. (Caso haja prorrogação do afastamento pelo mesmo CID, não há nova cobrança de franquia).
 
 ` +
-                `Podemos emitir a sua proposta oficial hoje?`;
+                `*Documentos necessários para regulação do benefício:* para liberação da indenização não há perícia de INSS. O segurado apresenta:
+` +
+                `1. Atestado médico original indicando o período de repouso e o CID.
+` +
+                `2. Formulário oficial da Seguros Unimed (declaração médica) preenchido e assinado pelo seu médico assistente.
+` +
+                `3. Laudos e exames complementares que comprovem o diagnóstico.
+
+` +
+                `*Prazos de carência e condições do contrato:*
+` +
+                `• Acidente: cobertura imediata a partir do início de vigência (não tem carência).
+` +
+                `• Doenças comuns: 30 dias de carência.
+` +
+                `• LER, DORT, afecções da coluna, hérnias e doenças progressivas/degenerativas: 180 dias de carência.
+` +
+                `• Doenças preexistentes: não possuem cobertura patologias ou lesões já diagnosticadas antes da contratação.
+` +
+                `• Vigência: o contrato é anual, com renovação garantida segundo as condições da apólice.
+
+` +
+                `*Investimento:*
+` +
+                `Prêmio mensal: ${brl(preco)}.
+
+` +
+                `Ficou clara a estrutura dos capitais e o cálculo da diária?
+` +
+                `Podemos prosseguir com o preenchimento da proposta nestas condições?`;
         }
 
         function enviarWhatsAppSERIT() {
