@@ -956,6 +956,8 @@
                                 <li><i class="fas fa-check-circle"></i> Renda: <strong>R$ 3.000/mês</strong></li>
                                 <li><i class="fas fa-check-circle"></i> Diária: <strong>R$ 100,00/dia</strong></li>
                                 <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 100.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Morte Acidente: <strong>R$ 200.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Garantia Funeral: <strong>R$ 7.000</strong></li>
                                 <li><i class="fas fa-check-circle"></i> Franquia: <strong>7 dias</strong></li>
                             </ul>
                         </div>
@@ -972,6 +974,7 @@
                                 <li><i class="fas fa-check-circle"></i> Diária: <strong>R$ 166,67/dia</strong></li>
                                 <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 200.000</strong></li>
                                 <li><i class="fas fa-check-circle"></i> Morte Acidente: <strong>R$ 400.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Garantia Funeral: <strong>R$ 7.000</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -987,6 +990,7 @@
                                 <li><i class="fas fa-check-circle"></i> Diária: <strong>R$ 333,33/dia</strong></li>
                                 <li><i class="fas fa-check-circle"></i> Morte / Invalidez: <strong>R$ 400.000</strong></li>
                                 <li><i class="fas fa-check-circle"></i> Morte Acidente: <strong>R$ 800.000</strong></li>
+                                <li><i class="fas fa-check-circle"></i> Garantia Funeral: <strong>R$ 7.000</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -1017,6 +1021,10 @@
                             <div class="proposal-grid-item">
                                 <div class="proposal-grid-label">Morte Acidental (Dobra)</div>
                                 <div class="proposal-grid-value" id="serit-grid-dobra">R$ 0,00</div>
+                            </div>
+                            <div class="proposal-grid-item">
+                                <div class="proposal-grid-label">Garantia Funeral Familiar</div>
+                                <div class="proposal-grid-value">R$ 7.000</div>
                             </div>
                         </div>
 
@@ -1637,6 +1645,8 @@
                 (dados.iea ? `• Morte Acidental (Dobra): R$ ${(dados.cap * 2).toLocaleString('pt-BR')}
 ` : '') +
                 `• Invalidez Permanente: R$ ${dados.cap.toLocaleString('pt-BR')}
+` +
+                `• Garantia Funeral Familiar: R$ 7.000
 
 ` +
                 `📊 *Cálculo Transparente de Afastamento:*
