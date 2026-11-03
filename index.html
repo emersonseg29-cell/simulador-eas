@@ -821,6 +821,12 @@
             .proposal-total-val { font-size: 30px; }
             .action-buttons-group .btn { width: 100%; }
         }
+
+        button.sim-product-tab { font: inherit; text-align: left; }
+        .globalvida-launch { max-width: 780px; margin: 0 auto; }
+        .globalvida-launch p { line-height: 1.6; margin: 12px 0; }
+        .globalvida-features { padding-left: 20px; line-height: 1.8; margin: 18px 0; }
+        .sim-product-tab:focus-visible { outline: 3px solid var(--eas-gold); outline-offset: 3px; }
     </style>
 </head>
 <body>
@@ -863,33 +869,47 @@
 
     <!-- SUB-BARRA DE PRODUTOS DO SIMULADOR -->
     <div id="sim-product-nav" class="simulator-nav">
-        <div class="sim-product-tab active" id="tab-btn-serit" onclick="switchSimulatorTab('serit')">
+        <button type="button" class="sim-product-tab active" id="tab-btn-serit" aria-pressed="true" onclick="switchSimulatorTab('serit')">
             <div class="tab-icon serit"><i class="fas fa-user-shield"></i></div>
             <div class="tab-info">
                 <h4>SERIT Individual</h4>
                 <p>Proteção de Renda Unimed</p>
             </div>
-        </div>
+        </button>
 
-        <div class="sim-product-tab" id="tab-btn-emp" onclick="switchSimulatorTab('emp')">
+        <button type="button" class="sim-product-tab" id="tab-btn-emp" aria-pressed="false" onclick="switchSimulatorTab('emp')">
             <div class="tab-icon emp"><i class="fas fa-building-shield"></i></div>
             <div class="tab-info">
                 <h4>Vida em Grupo</h4>
                 <p>Empresarial PME + DIT</p>
             </div>
-        </div>
+        </button>
 
-        <div class="sim-product-tab" id="tab-btn-cct" onclick="switchSimulatorTab('cct')">
+        <button type="button" class="sim-product-tab" id="tab-btn-cct" aria-pressed="false" onclick="switchSimulatorTab('cct')">
             <div class="tab-icon cct"><i class="fas fa-file-contract"></i></div>
             <div class="tab-info">
                 <h4>Convenção Coletiva</h4>
                 <p>CCT Sindical Porto Seguro</p>
             </div>
-        </div>
+        </button>
+        <button type="button" class="sim-product-tab" id="tab-btn-globalvida" aria-pressed="false" onclick="switchSimulatorTab('globalvida')">
+            <div class="tab-icon emp"><i class="fas fa-file-invoice" aria-hidden="true"></i></div>
+            <div class="tab-info"><h4>GlobalVida</h4><p>Proposta empresarial por sócios e funcionários</p></div>
+        </button>
     </div>
 
     <!-- ÁREA PRINCIPAL -->
     <main class="app-container">
+        <section id="panel-sim-globalvida" class="view-panel" aria-labelledby="globalvida-title">
+            <div class="card globalvida-launch">
+                <div class="card-header"><h2 class="card-title" id="globalvida-title">GlobalVida · Modelo de proposta empresarial</h2></div>
+                <p>Abra o modelo EAS para selecionar a companhia, informar sócios e funcionários e gerar o estudo em PDF.</p>
+                <ul class="globalvida-features"><li>Quantidade e subtotal separados para sócios e funcionários.</li><li>Seleção de companhia e ramo de atividade.</li><li>Prévia e estudo em PDF no modelo já utilizado pela EAS.</li></ul>
+                <a class="btn btn-gold" href="https://eas-propostas-globalvida.emersonseg29.chatgpt.site/" target="_blank" rel="noopener noreferrer">Abrir modelo de proposta GlobalVida <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                <p>O aplicativo abre em outra aba e mantém o acesso da sua conta. Os valores projetados continuam identificados como estimativas.</p>
+            </div>
+        </section>
+
 
         <!-- ============================================================== -->
         <!-- 1. SIMULADOR SERIT INDIVIDUAL (UNIMED)                         -->
@@ -2022,6 +2042,9 @@
             calcularSERITAuto();
             calcularEmpresarialAuto();
             calcularCCTAuto();
+            const product = new URLSearchParams(window.location.search).get('produto');
+            const productTabs = { serit: 'serit', vida_grupo: 'emp', emp: 'emp', cct: 'cct', globalvida: 'globalvida' };
+            if (product && Object.prototype.hasOwnProperty.call(productTabs, product)) switchSimulatorTab(productTabs[product]);
         });
 
         function showToast(msg) {
@@ -2057,7 +2080,11 @@
         }
 
         function switchSimulatorTab(tab) {
+            if (!['serit', 'emp', 'cct', 'globalvida'].includes(tab)) return;
             currentSimTab = tab;
+            for (const product of ['serit', 'emp', 'cct', 'globalvida']) {
+                document.getElementById('tab-btn-' + product).setAttribute('aria-pressed', String(product === tab));
+            }
             document.querySelectorAll('#sim-product-nav .sim-product-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
 
@@ -2069,6 +2096,9 @@
                 document.getElementById('tab-btn-emp').classList.add('active');
                 document.getElementById('panel-sim-emp').classList.add('active');
                 calcularEmpresarialAuto();
+            } else if (tab === 'globalvida') {
+                document.getElementById('tab-btn-globalvida').classList.add('active');
+                document.getElementById('panel-sim-globalvida').classList.add('active');
             } else if (tab === 'cct') {
                 document.getElementById('tab-btn-cct').classList.add('active');
                 document.getElementById('panel-sim-cct').classList.add('active');
